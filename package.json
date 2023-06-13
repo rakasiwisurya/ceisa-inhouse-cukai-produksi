@@ -1,0 +1,76 @@
+{
+  "name": "mf_ceisa_management",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^4.6.3",
+    "@ant-design/plots": "^1.2.1",
+    "@craco/craco": "^5.9.0",
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "@react-pdf/renderer": "^2.1.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "antd": "^3.26.9",
+    "axios": "^0.19.2",
+    "chart.js": "^3.8.2",
+    "container-validator": "^1.1.0",
+    "cors": "^2.8.5",
+    "d3-mitch-tree": "^1.1.2",
+    "elastic-builder": "^2.16.0",
+    "elasticsearch": "^16.7.3",
+    "file-saver": "^2.0.5",
+    "form-data": "^4.0.0",
+    "formik": "^2.2.9",
+    "formik-antd": "^2.0.4",
+    "google-map-react": "^2.2.0",
+    "highcharts": "^10.2.1",
+    "highcharts-react-official": "^3.1.0",
+    "history": "^4.10.1",
+    "html2canvas": "^1.4.1",
+    "javascript-obfuscator": "^2.6.1",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
+    "query-string": "^7.1.1",
+    "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
+    "react-chartjs-2": "^4.3.1",
+    "react-dom": "^16.13.1",
+    "react-geocode": "^0.2.3",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-redux": "^7.2.4",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-virtualized": "^9.22.3",
+    "react-webcam": "^6.0.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
+    "select2-react-component": "^6.1.1",
+    "webpack-obfuscator": "^2.1.0",
+    "xlsx-populate": "^1.21.0"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

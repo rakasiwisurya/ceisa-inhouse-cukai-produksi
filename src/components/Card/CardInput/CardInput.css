@@ -1,0 +1,29 @@
+.wrapper-card {
+  margin-bottom: 30px !important;
+}
+
+.wrapper-card .ant-card {
+  background: #ffffff !important;
+  border: 1px solid #c8c8c8 !important;
+  border-radius: 9px 9px 9px 9px !important;
+}
+
+.wrapper-card .ant-card-head {
+  background: #ffffff !important;
+  border-radius: 9px 9px 0px 0px !important;
+  text-align: center;
+}
+
+.wrapper-card .ant-card-head-title {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.wrapper-card .ant-form-item-label {
+  text-align: left !important;
+}

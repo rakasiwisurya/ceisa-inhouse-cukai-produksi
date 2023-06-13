@@ -1,0 +1,24 @@
+  .ant-table .primary td {
+    background: #ADD8E6;
+  }
+  
+  .ant-table .danger td {
+    background: rgba(250, 0, 4, 0.165);
+  }
+
+  .ant-table .warning td {
+    background: #EBD7A5;
+  }
+
+  .ant-table .safe td {
+    background: hsl(103, 100%, 92%);
+  }
+
+  .ant-table .custom .ant-table-thead tr th{
+    background: #EFF5FF
+  }
+
+  .ant-table-thead > tr > th {
+    background: #F5FAFA;
+    border-bottom: 1px solid #C1DAD6;
+  }

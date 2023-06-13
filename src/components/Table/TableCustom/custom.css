@@ -1,0 +1,27 @@
+.wrapper-rounded {
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  z-index: ;
+}
+.ant-table-thead tr th {
+  background: #FFFFFF;
+}
+.table-row-striped tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.ant-table-fixed .ant-table-thead {
+  border-radius: 10px 10px 0px 0px !important;
+}
+.ant-table-fixed .ant-table-thead tr th:first-child {
+  border-radius: 10px 0px 0px 0px !important;
+}
+.ant-table-fixed .ant-table-thead tr th:last-child {
+  border-radius: 0px 10px 0px 0px !important;
+}
+.ant-table-row-cell-break-word,
+.ant-table-fixed .ant-table-thead tr th {
+  text-align: center;
+}
+.ant-table-fixed-right {
+  z-index: 3;
+}

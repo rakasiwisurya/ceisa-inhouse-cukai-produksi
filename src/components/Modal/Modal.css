@@ -1,0 +1,13 @@
+.ant-modal-content {
+  border-radius: 9px 9px 9px 9px !important;
+  border: 1px solid #C8C8C8 !important;
+}
+
+.ant-modal-header {
+  background: #FFFFFF !important;
+  border-radius: 9px 9px 0px 0px !important;
+}
+
+.ant-modal-title {
+  text-align: center;
+}

@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+    environment {
+        PATH = "/usr/local/go/bin:$PATH"
+        DOCKER_IMAGE_NAME = "dc01w01hrbr.customs.go.id/librarydev/microfrontend"
+        HARBOR_CREDENTIAL_ID = 'harbor_dc_dev'
+        KUBECONFIG_CREDENTIAL_ID = 'kubeconfig_dc_dev'
+        REGISTRY = 'dc01w01hrbr.customs.go.id'
+        HARBOR_NAMESPACE = 'librarydev'
+        APP_NAME = 'microfrontend'
+        NAMESPACE = 'microfrontend'
+        PORT = '4000'
+		YAML_FILE = 'kubernetes_dcdev.yaml'
+		CHANGE_CAUSE = 'V.01'
+    }
+    
+    stages {
+        stage ('Checkout SCM') {
+            steps {
+                checkout(scm)
+            }
+        }
+        stage('Build Docker Image') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                script {
+                    app = docker.build(DOCKER_IMAGE_NAME, "-m 4g .")
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://' + REGISTRY, HARBOR_CREDENTIAL_ID) {                   
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                        app.push()
+                    }
+                }
+            }
+        }
+        stage('DeployToDC-DEV') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                kubernetesDeploy(
+                  kubeconfigId: KUBECONFIG_CREDENTIAL_ID,
+                  configs: YAML_FILE,
+                  enableConfigSubstitution: true
+                )
+            }
+        }
+        stage('GetServiceIP-DEV') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                retry(10) {
+                    withCredentials([usernamePassword(credentialsId: 'pks_dc_dev', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                        script {
+                            def ip = sh (script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_dc_dev \"kubectl -n $NAMESPACE get svc $APP_NAME --output=jsonpath={'.status.loadBalancer.ingress[].ip'}\"", returnStdout: true)
+							sh 'sleep 5'
+                            
+                            echo "IP is ${ip}"
+                            echo "URL is http://${ip}:$PORT"
+                            
+                            try {
+                            } catch (err) {
+                             echo: 'caught error: $err'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,88 @@
+pipeline {
+    agent any
+    environment {
+        PATH = "/usr/local/go/bin:$PATH"
+        DOCKER_IMAGE_NAME = "dc01w01hrbr.customs.go.id/library/microfrontend-citac"
+        HARBOR_CREDENTIAL_ID = 'harbor_dc'
+        KUBECONFIG_CREDENTIAL_ID01 = 'kubeconfig_dc_prod01'
+        REGISTRY = 'dc01w01hrbr.customs.go.id'
+        HARBOR_NAMESPACE = 'library'
+        APP_NAME = 'microfrontend-citac'
+        NAMESPACE = 'microfrontend'
+		PORT = '4000'
+				YAML_FILE = 'kubernetes.yaml'
+				CHANGE_CAUSE = 'V.01'
+
+    }
+
+    stages {
+        stage ('Checkout SCM') {
+            steps {
+                checkout(scm)
+            }
+        }
+        stage('Build Docker Image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    app = docker.build(DOCKER_IMAGE_NAME, "-m 12g .")
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://dc01w01hrbr.customs.go.id', HARBOR_CREDENTIAL_ID) {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                        app.push()
+                    }
+                }
+            }
+        }
+        stage('Deploy To DC PROD01') {
+            when {
+                branch 'master'
+            }
+            steps {
+                kubernetesDeploy(
+                  kubeconfigId: KUBECONFIG_CREDENTIAL_ID01,
+                  configs: YAML_FILE,
+                  enableConfigSubstitution: true
+                )
+            }
+        }
+		
+        stage('Get Service IP DC Prod01') {
+            when {
+                branch 'master'
+            }
+            steps {
+                retry(10) {
+                    withCredentials([usernamePassword(credentialsId: 'pks_dc_prod', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                        script {
+                            //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_client \"kubectl get all -l app=appsmanagerui -o wide\""
+                            def ip = sh (script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_client_dc \"kubectl -n $NAMESPACE get svc $APP_NAME --output=jsonpath={'.status.loadBalancer.ingress[].ip'}\"", returnStdout: true)
+                            sh 'sleep 5'
+                            echo "IP is ${ip}"
+                            echo "URL is http://${ip}:3100"
+                            try {
+                             //echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip ls -la", returnStdout: true)
+                             //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\""
+                            } catch (err) {
+                             echo: 'caught error: $err'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+		
+    
+    }
+}

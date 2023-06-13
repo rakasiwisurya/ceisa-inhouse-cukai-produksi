@@ -1,0 +1,37 @@
+.card-image-area {
+  position: relative;
+  border-radius: 10px;
+}
+
+.card-image-area .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.5s ease;
+  background-color: black;
+  border-radius: 10px;
+  text-align: right;
+  padding: 10px 10px 0px 0px;
+}
+
+.card-image-area:hover .overlay {
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.card-image-area .button-close {
+  display: none;
+}
+
+.card-image-area:hover .button-close {
+  display: inline;
+  position: absolute;
+  top: 0;
+  margin-top: 10px;
+  right: 10px;
+}
