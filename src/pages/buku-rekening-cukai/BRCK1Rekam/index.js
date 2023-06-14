@@ -408,15 +408,7 @@ export default class BRCK1Rekam extends Component {
             </div>
 
             <div style={{ display: "flex", gap: 5, justifyContent: "end" }}>
-              <Button
-                type="primary"
-                disabled={
-                  !this.state.nama_perusahaan &&
-                  !this.state.periode_awal &&
-                  !this.state.periode_akhir
-                }
-                onClick={this.handleTampilkan}
-              >
+              <Button type="primary" onClick={this.handleTampilkan}>
                 Tampilkan
               </Button>
               <Button type="danger" onClick={this.handleReset}>

@@ -41,7 +41,7 @@ export default function PageContent({ propsExtra }) {
       />
       <Route
         path={pathName + "/data-transaksional-pabean"}
-        render={(props) => <CK4MMEA {...props} {...propsExtra} />}
+        render={(props) => <CK4 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

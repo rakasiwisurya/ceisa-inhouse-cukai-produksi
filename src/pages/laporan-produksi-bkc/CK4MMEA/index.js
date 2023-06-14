@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select } from "antd";
+import { Button, Card, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Upload } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
@@ -40,7 +40,7 @@ export default class CK4MMEA extends Component {
       jumlah_produksi: "",
       jumlah_kemasan_pelekatan: "",
       dilekati_pita: "",
-      uraian_rincian_file: "",
+      uraian_rincian_file: [],
 
       list_tempat_dibuat: [
         {
@@ -97,6 +97,12 @@ export default class CK4MMEA extends Component {
   handleSelectChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
   };
+  handleUploadFileChange = (field, file, fileList) => {
+    this.setState({ ...this.state, [field]: [file] });
+  };
+  handleDummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => onSuccess("ok"), 0);
+  };
 
   handleSimpan = () => {
     console.log("simpan");
@@ -106,6 +112,8 @@ export default class CK4MMEA extends Component {
   };
 
   render() {
+    console.log("this.state.uraian_rincian_file", this.state.uraian_rincian_file);
+
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA" hideContentHeader>
@@ -474,7 +482,7 @@ export default class CK4MMEA extends Component {
                     <Card title="Jumlah Produksi">
                       <div style={{ marginBottom: 20 }}>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nomor</FormLabel>
+                          <FormLabel>Jumlah Kemasan</FormLabel>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
@@ -523,6 +531,32 @@ export default class CK4MMEA extends Component {
                     </Card>
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <Card title="Upload Uraian Rincian">
+                  <div>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Uraian Rincian</FormLabel>
+                    </div>
+                    <Upload
+                      id="uraian_rincian_file"
+                      name="uraian_rincian_file"
+                      customRequest={this.handleDummyRequest}
+                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      onChange={({ file, fileList }) =>
+                        this.handleUploadFileChange("uraian_rincian_file", file, fileList)
+                      }
+                      fileList={this.state.uraian_rincian_file}
+                    >
+                      <Button>
+                        <Icon type="upload" /> Upload
+                      </Button>
+                    </Upload>
+                  </div>
+                </Card>
               </Col>
             </Row>
 
