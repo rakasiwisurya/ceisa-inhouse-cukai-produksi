@@ -13,7 +13,28 @@ export default class CK4 extends Component {
 
       searchText: "",
       searchedColumn: "",
+
       columns: [
+        {
+          title: "Aksi",
+          dataIndex: "aksi",
+          key: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="default"
+                icon="eye"
+                onClick={() => this.handleDetail(record.id, record.nppbkc)}
+              />
+              <Button
+                type="primary"
+                icon="form"
+                onClick={() => this.handleEdit(record.id, record.nppbkc)}
+              />
+            </div>
+          ),
+        },
         {
           title: "KPPBC",
           dataIndex: "kppbc",
@@ -23,10 +44,10 @@ export default class CK4 extends Component {
         },
         {
           title: "NPPBKC",
-          dataIndex: "nkppbkc",
-          key: "nkppbkc",
+          dataIndex: "nppbkc",
+          key: "nppbkc",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("nkppbkc"),
+          ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
@@ -88,8 +109,9 @@ export default class CK4 extends Component {
       dataSource: [
         {
           key: "1",
+          id: 1,
           kppbc: "KPPBC",
-          nkppbkc: "NPPBKC",
+          nppbkc: "EA",
           nama_perusahaan: "Nama Perusahaan",
           tanggal_pemberitahuan: "Tanggal Pemberitahuan",
           tanggal_produksi_awal: "Tanggal Produksi Awal",
@@ -97,7 +119,35 @@ export default class CK4 extends Component {
           jumlah_produksi_lt: "Jumlah Produksi Lt",
           jumlah_produksi_btg: "Jumlah Produksi Batang",
           jumlah_produksi_gram: "Jumlah Produksi Gram",
-          status: "",
+          status: "status",
+        },
+        {
+          key: "2",
+          id: 2,
+          kppbc: "KPPBC",
+          nppbkc: "MMEA",
+          nama_perusahaan: "Nama Perusahaan",
+          tanggal_pemberitahuan: "Tanggal Pemberitahuan",
+          tanggal_produksi_awal: "Tanggal Produksi Awal",
+          tanggal_produksi_akhir: "Tanggal Produksi Akhir",
+          jumlah_produksi_lt: "Jumlah Produksi Lt",
+          jumlah_produksi_btg: "Jumlah Produksi Batang",
+          jumlah_produksi_gram: "Jumlah Produksi Gram",
+          status: "status",
+        },
+        {
+          key: "3",
+          id: 3,
+          kppbc: "KPPBC",
+          nppbkc: "HT",
+          nama_perusahaan: "Nama Perusahaan",
+          tanggal_pemberitahuan: "Tanggal Pemberitahuan",
+          tanggal_produksi_awal: "Tanggal Produksi Awal",
+          tanggal_produksi_akhir: "Tanggal Produksi Akhir",
+          jumlah_produksi_lt: "Jumlah Produksi Lt",
+          jumlah_produksi_btg: "Jumlah Produksi Batang",
+          jumlah_produksi_gram: "Jumlah Produksi Gram",
+          status: "status",
         },
       ],
     };
@@ -157,116 +207,35 @@ export default class CK4 extends Component {
     this.setState({ searchText: "" });
   };
 
-  getColumnSearchPropsCK4B = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearchCK4B(selectedKeys, confirm, dataIndex)}
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleColumnSearchCK4B(selectedKeys, confirm, dataIndex)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleColumnResetCK4B(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-  });
-  handleColumnSearchCK4B = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+  handleDetail = (id, nppbkc) => {
+    switch (true) {
+      case nppbkc === "EA":
+        this.props.history.push(`${pathName}/ck4-ea-detail/${id}`);
+        break;
+      case nppbkc === "MMEA":
+        this.props.history.push(`${pathName}/ck4-mmea-detail/${id}`);
+        break;
+      case nppbkc === "HT":
+        this.props.history.push(`${pathName}/ck4-ht-detail/${id}`);
+        break;
+      default:
+        break;
+    }
   };
-  handleColumnResetCK4B = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
-  getColumnSearchPropsCK4C = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearchCK4C(selectedKeys, confirm, dataIndex)}
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleColumnSearchCK4C(selectedKeys, confirm, dataIndex)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleColumnResetCK4C(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-  });
-  handleColumnSearchCK4C = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-  handleColumnResetCK4C = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
-  handleTabChange = (key) => {
-    this.setState({ ...this.state, activeKeyTab: key });
+  handleEdit = (id, nppbkc) => {
+    switch (true) {
+      case nppbkc === "EA":
+        this.props.history.push(`${pathName}/ck4-ea-edit/${id}`);
+        break;
+      case nppbkc === "MMEA":
+        this.props.history.push(`${pathName}/ck4-mmea-edit/${id}`);
+        break;
+      case nppbkc === "HT":
+        this.props.history.push(`${pathName}/ck4-ht-edit/${id}`);
+        break;
+      default:
+        break;
+    }
   };
 
   render() {

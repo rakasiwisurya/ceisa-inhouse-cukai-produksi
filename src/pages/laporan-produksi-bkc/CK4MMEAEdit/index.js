@@ -1,22 +1,11 @@
-import {
-  Button,
-  Card,
-  Col,
-  DatePicker,
-  Icon,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Table,
-  Upload,
-} from "antd";
+import { Button, Card, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Upload } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import moment from "moment";
 import React, { Component } from "react";
 
-export default class CK4HT extends Component {
+export default class CK4MMEAEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,37 +13,33 @@ export default class CK4HT extends Component {
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      tempat_dibuat: "tempat_dibuat",
+      nama_pengusaha: "nama_pengusaha",
 
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
-      jenis_laporan: "",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
-      jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
-      periode_awal: "",
-      periode_akhir: "",
-      tanggal_produksi_awal: "",
-      tanggal_produksi_akhir: "",
-      jumlah_kemasan: "",
-      jumlah_kemasan_dilekati_pita_kemasan: "",
-      jumlah_produksi_ht_btg: "",
-      jumlah_produksi_ht_gr: "",
-      jumlah_produksi_ht_ml: "",
-      upload_uraian_rincian: [],
+      nama_nppbkc: "nama_nppbkc",
+      nppbkc: "nppbkc",
+      alamat_nppbkc: "alamat_nppbkc",
+      jenis_laporan: "jenis_laporan",
+      nomor_pemberitahuan: "0",
+      tanggal_pemberitahuan: moment(new Date()),
+      jenis_barang_kena_cukai: "Minuman Mengandung Etil Alkohol (MMEA)",
+      tanggal_jam_produksi_awal: moment(new Date()),
+      tanggal_jam_produksi_akhir: moment(new Date()),
+      jumlah_kemasan: "0",
+      jumlah_kemasan_dilekati_pita: "0",
+      jumlah_produksi: "0",
 
-      merk_ht: "",
-      jenis_hasil_tembakau: "",
-      hje: "",
-      bahan_kemasan: "",
-      isi_per_kemasan: "",
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_kemasan_produksi: "",
-      jumlah_produksi_per_merk: "",
-      jumlah_kemasan_dilekati_pita: "",
+      jenis_mmea: "jenis_mmea",
+      merk_mmea: "merk_mmea",
+      isi: "isi",
+      jenis_kemasan: "jenis_kemasan",
+      golongan: "golongan",
+      kadar: "kadar",
+      nomor_dokumen_produksi: "nomor_dokumen_produksi",
+      tanggal_dokumen_produksi: moment(new Date()),
+      jumlah_kemasan_produksi: "0",
+      jumlah_produksi: "0",
+      jumlah_kemasan_dilekati_pita_pelekatan: "0",
 
       uraian_rincian_file: [],
 
@@ -88,102 +73,16 @@ export default class CK4HT extends Component {
           jenis_laporan_name: "Bulanan",
         },
       ],
-      list_periode: [
+      list_merk_mmea: [
         {
-          periode_code: "PERIODE1",
-          periode_name: "Periode 1",
+          merk_mmea_code: "HARIAN",
+          merk_mmea_name: "Harian",
         },
         {
-          periode_code: "PERIODE2",
-          periode_name: "Periode 2",
-        },
-      ],
-
-      columns: [
-        {
-          title: "Dokumen Produksi",
-          children: [
-            {
-              title: "Nomor",
-              dataIndex: "nomor_dokumen_produksi",
-              key: "nomor_dokumen_produksi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-            {
-              title: "Tanggal",
-              dataIndex: "tanggal_dokumen_produksi",
-              key: "tanggal_dokumen_produksi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-          ],
-        },
-        {
-          title: "Jenis HT",
-          dataIndex: "jenis_ht",
-          key: "jenis_ht",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          title: "Merk",
-          dataIndex: "merk",
-          key: "merk",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          title: "HJE",
-          dataIndex: "hje",
-          key: "hje",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          title: "Tarif",
-          dataIndex: "tarif",
-          key: "tarif",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          title: "Kemasan",
-          children: [
-            {
-              title: "Bahan",
-              dataIndex: "bahan",
-              key: "bahan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-            {
-              title: "Isi",
-              dataIndex: "isi",
-              key: "isi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-            {
-              title: "Satuan",
-              dataIndex: "satuan",
-              key: "satuan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-            {
-              title: "Jumlah",
-              dataIndex: "jumlah",
-              key: "jumlah",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-            },
-          ],
-        },
-        {
-          title: "Jumlah Isi",
-          dataIndex: "jumlah_isi",
-          key: "jumlah_isi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          title: "Jumlah Kemasan Dilekati Pita",
-          dataIndex: "jumlah_kemasan_dilekati_pita",
-          key: "jumlah_kemasan_dilekati_pita",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          merk_mmea_code: "BULANAN",
+          merk_mmea_name: "Bulanan",
         },
       ],
-      dataSource: [],
     };
   }
 
@@ -206,17 +105,17 @@ export default class CK4HT extends Component {
     setTimeout(() => onSuccess("ok"), 0);
   };
 
-  handleSimpan = () => {
+  handleUbah = () => {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam" hideContentHeader>
+        <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Edit" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -233,6 +132,7 @@ export default class CK4HT extends Component {
                     id="tempat_dibuat"
                     onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
                     style={{ width: "100%" }}
+                    value={this.state.tempat_dibuat}
                   >
                     {this.state.list_tempat_dibuat.length > 0 &&
                       this.state.list_tempat_dibuat.map((item, index) => (
@@ -277,6 +177,7 @@ export default class CK4HT extends Component {
                       id="nama_nppbkc"
                       onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
                       style={{ width: "100%" }}
+                      value={this.state.nama_nppbkc}
                     >
                       {this.state.list_nama_nppbkc.length > 0 &&
                         this.state.list_nama_nppbkc.map((item, index) => (
@@ -321,6 +222,7 @@ export default class CK4HT extends Component {
                       id="jenis_laporan"
                       onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
                       style={{ width: "100%" }}
+                      value={this.state.jenis_laporan}
                     >
                       {this.state.list_jenis_laporan.length > 0 &&
                         this.state.list_jenis_laporan.map((item, index) => (
@@ -351,11 +253,11 @@ export default class CK4HT extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_pemberitahuan}
                     />
                   </div>
 
@@ -363,7 +265,7 @@ export default class CK4HT extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                     </div>
-                    <Input disabled value={this.state.jenis_barang_kena_cukai} />
+                    <Input value={this.state.jenis_barang_kena_cukai} />
                   </div>
                 </Card>
               </Col>
@@ -372,59 +274,37 @@ export default class CK4HT extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}></Col>
               <Col span={12}>
-                <Card title="Data Produksi">
+                <Card title="Dokumen Produksi">
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Periode</FormLabel>
+                      <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Select
-                        id="periode_awal"
-                        onChange={(value) => this.handleSelectChange("periode_awal", value)}
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.list_periode.length > 0 &&
-                          this.state.list_periode.map((item, index) => (
-                            <Select.Option key={`periode-${index}`} value={item.periode_code}>
-                              {item.periode_name}
-                            </Select.Option>
-                          ))}
-                      </Select>
-
-                      <Select
-                        id="periode_akhir"
-                        onChange={(value) => this.handleSelectChange("periode_akhir", value)}
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.list_periode.length > 0 &&
-                          this.state.list_periode.map((item, index) => (
-                            <Select.Option key={`periode-${index}`} value={item.periode_code}>
-                              {item.periode_name}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </div>
+                    <DatePicker
+                      id="tanggal_jam_produksi_awal"
+                      showTime={{ format: "HH:mm" }}
+                      format="YYYY-MM-DD HH:mm"
+                      onChange={(date) =>
+                        this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
+                      }
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_jam_produksi_awal}
+                    />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Produksi</FormLabel>
+                      <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="tanggal_produksi_awal"
-                        onChange={(value) => this.handleInputChange("tanggal_produksi_awal", value)}
-                        value={this.state.tanggal_produksi_awal}
-                      />
-                      <div>s/d</div>
-                      <Input
-                        id="tanggal_produksi_akhir"
-                        onChange={(value) =>
-                          this.handleInputChange("tanggal_produksi_akhir", value)
-                        }
-                        value={this.state.tanggal_produksi_akhir}
-                      />
-                    </div>
+                    <DatePicker
+                      id="tanggal_jam_produksi_akhir"
+                      showTime={{ format: "HH:mm" }}
+                      format="YYYY-MM-DD HH:mm"
+                      onChange={(date) =>
+                        this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
+                      }
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_jam_produksi_akhir}
+                    />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -435,14 +315,13 @@ export default class CK4HT extends Component {
                       <InputNumber
                         id="jumlah_kemasan"
                         onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
-                        value={this.state.jumlah_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan}
                       />
                       <div>Kemasan</div>
                     </div>
                   </div>
-
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
@@ -456,65 +335,27 @@ export default class CK4HT extends Component {
                             value
                           )
                         }
-                        value={this.state.jumlah_kemasan_dilekati_pita_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan_dilekati_pita}
                       />
                       <div>Kemasan</div>
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Produksi HT (btg)</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_produksi_ht_btg"
-                        onChange={(value) =>
-                          this.handleInputNumberChange("jumlah_produksi_ht_btg", value)
-                        }
-                        value={this.state.jumlah_produksi_ht_btg}
-                        min={0}
-                        style={{ flex: 1 }}
-                      />
-                      <div>Batang</div>
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Produksi HT (gr)</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_produksi_ht_gr"
-                        onChange={(value) =>
-                          this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
-                        }
-                        value={this.state.jumlah_produksi_ht_gr}
-                        min={0}
-                        style={{ flex: 1 }}
-                      />
-                      <div>Gram</div>
-                    </div>
-                  </div>
-
                   <div>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Produksi HT (ml)</FormLabel>
+                      <FormLabel>Jumlah Produksi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="jumlah_produksi_ht_gr"
-                        onChange={(value) =>
-                          this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
-                        }
-                        value={this.state.jumlah_produksi_ht_gr}
+                        id="jumlah_produksi"
+                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi}
                       />
-                      <div>mililiter</div>
+                      <div>Liter</div>
                     </div>
                   </div>
                 </Card>
@@ -529,64 +370,89 @@ export default class CK4HT extends Component {
                 <Card title="Kep Tarif" style={{ height: 705 }}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Merk HT</FormLabel>
+                      <FormLabel>Jenis MMEA</FormLabel>
                     </div>
                     <Input
-                      id="merk_ht"
-                      onChange={(value) => this.handleInputChange("merk_ht", value)}
-                      value={this.state.merk_ht}
+                      id="jenis_mmea"
+                      onChange={(value) => this.handleInputChange("jenis_mmea", value)}
+                      style={{ flex: 1 }}
+                      value={this.state.jenis_mmea}
                     />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Hasil Tembakau</FormLabel>
+                      <FormLabel>Merk MMEA</FormLabel>
                     </div>
-                    <Input
-                      id="jenis_hasil_tembakau"
-                      onChange={(value) => this.handleInputChange("jenis_hasil_tembakau", value)}
-                      value={this.state.jenis_hasil_tembakau}
-                    />
+                    <Select
+                      id="merk_mmea"
+                      onChange={(value) => this.handleSelectChange("merk_mmea", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.merk_mmea}
+                    >
+                      {this.state.list_merk_mmea.length > 0 &&
+                        this.state.list_merk_mmea.map((item, index) => (
+                          <Select.Option key={`merk-mmea-${index}`} value={item.merk_mmea_code}>
+                            {item.merk_mmea_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>HJE</FormLabel>
+                      <FormLabel>Isi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="hje"
-                        onChange={(value) => this.handleInputNumberChange("hje", value)}
-                        value={this.state.hje}
+                        id="isi"
+                        onChange={(value) => this.handleInputNumberChange("isi", value)}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.isi}
                       />
-                      <div>Rupiah</div>
+                      <div>Mililiter (ml)</div>
                     </div>
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Bahan Kemasan</FormLabel>
+                      <FormLabel>Jenis Kemasan</FormLabel>
                     </div>
                     <Input
-                      id="bahan_kemasan"
-                      onChange={(value) => this.handleInputChange("bahan_kemasan", value)}
-                      value={this.state.bahan_kemasan}
+                      id="jenis_kemasan"
+                      onChange={(value) => this.handleInputChange("jenis_kemasan", value)}
+                      style={{ flex: 1 }}
+                      value={this.state.jenis_kemasan}
                     />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Isi per Kemasan</FormLabel>
+                      <FormLabel>Golongan</FormLabel>
                     </div>
-                    <InputNumber
-                      id="isi_per_kemasan"
-                      onChange={(value) => this.handleInputNumberChange("isi_per_kemasan", value)}
-                      value={this.state.isi_per_kemasan}
-                      min={0}
-                      style={{ width: "100%" }}
+                    <Input
+                      id="golongan"
+                      onChange={(value) => this.handleInputChange("golongan", value)}
+                      style={{ flex: 1 }}
+                      value={this.state.golongan}
                     />
+                  </div>
+
+                  <div>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Kadar</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <InputNumber
+                        id="kadar"
+                        onChange={(value) => this.handleInputNumberChange("kadar", value)}
+                        min={0}
+                        style={{ flex: 1 }}
+                        value={this.state.kadar}
+                      />
+                      <div>%</div>
+                    </div>
                   </div>
                 </Card>
               </Col>
@@ -612,18 +478,18 @@ export default class CK4HT extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_dokumen_produksi"
-                          value={this.state.tanggal_dokumen_produksi}
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                           }
                           style={{ width: "100%" }}
+                          value={this.state.tanggal_dokumen_produksi}
                         />
                       </div>
                     </Card>
                   </Col>
 
                   <Col span={24}>
-                    <Card title="Jumlah Produksi dan Kemasan">
+                    <Card title="Jumlah Produksi">
                       <div style={{ marginBottom: 20 }}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jumlah Kemasan</FormLabel>
@@ -634,24 +500,24 @@ export default class CK4HT extends Component {
                             onChange={(value) =>
                               this.handleInputNumberChange("jumlah_kemasan_produksi", value)
                             }
-                            value={this.state.jumlah_kemasan_produksi}
                             style={{ flex: 1 }}
+                            value={this.state.jumlah_kemasan_produksi}
                           />
-                          <div>Kemasan</div>
+                          <div>Liter</div>
                         </div>
                       </div>
 
                       <div>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jumlah Produksi per Merk</FormLabel>
+                          <FormLabel>Jumlah Produksi</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_produksi_per_merk"
+                          id="jumlah_produksi_produksi"
                           onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_produksi_per_merk", value)
+                            this.handleInputNumberChange("jumlah_produksi_produksi", value)
                           }
-                          value={this.state.jumlah_produksi_per_merk}
                           style={{ width: "100%" }}
+                          value={this.state.jumlah_produksi_produksi}
                         />
                       </div>
                     </Card>
@@ -663,17 +529,17 @@ export default class CK4HT extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <InputNumber
-                            id="jumlah_kemasan_dilekati_pita"
-                            onChange={(value) =>
-                              this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
-                            }
-                            value={this.state.jumlah_kemasan_dilekati_pita}
-                            style={{ flex: 1 }}
-                          />
-                          <div>Kemasan</div>
-                        </div>
+                        <InputNumber
+                          id="jumlah_kemasan_dilekati_pita_pelekatan"
+                          onChange={(value) =>
+                            this.handleInputNumberChange(
+                              "jumlah_kemasan_dilekati_pita_pelekatan",
+                              value
+                            )
+                          }
+                          style={{ width: "100%" }}
+                          value={this.state.jumlah_kemasan_dilekati_pita_pelekatan}
+                        />
                       </div>
                     </Card>
                   </Col>
@@ -711,8 +577,8 @@ export default class CK4HT extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
-                      Simpan Rincian
+                    <Button type="primary" block onClick={this.handleUbah}>
+                      Ubah Rincian
                     </Button>
                   </Col>
 
@@ -724,67 +590,6 @@ export default class CK4HT extends Component {
                 </Row>
               </Col>
             </Row>
-
-            <div style={{ marginTop: 40 }}>
-              <Table
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-                scroll={{ x: "max-content" }}
-                footer={(currentPageData) => {
-                  return (
-                    <Table
-                      style={{ margin: -16 }}
-                      showHeader={false}
-                      pagination={false}
-                      columns={[
-                        {
-                          key: "title",
-                          title: "Title",
-                          dataIndex: "title",
-                          render: (text, record, index) => (
-                            <div style={{ textAlign: "right" }}>{text}</div>
-                          ),
-                        },
-                        {
-                          key: "data",
-                          title: "Data",
-                          dataIndex: "data",
-                          width: 80,
-                          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                        },
-                      ]}
-                      dataSource={[
-                        {
-                          key: "1",
-                          title: "Jumlah Kemasan",
-                          data: "0",
-                        },
-                        {
-                          key: "2",
-                          title: "Jumlah Kemasan Dilekati Pita",
-                          data: "0",
-                        },
-                        {
-                          key: "3",
-                          title: "Jumlah Batang",
-                          data: "0",
-                        },
-                        {
-                          key: "4",
-                          title: "Jumlah Gram",
-                          data: "0",
-                        },
-                        {
-                          key: "5",
-                          title: "Jumlah Militer",
-                          data: "0",
-                        },
-                      ]}
-                    />
-                  );
-                }}
-              />
-            </div>
           </div>
         </Container>
       </>

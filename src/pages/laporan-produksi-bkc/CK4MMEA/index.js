@@ -37,9 +37,9 @@ export default class CK4MMEA extends Component {
       nomor_dokumen_produksi: "",
       tanggal_dokumen_produksi: "",
       jumlah_kemasan_produksi: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_pelekatan: "",
-      dilekati_pita: "",
+      jumlah_produksi_produksi: "",
+      jumlah_kemasan_dilekati_pita_pelekatan: "",
+
       uraian_rincian_file: [],
 
       list_tempat_dibuat: [
@@ -112,11 +112,9 @@ export default class CK4MMEA extends Component {
   };
 
   render() {
-    console.log("this.state.uraian_rincian_file", this.state.uraian_rincian_file);
-
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA" hideContentHeader>
+        <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Rekam" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -309,9 +307,9 @@ export default class CK4MMEA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="jumlah_produksi"
-                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
-                        value={this.state.jumlah_produksi}
+                        id="jumlah_kemasan"
+                        onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
+                        value={this.state.jumlah_kemasan}
                         min={0}
                         style={{ flex: 1 }}
                       />
@@ -324,9 +322,11 @@ export default class CK4MMEA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="jumlah_produksi"
-                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
-                        value={this.state.jumlah_produksi}
+                        id="jumlah_kemasan_dilekati_pita"
+                        onChange={(value) =>
+                          this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
+                        }
+                        value={this.state.jumlah_kemasan_dilekati_pita}
                         min={0}
                         style={{ flex: 1 }}
                       />
@@ -467,10 +467,10 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Tanggal Produksi</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_pemberitahuan"
-                          value={this.state.tanggal_pemberitahuan}
+                          id="tanggal_dokumen_produksi"
+                          value={this.state.tanggal_dokumen_produksi}
                           onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_pemberitahuan", date)
+                            this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                           }
                           style={{ width: "100%" }}
                         />
@@ -502,11 +502,11 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Jumlah Produksi</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_produksi"
+                          id="jumlah_produksi_produksi"
                           onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_produksi", value)
+                            this.handleInputNumberChange("jumlah_produksi_produksi", value)
                           }
-                          value={this.state.jumlah_produksi}
+                          value={this.state.jumlah_produksi_produksi}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -520,11 +520,14 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_kemasan_dilekati_pita"
+                          id="jumlah_kemasan_dilekati_pita_pelekatan"
                           onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
+                            this.handleInputNumberChange(
+                              "jumlah_kemasan_dilekati_pita_pelekatan",
+                              value
+                            )
                           }
-                          value={this.state.jumlah_kemasan_dilekati_pita}
+                          value={this.state.jumlah_kemasan_dilekati_pita_pelekatan}
                           style={{ width: "100%" }}
                         />
                       </div>

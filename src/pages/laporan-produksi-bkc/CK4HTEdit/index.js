@@ -14,9 +14,10 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import moment from "moment";
 import React, { Component } from "react";
 
-export default class CK4HT extends Component {
+export default class CK4HTDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,37 +25,37 @@ export default class CK4HT extends Component {
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      tempat_dibuat: "tempat_dibuat",
+      nama_pengusaha: "nama_pengusaha",
 
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
-      jenis_laporan: "",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nama_nppbkc: "nama_nppbkc",
+      nppbkc: "nppbkc",
+      alamat_nppbkc: "alamat_nppbkc",
+      jenis_laporan: "jenis_laporan",
+      nomor_pemberitahuan: "nomor_pemberitahuan",
+      tanggal_pemberitahuan: moment(new Date()),
       jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
-      periode_awal: "",
-      periode_akhir: "",
-      tanggal_produksi_awal: "",
-      tanggal_produksi_akhir: "",
-      jumlah_kemasan: "",
-      jumlah_kemasan_dilekati_pita_kemasan: "",
-      jumlah_produksi_ht_btg: "",
-      jumlah_produksi_ht_gr: "",
-      jumlah_produksi_ht_ml: "",
+      periode_awal: "periode_awal",
+      periode_akhir: "periode_akhir",
+      tanggal_produksi_awal: moment(new Date()),
+      tanggal_produksi_akhir: moment(new Date()),
+      jumlah_kemasan: "0",
+      jumlah_kemasan_dilekati_pita_kemasan: "0",
+      jumlah_produksi_ht_btg: "0",
+      jumlah_produksi_ht_gr: "0",
+      jumlah_produksi_ht_ml: "0",
       upload_uraian_rincian: [],
 
-      merk_ht: "",
-      jenis_hasil_tembakau: "",
-      hje: "",
-      bahan_kemasan: "",
-      isi_per_kemasan: "",
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_kemasan_produksi: "",
-      jumlah_produksi_per_merk: "",
-      jumlah_kemasan_dilekati_pita: "",
+      merk_ht: "merk_ht",
+      jenis_hasil_tembakau: "jenis_hasil_tembakau",
+      hje: "0",
+      bahan_kemasan: "bahan_kemasan",
+      isi_per_kemasan: "0",
+      nomor_dokumen_produksi: "nomor_dokumen_produksi",
+      tanggal_dokumen_produksi: moment(new Date()),
+      jumlah_kemasan_produksi: "0",
+      jumlah_produksi_per_merk: "0",
+      jumlah_kemasan_dilekati_pita: "0",
 
       uraian_rincian_file: [],
 
@@ -206,17 +207,17 @@ export default class CK4HT extends Component {
     setTimeout(() => onSuccess("ok"), 0);
   };
 
-  handleSimpan = () => {
+  handleUbah = () => {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam" hideContentHeader>
+        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Edit" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -233,6 +234,7 @@ export default class CK4HT extends Component {
                     id="tempat_dibuat"
                     onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
                     style={{ width: "100%" }}
+                    value={this.state.tempat_dibuat}
                   >
                     {this.state.list_tempat_dibuat.length > 0 &&
                       this.state.list_tempat_dibuat.map((item, index) => (
@@ -277,6 +279,7 @@ export default class CK4HT extends Component {
                       id="nama_nppbkc"
                       onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
                       style={{ width: "100%" }}
+                      value={this.state.nama_nppbkc}
                     >
                       {this.state.list_nama_nppbkc.length > 0 &&
                         this.state.list_nama_nppbkc.map((item, index) => (
@@ -321,6 +324,7 @@ export default class CK4HT extends Component {
                       id="jenis_laporan"
                       onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
                       style={{ width: "100%" }}
+                      value={this.state.jenis_laporan}
                     >
                       {this.state.list_jenis_laporan.length > 0 &&
                         this.state.list_jenis_laporan.map((item, index) => (
@@ -351,11 +355,11 @@ export default class CK4HT extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_pemberitahuan}
                     />
                   </div>
 
@@ -363,7 +367,7 @@ export default class CK4HT extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                     </div>
-                    <Input disabled value={this.state.jenis_barang_kena_cukai} />
+                    <Input value={this.state.jenis_barang_kena_cukai} />
                   </div>
                 </Card>
               </Col>
@@ -382,6 +386,7 @@ export default class CK4HT extends Component {
                         id="periode_awal"
                         onChange={(value) => this.handleSelectChange("periode_awal", value)}
                         style={{ width: "100%" }}
+                        value={this.state.periode_awal}
                       >
                         {this.state.list_periode.length > 0 &&
                           this.state.list_periode.map((item, index) => (
@@ -395,6 +400,7 @@ export default class CK4HT extends Component {
                         id="periode_akhir"
                         onChange={(value) => this.handleSelectChange("periode_akhir", value)}
                         style={{ width: "100%" }}
+                        value={this.state.periode_akhir}
                       >
                         {this.state.list_periode.length > 0 &&
                           this.state.list_periode.map((item, index) => (
@@ -435,9 +441,9 @@ export default class CK4HT extends Component {
                       <InputNumber
                         id="jumlah_kemasan"
                         onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
-                        value={this.state.jumlah_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan}
                       />
                       <div>Kemasan</div>
                     </div>
@@ -456,9 +462,9 @@ export default class CK4HT extends Component {
                             value
                           )
                         }
-                        value={this.state.jumlah_kemasan_dilekati_pita_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan_dilekati_pita_kemasan}
                       />
                       <div>Kemasan</div>
                     </div>
@@ -474,9 +480,9 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_btg", value)
                         }
-                        value={this.state.jumlah_produksi_ht_btg}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_btg}
                       />
                       <div>Batang</div>
                     </div>
@@ -492,9 +498,9 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
                         }
-                        value={this.state.jumlah_produksi_ht_gr}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_gr}
                       />
                       <div>Gram</div>
                     </div>
@@ -510,9 +516,9 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
                         }
-                        value={this.state.jumlah_produksi_ht_gr}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_gr}
                       />
                       <div>mililiter</div>
                     </div>
@@ -557,9 +563,9 @@ export default class CK4HT extends Component {
                       <InputNumber
                         id="hje"
                         onChange={(value) => this.handleInputNumberChange("hje", value)}
-                        value={this.state.hje}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.hje}
                       />
                       <div>Rupiah</div>
                     </div>
@@ -583,9 +589,9 @@ export default class CK4HT extends Component {
                     <InputNumber
                       id="isi_per_kemasan"
                       onChange={(value) => this.handleInputNumberChange("isi_per_kemasan", value)}
-                      value={this.state.isi_per_kemasan}
                       min={0}
                       style={{ width: "100%" }}
+                      value={this.state.isi_per_kemasan}
                     />
                   </div>
                 </Card>
@@ -612,11 +618,11 @@ export default class CK4HT extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_dokumen_produksi"
-                          value={this.state.tanggal_dokumen_produksi}
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                           }
                           style={{ width: "100%" }}
+                          value={this.state.tanggal_dokumen_produksi}
                         />
                       </div>
                     </Card>
@@ -634,8 +640,8 @@ export default class CK4HT extends Component {
                             onChange={(value) =>
                               this.handleInputNumberChange("jumlah_kemasan_produksi", value)
                             }
-                            value={this.state.jumlah_kemasan_produksi}
                             style={{ flex: 1 }}
+                            value={this.state.jumlah_kemasan_produksi}
                           />
                           <div>Kemasan</div>
                         </div>
@@ -650,8 +656,8 @@ export default class CK4HT extends Component {
                           onChange={(value) =>
                             this.handleInputNumberChange("jumlah_produksi_per_merk", value)
                           }
-                          value={this.state.jumlah_produksi_per_merk}
                           style={{ width: "100%" }}
+                          value={this.state.jumlah_produksi_per_merk}
                         />
                       </div>
                     </Card>
@@ -669,8 +675,8 @@ export default class CK4HT extends Component {
                             onChange={(value) =>
                               this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
                             }
-                            value={this.state.jumlah_kemasan_dilekati_pita}
                             style={{ flex: 1 }}
+                            value={this.state.jumlah_kemasan_dilekati_pita}
                           />
                           <div>Kemasan</div>
                         </div>
@@ -711,8 +717,8 @@ export default class CK4HT extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
-                      Simpan Rincian
+                    <Button type="primary" block onClick={this.handleUbah}>
+                      Ubah Rincian
                     </Button>
                   </Col>
 

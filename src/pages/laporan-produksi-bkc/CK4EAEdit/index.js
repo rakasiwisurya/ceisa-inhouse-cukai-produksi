@@ -2,9 +2,10 @@ import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select } from "
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import moment from "moment";
 import React, { Component } from "react";
 
-export default class CK4EA extends Component {
+export default class CK4EAEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,25 +13,25 @@ export default class CK4EA extends Component {
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      tempat_dibuat: "tempat_dibuat",
+      nama_pengusaha: "nama_pengusaha",
 
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
-      jenis_laporan: "",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nama_nppbkc: "nama_nppbkc",
+      nppbkc: "nppbkc",
+      alamat_nppbkc: "alamat_nppbkc",
+      jenis_laporan: "jenis_laporan",
+      nomor_pemberitahuan: "nomor_pemberitahuan",
+      tanggal_pemberitahuan: moment(new Date()),
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
-      tanggal_jam_produksi_awal: "",
-      tanggal_jam_produksi_akhir: "",
-      jumlah_produksi: "",
+      tanggal_jam_produksi_awal: moment(new Date()),
+      tanggal_jam_produksi_akhir: moment(new Date()),
+      jumlah_produksi: "0",
 
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_isi: "",
-      identitas_tangki: "",
-      keterangan: "",
+      nomor_dokumen_produksi: "nomor_dokumen_produksi",
+      tanggal_dokumen_produksi: moment(new Date()),
+      jumlah_isi: "0",
+      identitas_tangki: "identitas_tangki",
+      keterangan: "keterangan",
 
       list_jenis_laporan: [
         {
@@ -78,19 +79,18 @@ export default class CK4EA extends Component {
     this.setState({ ...this.state, [field]: value });
   };
 
-  handleSimpan = () => {
+  handleUbah = () => {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {
-    console.log("this.state", this.state);
-
+    console.log("this.props.match.params.id", this.props.match.params.id);
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Rekam" hideContentHeader>
+        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Edit" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -107,6 +107,7 @@ export default class CK4EA extends Component {
                     id="tempat_dibuat"
                     onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
                     style={{ width: "100%" }}
+                    value={this.state.tempat_dibuat}
                   >
                     {this.state.list_tempat_dibuat.length > 0 &&
                       this.state.list_tempat_dibuat.map((item, index) => (
@@ -151,6 +152,7 @@ export default class CK4EA extends Component {
                       id="nama_nppbkc"
                       onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
                       style={{ width: "100%" }}
+                      value={this.state.nama_nppbkc}
                     >
                       {this.state.list_nama_nppbkc.length > 0 &&
                         this.state.list_nama_nppbkc.map((item, index) => (
@@ -194,6 +196,7 @@ export default class CK4EA extends Component {
                       id="jenis_laporan"
                       onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
                       style={{ width: "100%" }}
+                      value={this.state.jenis_laporan}
                     >
                       {this.state.list_jenis_laporan.length > 0 &&
                         this.state.list_jenis_laporan.map((item, index) => (
@@ -224,11 +227,11 @@ export default class CK4EA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_pemberitahuan}
                     />
                   </div>
 
@@ -236,7 +239,7 @@ export default class CK4EA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                     </div>
-                    <Input disabled value={this.state.jenis_barang_kena_cukai} />
+                    <Input value={this.state.jenis_barang_kena_cukai} />
                   </div>
                 </Card>
               </Col>
@@ -258,6 +261,7 @@ export default class CK4EA extends Component {
                         this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_jam_produksi_awal}
                     />
                   </div>
 
@@ -273,6 +277,7 @@ export default class CK4EA extends Component {
                         this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_jam_produksi_akhir}
                     />
                   </div>
 
@@ -318,11 +323,11 @@ export default class CK4EA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_dokumen_produksi"
-                      value={this.state.tanggal_dokumen_produksi}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_dokumen_produksi}
                     />
                   </div>
                 </Card>
@@ -374,8 +379,8 @@ export default class CK4EA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
-                      Simpan Rincian
+                    <Button type="primary" block onClick={this.handleUbah}>
+                      Ubah Rincian
                     </Button>
                   </Col>
 

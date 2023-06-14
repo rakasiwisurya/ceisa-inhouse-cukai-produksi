@@ -14,9 +14,10 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import moment from "moment";
 import React, { Component } from "react";
 
-export default class CK4HT extends Component {
+export default class CK4HTDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,37 +25,37 @@ export default class CK4HT extends Component {
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      tempat_dibuat: "tempat_dibuat",
+      nama_pengusaha: "nama_pengusaha",
 
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
-      jenis_laporan: "",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nama_nppbkc: "nama_nppbkc",
+      nppbkc: "nppbkc",
+      alamat_nppbkc: "alamat_nppbkc",
+      jenis_laporan: "jenis_laporan",
+      nomor_pemberitahuan: "nomor_pemberitahuan",
+      tanggal_pemberitahuan: moment(new Date()),
       jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
-      periode_awal: "",
-      periode_akhir: "",
-      tanggal_produksi_awal: "",
-      tanggal_produksi_akhir: "",
-      jumlah_kemasan: "",
-      jumlah_kemasan_dilekati_pita_kemasan: "",
-      jumlah_produksi_ht_btg: "",
-      jumlah_produksi_ht_gr: "",
-      jumlah_produksi_ht_ml: "",
+      periode_awal: "periode_awal",
+      periode_akhir: "periode_akhir",
+      tanggal_produksi_awal: moment(new Date()),
+      tanggal_produksi_akhir: moment(new Date()),
+      jumlah_kemasan: "0",
+      jumlah_kemasan_dilekati_pita_kemasan: "0",
+      jumlah_produksi_ht_btg: "0",
+      jumlah_produksi_ht_gr: "0",
+      jumlah_produksi_ht_ml: "0",
       upload_uraian_rincian: [],
 
-      merk_ht: "",
-      jenis_hasil_tembakau: "",
-      hje: "",
-      bahan_kemasan: "",
-      isi_per_kemasan: "",
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_kemasan_produksi: "",
-      jumlah_produksi_per_merk: "",
-      jumlah_kemasan_dilekati_pita: "",
+      merk_ht: "merk_ht",
+      jenis_hasil_tembakau: "jenis_hasil_tembakau",
+      hje: "0",
+      bahan_kemasan: "bahan_kemasan",
+      isi_per_kemasan: "0",
+      nomor_dokumen_produksi: "nomor_dokumen_produksi",
+      tanggal_dokumen_produksi: moment(new Date()),
+      jumlah_kemasan_produksi: "0",
+      jumlah_produksi_per_merk: "0",
+      jumlah_kemasan_dilekati_pita: "0",
 
       uraian_rincian_file: [],
 
@@ -206,17 +207,10 @@ export default class CK4HT extends Component {
     setTimeout(() => onSuccess("ok"), 0);
   };
 
-  handleSimpan = () => {
-    console.log("simpan");
-  };
-  handleBatal = () => {
-    console.log("batal");
-  };
-
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam" hideContentHeader>
+        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Detail" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -233,6 +227,8 @@ export default class CK4HT extends Component {
                     id="tempat_dibuat"
                     onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
                     style={{ width: "100%" }}
+                    value={this.state.tempat_dibuat}
+                    disabled
                   >
                     {this.state.list_tempat_dibuat.length > 0 &&
                       this.state.list_tempat_dibuat.map((item, index) => (
@@ -254,6 +250,7 @@ export default class CK4HT extends Component {
                     id="nama_pengusaha"
                     onChange={this.handleInputChange}
                     value={this.state.nama_pengusaha}
+                    disabled
                   />
                 </div>
               </Col>
@@ -277,6 +274,8 @@ export default class CK4HT extends Component {
                       id="nama_nppbkc"
                       onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
                       style={{ width: "100%" }}
+                      value={this.state.nama_nppbkc}
+                      disabled
                     >
                       {this.state.list_nama_nppbkc.length > 0 &&
                         this.state.list_nama_nppbkc.map((item, index) => (
@@ -295,6 +294,7 @@ export default class CK4HT extends Component {
                       id="nppbkc"
                       onChange={this.handleInputChange}
                       value={this.state.nppbkc}
+                      disabled
                     />
                   </div>
 
@@ -306,6 +306,7 @@ export default class CK4HT extends Component {
                       id="alamat_nppbkc"
                       onChange={this.handleInputChange}
                       value={this.state.alamat_nppbkc}
+                      disabled
                     />
                   </div>
                 </Card>
@@ -321,6 +322,8 @@ export default class CK4HT extends Component {
                       id="jenis_laporan"
                       onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
                       style={{ width: "100%" }}
+                      value={this.state.jenis_laporan}
+                      disabled
                     >
                       {this.state.list_jenis_laporan.length > 0 &&
                         this.state.list_jenis_laporan.map((item, index) => (
@@ -342,6 +345,7 @@ export default class CK4HT extends Component {
                       id="nomor_pemberitahuan"
                       onChange={this.handleInputChange}
                       value={this.state.nomor_pemberitahuan}
+                      disabled
                     />
                   </div>
 
@@ -351,11 +355,12 @@ export default class CK4HT extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
                       style={{ width: "100%" }}
+                      value={this.state.tanggal_pemberitahuan}
+                      disabled
                     />
                   </div>
 
@@ -382,6 +387,8 @@ export default class CK4HT extends Component {
                         id="periode_awal"
                         onChange={(value) => this.handleSelectChange("periode_awal", value)}
                         style={{ width: "100%" }}
+                        value={this.state.periode_awal}
+                        disabled
                       >
                         {this.state.list_periode.length > 0 &&
                           this.state.list_periode.map((item, index) => (
@@ -395,6 +402,8 @@ export default class CK4HT extends Component {
                         id="periode_akhir"
                         onChange={(value) => this.handleSelectChange("periode_akhir", value)}
                         style={{ width: "100%" }}
+                        value={this.state.periode_akhir}
+                        disabled
                       >
                         {this.state.list_periode.length > 0 &&
                           this.state.list_periode.map((item, index) => (
@@ -415,6 +424,7 @@ export default class CK4HT extends Component {
                         id="tanggal_produksi_awal"
                         onChange={(value) => this.handleInputChange("tanggal_produksi_awal", value)}
                         value={this.state.tanggal_produksi_awal}
+                        disabled
                       />
                       <div>s/d</div>
                       <Input
@@ -423,6 +433,7 @@ export default class CK4HT extends Component {
                           this.handleInputChange("tanggal_produksi_akhir", value)
                         }
                         value={this.state.tanggal_produksi_akhir}
+                        disabled
                       />
                     </div>
                   </div>
@@ -435,9 +446,10 @@ export default class CK4HT extends Component {
                       <InputNumber
                         id="jumlah_kemasan"
                         onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
-                        value={this.state.jumlah_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan}
+                        disabled
                       />
                       <div>Kemasan</div>
                     </div>
@@ -456,9 +468,10 @@ export default class CK4HT extends Component {
                             value
                           )
                         }
-                        value={this.state.jumlah_kemasan_dilekati_pita_kemasan}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_kemasan_dilekati_pita_kemasan}
+                        disabled
                       />
                       <div>Kemasan</div>
                     </div>
@@ -474,9 +487,10 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_btg", value)
                         }
-                        value={this.state.jumlah_produksi_ht_btg}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_btg}
+                        disabled
                       />
                       <div>Batang</div>
                     </div>
@@ -492,9 +506,10 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
                         }
-                        value={this.state.jumlah_produksi_ht_gr}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_gr}
+                        disabled
                       />
                       <div>Gram</div>
                     </div>
@@ -510,9 +525,10 @@ export default class CK4HT extends Component {
                         onChange={(value) =>
                           this.handleInputNumberChange("jumlah_produksi_ht_gr", value)
                         }
-                        value={this.state.jumlah_produksi_ht_gr}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.jumlah_produksi_ht_gr}
+                        disabled
                       />
                       <div>mililiter</div>
                     </div>
@@ -535,6 +551,7 @@ export default class CK4HT extends Component {
                       id="merk_ht"
                       onChange={(value) => this.handleInputChange("merk_ht", value)}
                       value={this.state.merk_ht}
+                      disabled
                     />
                   </div>
 
@@ -546,6 +563,7 @@ export default class CK4HT extends Component {
                       id="jenis_hasil_tembakau"
                       onChange={(value) => this.handleInputChange("jenis_hasil_tembakau", value)}
                       value={this.state.jenis_hasil_tembakau}
+                      disabled
                     />
                   </div>
 
@@ -557,9 +575,10 @@ export default class CK4HT extends Component {
                       <InputNumber
                         id="hje"
                         onChange={(value) => this.handleInputNumberChange("hje", value)}
-                        value={this.state.hje}
                         min={0}
                         style={{ flex: 1 }}
+                        value={this.state.hje}
+                        disabled
                       />
                       <div>Rupiah</div>
                     </div>
@@ -573,6 +592,7 @@ export default class CK4HT extends Component {
                       id="bahan_kemasan"
                       onChange={(value) => this.handleInputChange("bahan_kemasan", value)}
                       value={this.state.bahan_kemasan}
+                      disabled
                     />
                   </div>
 
@@ -583,9 +603,10 @@ export default class CK4HT extends Component {
                     <InputNumber
                       id="isi_per_kemasan"
                       onChange={(value) => this.handleInputNumberChange("isi_per_kemasan", value)}
-                      value={this.state.isi_per_kemasan}
                       min={0}
                       style={{ width: "100%" }}
+                      value={this.state.isi_per_kemasan}
+                      disabled
                     />
                   </div>
                 </Card>
@@ -603,6 +624,7 @@ export default class CK4HT extends Component {
                           id="nomor_dokumen_produksi"
                           onChange={this.handleInputChange}
                           value={this.state.nomor_dokumen_produksi}
+                          disabled
                         />
                       </div>
 
@@ -612,11 +634,12 @@ export default class CK4HT extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_dokumen_produksi"
-                          value={this.state.tanggal_dokumen_produksi}
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                           }
                           style={{ width: "100%" }}
+                          value={this.state.tanggal_dokumen_produksi}
+                          disabled
                         />
                       </div>
                     </Card>
@@ -634,8 +657,9 @@ export default class CK4HT extends Component {
                             onChange={(value) =>
                               this.handleInputNumberChange("jumlah_kemasan_produksi", value)
                             }
-                            value={this.state.jumlah_kemasan_produksi}
                             style={{ flex: 1 }}
+                            value={this.state.jumlah_kemasan_produksi}
+                            disabled
                           />
                           <div>Kemasan</div>
                         </div>
@@ -650,8 +674,9 @@ export default class CK4HT extends Component {
                           onChange={(value) =>
                             this.handleInputNumberChange("jumlah_produksi_per_merk", value)
                           }
-                          value={this.state.jumlah_produksi_per_merk}
                           style={{ width: "100%" }}
+                          value={this.state.jumlah_produksi_per_merk}
+                          disabled
                         />
                       </div>
                     </Card>
@@ -669,8 +694,9 @@ export default class CK4HT extends Component {
                             onChange={(value) =>
                               this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
                             }
-                            value={this.state.jumlah_kemasan_dilekati_pita}
                             style={{ flex: 1 }}
+                            value={this.state.jumlah_kemasan_dilekati_pita}
+                            disabled
                           />
                           <div>Kemasan</div>
                         </div>
@@ -697,31 +723,14 @@ export default class CK4HT extends Component {
                         this.handleUploadFileChange("uraian_rincian_file", file, fileList)
                       }
                       fileList={this.state.uraian_rincian_file}
+                      disabled
                     >
-                      <Button>
+                      <Button disabled>
                         <Icon type="upload" /> Upload
                       </Button>
                     </Upload>
                   </div>
                 </Card>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={16}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
-                      Simpan Rincian
-                    </Button>
-                  </Col>
-
-                  <Col span={12}>
-                    <Button type="danger" block onClick={this.handleBatal}>
-                      Batal
-                    </Button>
-                  </Col>
-                </Row>
               </Col>
             </Row>
 

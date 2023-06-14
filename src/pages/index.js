@@ -20,6 +20,12 @@ import BRCK2Rekam from "./buku-rekening-cukai/BRCK2Rekam";
 import CK4EA from "./laporan-produksi-bkc/CK4EA";
 import CK4MMEA from "./laporan-produksi-bkc/CK4MMEA";
 import CK4HT from "./laporan-produksi-bkc/CK4HT";
+import CK4EADetail from "./laporan-produksi-bkc/CK4EADetail";
+import CK4EAEdit from "./laporan-produksi-bkc/CK4EAEdit";
+import CK4MMEADetail from "./laporan-produksi-bkc/CK4MMEADetail";
+import CK4MMEAEdit from "./laporan-produksi-bkc/CK4MMEAEdit";
+import CK4HTDetail from "./laporan-produksi-bkc/CK4HTDetail";
+import CK4HTEdit from "./laporan-produksi-bkc/CK4HTEdit";
 
 export default function PageContent({ propsExtra }) {
   const pathName = "/citac";
@@ -116,13 +122,43 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/ck4-ea-detail/:id"}
+        render={(props) => <CK4EADetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/ck4-ea-edit/:id"}
+        render={(props) => <CK4EAEdit {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/ck4-mmea"}
         render={(props) => <CK4MMEA {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
+        path={pathName + "/ck4-mmea-detail/:id"}
+        render={(props) => <CK4MMEADetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/ck4-mmea-edit/:id"}
+        render={(props) => <CK4MMEAEdit {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/ck4-ht"}
         render={(props) => <CK4HT {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/ck4-ht-detail/:id"}
+        render={(props) => <CK4HTDetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/ck4-ht-edit/:id"}
+        render={(props) => <CK4HTEdit {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
