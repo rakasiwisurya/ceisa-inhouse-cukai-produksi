@@ -1,9 +1,8 @@
-import { Button, Icon, Input, Table, Tabs } from "antd";
+import { Button, Col, Icon, Input, Row, Table, Tabs } from "antd";
 import Container from "components/Container";
 import React, { Component } from "react";
 import Header from "components/Header";
-
-const pathName = "/citac";
+import { pathName } from "configs/constants";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -225,13 +224,13 @@ export default class CK4 extends Component {
   handleEdit = (id, nppbkc) => {
     switch (true) {
       case nppbkc === "EA":
-        this.props.history.push(`${pathName}/ck4-ea-edit/${id}`);
+        this.props.history.push(`${pathName}/ck4-ea-perbaikan/${id}`);
         break;
       case nppbkc === "MMEA":
-        this.props.history.push(`${pathName}/ck4-mmea-edit/${id}`);
+        this.props.history.push(`${pathName}/ck4-mmea-perbaikan/${id}`);
         break;
       case nppbkc === "HT":
-        this.props.history.push(`${pathName}/ck4-ht-edit/${id}`);
+        this.props.history.push(`${pathName}/ck4-ht-perbaikan/${id}`);
         break;
       default:
         break;
@@ -244,22 +243,43 @@ export default class CK4 extends Component {
         <Container menuName="Laporan Produksi BKC" contentName="CK4" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
-              <Button type="default" onClick={() => this.props.history.push(`${pathName}/ck4-ea`)}>
-                CK4A Rekam
-              </Button>
-              <Button
-                type="default"
-                onClick={() => this.props.history.push(`${pathName}/ck4-mmea`)}
-              >
-                CK4B Rekam
-              </Button>
-              <Button type="default" onClick={() => this.props.history.push(`${pathName}/ck4-ht`)}>
-                CK4C Rekam
-              </Button>
-            </div>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <Row gutter={[16, 16]}>
+                  <Col span={8}>
+                    <Button
+                      block
+                      type="default"
+                      onClick={() => this.props.history.push(`${pathName}/ck4-ea-rekam`)}
+                    >
+                      CK4A Rekam
+                    </Button>
+                  </Col>
 
-            <div style={{ marginTop: 20 }}>
+                  <Col span={8}>
+                    <Button
+                      block
+                      type="default"
+                      onClick={() => this.props.history.push(`${pathName}/ck4-mmea-rekam`)}
+                    >
+                      CK4B Rekam
+                    </Button>
+                  </Col>
+
+                  <Col span={8}>
+                    <Button
+                      block
+                      type="default"
+                      onClick={() => this.props.history.push(`${pathName}/ck4-ht-rekam`)}
+                    >
+                      CK4C Rekam
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <div style={{ marginTop: 10 }}>
               <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}

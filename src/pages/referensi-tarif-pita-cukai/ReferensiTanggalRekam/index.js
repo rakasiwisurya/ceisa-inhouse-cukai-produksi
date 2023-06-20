@@ -4,7 +4,7 @@ import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import React, { Component } from "react";
 
-export default class ReferensiTanggal extends Component {
+export default class ReferensiTanggalRekam extends Component {
   constructor(props) {
     super(props);
     this.state = {

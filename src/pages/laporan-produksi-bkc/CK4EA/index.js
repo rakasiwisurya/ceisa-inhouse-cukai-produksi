@@ -82,12 +82,10 @@ export default class CK4EA extends Component {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {
-    console.log("this.state", this.state);
-
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Rekam" hideContentHeader>

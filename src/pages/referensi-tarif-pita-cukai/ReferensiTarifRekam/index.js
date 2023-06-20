@@ -1,10 +1,10 @@
-import React, { Fragment, Component } from "react";
+import React, { Component } from "react";
 import { Row, Col, Input, Button, Icon, DatePicker, Select, Table } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 
-export default class ReferensiTarif extends Component {
+export default class ReferensiTarifRekam extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -596,26 +596,14 @@ export default class ReferensiTarif extends Component {
   handleInputChange = (e) => {
     this.setState({ ...this.state, [e.target.id]: e.target.value });
   };
-  handleTanggalSuratChange = (date, dateString) => {
-    this.setState({ ...this.state, tanggal_surat: dateString });
+  handleInputChange = (e) => {
+    this.setState({ ...this.state, [e.target.id]: e.target.value });
   };
-  handleTanggalAwalBerlakuChange = (date, dateString) => {
-    this.setState({ ...this.state, tanggal_awal_berlaku: dateString });
+  handleDatepickerChange = (field, value) => {
+    this.setState({ ...this.state, [field]: value });
   };
-  handleTanggalperaturanChange = (date, dateString) => {
-    this.setState({ ...this.state, tanggal_peraturan: dateString });
-  };
-  handleJenisBKCChange = (value) => {
-    this.setState({ ...this.state, jenis_bkc: value });
-  };
-  handleJenisGolonganChange = (value) => {
-    this.setState({ ...this.state, golongan: value });
-  };
-  handleJenisProduksiChange = (value) => {
-    this.setState({ ...this.state, jenis_produksi: value });
-  };
-  handleJenisHPTLRELChange = (value) => {
-    this.setState({ ...this.setState, jenis_hptl_rel: value });
+  handleSelectChange = (field, value) => {
+    this.setState({ ...this.state, [field]: value });
   };
   handleEdit = () => {
     this.setState({ ...this.state, isEdit: true });
@@ -638,10 +626,10 @@ export default class ReferensiTarif extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <Container
           menuName="Referensi Tarif dan Pita Cukai"
-          contentName="Referensi Tarif"
+          contentName="Referensi Tarif Rekam"
           hideContentHeader
         >
           <Header>{this.state.subtitle1}</Header>
@@ -665,14 +653,20 @@ export default class ReferensiTarif extends Component {
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Tanggal Surat</FormLabel>
                 </div>
-                <DatePicker onChange={this.handleTanggalSuratChange} />
+                <DatePicker
+                  id="tanggal_surat"
+                  onChange={(value) => this.handleDatepickerChange("tanggal_surat", value)}
+                  value={this.state.tanggal_surat}
+                />
               </Col>
               <Col span={6}>
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Tanggal Awal Berlaku</FormLabel>
                 </div>
                 <DatePicker
-                  onChange={this.handleTanggalAwalBerlakuChange}
+                  id="tanggal_awal_berlaku"
+                  onChange={(value) => this.handleDatepickerChange("tanggal_awal_berlaku", value)}
+                  value={this.state.tanggal_awal_berlaku}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -693,7 +687,12 @@ export default class ReferensiTarif extends Component {
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Tanggal Peraturan</FormLabel>
                 </div>
-                <DatePicker onChange={this.handleTanggalperaturanChange} />
+                <DatePicker
+                  id="tanggal_peraturan"
+                  onChange={(value) => this.handleDatepickerChange("tanggal_peraturan", value)}
+                  style={{ width: "100%" }}
+                  value={this.state.tanggal_peraturan}
+                />
               </Col>
             </Row>
           </div>
@@ -707,7 +706,7 @@ export default class ReferensiTarif extends Component {
                 </div>
                 <Select
                   id="jenis_bkc"
-                  onChange={this.handleJenisBKCChange}
+                  onChange={(value) => this.handleSelectChange("jenis_bkc", value)}
                   value={this.state.jenis_bkc}
                   style={{ width: "100%" }}
                 >
@@ -728,7 +727,7 @@ export default class ReferensiTarif extends Component {
                   <Select
                     id="golongan"
                     value={this.state.golongan}
-                    onChange={this.handleJenisGolonganChange}
+                    onChange={(value) => this.handleSelectChange("golongan", value)}
                     style={{ width: "100%" }}
                   >
                     {this.state.list_golongan.length > 0 &&
@@ -749,7 +748,7 @@ export default class ReferensiTarif extends Component {
                     </div>
                     <Select
                       id="jenis_produksi"
-                      onChange={this.handleJenisProduksiChange}
+                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
                       value={this.state.jenis_produksi}
                       style={{ width: "100%" }}
                     >
@@ -772,7 +771,7 @@ export default class ReferensiTarif extends Component {
                     <Select
                       id="jenis_hptl_rel"
                       value={this.state.jenis_hptl_rel}
-                      onChange={this.handleJenisHPTLRELChange}
+                      onChange={(value) => this.handleSelectChange("jenis_hptl_rel", value)}
                       style={{ width: "100%" }}
                       disabled={
                         !(
@@ -954,7 +953,7 @@ export default class ReferensiTarif extends Component {
             )}
           </div>
         </Container>
-      </Fragment>
+      </>
     );
   }
 }

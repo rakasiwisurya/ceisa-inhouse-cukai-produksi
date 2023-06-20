@@ -210,7 +210,7 @@ export default class CK4HT extends Component {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {

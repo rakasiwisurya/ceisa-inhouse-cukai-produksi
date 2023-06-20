@@ -1,8 +1,7 @@
 import { Button, Icon, Input, Table } from "antd";
 import Container from "components/Container";
+import { pathName } from "configs/constants";
 import React, { Component } from "react";
-
-const pathName = "/citac";
 export default class BRCK1 extends Component {
   constructor(props) {
     super(props);

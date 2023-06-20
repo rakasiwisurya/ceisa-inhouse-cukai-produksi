@@ -108,7 +108,7 @@ export default class CK4MMEA extends Component {
     console.log("simpan");
   };
   handleBatal = () => {
-    console.log("batal");
+    this.props.history.goBack();
   };
 
   render() {

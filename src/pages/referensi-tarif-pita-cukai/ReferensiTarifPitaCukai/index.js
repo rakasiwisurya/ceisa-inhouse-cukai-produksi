@@ -1,18 +1,11 @@
-import React, { Fragment, Component } from "react";
-import { Button, Row, Input, Icon, Table, Modal, Col } from "antd";
+import React, { Component } from "react";
+import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
-import ModalDetailTarifPitaCukai from "./ModalDetailTarifPitaCukai";
-import ModalEditTarifPitaCukai from "./ModalEditTarifPitaCukai";
-
-const pathName = "/citac";
+import { pathName } from "configs/constants";
 export default class ReferensiTarifPitaCukai extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalDetailOpen: false,
-      isModalEditOpen: false,
-      detailData: {},
-      editData: {},
       searchText: "",
       searchedColumn: "",
 
@@ -24,8 +17,16 @@ export default class ReferensiTarifPitaCukai extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button icon="form" onClick={() => this.handleModalEditShow(record)} />
-              <Button icon="eye" onClick={() => this.handleModalDetailShow(record)} />
+              <Button
+                icon="form"
+                type="primary"
+                onClick={() => this.handleEdit(record.id, record.jenis_referensi)}
+              />
+              <Button
+                icon="eye"
+                type="default"
+                onClick={() => this.handleDetail(record.id, record.jenis_referensi)}
+              />
             </div>
           ),
         },
@@ -34,7 +35,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Nomor",
           dataIndex: "nomor",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text, record, index) => <div style={{ textAlign: "center" }}>{index + 1}</div>,
         },
 
         {
@@ -89,7 +90,7 @@ export default class ReferensiTarifPitaCukai extends Component {
       dataSource: [
         {
           key: 1,
-          nomor: 1,
+          id: 1,
           nomor_surat: "PER-12/BC/2022",
           tanggal_surat: "25-11-2022",
           awal_berlaku: "01-01-2023",
@@ -99,7 +100,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 2,
-          nomor: 2,
+          id: 2,
           nomor_surat: "PER-12/BC/2022",
           tanggal_surat: "25-11-2022",
           awal_berlaku: "01-01-2023",
@@ -109,7 +110,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 3,
-          nomor: 3,
+          id: 3,
           nomor_surat: "191/PMK.010/2022",
           tanggal_surat: "15-12-2022",
           awal_berlaku: "01-01-2023",
@@ -119,7 +120,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 4,
-          nomor: 4,
+          id: 4,
           nomor_surat: "192/PMK.010/2022",
           tanggal_surat: "15-11-2022",
           awal_berlaku: "01-01-2023",
@@ -129,7 +130,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 5,
-          nomor: 5,
+          id: 5,
           nomor_surat: "PER-12/BC/2022",
           tanggal_surat: "25-11-2022",
           awal_berlaku: "01-01-2023",
@@ -140,7 +141,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 6,
-          nomor: 6,
+          id: 6,
           nomor_surat: "PER-12/BC/2022",
           tanggal_surat: "25-11-2022",
           awal_berlaku: "01-01-2023",
@@ -150,7 +151,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 7,
-          nomor: 7,
+          id: 7,
           nomor_surat: "191/PMK.010/2022",
           tanggal_surat: "15-12-2022",
           awal_berlaku: "01-01-2023",
@@ -160,7 +161,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 8,
-          nomor: 8,
+          id: 8,
           nomor_surat: "192/PMK.010/2022",
           tanggal_surat: "15-11-2022",
           awal_berlaku: "01-01-2023",
@@ -170,7 +171,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 9,
-          nomor: 9,
+          id: 9,
           nomor_surat: "191/PMK.010/2022",
           tanggal_surat: "15-12-2022",
           awal_berlaku: "01-01-2023",
@@ -180,13 +181,13 @@ export default class ReferensiTarifPitaCukai extends Component {
         },
         {
           key: 10,
-          nomor: 10,
+          id: 10,
           nomor_surat: "192/PMK.010/2022",
           tanggal_surat: "15-11-2022",
           awal_berlaku: "01-01-2023",
           akhir_berlaku: "-",
           jenis_bkc: "HT",
-          jenis_referensi: "Tarif",
+          jenis_referensi: "Tanggal",
         },
       ],
     };
@@ -246,17 +247,35 @@ export default class ReferensiTarifPitaCukai extends Component {
     this.setState({ searchText: "" });
   };
 
-  handleModalDetailShow = (record) => {
-    this.setState({ ...this.state, isModalDetailOpen: true, detailData: record });
+  handleEdit = (id, jenisReferensi) => {
+    switch (true) {
+      case jenisReferensi === "Warna":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-edit/${id}`);
+        break;
+      case jenisReferensi === "Tarif":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-edit/${id}`);
+        break;
+      case jenisReferensi === "Tanggal":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-edit/${id}`);
+        break;
+      default:
+        break;
+    }
   };
-  handleModalDetailCancel = () => {
-    this.setState({ ...this.state, isModalDetailOpen: false });
-  };
-  handleModalEditShow = (record) => {
-    this.setState({ ...this.state, isModalEditOpen: true, editData: record });
-  };
-  handleModalEditCancel = () => {
-    this.setState({ ...this.state, isModalEditOpen: false });
+  handleDetail = (id, jenisReferensi) => {
+    switch (true) {
+      case jenisReferensi === "Warna":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-detail/${id}`);
+        break;
+      case jenisReferensi === "Tarif":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-detail/${id}`);
+        break;
+      case jenisReferensi === "Tanggal":
+        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-detail/${id}`);
+        break;
+      default:
+        break;
+    }
   };
 
   render() {
@@ -272,7 +291,11 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <Col span={8}>
                   <Button
                     style={{ backgroundColor: "#81d3f8", color: "white", borderColor: "#81d3f8" }}
-                    onClick={() => this.props.history.push(`${pathName}/referensi-warna`)}
+                    onClick={() =>
+                      this.props.history.push(
+                        `${pathName}/referensi-tarif-warna/referensi-warna-rekam`
+                      )
+                    }
                     block
                   >
                     + Referesi Warna
@@ -282,7 +305,11 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <Col span={8}>
                   <Button
                     style={{ backgroundColor: "#facd91", color: "white", borderColor: "#facd91" }}
-                    onClick={() => this.props.history.push(`${pathName}/referensi-tarif`)}
+                    onClick={() =>
+                      this.props.history.push(
+                        `${pathName}/referensi-tarif-warna/referensi-tarif-rekam`
+                      )
+                    }
                     block
                   >
                     + Referesi Tarif
@@ -292,7 +319,11 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <Col span={8}>
                   <Button
                     style={{ backgroundColor: "#ec808d", color: "white", borderColor: " #ec808d" }}
-                    onClick={() => this.props.history.push(`${pathName}/referensi-tanggal`)}
+                    onClick={() =>
+                      this.props.history.push(
+                        `${pathName}/referensi-tarif-warna/referensi-tanggal-rekam`
+                      )
+                    }
                     block
                   >
                     + Referesi Tanggal
@@ -310,18 +341,6 @@ export default class ReferensiTarifPitaCukai extends Component {
             />
           </div>
         </Container>
-
-        <ModalDetailTarifPitaCukai
-          isOpen={this.state.isModalDetailOpen}
-          onCancel={this.handleModalDetailCancel}
-          data={this.state.detailData}
-        />
-
-        <ModalEditTarifPitaCukai
-          isOpen={this.state.isModalEditOpen}
-          onCancel={this.handleModalEditCancel}
-          data={this.state.editData}
-        />
       </>
     );
   }

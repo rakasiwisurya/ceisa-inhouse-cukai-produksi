@@ -3,9 +3,6 @@ import { Route, Switch } from "react-router-dom";
 import NotFound from "components/NotFound";
 import Dashboard from "./dashboard/Dashboard";
 import ReferensiTarifPitaCukai from "./referensi-tarif-pita-cukai/ReferensiTarifPitaCukai";
-import ReferensiTarif from "./referensi-tarif-pita-cukai/ReferensiTarif";
-import ReferensiWarna from "./referensi-tarif-pita-cukai/ReferensiWarna";
-import ReferensiTanggal from "./referensi-tarif-pita-cukai/ReferensiTanggal";
 import PermohonanTarif from "./tarif-cukai/PermohonanTarif";
 import PencabutanTarif from "./tarif-cukai/PencabutanTarif";
 import PenetapanKembali from "./tarif-cukai/PenetapanKembali";
@@ -26,69 +23,71 @@ import CK4MMEADetail from "./laporan-produksi-bkc/CK4MMEADetail";
 import CK4MMEAEdit from "./laporan-produksi-bkc/CK4MMEAEdit";
 import CK4HTDetail from "./laporan-produksi-bkc/CK4HTDetail";
 import CK4HTEdit from "./laporan-produksi-bkc/CK4HTEdit";
+import CK4EAPerbaikan from "./laporan-produksi-bkc/CK4EAPerbaikan";
+import CK4MMEAPerbaikan from "./laporan-produksi-bkc/CK4MMEAPerbaikan";
+import CK4HTPerbaikan from "./laporan-produksi-bkc/CK4HTPerbaikan";
+import { pathName } from "configs/constants";
+import ReferensiTarifEdit from "./referensi-tarif-pita-cukai/ReferensiTarifEdit";
+import ReferensiTarifDetail from "./referensi-tarif-pita-cukai/ReferensiTarifDetail";
+import ReferensiWarnaRekam from "./referensi-tarif-pita-cukai/ReferensiWarnaRekam";
+import ReferensiWarnaEdit from "./referensi-tarif-pita-cukai/ReferensiWarnaEdit";
+import ReferensiWarnaDetail from "./referensi-tarif-pita-cukai/ReferensiWarnaDetail";
+import ReferensiTanggalEdit from "./referensi-tarif-pita-cukai/ReferensiTanggalEdit";
+import ReferensiTanggalDetail from "./referensi-tarif-pita-cukai/ReferensiTanggalDetail";
+import ReferensiTarifRekam from "./referensi-tarif-pita-cukai/ReferensiTarifRekam";
+import ReferensiTanggalRekam from "./referensi-tarif-pita-cukai/ReferensiTanggalRekam";
 
 export default function PageContent({ propsExtra }) {
-  const pathName = "/citac";
-  // const pathName = ""
-
-  // route yang tersedia
-  // /data-transaksional-pabean
-  // /data-transaksional-cukai
-  // /data-transaksional-tpb
-  // /user-management
-  // /dashboard
-
   return (
     <Switch>
-      <Route
-        path={pathName + "/dashboard"}
-        render={(props) => <ReferensiTarifPitaCukai {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/data-transaksional-pabean"}
-        render={(props) => <CK4 {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/data-transaksional-cukai"}
-        render={(props) => <CK4BelumLapor {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/data-transaksional-tpb"}
-        render={(props) => <SPL {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/data-management"}
-        render={(props) => <BRCK1 {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/user-management"}
-        render={(props) => <BRCK2 {...props} {...propsExtra} />}
-        exact={true}
-      />
-
       <Route
         path={pathName + "/referensi-tarif-warna"}
         render={(props) => <ReferensiTarifPitaCukai {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/referensi-tarif"}
-        render={(props) => <ReferensiTarif {...props} {...propsExtra} />}
+        path={pathName + "/referensi-tarif-warna/referensi-tarif-rekam"}
+        render={(props) => <ReferensiTarifRekam {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/referensi-warna"}
-        render={(props) => <ReferensiWarna {...props} {...propsExtra} />}
+        path={pathName + "/referensi-tarif-warna/referensi-tarif-edit/:id"}
+        render={(props) => <ReferensiTarifEdit {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/referensi-tanggal"}
-        render={(props) => <ReferensiTanggal {...props} {...propsExtra} />}
+        path={pathName + "/referensi-tarif-warna/referensi-tarif-detail/:id"}
+        render={(props) => <ReferensiTarifDetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-warna-rekam"}
+        render={(props) => <ReferensiWarnaRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-warna-edit/:id"}
+        render={(props) => <ReferensiWarnaEdit {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-warna-detail/:id"}
+        render={(props) => <ReferensiWarnaDetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-tanggal-rekam"}
+        render={(props) => <ReferensiTanggalRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-tanggal-edit/:id"}
+        render={(props) => <ReferensiTanggalEdit {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/referensi-tarif-warna/referensi-tanggal-detail/:id"}
+        render={(props) => <ReferensiTanggalDetail {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -117,7 +116,7 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ea"}
+        path={pathName + "/ck4-ea-rekam"}
         render={(props) => <CK4EA {...props} {...propsExtra} />}
         exact={true}
       />
@@ -126,13 +125,18 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4EADetail {...props} {...propsExtra} />}
         exact={true}
       />
-      <Route
+      {/* <Route
         path={pathName + "/ck4-ea-edit/:id"}
         render={(props) => <CK4EAEdit {...props} {...propsExtra} />}
         exact={true}
+      /> */}
+      <Route
+        path={pathName + "/ck4-ea-perbaikan/:id"}
+        render={(props) => <CK4EAPerbaikan {...props} {...propsExtra} />}
+        exact={true}
       />
       <Route
-        path={pathName + "/ck4-mmea"}
+        path={pathName + "/ck4-mmea-rekam"}
         render={(props) => <CK4MMEA {...props} {...propsExtra} />}
         exact={true}
       />
@@ -141,13 +145,18 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4MMEADetail {...props} {...propsExtra} />}
         exact={true}
       />
-      <Route
+      {/* <Route
         path={pathName + "/ck4-mmea-edit/:id"}
         render={(props) => <CK4MMEAEdit {...props} {...propsExtra} />}
         exact={true}
+      /> */}
+      <Route
+        path={pathName + "/ck4-mmea-perbaikan/:id"}
+        render={(props) => <CK4MMEAPerbaikan {...props} {...propsExtra} />}
+        exact={true}
       />
       <Route
-        path={pathName + "/ck4-ht"}
+        path={pathName + "/ck4-ht-rekam"}
         render={(props) => <CK4HT {...props} {...propsExtra} />}
         exact={true}
       />
@@ -156,9 +165,14 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4HTDetail {...props} {...propsExtra} />}
         exact={true}
       />
-      <Route
+      {/* <Route
         path={pathName + "/ck4-ht-edit/:id"}
         render={(props) => <CK4HTEdit {...props} {...propsExtra} />}
+        exact={true}
+      /> */}
+      <Route
+        path={pathName + "/ck4-ht-perbaikan/:id"}
+        render={(props) => <CK4HTPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
