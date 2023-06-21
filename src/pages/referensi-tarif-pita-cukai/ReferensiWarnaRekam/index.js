@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import { Fragment } from "react";
 
 export default class ReferensiWarnaRekam extends Component {
   constructor(props) {
@@ -11,24 +12,32 @@ export default class ReferensiWarnaRekam extends Component {
       subtitle1: "Surat Keputusan",
       subtitle2: "Rincian",
       isEdit: false,
+
       nomor_surat: "",
       tanggal_surat: "",
       tanggal_awal_berlaku: "",
-      jenis_bkc: "",
+      jenis_bkc_code: "",
+      jenis_bkc_name: "",
       kode_warna: "",
       warna: "",
-      golongan: "",
-      jenis_produksi: "",
-      jenis_usaha: "",
+      golongan_code: "",
+      golongan_name: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_usaha_code: "",
+      jenis_usaha_name: "",
+
       searchText: "",
       searchedColumn: "",
+      page: 1,
+
       list_jenis_bkc: [
         {
-          jenis_bkc_code: "HT",
+          jenis_bkc_code: 3,
           jenis_bkc_name: "Hasil Tembakau (HT)",
         },
         {
-          jenis_bkc_code: "MMEA",
+          jenis_bkc_code: 2,
           jenis_bkc_name: "Minuman Mengandung Etil Alkohol (MMEA)",
         },
       ],
@@ -41,8 +50,8 @@ export default class ReferensiWarnaRekam extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc !== this.state.jenis_bkc) {
-      if (this.state.jenis_bkc === "HT") {
+    if (prevState.jenis_bkc_code !== this.state.jenis_bkc_code) {
+      if (this.state.jenis_bkc_code === 3) {
         this.setState({
           ...this.state,
           list_golongan: [
@@ -131,10 +140,10 @@ export default class ReferensiWarnaRekam extends Component {
               dataIndex: "aksi",
               key: "aksi",
               fixed: "left",
-              render: () => (
+              render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={this.handleEdit} />
-                  <Button type="danger" icon="close" onClick={this.handleReset} />
+                  <Button type="primary" icon="form" onClick={() => this.handleEdit(record)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                 </div>
               ),
             },
@@ -142,8 +151,9 @@ export default class ReferensiWarnaRekam extends Component {
               title: "Nomor",
               dataIndex: "nomor",
               key: "nomor",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor"),
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
             },
             {
               title: "Kode Warna",
@@ -161,105 +171,23 @@ export default class ReferensiWarnaRekam extends Component {
             },
             {
               title: "Golongan",
-              dataIndex: "golongan",
-              key: "golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("golongan"),
+              ...this.getColumnSearchProps("golongan_name"),
             },
             {
               title: "Jenis Produksi",
-              dataIndex: "jenis_produksi",
-              key: "jenis_produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_produksi"),
-            },
-          ],
-          dataSource: [
-            {
-              key: "1",
-              nomor: "1",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "2",
-              nomor: "2",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "3",
-              nomor: "3",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "4",
-              nomor: "4",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "5",
-              nomor: "5",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "6",
-              nomor: "6",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "7",
-              nomor: "7",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "8",
-              nomor: "8",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "9",
-              nomor: "9",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "10",
-              nomor: "10",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_produksi: "KLM - KELEMBAK MENYAN",
+              ...this.getColumnSearchProps("jenis_produksi_name"),
             },
           ],
         });
       }
 
-      if (this.state.jenis_bkc === "MMEA") {
+      if (this.state.jenis_bkc_code === 2) {
         this.setState({
           ...this.state,
           list_golongan: [
@@ -292,10 +220,10 @@ export default class ReferensiWarnaRekam extends Component {
               dataIndex: "aksi",
               key: "aksi",
               fixed: "left",
-              render: () => (
+              render: (text, record) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={this.handleEdit} />
-                  <Button type="danger" icon="close" onClick={this.handleReset} />
+                  <Button type="primary" icon="form" onClick={() => this.handleEdit(record)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                 </div>
               ),
             },
@@ -303,8 +231,9 @@ export default class ReferensiWarnaRekam extends Component {
               title: "Nomor",
               dataIndex: "nomor",
               key: "nomor",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor"),
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
             },
             {
               title: "Kode Warna",
@@ -322,89 +251,17 @@ export default class ReferensiWarnaRekam extends Component {
             },
             {
               title: "Golongan",
-              dataIndex: "golongan",
-              key: "golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("golongan"),
+              ...this.getColumnSearchProps("golongan_name"),
             },
             {
               title: "Jenis Usaha",
-              dataIndex: "jenis_usaha",
-              key: "jenis_usaha",
+              dataIndex: "jenis_usaha_name",
+              key: "jenis_usaha_name",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_usaha"),
-            },
-          ],
-          dataSource: [
-            {
-              key: "1",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "2",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "3",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "4",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "5",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "6",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "7",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "8",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "9",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
-            },
-            {
-              key: "10",
-              kode_warna: "HI",
-              warna: "HIJAU",
-              golongan: "2",
-              jenis_usaha: "KLM - KELEMBAK MENYAN",
+              ...this.getColumnSearchProps("jenis_usaha_name"),
             },
           ],
         });
@@ -466,6 +323,9 @@ export default class ReferensiWarnaRekam extends Component {
     clearFilters();
     this.setState({ searchText: "" });
   };
+  handleTableChange = (page) => {
+    this.setState({ ...this.state, page: page.current });
+  };
 
   handleInputChange = (e) => {
     this.setState({ ...this.state, [e.target.id]: e.target.value });
@@ -476,27 +336,137 @@ export default class ReferensiWarnaRekam extends Component {
   handleSelectChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
   };
-  handleEdit = () => {
-    this.setState({ ...this.state, isEdit: true });
+  handleSelectCustomChange = (field, value, option) => {
+    this.setState({
+      ...this.state,
+      [`${field}_code`]: value,
+      [`${field}_name`]: option.props.children,
+    });
   };
-  handleDelete = () => {
-    console.log("deleting...");
+
+  handleSimpan = () => {
+    const {
+      jenis_bkc_code,
+      jenis_bkc_name,
+      kode_warna,
+      warna,
+      golongan_code,
+      golongan_name,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_usaha_code,
+      jenis_usaha_name,
+    } = this.state;
+
+    this.setState({
+      ...this.state,
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          jenis_bkc_code,
+          jenis_bkc_name,
+          kode_warna,
+          warna,
+          golongan_code,
+          golongan_name,
+          jenis_produksi_code,
+          jenis_produksi_name,
+          jenis_usaha_code,
+          jenis_usaha_name,
+        },
+      ],
+    });
   };
   handleReset = () => {
-    console.log("reseting...");
+    this.setState({
+      ...this.state,
+      isEdit: false,
+      jenis_bkc_code: "",
+      jenis_bkc_name: "",
+      kode_warna: "",
+      warna: "",
+      golongan_code: "",
+      golongan_name: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_usaha_code: "",
+      jenis_usaha_name: "",
+      dataSource: [],
+    });
   };
-  handleUpdate = () => {
-    this.setState({ ...this.state, isEdit: false });
-    console.log("update...");
+  handleUbah = () => {
+    const {
+      jenis_bkc_code,
+      jenis_bkc_name,
+      kode_warna,
+      warna,
+      golongan_code,
+      golongan_name,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_usaha_code,
+      jenis_usaha_name,
+    } = this.state;
+
+    this.setState({
+      ...this.state,
+      isEdit: false,
+      jenis_bkc_code,
+      jenis_bkc_name,
+      kode_warna,
+      warna,
+      golongan_code,
+      golongan_name,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_usaha_code,
+      jenis_usaha_name,
+    });
   };
-  handleSave = () => {
-    console.log("saving...");
+  handleBatal = () => {
+    this.setState({
+      ...this.state,
+      isEdit: false,
+      kode_warna: "",
+      warna: "",
+      golongan_code: "",
+      golongan_name: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_usaha_code: "",
+      jenis_usaha_name: "",
+    });
   };
-  handleRekam = () => {
+
+  handleEdit = (record) => {
+    this.setState({
+      ...this.state,
+      isEdit: true,
+      jenis_bkc_code: record.jenis_bkc_code,
+      jenis_bkc_name: record.jenis_bkc_name,
+      kode_warna: record.kode_warna,
+      warna: record.warna,
+      golongan_code: record.golongan_code,
+      golongan_name: record.golongan_name,
+      jenis_produksi_code: record.jenis_produksi_code,
+      jenis_produksi_name: record.jenis_produksi_name,
+      jenis_usaha_code: record.jenis_usaha_code,
+      jenis_usaha_name: record.jenis_usaha_name,
+    });
+  };
+  handleDelete = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ ...this.state, dataSource: newDataSource });
+  };
+
+  handleRekam = async () => {
     console.log("merekam...");
   };
 
   render() {
+    console.log("this.state", this.state);
     return (
       <>
         <Container
@@ -557,9 +527,12 @@ export default class ReferensiWarnaRekam extends Component {
                 </div>
                 <Select
                   id="jenis_bkc"
-                  onChange={(value) => this.handleSelectChange("jenis_bkc", value)}
+                  onChange={(value, option) =>
+                    this.handleSelectCustomChange("jenis_bkc", value, option)
+                  }
                   style={{ width: "100%" }}
-                  value={this.state.jenis_bkc}
+                  value={this.state.jenis_bkc_code}
+                  disabled={this.state.dataSource.length > 0}
                 >
                   {this.state.list_jenis_bkc.length > 0 &&
                     this.state.list_jenis_bkc.map((item, index) => (
@@ -591,15 +564,17 @@ export default class ReferensiWarnaRekam extends Component {
               </Col>
 
               <Col span={12}>
-                {this.state.jenis_bkc && (
+                {this.state.jenis_bkc_code && (
                   <>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Golongan</FormLabel>
                     </div>
                     <Select
                       id="golongan"
-                      onChange={(value) => this.handleSelectChange("golongan", value)}
-                      value={this.state.golongan}
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("golongan", value, option)
+                      }
+                      value={this.state.golongan_code}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_golongan.length > 0 &&
@@ -614,15 +589,17 @@ export default class ReferensiWarnaRekam extends Component {
               </Col>
 
               <Col span={12}>
-                {this.state.jenis_bkc === "HT" && (
+                {this.state.jenis_bkc_code === 3 && (
                   <>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Produksi</FormLabel>
                     </div>
                     <Select
                       id="jenis_produksi"
-                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
-                      value={this.state.jenis_produksi}
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("jenis_produksi", value, option)
+                      }
+                      value={this.state.jenis_produksi_code}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
@@ -638,15 +615,17 @@ export default class ReferensiWarnaRekam extends Component {
                   </>
                 )}
 
-                {this.state.jenis_bkc === "MMEA" && (
+                {this.state.jenis_bkc_code === 2 && (
                   <>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Usaha</FormLabel>
                     </div>
                     <Select
                       id="jenis_usaha"
-                      onChange={(value) => this.handleSelectChange("jenis_usaha", value)}
-                      value={this.state.jenis_usaha}
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("jenis_usaha", value, option)
+                      }
+                      value={this.state.jenis_usaha_code}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_jenis_usaha.length > 0 &&
@@ -666,32 +645,40 @@ export default class ReferensiWarnaRekam extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEdit ? (
-                      <Button type="primary" block onClick={this.handleUpdate}>
+                      <Button type="primary" block onClick={this.handleUbah}>
                         UBAH
                       </Button>
                     ) : (
-                      <Button type="primary" block onClick={this.handleSave}>
+                      <Button type="primary" block onClick={this.handleSimpan}>
                         SIMPAN
                       </Button>
                     )}
                   </Col>
 
                   <Col span={12}>
-                    <Button type="danger" block onClick={this.handleReset}>
-                      RESET
-                    </Button>
+                    {this.state.isEdit ? (
+                      <Button type="danger" block onClick={this.handleBatal}>
+                        BATAL
+                      </Button>
+                    ) : (
+                      <Button type="danger" block onClick={this.handleReset}>
+                        RESET
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               </Col>
             </Row>
 
-            {this.state.jenis_bkc && (
+            {this.state.jenis_bkc_code && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
                     scroll={{ x: "max-content" }}
+                    onChange={this.handleTableChange}
+                    pagination={{ current: this.state.page }}
                   />
                 </div>
 

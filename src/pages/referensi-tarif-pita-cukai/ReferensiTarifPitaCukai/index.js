@@ -256,7 +256,8 @@ export default class ReferensiTarifPitaCukai extends Component {
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-edit/${id}`);
         break;
       case jenisReferensi === "Tanggal":
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-edit/${id}`);
+        // this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-edit/${id}`);
+        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
         break;
       default:
         break;
@@ -271,7 +272,8 @@ export default class ReferensiTarifPitaCukai extends Component {
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-detail/${id}`);
         break;
       case jenisReferensi === "Tanggal":
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-detail/${id}`);
+        // this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-detail/${id}`);
+        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
         break;
       default:
         break;
@@ -320,7 +322,10 @@ export default class ReferensiTarifPitaCukai extends Component {
                   <Button
                     style={{ backgroundColor: "#ec808d", color: "white", borderColor: " #ec808d" }}
                     onClick={() =>
-                      this.props.history.push(`${pathName}/referensi-penyediaan-pita-cukai`)
+                      // this.props.history.push(
+                      //   `${pathName}/referensi-tarif-warna/referensi-tanggal-rekam`
+                      // )
+                      this.props.history.push(`/referensi-penyediaan-pita-cukai`)
                     }
                     block
                   >
