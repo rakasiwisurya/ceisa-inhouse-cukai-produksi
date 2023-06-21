@@ -320,9 +320,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                   <Button
                     style={{ backgroundColor: "#ec808d", color: "white", borderColor: " #ec808d" }}
                     onClick={() =>
-                      this.props.history.push(
-                        `${pathName}/referensi-tarif-warna/referensi-tanggal-rekam`
-                      )
+                      this.props.history.push(`${pathName}/referensi-penyediaan-pita-cukai`)
                     }
                     block
                   >
