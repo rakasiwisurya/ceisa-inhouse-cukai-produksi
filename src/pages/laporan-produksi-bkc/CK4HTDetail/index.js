@@ -21,9 +21,9 @@ export default class CK4HTDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Pemberitahu",
-      subtitle2: "Pemberitahuan",
-      subtitle3: "Rincian",
+      subtitle1: "Pemberitahuan",
+      subtitle2: "Rincian",
+      subtitle3: "Pemberitahu",
 
       tempat_dibuat: "tempat_dibuat",
       nama_pengusaha: "nama_pengusaha",
@@ -212,52 +212,6 @@ export default class CK4HTDetail extends Component {
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="HT Detail" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                  </div>
-                  <Select
-                    id="tempat_dibuat"
-                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
-                    style={{ width: "100%" }}
-                    value={this.state.tempat_dibuat}
-                    disabled
-                  >
-                    {this.state.list_tempat_dibuat.length > 0 &&
-                      this.state.list_tempat_dibuat.map((item, index) => (
-                        <Select.Option
-                          key={`tempat-dibuat-${index}`}
-                          value={item.tempat_dibuat_code}
-                        >
-                          {item.tempat_dibuat_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </div>
-
-                <div>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Nama Pengusaha</FormLabel>
-                  </div>
-                  <Input
-                    id="nama_pengusaha"
-                    onChange={this.handleInputChange}
-                    value={this.state.nama_pengusaha}
-                    disabled
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle2}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
             id="kt_content"
@@ -538,8 +492,12 @@ export default class CK4HTDetail extends Component {
             </Row>
           </div>
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Header>{this.state.subtitle2}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Kep Tarif" style={{ height: 705 }}>
@@ -794,6 +752,48 @@ export default class CK4HTDetail extends Component {
                 }}
               />
             </div>
+          </div>
+
+          <Header>{this.state.subtitle3}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                  </div>
+                  <Select
+                    id="tempat_dibuat"
+                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
+                    style={{ width: "100%" }}
+                    value={this.state.tempat_dibuat}
+                    disabled
+                  >
+                    {this.state.list_tempat_dibuat.length > 0 &&
+                      this.state.list_tempat_dibuat.map((item, index) => (
+                        <Select.Option
+                          key={`tempat-dibuat-${index}`}
+                          value={item.tempat_dibuat_code}
+                        >
+                          {item.tempat_dibuat_name}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </div>
+
+                <div>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Nama Pengusaha</FormLabel>
+                  </div>
+                  <Input
+                    id="nama_pengusaha"
+                    onChange={this.handleInputChange}
+                    value={this.state.nama_pengusaha}
+                    disabled
+                  />
+                </div>
+              </Col>
+            </Row>
           </div>
         </Container>
       </>

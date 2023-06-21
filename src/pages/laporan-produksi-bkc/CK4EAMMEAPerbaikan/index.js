@@ -1,10 +1,10 @@
-import { Card, Col, DatePicker, Input, InputNumber, Row, Select } from "antd";
+import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, Table } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import React, { Component } from "react";
 
-export default class CK4EAPerbaikan extends Component {
+export default class CK4EAMMEAPerbaikan extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +12,7 @@ export default class CK4EAPerbaikan extends Component {
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
       subtitle4: "Keterangan Lain",
-      subtitle4: "Dasar Perbaikan",
+      subtitle5: "Dasar Perbaikan",
 
       nama_pemrakarsa: "SENDI BENI SUSANDI",
       jabatan_pemrakarsa: "PEGAWAI PADA DIREKTORAT INFORMASI KEPABEANAN DAN CUKAI",
@@ -51,7 +51,8 @@ export default class CK4EAPerbaikan extends Component {
 
       nomor_surat: "",
       tanggal_surat: "",
-      penjabat_bc: "",
+      penjabat_bc_nip: "",
+      penjabat_bc_nama: "",
       asal_kesalahan: "",
       keterangan: "",
 
@@ -93,14 +94,20 @@ export default class CK4EAPerbaikan extends Component {
           golongan_name: "C",
         },
       ],
-      list_alasan_perbaikan: [
+      list_penyampaian_ck4: [
         {
-          alasan_perbaikan_code: "X",
-          alasan_perbaikan_name: "Factor X",
+          penyampaian_ck4_code: "TEPAT_WAKTU",
+          penyampaian_ck4_name: "Tepat Waktu",
+        },
+      ],
+      list_asal_kesalahan: [
+        {
+          asal_kesalahan_code: "X",
+          asal_kesalahan_name: "Factor X",
         },
         {
-          alasan_perbaikan_code: "Y",
-          alasan_perbaikan_name: "Factor Y",
+          asal_kesalahan_code: "Y",
+          asal_kesalahan_name: "Factor Y",
         },
       ],
 
@@ -252,12 +259,19 @@ export default class CK4EAPerbaikan extends Component {
   handleBatal = () => {
     this.props.history.goBack();
   };
+  handleSimpanPerbaikan = () => {
+    console.log("simpan perbaikan...");
+  };
 
   render() {
     console.log("this.props.match.params.id", this.props.match.params.id);
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Perbaikan" hideContentHeader>
+        <Container
+          menuName="Laporan Produksi BKC CK4"
+          contentName="EA dan MMEA Perbaikan"
+          hideContentHeader
+        >
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -613,6 +627,187 @@ export default class CK4EAPerbaikan extends Component {
                     </div>
                   </div>
                 </Card>
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={8} offset={16}>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Button type="primary" block>
+                      Batal
+                    </Button>
+                  </Col>
+                  <Col span={12}>
+                    <Button type="primary" block>
+                      Simpan Rincian
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <div style={{ marginTop: 30 }}>
+              <Table
+                dataSource={this.state.dataSource}
+                columns={this.state.columns}
+                scroll={{ x: "max-content" }}
+              />
+            </div>
+          </div>
+
+          <Header>{this.state.subtitle4}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Diterima</FormLabel>
+                </div>
+                <DatePicker
+                  id="tangal_diterima"
+                  onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                  style={{ width: "100%" }}
+                  value={this.state.tanggal_diterima}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Penyampaian CK-4</FormLabel>
+                </div>
+                <Select
+                  id="penyampaian_ck4"
+                  onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
+                  style={{ width: "100%" }}
+                  value={this.state.penyampaian_ck4}
+                >
+                  {this.state.list_penyampaian_ck4.length > 0 &&
+                    this.state.list_penyampaian_ck4.map((item, index) => (
+                      <Select.Option
+                        key={`penyampaian-ck4-${index}`}
+                        value={item.penyampaian_ck4_code}
+                      >
+                        {item.penyampaian_ck4_name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Dibuat di Kota / Kabupaten</FormLabel>
+                </div>
+                <Input
+                  id="tempat_dibuat"
+                  onChange={this.handleInputChange}
+                  value={this.state.tempat_dibuat}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nama Pengusaha</FormLabel>
+                </div>
+                <Input
+                  id="nama_pengusaha"
+                  onChange={this.handleInputChange}
+                  value={this.state.nama_pengusaha}
+                />
+              </Col>
+            </Row>
+          </div>
+
+          <Header>{this.state.subtitle5}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Surat</FormLabel>
+                </div>
+                <Input
+                  id="nomor_surat"
+                  onChange={this.handleInputChange}
+                  value={this.state.nomor_surat}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Surat</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggal_surat"
+                  onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                  style={{ width: "100%" }}
+                  value={this.state.tanggal_surat}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Penjabat BC</FormLabel>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Input
+                    id="penjabat_bc_nip"
+                    onChange={this.handleInputChange}
+                    value={this.state.penjabat_bc_nip}
+                    style={{ flex: 1 }}
+                  />
+                  <Button type="primary">Cari</Button>
+                  <Input
+                    id="penjabat_bc_nama"
+                    onChange={this.handleInputChange}
+                    value={this.state.penjabat_bc_nama}
+                    style={{ flex: 2 }}
+                    disabled
+                  />
+                </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Asal Kesalahan</FormLabel>
+                </div>
+                <Select
+                  id="asal_kesalahan"
+                  onChange={(value) => this.handleSelectChange("asal_kesalahan", value)}
+                  style={{ width: "100%" }}
+                  value={this.state.asal_kesalahan}
+                >
+                  {this.state.list_asal_kesalahan.length > 0 &&
+                    this.state.list_asal_kesalahan.map((item, index) => (
+                      <Select.Option
+                        key={`penyampaian-ck4-${index}`}
+                        value={item.asal_kesalahan_code}
+                      >
+                        {item.asal_kesalahan_name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Keterangan</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="keterangan"
+                  onChange={this.handleInputChange}
+                  value={this.state.keterangan}
+                />
+              </Col>
+            </Row>
+
+            <Row style={{ marginTop: 20 }}>
+              <Col span={4} offset={20}>
+                <Button type="primary" onClick={this.handleSimpanPerbaikan} block>
+                  Simpan Perbaikan
+                </Button>
               </Col>
             </Row>
           </div>

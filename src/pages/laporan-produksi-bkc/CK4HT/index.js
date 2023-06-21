@@ -20,9 +20,9 @@ export default class CK4HT extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Pemberitahu",
-      subtitle2: "Pemberitahuan",
-      subtitle3: "Rincian",
+      subtitle1: "Pemberitahuan",
+      subtitle2: "Rincian",
+      subtitle3: "Pemberitahu",
 
       tempat_dibuat: "",
       nama_pengusaha: "",
@@ -30,12 +30,13 @@ export default class CK4HT extends Component {
       nama_nppbkc: "",
       nppbkc: "",
       alamat_nppbkc: "",
+
       jenis_laporan: "",
       nomor_pemberitahuan: "",
       tanggal_pemberitahuan: "",
       jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
-      periode_awal: "",
-      periode_akhir: "",
+      periode_bulan: "",
+      periode_tahun: "",
       tanggal_produksi_awal: "",
       tanggal_produksi_akhir: "",
       jumlah_kemasan: "",
@@ -43,17 +44,19 @@ export default class CK4HT extends Component {
       jumlah_produksi_ht_btg: "",
       jumlah_produksi_ht_gr: "",
       jumlah_produksi_ht_ml: "",
-      upload_uraian_rincian: [],
 
       merk_ht: "",
       jenis_hasil_tembakau: "",
       hje: "",
       bahan_kemasan: "",
       isi_per_kemasan: "",
+
       nomor_dokumen_produksi: "",
       tanggal_dokumen_produksi: "",
+
       jumlah_kemasan_produksi: "",
       jumlah_produksi_per_merk: "",
+
       jumlah_kemasan_dilekati_pita: "",
 
       uraian_rincian_file: [],
@@ -206,11 +209,14 @@ export default class CK4HT extends Component {
     setTimeout(() => onSuccess("ok"), 0);
   };
 
-  handleSimpan = () => {
-    console.log("simpan");
+  handleSimpanRincian = () => {
+    console.log("simpan...");
   };
   handleBatal = () => {
-    this.props.history.goBack();
+    console.log("batal...");
+  };
+  handleRekam = () => {
+    console.log("rekam...");
   };
 
   render() {
@@ -218,49 +224,6 @@ export default class CK4HT extends Component {
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                  </div>
-                  <Select
-                    id="tempat_dibuat"
-                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_tempat_dibuat.length > 0 &&
-                      this.state.list_tempat_dibuat.map((item, index) => (
-                        <Select.Option
-                          key={`tempat-dibuat-${index}`}
-                          value={item.tempat_dibuat_code}
-                        >
-                          {item.tempat_dibuat_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </div>
-
-                <div>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Nama Pengusaha</FormLabel>
-                  </div>
-                  <Input
-                    id="nama_pengusaha"
-                    onChange={this.handleInputChange}
-                    value={this.state.nama_pengusaha}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle2}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
             id="kt_content"
@@ -379,8 +342,8 @@ export default class CK4HT extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Select
-                        id="periode_awal"
-                        onChange={(value) => this.handleSelectChange("periode_awal", value)}
+                        id="periode_bulan"
+                        onChange={(value) => this.handleSelectChange("periode_bulan", value)}
                         style={{ width: "100%" }}
                       >
                         {this.state.list_periode.length > 0 &&
@@ -392,8 +355,8 @@ export default class CK4HT extends Component {
                       </Select>
 
                       <Select
-                        id="periode_akhir"
-                        onChange={(value) => this.handleSelectChange("periode_akhir", value)}
+                        id="periode_tahun"
+                        onChange={(value) => this.handleSelectChange("periode_tahun", value)}
                         style={{ width: "100%" }}
                       >
                         {this.state.list_periode.length > 0 &&
@@ -522,8 +485,12 @@ export default class CK4HT extends Component {
             </Row>
           </div>
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Header>{this.state.subtitle2}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Kep Tarif" style={{ height: 705 }}>
@@ -711,7 +678,7 @@ export default class CK4HT extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
                       Simpan Rincian
                     </Button>
                   </Col>
@@ -725,7 +692,7 @@ export default class CK4HT extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 40 }}>
+            <div style={{ marginTop: 20, marginBottom: 10 }}>
               <Table
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
@@ -785,6 +752,53 @@ export default class CK4HT extends Component {
                 }}
               />
             </div>
+          </div>
+
+          <Header>{this.state.subtitle3}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+              <Col span={12}>
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                  </div>
+                  <Select
+                    id="tempat_dibuat"
+                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.list_tempat_dibuat.length > 0 &&
+                      this.state.list_tempat_dibuat.map((item, index) => (
+                        <Select.Option
+                          key={`tempat-dibuat-${index}`}
+                          value={item.tempat_dibuat_code}
+                        >
+                          {item.tempat_dibuat_name}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </div>
+
+                <div>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Nama Pengusaha</FormLabel>
+                  </div>
+                  <Input
+                    id="nama_pengusaha"
+                    onChange={this.handleInputChange}
+                    value={this.state.nama_pengusaha}
+                  />
+                </div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={4} offset={20}>
+                <Button type="primary" block onClick={this.handleRekam}>
+                  Rekam
+                </Button>
+              </Col>
+            </Row>
           </div>
         </Container>
       </>

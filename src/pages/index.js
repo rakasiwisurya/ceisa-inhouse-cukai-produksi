@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { pathName } from "configs/constants";
 import NotFound from "components/NotFound";
 import ReferensiTarifPitaCukai from "./referensi-tarif-pita-cukai/ReferensiTarifPitaCukai";
 import PermohonanTarif from "./tarif-cukai/PermohonanTarif";
@@ -19,19 +20,14 @@ import CK4HT from "./laporan-produksi-bkc/CK4HT";
 import CK4EADetail from "./laporan-produksi-bkc/CK4EADetail";
 import CK4MMEADetail from "./laporan-produksi-bkc/CK4MMEADetail";
 import CK4HTDetail from "./laporan-produksi-bkc/CK4HTDetail";
-import CK4EAPerbaikan from "./laporan-produksi-bkc/CK4EAPerbaikan";
-import CK4MMEAPerbaikan from "./laporan-produksi-bkc/CK4MMEAPerbaikan";
+import CK4EAMMEAPerbaikan from "./laporan-produksi-bkc/CK4EAMMEAPerbaikan";
 import CK4HTPerbaikan from "./laporan-produksi-bkc/CK4HTPerbaikan";
-import { pathName } from "configs/constants";
 import ReferensiTarifEdit from "./referensi-tarif-pita-cukai/ReferensiTarifEdit";
 import ReferensiTarifDetail from "./referensi-tarif-pita-cukai/ReferensiTarifDetail";
 import ReferensiWarnaRekam from "./referensi-tarif-pita-cukai/ReferensiWarnaRekam";
 import ReferensiWarnaEdit from "./referensi-tarif-pita-cukai/ReferensiWarnaEdit";
 import ReferensiWarnaDetail from "./referensi-tarif-pita-cukai/ReferensiWarnaDetail";
-import ReferensiTanggalEdit from "./referensi-tarif-pita-cukai/ReferensiTanggalEdit";
-import ReferensiTanggalDetail from "./referensi-tarif-pita-cukai/ReferensiTanggalDetail";
 import ReferensiTarifRekam from "./referensi-tarif-pita-cukai/ReferensiTarifRekam";
-import ReferensiTanggalRekam from "./referensi-tarif-pita-cukai/ReferensiTanggalRekam";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -72,21 +68,6 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/referensi-tarif-warna/referensi-tanggal-rekam"}
-        render={(props) => <ReferensiTanggalRekam {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/referensi-tarif-warna/referensi-tanggal-edit/:id"}
-        render={(props) => <ReferensiTanggalEdit {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/referensi-tarif-warna/referensi-tanggal-detail/:id"}
-        render={(props) => <ReferensiTanggalDetail {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
         path={pathName + "/permohonan-tarif"}
         render={(props) => <PermohonanTarif {...props} {...propsExtra} />}
         exact={true}
@@ -121,14 +102,9 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4EADetail {...props} {...propsExtra} />}
         exact={true}
       />
-      {/* <Route
-        path={pathName + "/ck4-ea-edit/:id"}
-        render={(props) => <CK4EAEdit {...props} {...propsExtra} />}
-        exact={true}
-      /> */}
       <Route
-        path={pathName + "/ck4-ea-perbaikan/:id"}
-        render={(props) => <CK4EAPerbaikan {...props} {...propsExtra} />}
+        path={pathName + "/ck4-ea-mmea-perbaikan/:id"}
+        render={(props) => <CK4EAMMEAPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -141,16 +117,6 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4MMEADetail {...props} {...propsExtra} />}
         exact={true}
       />
-      {/* <Route
-        path={pathName + "/ck4-mmea-edit/:id"}
-        render={(props) => <CK4MMEAEdit {...props} {...propsExtra} />}
-        exact={true}
-      /> */}
-      <Route
-        path={pathName + "/ck4-mmea-perbaikan/:id"}
-        render={(props) => <CK4MMEAPerbaikan {...props} {...propsExtra} />}
-        exact={true}
-      />
       <Route
         path={pathName + "/ck4-ht-rekam"}
         render={(props) => <CK4HT {...props} {...propsExtra} />}
@@ -161,11 +127,6 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <CK4HTDetail {...props} {...propsExtra} />}
         exact={true}
       />
-      {/* <Route
-        path={pathName + "/ck4-ht-edit/:id"}
-        render={(props) => <CK4HTEdit {...props} {...propsExtra} />}
-        exact={true}
-      /> */}
       <Route
         path={pathName + "/ck4-ht-perbaikan/:id"}
         render={(props) => <CK4HTPerbaikan {...props} {...propsExtra} />}

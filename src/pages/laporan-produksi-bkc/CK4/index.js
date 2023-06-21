@@ -223,11 +223,8 @@ export default class CK4 extends Component {
   };
   handleEdit = (id, nppbkc) => {
     switch (true) {
-      case nppbkc === "EA":
-        this.props.history.push(`${pathName}/ck4-ea-perbaikan/${id}`);
-        break;
-      case nppbkc === "MMEA":
-        this.props.history.push(`${pathName}/ck4-mmea-perbaikan/${id}`);
+      case nppbkc === "EA" || nppbkc === "MMEA":
+        this.props.history.push(`${pathName}/ck4-ea-mmea-perbaikan/${id}`);
         break;
       case nppbkc === "HT":
         this.props.history.push(`${pathName}/ck4-ht-perbaikan/${id}`);

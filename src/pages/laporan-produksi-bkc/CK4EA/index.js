@@ -8,9 +8,9 @@ export default class CK4EA extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Pemberitahu",
-      subtitle2: "Pemberitahuan",
-      subtitle3: "Rincian",
+      subtitle1: "Pemberitahuan",
+      subtitle2: "Rincian",
+      subtitle3: "Pemberitahu",
 
       tempat_dibuat: "",
       nama_pengusaha: "",
@@ -78,11 +78,14 @@ export default class CK4EA extends Component {
     this.setState({ ...this.state, [field]: value });
   };
 
-  handleSimpan = () => {
-    console.log("simpan");
+  handleSimpanRincian = () => {
+    console.log("simpan rincian...");
   };
   handleBatal = () => {
-    this.props.history.goBack();
+    console.log("batal...");
+  };
+  handleRekam = () => {
+    console.log("rekam...");
   };
 
   render() {
@@ -90,49 +93,6 @@ export default class CK4EA extends Component {
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Rekam" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                  </div>
-                  <Select
-                    id="tempat_dibuat"
-                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_tempat_dibuat.length > 0 &&
-                      this.state.list_tempat_dibuat.map((item, index) => (
-                        <Select.Option
-                          key={`tempat-dibuat-${index}`}
-                          value={item.tempat_dibuat_code}
-                        >
-                          {item.tempat_dibuat_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </div>
-
-                <div>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Nama Pengusaha</FormLabel>
-                  </div>
-                  <Input
-                    id="nama_pengusaha"
-                    onChange={this.handleInputChange}
-                    value={this.state.nama_pengusaha}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle2}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
             id="kt_content"
@@ -294,8 +254,12 @@ export default class CK4EA extends Component {
             </Row>
           </div>
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Header>{this.state.subtitle2}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Data Produksi" style={{ height: 334 }}>
@@ -372,7 +336,7 @@ export default class CK4EA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpan}>
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
                       Simpan Rincian
                     </Button>
                   </Col>
@@ -383,6 +347,53 @@ export default class CK4EA extends Component {
                     </Button>
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+          </div>
+
+          <Header>{this.state.subtitle3}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                  </div>
+                  <Select
+                    id="tempat_dibuat"
+                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.list_tempat_dibuat.length > 0 &&
+                      this.state.list_tempat_dibuat.map((item, index) => (
+                        <Select.Option
+                          key={`tempat-dibuat-${index}`}
+                          value={item.tempat_dibuat_code}
+                        >
+                          {item.tempat_dibuat_name}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </div>
+
+                <div>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Nama Pengusaha</FormLabel>
+                  </div>
+                  <Input
+                    id="nama_pengusaha"
+                    onChange={this.handleInputChange}
+                    value={this.state.nama_pengusaha}
+                  />
+                </div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={4} offset={20}>
+                <Button type="primary" block onClick={this.handleRekam}>
+                  Rekam
+                </Button>
               </Col>
             </Row>
           </div>
