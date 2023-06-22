@@ -1,0 +1,81 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: microfrontend-citac
+  namespace: microfrontend
+spec:
+  selector:
+    app: microfrontend-citac
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 4000
+    targetPort: 4000
+    name: http
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microfrontend-citac
+  namespace: microfrontend
+  labels:
+    app: microfrontend-citac
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0%
+      maxUnavailable: 25%
+  minReadySeconds: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: microfrontend-citac
+  template:
+    metadata:
+      labels:
+        app: microfrontend-citac
+    spec:
+      containers:
+      - name: microfrontend-citac
+        image: $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:$BUILD_NUMBER
+        ports:
+        - containerPort: 4000
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "1"
+            memory: "500Mi"
+          requests:
+            cpu: "0.5"
+            memory: "250Mi"
+        volumeMounts:
+        - name: tz-config
+          mountPath: /etc/localtime
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Jakarta
+
+---
+ 
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: microfrontend-citac
+  namespace: microfrontend
+spec:
+  maxReplicas: 1
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: microfrontend-citac
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 75
