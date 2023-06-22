@@ -48,7 +48,7 @@ pipeline {
                 branch 'develop'
             }
             steps {
-                sh "envsubst < $YAML_FILE | kubectl apply -f - --kubeconfig $KUBECONFIG_CREDENTIAL_ID"
+                sh "envsubst < $YAML_FILE | kubectl apply -f - --kubeconfig $KUBECONFIG_CREDENTIAL_ID01"
             }
         }
         stage('Get Service IP DRC STAGGING') {
@@ -59,7 +59,7 @@ pipeline {
                 retry(10) {
                     //withCredentials([usernamePassword(credentialsId: 'pks_client_drc01', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                         script {
-                          def ip = sh (script: "kubectl -n '$NAMESPACE' get svc '$APP_NAME' --output=jsonpath={.status.loadBalancer.ingress[].ip} --kubeconfig $KUBECONFIG_CREDENTIAL_ID", returnStdout: true)
+                          def ip = sh (script: "kubectl -n '$NAMESPACE' get svc '$APP_NAME' --output=jsonpath={.status.loadBalancer.ingress[].ip} --kubeconfig $KUBECONFIG_CREDENTIAL_ID01", returnStdout: true)
 							sh 'sleep 5'
                             
                             echo "IP is ${ip}"
