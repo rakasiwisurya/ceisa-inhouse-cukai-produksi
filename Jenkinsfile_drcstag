@@ -2,11 +2,11 @@ pipeline {
     agent any
     environment {
         PATH = "/usr/local/go/bin:$PATH"
-        DOCKER_IMAGE_NAME = "drc01dev01hrbr.customs.go.id/library-stag/microfrontend-citac"
-        HARBOR_CREDENTIAL_ID = 'harbor_drc'
+        DOCKER_IMAGE_NAME = "drc01dev01hrbr.customs.go.id/library/microfrontend-citac"
+        HARBOR_CREDENTIAL_ID = 'harbor_dev'
         KUBECONFIG_CREDENTIAL_ID01 = credentials('kubeconfig_dev01')
         REGISTRY = 'drc01dev01hrbr.customs.go.id'
-        HARBOR_NAMESPACE = 'library-stag'
+        HARBOR_NAMESPACE = 'library'
         APP_NAME = 'microfrontend-citac'
         NAMESPACE = 'microfrontend'
         PORT = '4000'
