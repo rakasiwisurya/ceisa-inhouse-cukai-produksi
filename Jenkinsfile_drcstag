@@ -4,7 +4,7 @@ pipeline {
         PATH = "/usr/local/go/bin:$PATH"
         DOCKER_IMAGE_NAME = "drc01dev01hrbr.customs.go.id/library-stag/microfrontend-citac"
         HARBOR_CREDENTIAL_ID = 'harbor_drc'
-        KUBECONFIG_CREDENTIAL_ID01 = credentials('drc-stagging')
+        KUBECONFIG_CREDENTIAL_ID01 = credentials('kubeconfig_dev01')
         REGISTRY = 'drc01dev01hrbr.customs.go.id'
         HARBOR_NAMESPACE = 'library-stag'
         APP_NAME = 'microfrontend-citac'
