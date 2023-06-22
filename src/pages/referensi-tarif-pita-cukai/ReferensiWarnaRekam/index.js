@@ -3,7 +3,9 @@ import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import { Fragment } from "react";
+import moment from "moment";
+import { api } from "configs/api";
+import { requestApi } from "utils/requestApi";
 
 export default class ReferensiWarnaRekam extends Component {
   constructor(props) {
@@ -12,10 +14,18 @@ export default class ReferensiWarnaRekam extends Component {
       subtitle1: "Surat Keputusan",
       subtitle2: "Rincian",
       isEdit: false,
+      editIndex: null,
+
+      isJenisBkcLoading: true,
+      isJenisProduksiLoading: true,
+      isJenisUsahaLoading: true,
+      isGolonganLoading: true,
+      isRekamLoading: false,
 
       nomor_surat: "",
       tanggal_surat: "",
       tanggal_awal_berlaku: "",
+
       jenis_bkc_code: "",
       jenis_bkc_name: "",
       kode_warna: "",
@@ -31,16 +41,7 @@ export default class ReferensiWarnaRekam extends Component {
       searchedColumn: "",
       page: 1,
 
-      list_jenis_bkc: [
-        {
-          jenis_bkc_code: 3,
-          jenis_bkc_name: "Hasil Tembakau (HT)",
-        },
-        {
-          jenis_bkc_code: 2,
-          jenis_bkc_name: "Minuman Mengandung Etil Alkohol (MMEA)",
-        },
-      ],
+      list_jenis_bkc: [],
       list_golongan: [],
       list_jenis_produksi: [],
       list_jenis_usaha: [],
@@ -49,91 +50,18 @@ export default class ReferensiWarnaRekam extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getJenisBkc();
+    this.getListJenisUsaha();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_bkc_code !== this.state.jenis_bkc_code) {
+      this.getListGolongan();
+      this.getListJenisProduksi();
+
       if (this.state.jenis_bkc_code === 3) {
         this.setState({
-          ...this.state,
-          list_golongan: [
-            {
-              golongan_code: "1",
-              golongan_name: "I",
-            },
-            {
-              golongan_code: "2",
-              golongan_name: "II",
-            },
-            {
-              golongan_code: "3",
-              golongan_name: "III",
-            },
-            {
-              golongan_code: "4",
-              golongan_name: "III/A",
-            },
-            {
-              golongan_code: "5",
-              golongan_name: "III/B",
-            },
-            {
-              golongan_code: "6",
-              golongan_name: "IMPORTIR HT",
-            },
-            {
-              golongan_code: "7",
-              golongan_name: "TANPA GOLONGAN",
-            },
-          ],
-          list_jenis_produksi: [
-            {
-              jenis_produksi_code: "SKM",
-              jenis_produksi_name: "SIGARET KRETEK MESIN",
-            },
-            {
-              jenis_produksi_code: "CRT",
-              jenis_produksi_name: "CERUTU",
-            },
-            {
-              jenis_produksi_code: "HTL",
-              jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
-            },
-            {
-              jenis_produksi_code: "STF",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN FILTER",
-            },
-            {
-              jenis_produksi_code: "SPT",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN",
-            },
-            {
-              jenis_produksi_code: "SPM",
-              jenis_produksi_name: "SIGARET PUTIH MESIN",
-            },
-            {
-              jenis_produksi_code: "TIS",
-              jenis_produksi_name: "TEMBAKAU IRIS",
-            },
-            {
-              jenis_produksi_code: "KLM",
-              jenis_produksi_name: "KELEMBAK MENYAN",
-            },
-            {
-              jenis_produksi_code: "KLB",
-              jenis_produksi_name: "KLOBOT",
-            },
-            {
-              jenis_produksi_code: "SKT",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN",
-            },
-            {
-              jenis_produksi_code: "SPF",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN FILTER",
-            },
-            {
-              jenis_produksi_code: "REL",
-              jenis_produksi_name: "ROKOK ELEKTRIK",
-            },
-          ],
           columns: [
             {
               title: "Aksi",
@@ -142,7 +70,11 @@ export default class ReferensiWarnaRekam extends Component {
               fixed: "left",
               render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={() => this.handleEdit(record)} />
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
                   <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                 </div>
               ),
@@ -189,41 +121,20 @@ export default class ReferensiWarnaRekam extends Component {
 
       if (this.state.jenis_bkc_code === 2) {
         this.setState({
-          ...this.state,
-          list_golongan: [
-            {
-              golongan_code: "A",
-              golongan_name: "A",
-            },
-            {
-              golongan_code: "B",
-              golongan_name: "B",
-            },
-            {
-              golongan_code: "C",
-              golongan_name: "C",
-            },
-          ],
-          list_jenis_usaha: [
-            {
-              jenis_usaha_code: "DALAM_NEGERI",
-              jenis_usaha_name: "Dalam Negeri",
-            },
-            {
-              jenis_usaha_code: "IMPORTIR",
-              jenis_usaha_name: "Importir",
-            },
-          ],
           columns: [
             {
               title: "Aksi",
               dataIndex: "aksi",
               key: "aksi",
               fixed: "left",
-              render: (text, record) => (
+              render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={() => this.handleEdit(record)} />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                 </div>
               ),
             },
@@ -269,6 +180,247 @@ export default class ReferensiWarnaRekam extends Component {
     }
   }
 
+  getJenisBkc = async () => {
+    // const response = await api.referensi.json.get("/referensi/jenis-bkc")
+    // console.log('response.data', response.data)
+
+    //  const response = await requestApi({
+    //     service: "referensi",
+    //     method: "get",
+    //     endpoint: "/referensi/jenis-bkc",
+    //     setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
+    //   });
+    //   if(response) {
+    //     console.log('response.data', response.data)
+    //   }
+
+    this.setState({ isJenisBkcLoading: true });
+    setTimeout(() => {
+      this.setState({
+        list_jenis_bkc: [
+          {
+            idJenisBkc: 3,
+            namaJenisBkc: "HT",
+          },
+          {
+            idJenisBkc: 2,
+            namaJenisBkc: "MMEA",
+          },
+        ],
+      });
+      this.setState({ isJenisBkcLoading: false });
+    }, 2000);
+  };
+  getListGolongan = async () => {
+    // const payload = { idJenisBkc: this.state.jenis_bkc_code };
+    // const response = await api.referensi.json.get("/referensi/golongan", payload);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/golongan",
+    //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isGolonganLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_code === 3) {
+        this.setState({
+          list_golongan: [
+            {
+              idGolongan: 1,
+              namaGolongan: "I",
+            },
+            {
+              idGolongan: 2,
+              namaGolongan: "II",
+            },
+            {
+              idGolongan: 3,
+              namaGolongan: "III",
+            },
+            {
+              idGolongan: 4,
+              namaGolongan: "III/A",
+            },
+            {
+              idGolongan: 5,
+              namaGolongan: "III/B",
+            },
+            {
+              idGolongan: 6,
+              namaGolongan: "IMPORTIR HT",
+            },
+            {
+              idGolongan: 7,
+              namaGolongan: "TANPA GOLONGAN",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_golongan: [
+            {
+              idGolongan: 1,
+              namaGolongan: "A",
+            },
+            {
+              idGolongan: 2,
+              namaGolongan: "B",
+            },
+            {
+              idGolongan: 3,
+              namaGolongan: "C",
+            },
+          ],
+        });
+      }
+      this.setState({ isGolonganLoading: false });
+    }, 2000);
+  };
+  getListJenisProduksi = async () => {
+    // const payload = {idJenisBkc: this.state.jenis_bkc_code}
+    // const response = await api.referensi.json.get("/referensi/jenis-produksi", payload)
+    // console.log('response.data', response.data)
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/jenis-produksi",
+    //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isJenisProduksiLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_code === 3) {
+        this.setState({
+          list_jenis_produksi: [
+            {
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "SKM",
+              namaJenisProduksi: "SIGARET KRETEK MESIN",
+            },
+            {
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "CRT",
+              namaJenisProduksi: "CERUTU",
+            },
+            {
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "HTL",
+              namaJenisProduksi: "HASIL TEMBAKAU LAINNYA",
+            },
+            {
+              idJenisProduksi: 4,
+              kodeJenisProduksi: "STF",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN FILTER",
+            },
+            {
+              idJenisProduksi: 5,
+              kodeJenisProduksi: "SPT",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN",
+            },
+            {
+              idJenisProduksi: 6,
+              kodeJenisProduksi: "SPM",
+              namaJenisProduksi: "SIGARET PUTIH MESIN",
+            },
+            {
+              idJenisProduksi: 7,
+              kodeJenisProduksi: "TIS",
+              namaJenisProduksi: "TEMBAKAU IRIS",
+            },
+            {
+              idJenisProduksi: 8,
+              kodeJenisProduksi: "KLM",
+              namaJenisProduksi: "KELEMBAK MENYAN",
+            },
+            {
+              idJenisProduksi: 9,
+              kodeJenisProduksi: "KLB",
+              namaJenisProduksi: "KLOBOT",
+            },
+            {
+              idJenisProduksi: 10,
+              kodeJenisProduksi: "SKT",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN",
+            },
+            {
+              idJenisProduksi: 11,
+              kodeJenisProduksi: "SPF",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN FILTER",
+            },
+            {
+              idJenisProduksi: 12,
+              kodeJenisProduksi: "REL",
+              namaJenisProduksi: "ROKOK ELEKTRIK",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_jenis_produksi: [
+            {
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "(MMEA1) - MMEA1",
+              namaJenisProduksi: "(MMEA1) - MMEA1",
+            },
+            {
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "(MMEA2) - MMEA2",
+              namaJenisProduksi: "(MMEA2) - MMEA2",
+            },
+            {
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "(MMEA3) - MMEA3",
+              namaJenisProduksi: "(MMEA3) - MMEA3",
+            },
+          ],
+        });
+      }
+
+      this.setState({ isJenisProduksiLoading: false });
+    }, 2000);
+  };
+  getListJenisUsaha = async () => {
+    // const response = await api.referensi.json.get("/referensi/jenis-usaha");
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/jenis-usaha",
+    //   setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isJenisUsahaLoading: true });
+    setTimeout(() => {
+      this.setState({
+        list_jenis_usaha: [
+          {
+            idJenisUsaha: 1,
+            namaJenisUsaha: "Dalam Negeri",
+          },
+          {
+            idJenisUsaha: 2,
+            namaJenisUsaha: "Importir",
+          },
+        ],
+      });
+      this.setState({ isJenisUsahaLoading: false });
+    }, 2000);
+  };
+
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -311,7 +463,6 @@ export default class ReferensiWarnaRekam extends Component {
       }
     },
   });
-
   handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -324,21 +475,20 @@ export default class ReferensiWarnaRekam extends Component {
     this.setState({ searchText: "" });
   };
   handleTableChange = (page) => {
-    this.setState({ ...this.state, page: page.current });
+    this.setState({ page: page.current });
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleSelectCustomChange = (field, value, option) => {
     this.setState({
-      ...this.state,
       [`${field}_code`]: value,
       [`${field}_name`]: option.props.children,
     });
@@ -359,7 +509,6 @@ export default class ReferensiWarnaRekam extends Component {
     } = this.state;
 
     this.setState({
-      ...this.state,
       dataSource: [
         ...this.state.dataSource,
         {
@@ -380,7 +529,6 @@ export default class ReferensiWarnaRekam extends Component {
   };
   handleReset = () => {
     this.setState({
-      ...this.state,
       isEdit: false,
       jenis_bkc_code: "",
       jenis_bkc_name: "",
@@ -395,7 +543,7 @@ export default class ReferensiWarnaRekam extends Component {
       dataSource: [],
     });
   };
-  handleUbah = () => {
+  handleUbah = (index) => {
     const {
       jenis_bkc_code,
       jenis_bkc_name,
@@ -409,9 +557,9 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_usaha_name,
     } = this.state;
 
-    this.setState({
-      ...this.state,
-      isEdit: false,
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1, {
+      key: new Date().getTime(),
       jenis_bkc_code,
       jenis_bkc_name,
       kode_warna,
@@ -423,10 +571,10 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_usaha_code,
       jenis_usaha_name,
     });
+    this.setState({ isEdit: false, editIndex: null, dataSource: newDataSource });
   };
   handleBatal = () => {
     this.setState({
-      ...this.state,
       isEdit: false,
       kode_warna: "",
       warna: "",
@@ -439,10 +587,10 @@ export default class ReferensiWarnaRekam extends Component {
     });
   };
 
-  handleEdit = (record) => {
+  handleEdit = (record, index) => {
     this.setState({
-      ...this.state,
       isEdit: true,
+      editIndex: index,
       jenis_bkc_code: record.jenis_bkc_code,
       jenis_bkc_name: record.jenis_bkc_name,
       kode_warna: record.kode_warna,
@@ -458,15 +606,62 @@ export default class ReferensiWarnaRekam extends Component {
   handleDelete = (index) => {
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(index, 1);
-    this.setState({ ...this.state, dataSource: newDataSource });
+    this.setState({ dataSource: newDataSource });
   };
 
   handleRekam = async () => {
-    console.log("merekam...");
+    const details = this.state.dataSource.map((item) => {
+      if (this.state.jenis_bkc_code === 3) {
+        return {
+          idJenisBkc: item.jenis_bkc_code,
+          kodeWarna: item.kode_warna,
+          warna: item.warna,
+          idGolongan: item.golongan_code,
+          idJenisProduksi: item.jenis_produksi_code,
+        };
+      }
+
+      return {
+        idJenisBkc: item.jenis_bkc_code,
+        kodeWarna: item.kode_warna,
+        warna: item.warna,
+        idGolongan: item.golongan_code,
+        idJenisProduksi: item.jenis_produksi_code,
+        idJenisUsaha: item.jenis_usaha_code,
+      };
+    });
+
+    const data = {
+      header: {
+        noSurat: this.state.nomor_surat,
+        tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+        tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
+      },
+      details,
+    };
+
+    // const response = await api.referensi.json.post("/referensi/browse-rekam-warna", data);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-rekam-warna",
+    //   payload: data,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isRekamLoading: true });
+    setTimeout(() => {
+      console.log("data", data);
+      this.setState({ isRekamLoading: false });
+    }, 2000);
   };
 
   render() {
-    console.log("this.state", this.state);
     return (
       <>
         <Container
@@ -532,12 +727,13 @@ export default class ReferensiWarnaRekam extends Component {
                   }
                   style={{ width: "100%" }}
                   value={this.state.jenis_bkc_code}
+                  loading={this.state.isJenisBkcLoading}
                   disabled={this.state.dataSource.length > 0}
                 >
                   {this.state.list_jenis_bkc.length > 0 &&
                     this.state.list_jenis_bkc.map((item, index) => (
-                      <Select.Option key={`jenis-bkc-${index}`} value={item.jenis_bkc_code}>
-                        {item.jenis_bkc_name}
+                      <Select.Option key={`jenis-bkc-${index}`} value={item.idJenisBkc}>
+                        {item.namaJenisBkc}
                       </Select.Option>
                     ))}
                 </Select>
@@ -563,58 +759,55 @@ export default class ReferensiWarnaRekam extends Component {
                 <Input id="warna" onChange={this.handleInputChange} value={this.state.warna} />
               </Col>
 
-              <Col span={12}>
-                {this.state.jenis_bkc_code && (
-                  <>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Golongan</FormLabel>
-                    </div>
-                    <Select
-                      id="golongan"
-                      onChange={(value, option) =>
-                        this.handleSelectCustomChange("golongan", value, option)
-                      }
-                      value={this.state.golongan_code}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_golongan.length > 0 &&
-                        this.state.list_golongan.map((item, index) => (
-                          <Select.Option key={`golongan-${index}`} value={item.golongan_code}>
-                            {item.golongan_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </>
-                )}
-              </Col>
+              {this.state.jenis_bkc_code && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Golongan</FormLabel>
+                  </div>
+                  <Select
+                    id="golongan"
+                    onChange={(value, option) =>
+                      this.handleSelectCustomChange("golongan", value, option)
+                    }
+                    value={this.state.golongan_code}
+                    loading={this.state.isGolonganLoading}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.list_golongan.length > 0 &&
+                      this.state.list_golongan.map((item, index) => (
+                        <Select.Option key={`golongan-${index}`} value={item.idGolongan}>
+                          {item.namaGolongan}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
+              )}
+
+              {this.state.jenis_bkc_code && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Jenis Produksi</FormLabel>
+                  </div>
+                  <Select
+                    id="jenis_produksi"
+                    onChange={(value, option) =>
+                      this.handleSelectCustomChange("jenis_produksi", value, option)
+                    }
+                    value={this.state.jenis_produksi_code}
+                    loading={this.state.isJenisProduksiLoading}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.list_jenis_produksi.length > 0 &&
+                      this.state.list_jenis_produksi.map((item, index) => (
+                        <Select.Option key={`jenis-produksi-${index}`} value={item.idJenisProduksi}>
+                          {item.namaJenisProduksi}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
+              )}
 
               <Col span={12}>
-                {this.state.jenis_bkc_code === 3 && (
-                  <>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Produksi</FormLabel>
-                    </div>
-                    <Select
-                      id="jenis_produksi"
-                      onChange={(value, option) =>
-                        this.handleSelectCustomChange("jenis_produksi", value, option)
-                      }
-                      value={this.state.jenis_produksi_code}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_jenis_produksi.length > 0 &&
-                        this.state.list_jenis_produksi.map((item, index) => (
-                          <Select.Option
-                            key={`jenis-produksi-${index}`}
-                            value={item.jenis_produksi_code}
-                          >
-                            {item.jenis_produksi_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </>
-                )}
-
                 {this.state.jenis_bkc_code === 2 && (
                   <>
                     <div style={{ marginBottom: 10 }}>
@@ -626,12 +819,13 @@ export default class ReferensiWarnaRekam extends Component {
                         this.handleSelectCustomChange("jenis_usaha", value, option)
                       }
                       value={this.state.jenis_usaha_code}
+                      loading={this.state.isJenisUsahaLoading}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_jenis_usaha.length > 0 &&
                         this.state.list_jenis_usaha.map((item, index) => (
-                          <Select.Option key={`golongan-${index}`} value={item.jenis_usaha_code}>
-                            {item.jenis_usaha_name}
+                          <Select.Option key={`golongan-${index}`} value={item.idJenisUsaha}>
+                            {item.namaJenisUsaha}
                           </Select.Option>
                         ))}
                     </Select>
@@ -645,7 +839,11 @@ export default class ReferensiWarnaRekam extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEdit ? (
-                      <Button type="primary" block onClick={this.handleUbah}>
+                      <Button
+                        type="primary"
+                        block
+                        onClick={() => this.handleUbah(this.state.editIndex)}
+                      >
                         UBAH
                       </Button>
                     ) : (
@@ -684,7 +882,12 @@ export default class ReferensiWarnaRekam extends Component {
 
                 <Row>
                   <Col span={4} offset={20}>
-                    <Button type="primary" block onClick={this.handleRekam}>
+                    <Button
+                      type="primary"
+                      loading={this.state.isRekamLoading}
+                      onClick={this.handleRekam}
+                      block
+                    >
                       Rekam
                     </Button>
                   </Col>
