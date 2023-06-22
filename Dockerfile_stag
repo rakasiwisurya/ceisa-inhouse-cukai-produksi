@@ -4,7 +4,7 @@ FROM drc01dev01hrbr.customs.go.id/base-image/node:erbium-alpine
 RUN set -xe \
     && apk add --no-cache bash git openssh \
     && npm install -g npm \
-    #&& git --version && bash --version && ssh -V && npm -v && node -v && yarn -v
+    && git --version && bash --version && ssh -V && npm -v && node -v && yarn -v
 
 ARG home_dir=/home/node/app
 ARG exposed_port=4000
