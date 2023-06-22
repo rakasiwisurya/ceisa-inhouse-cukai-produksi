@@ -15,8 +15,8 @@ WORKDIR ${home_dir}
 # Install app dependencies
 COPY --chown=node:node package.json ${home_dir}
 
-#RUN npm install
-RUN yarn install
+RUN npm install
+#RUN yarn install
 
 # Bundle app source
 COPY --chown=node:node . ${home_dir}
