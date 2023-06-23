@@ -26,15 +26,15 @@ export default class ReferensiWarnaRekam extends Component {
       tanggal_surat: "",
       tanggal_awal_berlaku: "",
 
-      jenis_bkc_code: "",
+      jenis_bkc_id: "",
       jenis_bkc_name: "",
       kode_warna: "",
       warna: "",
-      golongan_code: "",
+      golongan_id: "",
       golongan_name: "",
-      jenis_produksi_code: "",
+      jenis_produksi_id: "",
       jenis_produksi_name: "",
-      jenis_usaha_code: "",
+      jenis_usaha_id: "",
       jenis_usaha_name: "",
 
       searchText: "",
@@ -56,11 +56,11 @@ export default class ReferensiWarnaRekam extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc_code !== this.state.jenis_bkc_code) {
+    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
       this.getListGolongan();
       this.getListJenisProduksi();
 
-      if (this.state.jenis_bkc_code === 3) {
+      if (this.state.jenis_bkc_id === 3) {
         this.setState({
           columns: [
             {
@@ -119,7 +119,7 @@ export default class ReferensiWarnaRekam extends Component {
         });
       }
 
-      if (this.state.jenis_bkc_code === 2) {
+      if (this.state.jenis_bkc_id === 2) {
         this.setState({
           columns: [
             {
@@ -168,6 +168,13 @@ export default class ReferensiWarnaRekam extends Component {
               ...this.getColumnSearchProps("golongan_name"),
             },
             {
+              title: "Jenis Produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
+            },
+            {
               title: "Jenis Usaha",
               dataIndex: "jenis_usaha_name",
               key: "jenis_usaha_name",
@@ -212,7 +219,7 @@ export default class ReferensiWarnaRekam extends Component {
     }, 2000);
   };
   getListGolongan = async () => {
-    // const payload = { idJenisBkc: this.state.jenis_bkc_code };
+    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
     // const response = await api.referensi.json.get("/referensi/golongan", payload);
     // console.log("response.data", response.data);
 
@@ -220,15 +227,16 @@ export default class ReferensiWarnaRekam extends Component {
     //   service: "referensi",
     //   method: "get",
     //   endpoint: "/referensi/golongan",
+    //   payload,
     //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     // });
-    // if(response) {
-    //   console.log('response.data', response.data)
+    // if (response) {
+    //   console.log("response.data", response.data);
     // }
 
     this.setState({ isGolonganLoading: true });
     setTimeout(() => {
-      if (this.state.jenis_bkc_code === 3) {
+      if (this.state.jenis_bkc_id === 3) {
         this.setState({
           list_golongan: [
             {
@@ -283,7 +291,7 @@ export default class ReferensiWarnaRekam extends Component {
     }, 2000);
   };
   getListJenisProduksi = async () => {
-    // const payload = {idJenisBkc: this.state.jenis_bkc_code}
+    // const payload = {idJenisBkc: this.state.jenis_bkc_id}
     // const response = await api.referensi.json.get("/referensi/jenis-produksi", payload)
     // console.log('response.data', response.data)
 
@@ -291,6 +299,7 @@ export default class ReferensiWarnaRekam extends Component {
     //   service: "referensi",
     //   method: "get",
     //   endpoint: "/referensi/jenis-produksi",
+    //   payload,
     //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     // });
     // if(response) {
@@ -299,7 +308,7 @@ export default class ReferensiWarnaRekam extends Component {
 
     this.setState({ isJenisProduksiLoading: true });
     setTimeout(() => {
-      if (this.state.jenis_bkc_code === 3) {
+      if (this.state.jenis_bkc_id === 3) {
         this.setState({
           list_jenis_produksi: [
             {
@@ -369,18 +378,18 @@ export default class ReferensiWarnaRekam extends Component {
           list_jenis_produksi: [
             {
               idJenisProduksi: 1,
-              kodeJenisProduksi: "(MMEA1) - MMEA1",
-              namaJenisProduksi: "(MMEA1) - MMEA1",
+              kodeJenisProduksi: "MMEA1",
+              namaJenisProduksi: "Nama MMEA1",
             },
             {
               idJenisProduksi: 2,
-              kodeJenisProduksi: "(MMEA2) - MMEA2",
-              namaJenisProduksi: "(MMEA2) - MMEA2",
+              kodeJenisProduksi: "MMEA2",
+              namaJenisProduksi: "Nama MMEA2",
             },
             {
               idJenisProduksi: 3,
-              kodeJenisProduksi: "(MMEA3) - MMEA3",
-              namaJenisProduksi: "(MMEA3) - MMEA3",
+              kodeJenisProduksi: "MMEA3",
+              namaJenisProduksi: "Nama MMEA3",
             },
           ],
         });
@@ -489,22 +498,22 @@ export default class ReferensiWarnaRekam extends Component {
   };
   handleSelectCustomChange = (field, value, option) => {
     this.setState({
-      [`${field}_code`]: value,
+      [`${field}_id`]: value,
       [`${field}_name`]: option.props.children,
     });
   };
 
   handleSimpan = () => {
     const {
-      jenis_bkc_code,
+      jenis_bkc_id,
       jenis_bkc_name,
       kode_warna,
       warna,
-      golongan_code,
+      golongan_id,
       golongan_name,
-      jenis_produksi_code,
+      jenis_produksi_id,
       jenis_produksi_name,
-      jenis_usaha_code,
+      jenis_usaha_id,
       jenis_usaha_name,
     } = this.state;
 
@@ -513,76 +522,99 @@ export default class ReferensiWarnaRekam extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          jenis_bkc_code,
+          jenis_bkc_id,
           jenis_bkc_name,
           kode_warna,
           warna,
-          golongan_code,
+          golongan_id,
           golongan_name,
-          jenis_produksi_code,
+          jenis_produksi_id,
           jenis_produksi_name,
-          jenis_usaha_code,
+          jenis_usaha_id,
           jenis_usaha_name,
         },
       ],
+    });
+
+    this.setState({
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
     });
   };
   handleReset = () => {
     this.setState({
       isEdit: false,
-      jenis_bkc_code: "",
+      jenis_bkc_id: "",
       jenis_bkc_name: "",
       kode_warna: "",
       warna: "",
-      golongan_code: "",
+      golongan_id: "",
       golongan_name: "",
-      jenis_produksi_code: "",
+      jenis_produksi_id: "",
       jenis_produksi_name: "",
-      jenis_usaha_code: "",
+      jenis_usaha_id: "",
       jenis_usaha_name: "",
       dataSource: [],
     });
   };
   handleUbah = (index) => {
     const {
-      jenis_bkc_code,
+      jenis_bkc_id,
       jenis_bkc_name,
       kode_warna,
       warna,
-      golongan_code,
+      golongan_id,
       golongan_name,
-      jenis_produksi_code,
+      jenis_produksi_id,
       jenis_produksi_name,
-      jenis_usaha_code,
+      jenis_usaha_id,
       jenis_usaha_name,
     } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      jenis_bkc_code,
+      jenis_bkc_id,
       jenis_bkc_name,
       kode_warna,
       warna,
-      golongan_code,
+      golongan_id,
       golongan_name,
-      jenis_produksi_code,
+      jenis_produksi_id,
       jenis_produksi_name,
-      jenis_usaha_code,
+      jenis_usaha_id,
       jenis_usaha_name,
     });
-    this.setState({ isEdit: false, editIndex: null, dataSource: newDataSource });
+    this.setState({
+      isEdit: false,
+      editIndex: null,
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
+      dataSource: newDataSource,
+    });
   };
   handleBatal = () => {
     this.setState({
       isEdit: false,
       kode_warna: "",
       warna: "",
-      golongan_code: "",
+      golongan_id: "",
       golongan_name: "",
-      jenis_produksi_code: "",
+      jenis_produksi_id: "",
       jenis_produksi_name: "",
-      jenis_usaha_code: "",
+      jenis_usaha_id: "",
       jenis_usaha_name: "",
     });
   };
@@ -591,15 +623,15 @@ export default class ReferensiWarnaRekam extends Component {
     this.setState({
       isEdit: true,
       editIndex: index,
-      jenis_bkc_code: record.jenis_bkc_code,
+      jenis_bkc_id: record.jenis_bkc_id,
       jenis_bkc_name: record.jenis_bkc_name,
       kode_warna: record.kode_warna,
       warna: record.warna,
-      golongan_code: record.golongan_code,
+      golongan_id: record.golongan_id,
       golongan_name: record.golongan_name,
-      jenis_produksi_code: record.jenis_produksi_code,
+      jenis_produksi_id: record.jenis_produksi_id,
       jenis_produksi_name: record.jenis_produksi_name,
-      jenis_usaha_code: record.jenis_usaha_code,
+      jenis_usaha_id: record.jenis_usaha_id,
       jenis_usaha_name: record.jenis_usaha_name,
     });
   };
@@ -611,23 +643,23 @@ export default class ReferensiWarnaRekam extends Component {
 
   handleRekam = async () => {
     const details = this.state.dataSource.map((item) => {
-      if (this.state.jenis_bkc_code === 3) {
+      if (this.state.jenis_bkc_id === 3) {
         return {
-          idJenisBkc: item.jenis_bkc_code,
+          idJenisBkc: item.jenis_bkc_id,
           kodeWarna: item.kode_warna,
           warna: item.warna,
-          idGolongan: item.golongan_code,
-          idJenisProduksi: item.jenis_produksi_code,
+          idGolongan: item.golongan_id,
+          idJenisProduksi: item.jenis_produksi_id,
         };
       }
 
       return {
-        idJenisBkc: item.jenis_bkc_code,
+        idJenisBkc: item.jenis_bkc_id,
         kodeWarna: item.kode_warna,
         warna: item.warna,
-        idGolongan: item.golongan_code,
-        idJenisProduksi: item.jenis_produksi_code,
-        idJenisUsaha: item.jenis_usaha_code,
+        idGolongan: item.golongan_id,
+        idJenisProduksi: item.jenis_produksi_id,
+        idJenisUsaha: item.jenis_usaha_id,
       };
     });
 
@@ -722,11 +754,21 @@ export default class ReferensiWarnaRekam extends Component {
                 </div>
                 <Select
                   id="jenis_bkc"
-                  onChange={(value, option) =>
-                    this.handleSelectCustomChange("jenis_bkc", value, option)
-                  }
+                  onChange={(value, option) => {
+                    this.setState({
+                      golongan_id: "",
+                      golongan_name: "",
+                      jenis_produksi_id: "",
+                      jenis_produksi_name: "",
+                      jenis_usaha_id: "",
+                      jenis_usaha_name: "",
+                      list_golongan: [],
+                      list_jenis_produksi: [],
+                    });
+                    this.handleSelectCustomChange("jenis_bkc", value, option);
+                  }}
                   style={{ width: "100%" }}
-                  value={this.state.jenis_bkc_code}
+                  value={this.state.jenis_bkc_id}
                   loading={this.state.isJenisBkcLoading}
                   disabled={this.state.dataSource.length > 0}
                 >
@@ -759,7 +801,7 @@ export default class ReferensiWarnaRekam extends Component {
                 <Input id="warna" onChange={this.handleInputChange} value={this.state.warna} />
               </Col>
 
-              {this.state.jenis_bkc_code && (
+              {this.state.jenis_bkc_id && (
                 <Col span={12}>
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Golongan</FormLabel>
@@ -769,7 +811,7 @@ export default class ReferensiWarnaRekam extends Component {
                     onChange={(value, option) =>
                       this.handleSelectCustomChange("golongan", value, option)
                     }
-                    value={this.state.golongan_code}
+                    value={this.state.golongan_id}
                     loading={this.state.isGolonganLoading}
                     style={{ width: "100%" }}
                   >
@@ -783,7 +825,7 @@ export default class ReferensiWarnaRekam extends Component {
                 </Col>
               )}
 
-              {this.state.jenis_bkc_code && (
+              {this.state.jenis_bkc_id && (
                 <Col span={12}>
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Jenis Produksi</FormLabel>
@@ -793,7 +835,7 @@ export default class ReferensiWarnaRekam extends Component {
                     onChange={(value, option) =>
                       this.handleSelectCustomChange("jenis_produksi", value, option)
                     }
-                    value={this.state.jenis_produksi_code}
+                    value={this.state.jenis_produksi_id}
                     loading={this.state.isJenisProduksiLoading}
                     style={{ width: "100%" }}
                   >
@@ -808,7 +850,7 @@ export default class ReferensiWarnaRekam extends Component {
               )}
 
               <Col span={12}>
-                {this.state.jenis_bkc_code === 2 && (
+                {this.state.jenis_bkc_id === 2 && (
                   <>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Usaha</FormLabel>
@@ -818,7 +860,7 @@ export default class ReferensiWarnaRekam extends Component {
                       onChange={(value, option) =>
                         this.handleSelectCustomChange("jenis_usaha", value, option)
                       }
-                      value={this.state.jenis_usaha_code}
+                      value={this.state.jenis_usaha_id}
                       loading={this.state.isJenisUsahaLoading}
                       style={{ width: "100%" }}
                     >
@@ -868,7 +910,7 @@ export default class ReferensiWarnaRekam extends Component {
               </Col>
             </Row>
 
-            {this.state.jenis_bkc_code && (
+            {this.state.jenis_bkc_id && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table

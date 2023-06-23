@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Input, Button, Icon, DatePicker, Select, Table } from "antd";
+import { Row, Col, Input, Button, Icon, DatePicker, Select, Table, InputNumber } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import { requestApi } from "utils/requestApi";
+import { api } from "configs/api";
+import moment from "moment";
 
 export default class ReferensiTarifRekam extends Component {
   constructor(props) {
@@ -11,155 +14,97 @@ export default class ReferensiTarifRekam extends Component {
       subtitle1: "Surat Keputusan",
       subtitle2: "Rincian",
       isEdit: false,
-      searchText: "",
-      searchedColumn: "",
+      editIndex: null,
+
+      isJenisBkcLoading: true,
+      isGolonganLoading: true,
+      isJenisProduksiLoading: true,
+      isJenisHtlRelLoading: true,
+      isRekamLoading: false,
 
       nomor_surat: "",
       tanggal_surat: "",
       tanggal_awal_berlaku: "",
       nomor_peraturan: "",
       tanggal_peraturan: "",
-      golongan: "",
-      jenis_bkc: "",
 
-      jenis_produksi: "",
-      jenis_hptl_rel: "",
+      jenis_bkc_id: "",
+      jenis_bkc_name: "",
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+      satuan: "[Satuan]",
+
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
       tarif: "",
       batas_produksi1: "",
       batas_produksi2: "",
       hje1: "",
       hje2: "",
       layer: "",
-      satuan: "[Satuan]",
 
       kadar_atas: "",
       kadar_bawah: "",
       tarif_cukai_dalam_negeri: "",
       tarif_cukai_impor: "",
 
-      list_jenis_bkc: [
+      searchText: "",
+      searchedColumn: "",
+      page: 1,
+
+      list_jenis_bkc: [],
+      list_golongan: [],
+      list_personal: [
         {
-          jenis_bkc_code: "HT",
-          jenis_bkc_name: "Hasil Tembakau (HT)",
+          personal_id: "YA",
+          personal_name: "Ya",
         },
         {
-          jenis_bkc_code: "MMEA",
-          jenis_bkc_name: "Minuman Mengandung Etil Alkohol (MMEA)",
+          personal_id: "TIDAK",
+          personal_name: "Tidak",
         },
       ],
-      list_golongan: [],
       list_jenis_produksi: [],
-      list_jenis_hptl_rel: [],
-      dataSource: [],
+      list_jenis_htl_rel: [],
       columns: [],
+      dataSource: [],
     };
   }
 
+  componentDidMount() {
+    this.getJenisBkc();
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc !== this.state.jenis_bkc) {
-      if (this.state.jenis_bkc === "HT") {
+    if (prevState.jenis_produksi_id !== this.state.jenis_produksi_id) {
+      this.getJenisHtlRel();
+    }
+
+    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
+      this.getListGolongan();
+      this.getListJenisProduksi();
+
+      if (this.state.jenis_bkc_id === 3) {
         this.setState({
-          ...this.state,
-          list_golongan: [
-            {
-              golongan_code: "1",
-              golongan_name: "I",
-            },
-            {
-              golongan_code: "2",
-              golongan_name: "II",
-            },
-            {
-              golongan_code: "3",
-              golongan_name: "III",
-            },
-            {
-              golongan_code: "4",
-              golongan_name: "III/A",
-            },
-            {
-              golongan_code: "5",
-              golongan_name: "III/B",
-            },
-            {
-              golongan_code: "6",
-              golongan_name: "IMPORTIR HT",
-            },
-            {
-              golongan_code: "7",
-              golongan_name: "TANPA GOLONGAN",
-            },
-          ],
-          list_jenis_produksi: [
-            {
-              jenis_produksi_code: "SKM",
-              jenis_produksi_name: "SIGARET KRETEK MESIN",
-            },
-            {
-              jenis_produksi_code: "CRT",
-              jenis_produksi_name: "CERUTU",
-            },
-            {
-              jenis_produksi_code: "HTL",
-              jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
-            },
-            {
-              jenis_produksi_code: "STF",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN FILTER",
-            },
-            {
-              jenis_produksi_code: "SPT",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN",
-            },
-            {
-              jenis_produksi_code: "SPM",
-              jenis_produksi_name: "SIGARET PUTIH MESIN",
-            },
-            {
-              jenis_produksi_code: "TIS",
-              jenis_produksi_name: "TEMBAKAU IRIS",
-            },
-            {
-              jenis_produksi_code: "KLM",
-              jenis_produksi_name: "KELEMBAK MENYAN",
-            },
-            {
-              jenis_produksi_code: "KLB",
-              jenis_produksi_name: "KLOBOT",
-            },
-            {
-              jenis_produksi_code: "SKT",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN",
-            },
-            {
-              jenis_produksi_code: "SPF",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN FILTER",
-            },
-            {
-              jenis_produksi_code: "REL",
-              jenis_produksi_name: "ROKOK ELEKTRIK",
-            },
-          ],
-          list_jenis_hptl_rel: [
-            {
-              jenis_hptl_rel_code: "HT",
-              jenis_hptl_rel_name: "Hasil Tembakau (HT)",
-            },
-            {
-              jenis_hptl_rel_code: "MMEA",
-              jenis_hptl_rel_name: "Minuman Mengandung Etil Alkohol (MMEA)",
-            },
-          ],
           columns: [
             {
               key: "aksi",
               dataIndex: "aksi",
               title: "Aksi",
               fixed: "left",
-              render: () => (
+              render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={this.handleEdit} />
-                  <Button type="danger" icon="close" onClick={this.handleReset} />
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                 </div>
               ),
             },
@@ -167,29 +112,30 @@ export default class ReferensiTarifRekam extends Component {
               key: "nomor",
               dataIndex: "nomor",
               title: "Nomor",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor"),
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
             },
             {
-              key: "golongan",
-              dataIndex: "golongan",
+              key: "golongan_name",
+              dataIndex: "golongan_name",
               title: "Golongan",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("golongan"),
+              ...this.getColumnSearchProps("golongan_name"),
             },
             {
-              key: "jenis_produksi",
-              dataIndex: "jenis_produksi",
+              key: "jenis_produksi_name",
+              dataIndex: "jenis_produksi_name",
               title: "Jenis Produksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_produksi"),
+              ...this.getColumnSearchProps("jenis_produksi_name"),
             },
             {
-              key: "jenis_hptl_rel",
-              dataIndex: "jenis_hptl_rel",
+              key: "jenis_htl_rel_name",
+              dataIndex: "jenis_htl_rel_name",
               title: "Jenis HPTL/REL",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_hptl_rel"),
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("jenis_htl_rel_name"),
             },
             {
               key: "hje1",
@@ -234,168 +180,25 @@ export default class ReferensiTarifRekam extends Component {
               ...this.getColumnSearchProps("batas_produksi2"),
             },
           ],
-          dataSource: [
-            {
-              key: "1",
-              nomor: "1",
-              golongan: "9",
-              jenis_produksi: "CRT",
-              jenis_hptl_rel: "-",
-              hje1: "198001",
-              hje2: "-",
-              layer: "1",
-              tarif: "110000",
-              batas_produksi1: "0",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "2",
-              nomor: "2",
-              golongan: "8",
-              jenis_produksi: "KLB",
-              jenis_hptl_rel: "-",
-              hje1: "290",
-              hje2: "-",
-              layer: "1",
-              tarif: "30",
-              batas_produksi1: "0",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "3",
-              nomor: "3",
-              golongan: "1",
-              jenis_produksi: "KLM",
-              jenis_hptl_rel: "-",
-              hje1: "860",
-              hje2: "-",
-              layer: "1",
-              tarif: "4000001",
-              batas_produksi1: "0",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "4",
-              nomor: "4",
-              golongan: "1",
-              jenis_produksi: "SKT",
-              jenis_hptl_rel: "-",
-              hje1: "1250",
-              hje2: "1800",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "5",
-              nomor: "5",
-              golongan: "1",
-              jenis_produksi: "SPT",
-              jenis_hptl_rel: "-",
-              hje1: "1250",
-              hje2: "1800",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "6",
-              nomor: "6",
-              golongan: "8",
-              jenis_produksi: "KLM",
-              jenis_hptl_rel: "-",
-              hje1: "12345",
-              hje2: "-",
-              layer: "1",
-              tarif: "3000001",
-              batas_produksi1: "0",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "7",
-              nomor: "7",
-              golongan: "3",
-              jenis_produksi: "SKT",
-              jenis_hptl_rel: "-",
-              hje1: "4000",
-              hje2: "1800",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "8",
-              nomor: "8",
-              golongan: "5",
-              jenis_produksi: "SPT",
-              jenis_hptl_rel: "-",
-              hje1: "3000",
-              hje2: "1800",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "9",
-              nomor: "9",
-              golongan: "1",
-              jenis_produksi: "SKT",
-              jenis_hptl_rel: "-",
-              hje1: "1250",
-              hje2: "2000",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-            {
-              key: "10",
-              nomor: "10",
-              golongan: "1",
-              jenis_produksi: "KLM",
-              jenis_hptl_rel: "-",
-              hje1: "1250",
-              hje2: "2000",
-              layer: "2",
-              tarif: "361",
-              batas_produksi1: "20000000001",
-              batas_produksi2: "9999999999",
-            },
-          ],
         });
       }
 
-      if (this.state.jenis_bkc === "MMEA") {
+      if (this.state.jenis_bkc_id === 2) {
         this.setState({
-          ...this.state,
-          list_golongan: [
-            {
-              golongan_code: "A",
-              golongan_name: "A",
-            },
-            {
-              golongan_code: "B",
-              golongan_name: "B",
-            },
-            {
-              golongan_code: "C",
-              golongan_name: "C",
-            },
-          ],
           columns: [
             {
               key: "aksi",
               dataIndex: "aksi",
               title: "Aksi",
               fixed: "left",
-              render: () => (
+              render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button type="primary" icon="form" onClick={this.handleEdit} />
-                  <Button type="danger" icon="close" onClick={this.handleReset} />
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                 </div>
               ),
             },
@@ -403,15 +206,24 @@ export default class ReferensiTarifRekam extends Component {
               key: "nomor",
               dataIndex: "nomor",
               title: "Nomor",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
               ...this.getColumnSearchProps("nomor"),
             },
             {
-              key: "golongan",
-              dataIndex: "golongan",
+              key: "golongan_name",
+              dataIndex: "golongan_name",
               title: "Golongan",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("golongan"),
+              ...this.getColumnSearchProps("golongan_name"),
+            },
+            {
+              key: "jenis_produksi_name",
+              dataIndex: "jenis_produksi_name",
+              title: "Jenis Produksi",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
             },
             {
               key: "kadar_atas",
@@ -442,102 +254,278 @@ export default class ReferensiTarifRekam extends Component {
               ...this.getColumnSearchProps("tarif_cukai_impor"),
             },
           ],
-          dataSource: [
-            {
-              key: "1",
-              nomor: "1",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "2",
-              nomor: "2",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "3",
-              nomor: "3",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "4",
-              nomor: "4",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "5",
-              nomor: "5",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "6",
-              nomor: "6",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "7",
-              nomor: "7",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "8",
-              nomor: "8",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "9",
-              nomor: "9",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-            {
-              key: "10",
-              nomor: "10",
-              golongan: "A",
-              kadar_atas: "kadar_atas",
-              kadar_bawah: "kadar_bawah",
-              tarif_cukai_dalam_negeri: "tarif_cukai_dalam_negeri",
-              tarif_cukai_impor: "tarif_cukai_impor",
-            },
-          ],
         });
       }
     }
   }
+
+  getJenisBkc = async () => {
+    // const response = await api.referensi.json.get("/referensi/jenis-bkc")
+    // console.log('response.data', response.data)
+
+    //  const response = await requestApi({
+    //     service: "referensi",
+    //     method: "get",
+    //     endpoint: "/referensi/jenis-bkc",
+    //     setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
+    //   });
+    //   if(response) {
+    //     console.log('response.data', response.data)
+    //   }
+
+    this.setState({ isJenisBkcLoading: true });
+    setTimeout(() => {
+      this.setState({
+        list_jenis_bkc: [
+          {
+            idJenisBkc: 3,
+            namaJenisBkc: "HT",
+          },
+          {
+            idJenisBkc: 2,
+            namaJenisBkc: "MMEA",
+          },
+        ],
+      });
+      this.setState({ isJenisBkcLoading: false });
+    }, 2000);
+  };
+  getListGolongan = async () => {
+    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    // const response = await api.referensi.json.get("/referensi/golongan", payload);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/golongan",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isGolonganLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_id === 3) {
+        this.setState({
+          list_golongan: [
+            {
+              idGolongan: 1,
+              namaGolongan: "I",
+            },
+            {
+              idGolongan: 2,
+              namaGolongan: "II",
+            },
+            {
+              idGolongan: 3,
+              namaGolongan: "III",
+            },
+            {
+              idGolongan: 4,
+              namaGolongan: "III/A",
+            },
+            {
+              idGolongan: 5,
+              namaGolongan: "III/B",
+            },
+            {
+              idGolongan: 6,
+              namaGolongan: "IMPORTIR HT",
+            },
+            {
+              idGolongan: 7,
+              namaGolongan: "TANPA GOLONGAN",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_golongan: [
+            {
+              idGolongan: 1,
+              namaGolongan: "A",
+            },
+            {
+              idGolongan: 2,
+              namaGolongan: "B",
+            },
+            {
+              idGolongan: 3,
+              namaGolongan: "C",
+            },
+          ],
+        });
+      }
+      this.setState({ isGolonganLoading: false });
+    }, 2000);
+  };
+  getListJenisProduksi = async () => {
+    // const payload = {idJenisBkc: this.state.jenis_bkc_id}
+    // const response = await api.referensi.json.get("/referensi/jenis-produksi", payload)
+    // console.log('response.data', response.data)
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/jenis-produksi",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isJenisProduksiLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_id === 3) {
+        this.setState({
+          list_jenis_produksi: [
+            {
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "SKM",
+              namaJenisProduksi: "SIGARET KRETEK MESIN",
+            },
+            {
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "CRT",
+              namaJenisProduksi: "CERUTU",
+            },
+            {
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "HTL",
+              namaJenisProduksi: "HASIL TEMBAKAU LAINNYA",
+            },
+            {
+              idJenisProduksi: 4,
+              kodeJenisProduksi: "STF",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN FILTER",
+            },
+            {
+              idJenisProduksi: 5,
+              kodeJenisProduksi: "SPT",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN",
+            },
+            {
+              idJenisProduksi: 6,
+              kodeJenisProduksi: "SPM",
+              namaJenisProduksi: "SIGARET PUTIH MESIN",
+            },
+            {
+              idJenisProduksi: 7,
+              kodeJenisProduksi: "TIS",
+              namaJenisProduksi: "TEMBAKAU IRIS",
+            },
+            {
+              idJenisProduksi: 8,
+              kodeJenisProduksi: "KLM",
+              namaJenisProduksi: "KELEMBAK MENYAN",
+            },
+            {
+              idJenisProduksi: 9,
+              kodeJenisProduksi: "KLB",
+              namaJenisProduksi: "KLOBOT",
+            },
+            {
+              idJenisProduksi: 10,
+              kodeJenisProduksi: "SKT",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN",
+            },
+            {
+              idJenisProduksi: 11,
+              kodeJenisProduksi: "SPF",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN FILTER",
+            },
+            {
+              idJenisProduksi: 12,
+              kodeJenisProduksi: "REL",
+              namaJenisProduksi: "ROKOK ELEKTRIK",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_jenis_produksi: [
+            {
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "MMEA1",
+              namaJenisProduksi: "Nama MMEA1",
+            },
+            {
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "MMEA2",
+              namaJenisProduksi: "Nama MMEA2",
+            },
+            {
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "MMEA3",
+              namaJenisProduksi: "Nama MMEA3",
+            },
+          ],
+        });
+      }
+
+      this.setState({ isJenisProduksiLoading: false });
+    }, 2000);
+  };
+  getJenisHtlRel = async () => {
+    // const payload = {idJenisProduksi: this.state.jenis_produksi_id}
+    // const response = await api.referensi.json.get("/referensi/jenis-htl-rel", payload)
+    // console.log('response.data', response.data)
+
+    //  const response = await requestApi({
+    //     service: "referensi",
+    //     method: "get",
+    //     endpoint: "/referensi/jenis-htl-rel",
+    //     payload,
+    //     setLoading: (bool) => this.setState({ isJenisHtlRel: bool }),
+    //   });
+    //   if(response) {
+    //     console.log('response.data', response.data)
+    //   }
+
+    this.setState({ isJenisHtlRelLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_produksi_code === "HTL") {
+        this.setState({
+          list_jenis_htl_rel: [
+            {
+              idJenisHtlRel: 1,
+              kodeHtlRel: "ABC",
+              namaJenisHtlRel: "Jenis HTL",
+              kodeJenisProduksiBkc: "HTL",
+            },
+            {
+              idJenisHtlRel: 2,
+              kodeHtlRel: "DEF",
+              namaJenisHtlRel: "Jenis HTL",
+              kodeJenisProduksiBkc: "HTL",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_jenis_htl_rel: [
+            {
+              idJenisHtlRel: 1,
+              kodeHtlRel: "GHI",
+              namaJenisHtlRel: "Jenis REL",
+              kodeJenisProduksiBkc: "REL",
+            },
+            {
+              idJenisHtlRel: 2,
+              kodeHtlRel: "JKL",
+              namaJenisHtlRel: "Jenis REL",
+              kodeJenisProduksiBkc: "REL",
+            },
+          ],
+        });
+      }
+      this.setState({ isJenisHtlRelLoading: false });
+    }, 2000);
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -592,36 +580,340 @@ export default class ReferensiTarifRekam extends Component {
     clearFilters();
     this.setState({ searchText: "" });
   };
+  handleTableChange = (page) => {
+    this.setState({ page: page.current });
+  };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
-  handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+  handleInputNumberChange = (field, value) => {
+    this.setState({ [field]: value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
-  handleEdit = () => {
-    this.setState({ ...this.state, isEdit: true });
+  handleSelectCustomChange = (field, value, option) => {
+    this.setState({
+      [`${field}_id`]: value,
+      [`${field}_name`]: option.props.children,
+    });
   };
-  handleDelete = () => {
-    console.log("deleting...");
+
+  handleSimpan = () => {
+    const {
+      jenis_bkc_id,
+      jenis_bkc_name,
+      golongan_id,
+      golongan_name,
+      personal_id,
+      personal_name,
+
+      jenis_produksi_id,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_htl_rel_id,
+      jenis_htl_rel_name,
+      tarif,
+      batas_produksi1,
+      batas_produksi2,
+      hje1,
+      hje2,
+      layer,
+
+      kadar_atas,
+      kadar_bawah,
+      tarif_cukai_dalam_negeri,
+      tarif_cukai_impor,
+    } = this.state;
+
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          jenis_bkc_id,
+          jenis_bkc_name,
+          golongan_id,
+          golongan_name,
+          personal_id,
+          personal_name,
+          jenis_produksi_id,
+          jenis_produksi_code,
+          jenis_produksi_name,
+          jenis_htl_rel_id,
+          jenis_htl_rel_name,
+          tarif,
+          batas_produksi1,
+          batas_produksi2,
+          hje1,
+          hje2,
+          layer,
+          kadar_atas,
+          kadar_bawah,
+          tarif_cukai_dalam_negeri,
+          tarif_cukai_impor,
+        },
+      ],
+    });
+
+    this.setState({
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
+      tarif: "",
+      batas_produksi1: "",
+      batas_produksi2: "",
+      hje1: "",
+      hje2: "",
+      layer: "",
+
+      kadar_atas: "",
+      kadar_bawah: "",
+      tarif_cukai_dalam_negeri: "",
+      tarif_cukai_impor: "",
+    });
   };
   handleReset = () => {
-    console.log("reseting...");
+    this.setState({
+      isEdit: false,
+      jenis_bkc_id: "",
+      jenis_bkc_name: "",
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
+      tarif: "",
+      batas_produksi1: "",
+      batas_produksi2: "",
+      hje1: "",
+      hje2: "",
+      layer: "",
+
+      kadar_atas: "",
+      kadar_bawah: "",
+      tarif_cukai_dalam_negeri: "",
+      tarif_cukai_impor: "",
+      dataSource: [],
+    });
   };
-  handleUpdate = () => {
-    this.setState({ ...this.state, isEdit: false });
+  handleUbah = (index) => {
+    const {
+      jenis_bkc_id,
+      jenis_bkc_name,
+      golongan_id,
+      golongan_name,
+      personal_id,
+      personal_name,
+
+      jenis_produksi_id,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_htl_rel_id,
+      jenis_htl_rel_name,
+      tarif,
+      batas_produksi1,
+      batas_produksi2,
+      hje1,
+      hje2,
+      layer,
+
+      kadar_atas,
+      kadar_bawah,
+      tarif_cukai_dalam_negeri,
+      tarif_cukai_impor,
+    } = this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1, {
+      key: new Date().getTime(),
+      jenis_bkc_id,
+      jenis_bkc_name,
+      golongan_id,
+      golongan_name,
+      personal_id,
+      personal_name,
+
+      jenis_produksi_id,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_htl_rel_id,
+      jenis_htl_rel_name,
+      tarif,
+      batas_produksi1,
+      batas_produksi2,
+      hje1,
+      hje2,
+      layer,
+
+      kadar_atas,
+      kadar_bawah,
+      tarif_cukai_dalam_negeri,
+      tarif_cukai_impor,
+    });
+    this.setState({
+      isEdit: false,
+      editIndex: null,
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
+      tarif: "",
+      batas_produksi1: "",
+      batas_produksi2: "",
+      hje1: "",
+      hje2: "",
+      layer: "",
+
+      kadar_atas: "",
+      kadar_bawah: "",
+      tarif_cukai_dalam_negeri: "",
+      tarif_cukai_impor: "",
+      dataSource: newDataSource,
+    });
   };
-  handleSave = () => {
-    console.log("saving...");
+  handleBatal = () => {
+    this.setState({
+      isEdit: false,
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
+      tarif: "",
+      batas_produksi1: "",
+      batas_produksi2: "",
+      hje1: "",
+      hje2: "",
+      layer: "",
+
+      kadar_atas: "",
+      kadar_bawah: "",
+      tarif_cukai_dalam_negeri: "",
+      tarif_cukai_impor: "",
+    });
   };
+
+  handleEdit = (record, index) => {
+    this.setState({
+      isEdit: true,
+      editIndex: index,
+      jenis_bkc_id: record.jenis_bkc_id,
+      jenis_bkc_name: record.jenis_bkc_name,
+      golongan_id: record.golongan_id,
+      golongan_name: record.golongan_name,
+      personal_id: record.personal_id,
+      personal_name: record.personal_name,
+
+      jenis_produksi_id: record.jenis_produksi_id,
+      jenis_produksi_code: record.jenis_produksi_code,
+      jenis_produksi_name: record.jenis_produksi_name,
+      jenis_htl_rel_id: record.jenis_htl_rel_id,
+      jenis_htl_rel_name: record.jenis_htl_rel_name,
+      tarif: record.tarif,
+      batas_produksi1: record.batas_produksi1,
+      batas_produksi2: record.batas_produksi2,
+      hje1: record.hje1,
+      hje2: record.hje2,
+      layer: record.layer,
+
+      kadar_atas: record.kadar_atas,
+      kadar_bawah: record.kadar_bawah,
+      tarif_cukai_dalam_negeri: record.tarif_cukai_dalam_negeri,
+      tarif_cukai_impor: record.tarif_cukai_impor,
+    });
+  };
+  handleDelete = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
+  };
+
   handleRekam = () => {
-    console.log("merekam...");
+    const details = this.state.dataSource.map((item) => {
+      if (this.state.jenis_bkc_id === 3) {
+        return {
+          idJenisBkc: item.jenis_bkc_id,
+          idGolongan: item.golongan_id,
+          idJenisProduksi: item.jenis_produksi_id,
+          idJenisHtlRel: item.jenis_htl_rel_id,
+          tarif: item.tarif,
+          batasProduksi1: item.batas_produksi1,
+          batasProduksi2: item.batas_produksi2,
+          hje1: item.hje1,
+          hje2: item.hje2,
+          layer: item.layer,
+        };
+      }
+
+      return {
+        idJenisBkc: item.jenis_bkc_id,
+        idGolongan: item.golongan_id,
+        idJenisProduksi: item.jenis_produksi_id,
+        kadarAtas: item.kadar_atas,
+        kadarBawah: item.kadar_bawah,
+        tarifCukaiDalamNegeri: item.tarif_cukai_dalam_negeri,
+        tarifCukaiImpor: item.tarif_cukai_impor,
+      };
+    });
+
+    const data = {
+      header: {
+        noSurat: this.state.nomor_surat,
+        tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+        tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
+        nomorPeraturan: this.state.nomor_peraturan,
+        tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
+      },
+      details,
+    };
+
+    // const response = await api.referensi.json.post("/referensi/browse-rekam-warna", data);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-rekam-warna",
+    //   payload: data,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isRekamLoading: true });
+    setTimeout(() => {
+      console.log("data", data);
+      this.setState({ isRekamLoading: false });
+    }, 2000);
   };
 
   render() {
@@ -699,66 +991,61 @@ export default class ReferensiTarifRekam extends Component {
 
           <Header>{this.state.subtitle2}</Header>
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+            <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Jenis BKC</FormLabel>
                 </div>
                 <Select
                   id="jenis_bkc"
-                  onChange={(value) => this.handleSelectChange("jenis_bkc", value)}
-                  value={this.state.jenis_bkc}
+                  onChange={(value, option) => {
+                    this.setState({
+                      golongan_id: "",
+                      golongan_name: "",
+                      jenis_produksi_id: "",
+                      jenis_produksi_name: "",
+                      jenis_htl_rel_id: "",
+                      jenis_htl_rel_name: "",
+                      list_jenis_produksi: [],
+                      list_golongan: [],
+                    });
+                    this.handleSelectCustomChange("jenis_bkc", value, option);
+                  }}
                   style={{ width: "100%" }}
+                  value={this.state.jenis_bkc_id}
+                  loading={this.state.isJenisBkcLoading}
+                  disabled={this.state.dataSource.length > 0}
                 >
                   {this.state.list_jenis_bkc.length > 0 &&
                     this.state.list_jenis_bkc.map((item, index) => (
-                      <Select.Option key={`jenis-bkc-${index}`} value={item.jenis_bkc_code}>
-                        {item.jenis_bkc_name}
+                      <Select.Option key={`jenis-bkc-${index}`} value={item.idJenisBkc}>
+                        {item.namaJenisBkc}
                       </Select.Option>
                     ))}
                 </Select>
               </Col>
+            </Row>
 
-              {this.state.jenis_bkc && (
-                <Col span={12}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Golongan</FormLabel>
-                  </div>
-                  <Select
-                    id="golongan"
-                    value={this.state.golongan}
-                    onChange={(value) => this.handleSelectChange("golongan", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_golongan.length > 0 &&
-                      this.state.list_golongan.map((item, index) => (
-                        <Select.Option key={`golongan-${index}`} value={item.golongan_code}>
-                          {item.golongan_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </Col>
-              )}
-
-              {this.state.jenis_bkc === "HT" && (
+            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+              {this.state.jenis_bkc_id && (
                 <>
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Produksi</FormLabel>
+                      <FormLabel>Golongan</FormLabel>
                     </div>
                     <Select
-                      id="jenis_produksi"
-                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
-                      value={this.state.jenis_produksi}
+                      id="golongan"
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("golongan", value, option)
+                      }
+                      value={this.state.golongan_id}
+                      loading={this.state.isGolonganLoading}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_jenis_produksi.length > 0 &&
-                        this.state.list_jenis_produksi.map((item, index) => (
-                          <Select.Option
-                            key={`jenis-produksi-${index}`}
-                            value={item.jenis_produksi_code}
-                          >
-                            {item.jenis_produksi_name}
+                      {this.state.list_golongan.length > 0 &&
+                        this.state.list_golongan.map((item, index) => (
+                          <Select.Option key={`golongan-${index}`} value={item.idGolongan}>
+                            {item.namaGolongan}
                           </Select.Option>
                         ))}
                     </Select>
@@ -766,26 +1053,85 @@ export default class ReferensiTarifRekam extends Component {
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Personal</FormLabel>
+                    </div>
+                    <Select
+                      id="personal"
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("personal", value, option)
+                      }
+                      value={this.state.personal_id}
+                      style={{ width: "100%" }}
+                    >
+                      {this.state.list_personal.length > 0 &&
+                        this.state.list_personal.map((item, index) => (
+                          <Select.Option key={`personal-${index}`} value={item.personal_id}>
+                            {item.personal_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Jenis Produksi</FormLabel>
+                    </div>
+                    <Select
+                      id="jenis_produksi"
+                      onChange={(value, option) => {
+                        this.setState({
+                          jenis_htl_rel_id: "",
+                          jenis_htl_rel_name: "",
+                          list_jenis_htl_rel: [],
+                          jenis_produksi_code: option.props.children
+                            .split("-")[0]
+                            .replace(/[()\s]/g, ""),
+                        });
+                        this.handleSelectCustomChange("jenis_produksi", value, option);
+                      }}
+                      value={this.state.jenis_produksi_id}
+                      loading={this.state.isJenisProduksiLoading}
+                      style={{ width: "100%" }}
+                    >
+                      {this.state.list_jenis_produksi.length > 0 &&
+                        this.state.list_jenis_produksi.map((item, index) => (
+                          <Select.Option
+                            key={`jenis-produksi-${index}`}
+                            value={item.idJenisProduksi}
+                          >
+                            {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+                </>
+              )}
+
+              {this.state.jenis_bkc_id === 3 && (
+                <>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis HPTL/REL</FormLabel>
                     </div>
                     <Select
-                      id="jenis_hptl_rel"
-                      value={this.state.jenis_hptl_rel}
-                      onChange={(value) => this.handleSelectChange("jenis_hptl_rel", value)}
+                      id="jenis_htl_rel"
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("jenis_htl_rel", value, option)
+                      }
+                      value={this.state.jenis_htl_rel_id}
+                      loading={this.state.isJenisHtlRelLoading}
                       style={{ width: "100%" }}
                       disabled={
                         !(
-                          this.state.jenis_produksi === "HTL" || this.state.jenis_produksi === "REL"
+                          this.state.jenis_produksi_code === "HTL" ||
+                          this.state.jenis_produksi_code === "REL"
                         )
                       }
                     >
-                      {this.state.list_jenis_hptl_rel.length > 0 &&
-                        this.state.list_jenis_hptl_rel.map((item, index) => (
-                          <Select.Option
-                            key={`jenis_hptl_rel-${index}`}
-                            value={item.jenis_hptl_rel_code}
-                          >
-                            {item.jenis_hptl_rel_name}
+                      {this.state.list_jenis_htl_rel.length > 0 &&
+                        this.state.list_jenis_htl_rel.map((item, index) => (
+                          <Select.Option key={`jenis_htl_rel-${index}`} value={item.idJenisHtlRel}>
+                            {item.namaJenisHtlRel}
                           </Select.Option>
                         ))}
                     </Select>
@@ -796,13 +1142,19 @@ export default class ReferensiTarifRekam extends Component {
                       <FormLabel>Tarif</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
+                      <InputNumber
                         id="tarif"
-                        onChange={this.handleInputChange}
+                        onChange={(value) => this.handleInputNumberChange("tarif", value)}
                         value={this.state.tarif}
+                        style={{ flex: 1 }}
+                        min={0}
                       />
-                      <div>/</div>
-                      <div>{this.state.satuan}</div>
+                      {this.state.satuan && (
+                        <>
+                          <div>/</div>
+                          <div>{this.state.satuan}</div>
+                        </>
+                      )}
                     </div>
                   </Col>
 
@@ -811,16 +1163,20 @@ export default class ReferensiTarifRekam extends Component {
                       <FormLabel>Batas Produksi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
+                      <InputNumber
                         id="batas_produksi1"
-                        onChange={this.handleInputChange}
+                        onChange={(value) => this.handleInputNumberChange("batas_produksi1", value)}
                         value={this.state.batas_produksi1}
+                        style={{ flex: 1 }}
+                        min={0}
                       />
                       <div>s.d</div>
-                      <Input
+                      <InputNumber
                         id="batas_produksi2"
-                        onChange={this.handleInputChange}
+                        onChange={(value) => this.handleInputNumberChange("batas_produksi2", value)}
                         value={this.state.batas_produksi2}
+                        style={{ flex: 1 }}
+                        min={0}
                       />
                     </div>
                   </Col>
@@ -831,22 +1187,30 @@ export default class ReferensiTarifRekam extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div>
-                        <Input
+                        <InputNumber
                           id="hje1"
-                          onChange={this.handleInputChange}
+                          onChange={(value) => this.handleInputNumberChange("hje1", value)}
                           value={this.state.hje1}
+                          style={{ flex: 1 }}
+                          min={0}
                         />
                       </div>
                       <div>s.d</div>
                       <div>
-                        <Input
+                        <InputNumber
                           id="hje2"
-                          onChange={this.handleInputChange}
+                          onChange={(value) => this.handleInputNumberChange("hje2", value)}
                           value={this.state.hje2}
+                          style={{ flex: 1 }}
+                          min={0}
                         />
                       </div>
-                      <div>/</div>
-                      <div>{this.state.satuan}</div>
+                      {this.state.satuan && (
+                        <>
+                          <div>/</div>
+                          <div>{this.state.satuan}</div>
+                        </>
+                      )}
                     </div>
                   </Col>
 
@@ -859,38 +1223,50 @@ export default class ReferensiTarifRekam extends Component {
                 </>
               )}
 
-              {this.state.jenis_bkc === "MMEA" && (
+              {this.state.jenis_bkc_id === 2 && (
                 <>
                   <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kadar Atas</FormLabel>
-                    </div>
-                    <Input
-                      id="kadar_atas"
-                      onChange={this.handleInputChange}
-                      value={this.state.kadar_atas}
-                    />
-                  </Col>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Kadar Atas</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="kadar_atas"
+                          onChange={(value) => this.handleInputNumberChange("kadar_atas", value)}
+                          value={this.state.kadar_atas}
+                          style={{ width: "100%" }}
+                          min={0}
+                        />
+                      </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kadar Bawah</FormLabel>
-                    </div>
-                    <Input
-                      id="kadar_bawah"
-                      onChange={this.handleInputChange}
-                      value={this.state.kadar_bawah}
-                    />
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Kadar Bawah</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="kadar_bawah"
+                          onChange={(value) => this.handleInputNumberChange("kadar_bawah", value)}
+                          value={this.state.kadar_bawah}
+                          style={{ width: "100%" }}
+                          min={0}
+                        />
+                      </Col>
+                    </Row>
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
                     </div>
-                    <Input
+                    <InputNumber
                       id="tarif_cukai_dalam_negeri"
-                      onChange={this.handleInputChange}
+                      onChange={(value) =>
+                        this.handleInputNumberChange("tarif_cukai_dalam_negeri", value)
+                      }
                       value={this.state.tarif_cukai_dalam_negeri}
+                      style={{ width: "100%" }}
+                      min={0}
                     />
                   </Col>
 
@@ -898,10 +1274,12 @@ export default class ReferensiTarifRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tarif Cukai Impor</FormLabel>
                     </div>
-                    <Input
+                    <InputNumber
                       id="tarif_cukai_impor"
-                      onChange={this.handleInputChange}
+                      onChange={(value) => this.handleInputNumberChange("tarif_cukai_impor", value)}
                       value={this.state.tarif_cukai_impor}
+                      style={{ width: "100%" }}
+                      min={0}
                     />
                   </Col>
                 </>
@@ -913,38 +1291,51 @@ export default class ReferensiTarifRekam extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEdit ? (
-                      <Button type="primary" block onClick={this.handleUpdate}>
+                      <Button type="primary" block onClick={this.handleUbah}>
                         UBAH
                       </Button>
                     ) : (
-                      <Button type="primary" block onClick={this.handleSave}>
+                      <Button type="primary" block onClick={this.handleSimpan}>
                         SIMPAN
                       </Button>
                     )}
                   </Col>
 
                   <Col span={12}>
-                    <Button type="danger" block>
-                      RESET
-                    </Button>
+                    {this.state.isEdit ? (
+                      <Button type="danger" block onClick={this.handleBatal}>
+                        BATAL
+                      </Button>
+                    ) : (
+                      <Button type="danger" block onClick={this.handleReset}>
+                        RESET
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               </Col>
             </Row>
 
-            {this.state.jenis_bkc && (
+            {this.state.jenis_bkc_id && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
                     scroll={{ x: "max-content" }}
+                    onChange={this.handleTableChange}
+                    pagination={{ current: this.state.page }}
                   />
                 </div>
 
                 <Row>
                   <Col span={4} offset={20}>
-                    <Button type="primary" block onClick={this.handleRekam}>
+                    <Button
+                      type="primary"
+                      loading={this.state.isRekamLoading}
+                      onClick={this.handleRekam}
+                      block
+                    >
                       Rekam
                     </Button>
                   </Col>
