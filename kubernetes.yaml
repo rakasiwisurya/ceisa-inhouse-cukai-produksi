@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: microfrontend-citac
+  name: microfrontend-cukai-produksi
   namespace: microfrontend
 spec:
   selector:
-    app: microfrontend-citac
+    app: microfrontend-cukai-produksi
   type: LoadBalancer
   ports:
   - protocol: TCP
@@ -18,10 +18,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microfrontend-citac
+  name: microfrontend-cukai-produksi
   namespace: microfrontend
   labels:
-    app: microfrontend-citac
+    app: microfrontend-cukai-produksi
 spec:
   replicas: 2
   strategy:
@@ -33,14 +33,14 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: microfrontend-citac
+      app: microfrontend-cukai-produksi
   template:
     metadata:
       labels:
-        app: microfrontend-citac
+        app: microfrontend-cukai-produksi
     spec:
       containers:
-      - name: microfrontend-citac
+      - name: microfrontend-cukai-produksi
         image: $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:$BUILD_NUMBER
         ports:
         - containerPort: 4000
@@ -65,7 +65,7 @@ spec:
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: microfrontend-citac
+  name: microfrontend-cukai-produksi
   namespace: microfrontend
 spec:
   maxReplicas: 4
@@ -73,7 +73,7 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: microfrontend-citac
+    name: microfrontend-cukai-produksi
   metrics:
   - type: Resource
     resource:

@@ -1,6 +1,8 @@
 # Extending image
 #FROM node:erbium-alpine
-FROM drc01w01hrbr.customs.go.id/base-image/node:erbium-alpine
+#FROM drc01w01hrbr.customs.go.id/base-image/node:erbium-alpine
+FROM drc01w01hrbr.customs.go.id/base-image/node:16.13.0-alpine as build-frontend
+
 RUN set -xe \
     && apk add --no-cache bash git openssh \
     && npm install -g npm \
@@ -25,7 +27,7 @@ COPY --chown=node:node . ${home_dir}
 EXPOSE ${exposed_port}
 
 # Environment variables
-ENV NODE_ENV production
+ENV NODE_ENV development
 ENV PORT ${exposed_port}
 ENV PUBLIC_PATH "/"
 ENV NODE_OPTIONS --max_old_space_size=8192
