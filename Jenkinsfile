@@ -31,16 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                script {
-                    app = docker.build(DOCKER_IMAGE_NAME, "-m 4g .")
-                }
-            }
-        }
+        
         stage('Push Docker Image') {
             when {
                 branch 'develop'
