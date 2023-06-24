@@ -437,7 +437,6 @@ export default class ReferensiWarnaRekam extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
@@ -643,27 +642,42 @@ export default class ReferensiWarnaRekam extends Component {
 
   handleRekam = async () => {
     const details = this.state.dataSource.map((item) => {
-      if (this.state.jenis_bkc_id === 3) {
-        return {
-          idJenisBkc: item.jenis_bkc_id,
-          kodeWarna: item.kode_warna,
-          warna: item.warna,
-          idGolongan: item.golongan_id,
-          idJenisProduksi: item.jenis_produksi_id,
-        };
-      }
-
-      return {
+      const data = {
         idJenisBkc: item.jenis_bkc_id,
         kodeWarna: item.kode_warna,
         warna: item.warna,
         idGolongan: item.golongan_id,
         idJenisProduksi: item.jenis_produksi_id,
-        idJenisUsaha: item.jenis_usaha_id,
       };
+
+      if (this.state.jenis_bkc_id === 2) {
+        data.idJenisUsaha = item.jenis_usaha_id;
+        return data;
+      }
+
+      return data;
+
+      // if (this.state.jenis_bkc_id === 3) {
+      //   return {
+      //     idJenisBkc: item.jenis_bkc_id,
+      //     kodeWarna: item.kode_warna,
+      //     warna: item.warna,
+      //     idGolongan: item.golongan_id,
+      //     idJenisProduksi: item.jenis_produksi_id,
+      //   };
+      // }
+
+      // return {
+      //   idJenisBkc: item.jenis_bkc_id,
+      //   kodeWarna: item.kode_warna,
+      //   warna: item.warna,
+      //   idGolongan: item.golongan_id,
+      //   idJenisProduksi: item.jenis_produksi_id,
+      //   idJenisUsaha: item.jenis_usaha_id,
+      // };
     });
 
-    const data = {
+    const payload = {
       header: {
         noSurat: this.state.nomor_surat,
         tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
@@ -672,14 +686,14 @@ export default class ReferensiWarnaRekam extends Component {
       details,
     };
 
-    // const response = await api.referensi.json.post("/referensi/browse-rekam-warna", data);
+    // const response = await api.referensi.json.post("/referensi/browse-rekam-warna", payload);
     // console.log("response.data", response.data);
 
     // const response = await requestApi({
     //   service: "referensi",
     //   method: "post",
     //   endpoint: "/referensi/browse-rekam-warna",
-    //   payload: data,
+    //   payload,
     //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     // });
     // if(response) {
@@ -688,7 +702,7 @@ export default class ReferensiWarnaRekam extends Component {
 
     this.setState({ isRekamLoading: true });
     setTimeout(() => {
-      console.log("data", data);
+      console.log("payload", payload);
       this.setState({ isRekamLoading: false });
     }, 2000);
   };
@@ -842,7 +856,7 @@ export default class ReferensiWarnaRekam extends Component {
                     {this.state.list_jenis_produksi.length > 0 &&
                       this.state.list_jenis_produksi.map((item, index) => (
                         <Select.Option key={`jenis-produksi-${index}`} value={item.idJenisProduksi}>
-                          {item.namaJenisProduksi}
+                          {`${item.kodeJenisProduksi} - ${item.namaJenisProduksi}`}
                         </Select.Option>
                       ))}
                   </Select>
@@ -866,7 +880,7 @@ export default class ReferensiWarnaRekam extends Component {
                     >
                       {this.state.list_jenis_usaha.length > 0 &&
                         this.state.list_jenis_usaha.map((item, index) => (
-                          <Select.Option key={`golongan-${index}`} value={item.idJenisUsaha}>
+                          <Select.Option key={`jenis-usaha-${index}`} value={item.idJenisUsaha}>
                             {item.namaJenisUsaha}
                           </Select.Option>
                         ))}

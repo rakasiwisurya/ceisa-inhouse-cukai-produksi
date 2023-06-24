@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Row, Col, Input, Button, DatePicker, Select } from "antd";
+import { Row, Col, Input, Button, DatePicker, Select, InputNumber } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import moment from "moment";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { api } from "configs/api";
+import { requestApi } from "utils/requestApi";
 
 export default class ReferensiTarifEdit extends Component {
   constructor(props) {
@@ -12,170 +15,402 @@ export default class ReferensiTarifEdit extends Component {
       subtitle1: "Surat Keputusan",
       subtitle2: "Rincian",
 
-      nomor_surat: "A",
-      tanggal_surat: moment(new Date()),
-      tanggal_awal_berlaku: moment(new Date()),
-      nomor_peraturan: "B",
-      tanggal_peraturan: moment(new Date()),
-      golongan: "I",
-      jenis_bkc: "HT",
+      isDetailTarifLoading: true,
+      isUbahLoading: false,
+      isJenisBkcLoading: true,
+      isGolonganLoading: true,
+      isJenisProduksiLoading: true,
+      isJenisHtlRelLoading: true,
 
-      jenis_produksi: "HTL",
-      jenis_hptl_rel: "A",
-      tarif: 0,
-      batas_produksi1: "A",
-      batas_produksi2: "B",
-      hje1: "C",
-      hje2: "E",
-      layer: "F",
-      satuan: "[Satuan]",
+      nomor_surat: "",
+      tanggal_surat: "",
+      tanggal_awal_berlaku: "",
+      nomor_peraturan: "",
+      tanggal_peraturan: "",
 
-      kadar_atas: 0,
-      kadar_bawah: 0,
-      tarif_cukai_dalam_negeri: 0,
-      tarif_cukai_impor: 0,
+      jenis_bkc_id: "",
+      jenis_bkc_name: "",
+      golongan_id: "",
+      golongan_name: "",
+      personal_id: "",
+      personal_name: "",
+      satuan: "",
 
-      list_jenis_bkc: [
+      jenis_produksi_id: "",
+      jenis_produksi_code: "",
+      jenis_produksi_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
+      tarif: "",
+      batas_produksi1: "",
+      batas_produksi2: "",
+      hje1: "",
+      hje2: "",
+      layer: "",
+
+      kadar_atas: "",
+      kadar_bawah: "",
+      tarif_cukai_dalam_negeri: "",
+      tarif_cukai_impor: "",
+
+      list_jenis_bkc: [],
+      list_golongan: [],
+      list_personal: [
         {
-          jenis_bkc_code: "HT",
-          jenis_bkc_name: "Hasil Tembakau (HT)",
+          personal_id: "YA",
+          personal_name: "Ya",
         },
         {
-          jenis_bkc_code: "MMEA",
-          jenis_bkc_name: "Minuman Mengandung Etil Alkohol (MMEA)",
+          personal_id: "TIDAK",
+          personal_name: "Tidak",
         },
       ],
-      list_golongan: [],
       list_jenis_produksi: [],
-      list_jenis_hptl_rel: [],
+      list_jenis_htl_rel: [],
     };
   }
 
+  componentDidMount() {
+    this.getJenisBkc();
+    this.getDetailTarif();
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc !== this.state.jenis_bkc) {
-      if (this.state.jenis_bkc === "HT") {
+    if (prevState.jenis_produksi_id !== this.state.jenis_produksi_id) {
+      this.getJenisHtlRel();
+    }
+
+    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
+      this.getListGolongan();
+      this.getListJenisProduksi();
+    }
+  }
+
+  getDetailTarif = async () => {
+    // const payload = {idReferensiSkep: this.props.match.params.id}
+
+    //  const response = await api.referensi.json.get("/referensi/browse-detail-tarif", payload);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/browse-detail-tarif",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
+    // });
+    // if (response) {
+    //   console.log("response.data", response.data);
+    // }
+
+    this.setState({ isDetailTarifLoading: true });
+    setTimeout(() => {
+      this.setState({
+        nomor_surat: "A",
+        tanggal_surat: moment(new Date()),
+        tanggal_awal_berlaku: moment(new Date()),
+        nomor_peraturan: "B",
+        tanggal_peraturan: moment(new Date()),
+        golongan_id: 1,
+        golongan_name: "I",
+        jenis_bkc_id: 3,
+        jenis_bkc_name: "HT",
+
+        jenis_produksi_id: 1,
+        jenis_produksi_code: "HTL",
+        jenis_produksi_name: "Hasil Tembakau Lainnya",
+        jenis_htl_rel_id: 1,
+        jenis_htl_rel_name: "B",
+        tarif: 100,
+        batas_produksi1: 200,
+        batas_produksi2: 300,
+        hje1: 400,
+        hje2: 500,
+        layer: "Layer 1",
+        satuan: "gram",
+
+        kadar_atas: 0,
+        kadar_bawah: 0,
+        tarif_cukai_dalam_negeri: 0,
+        tarif_cukai_impor: 0,
+      });
+      this.setState({ isDetailTarifLoading: false });
+    }, 2000);
+  };
+
+  getJenisBkc = async () => {
+    // const response = await api.referensi.json.get("/referensi/jenis-bkc")
+    // console.log('response.data', response.data)
+
+    //  const response = await requestApi({
+    //     service: "referensi",
+    //     method: "get",
+    //     endpoint: "/referensi/jenis-bkc",
+    //     setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
+    //   });
+    //   if(response) {
+    //     console.log('response.data', response.data)
+    //   }
+
+    this.setState({ isJenisBkcLoading: true });
+    setTimeout(() => {
+      this.setState({
+        list_jenis_bkc: [
+          {
+            idJenisBkc: 3,
+            namaJenisBkc: "HT",
+          },
+          {
+            idJenisBkc: 2,
+            namaJenisBkc: "MMEA",
+          },
+        ],
+      });
+      this.setState({ isJenisBkcLoading: false });
+    }, 2000);
+  };
+  getListGolongan = async () => {
+    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    // const response = await api.referensi.json.get("/referensi/golongan", payload);
+    // console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/golongan",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isGolonganLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_id === 3) {
         this.setState({
-          ...this.state,
           list_golongan: [
             {
-              golongan_code: "1",
-              golongan_name: "I",
+              idGolongan: 1,
+              namaGolongan: "I",
             },
             {
-              golongan_code: "2",
-              golongan_name: "II",
+              idGolongan: 2,
+              namaGolongan: "II",
             },
             {
-              golongan_code: "3",
-              golongan_name: "III",
+              idGolongan: 3,
+              namaGolongan: "III",
             },
             {
-              golongan_code: "4",
-              golongan_name: "III/A",
+              idGolongan: 4,
+              namaGolongan: "III/A",
             },
             {
-              golongan_code: "5",
-              golongan_name: "III/B",
+              idGolongan: 5,
+              namaGolongan: "III/B",
             },
             {
-              golongan_code: "6",
-              golongan_name: "IMPORTIR HT",
+              idGolongan: 6,
+              namaGolongan: "IMPORTIR HT",
             },
             {
-              golongan_code: "7",
-              golongan_name: "TANPA GOLONGAN",
+              idGolongan: 7,
+              namaGolongan: "TANPA GOLONGAN",
             },
           ],
+        });
+      } else {
+        this.setState({
+          list_golongan: [
+            {
+              idGolongan: 1,
+              namaGolongan: "A",
+            },
+            {
+              idGolongan: 2,
+              namaGolongan: "B",
+            },
+            {
+              idGolongan: 3,
+              namaGolongan: "C",
+            },
+          ],
+        });
+      }
+      this.setState({ isGolonganLoading: false });
+    }, 2000);
+  };
+  getListJenisProduksi = async () => {
+    // const payload = {idJenisBkc: this.state.jenis_bkc_id}
+    // const response = await api.referensi.json.get("/referensi/jenis-produksi", payload)
+    // console.log('response.data', response.data)
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/jenis-produksi",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    // });
+    // if(response) {
+    //   console.log('response.data', response.data)
+    // }
+
+    this.setState({ isJenisProduksiLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_bkc_id === 3) {
+        this.setState({
           list_jenis_produksi: [
             {
-              jenis_produksi_code: "SKM",
-              jenis_produksi_name: "SIGARET KRETEK MESIN",
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "SKM",
+              namaJenisProduksi: "SIGARET KRETEK MESIN",
             },
             {
-              jenis_produksi_code: "CRT",
-              jenis_produksi_name: "CERUTU",
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "CRT",
+              namaJenisProduksi: "CERUTU",
             },
             {
-              jenis_produksi_code: "HTL",
-              jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "HTL",
+              namaJenisProduksi: "HASIL TEMBAKAU LAINNYA",
             },
             {
-              jenis_produksi_code: "STF",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN FILTER",
+              idJenisProduksi: 4,
+              kodeJenisProduksi: "STF",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN FILTER",
             },
             {
-              jenis_produksi_code: "SPT",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN",
+              idJenisProduksi: 5,
+              kodeJenisProduksi: "SPT",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN",
             },
             {
-              jenis_produksi_code: "SPM",
-              jenis_produksi_name: "SIGARET PUTIH MESIN",
+              idJenisProduksi: 6,
+              kodeJenisProduksi: "SPM",
+              namaJenisProduksi: "SIGARET PUTIH MESIN",
             },
             {
-              jenis_produksi_code: "TIS",
-              jenis_produksi_name: "TEMBAKAU IRIS",
+              idJenisProduksi: 7,
+              kodeJenisProduksi: "TIS",
+              namaJenisProduksi: "TEMBAKAU IRIS",
             },
             {
-              jenis_produksi_code: "KLM",
-              jenis_produksi_name: "KELEMBAK MENYAN",
+              idJenisProduksi: 8,
+              kodeJenisProduksi: "KLM",
+              namaJenisProduksi: "KELEMBAK MENYAN",
             },
             {
-              jenis_produksi_code: "KLB",
-              jenis_produksi_name: "KLOBOT",
+              idJenisProduksi: 9,
+              kodeJenisProduksi: "KLB",
+              namaJenisProduksi: "KLOBOT",
             },
             {
-              jenis_produksi_code: "SKT",
-              jenis_produksi_name: "SIGARET KRETEK TANGAN",
+              idJenisProduksi: 10,
+              kodeJenisProduksi: "SKT",
+              namaJenisProduksi: "SIGARET KRETEK TANGAN",
             },
             {
-              jenis_produksi_code: "SPF",
-              jenis_produksi_name: "SIGARET PUTIH TANGAN FILTER",
+              idJenisProduksi: 11,
+              kodeJenisProduksi: "SPF",
+              namaJenisProduksi: "SIGARET PUTIH TANGAN FILTER",
             },
             {
-              jenis_produksi_code: "REL",
-              jenis_produksi_name: "ROKOK ELEKTRIK",
+              idJenisProduksi: 12,
+              kodeJenisProduksi: "REL",
+              namaJenisProduksi: "ROKOK ELEKTRIK",
             },
           ],
-          list_jenis_hptl_rel: [
+        });
+      } else {
+        this.setState({
+          list_jenis_produksi: [
             {
-              jenis_hptl_rel_code: "HT",
-              jenis_hptl_rel_name: "Hasil Tembakau (HT)",
+              idJenisProduksi: 1,
+              kodeJenisProduksi: "MMEA1",
+              namaJenisProduksi: "Nama MMEA1",
             },
             {
-              jenis_hptl_rel_code: "MMEA",
-              jenis_hptl_rel_name: "Minuman Mengandung Etil Alkohol (MMEA)",
+              idJenisProduksi: 2,
+              kodeJenisProduksi: "MMEA2",
+              namaJenisProduksi: "Nama MMEA2",
+            },
+            {
+              idJenisProduksi: 3,
+              kodeJenisProduksi: "MMEA3",
+              namaJenisProduksi: "Nama MMEA3",
             },
           ],
         });
       }
 
-      if (this.state.jenis_bkc === "MMEA") {
+      this.setState({ isJenisProduksiLoading: false });
+    }, 2000);
+  };
+  getJenisHtlRel = async () => {
+    // const payload = {idJenisProduksi: this.state.jenis_produksi_id}
+    // const response = await api.referensi.json.get("/referensi/jenis-htl-rel", payload)
+    // console.log('response.data', response.data)
+
+    //  const response = await requestApi({
+    //     service: "referensi",
+    //     method: "get",
+    //     endpoint: "/referensi/jenis-htl-rel",
+    //     payload,
+    //     setLoading: (bool) => this.setState({ isJenisHtlRel: bool }),
+    //   });
+    //   if(response) {
+    //     console.log('response.data', response.data)
+    //   }
+
+    this.setState({ isJenisHtlRelLoading: true });
+    setTimeout(() => {
+      if (this.state.jenis_produksi_code === "HTL") {
         this.setState({
-          ...this.state,
-          list_golongan: [
+          list_jenis_htl_rel: [
             {
-              golongan_code: "A",
-              golongan_name: "A",
+              idJenisHtlRel: 1,
+              kodeHtlRel: "ABC",
+              namaJenisHtlRel: "Jenis HTL",
+              kodeJenisProduksiBkc: "HTL",
             },
             {
-              golongan_code: "B",
-              golongan_name: "B",
+              idJenisHtlRel: 2,
+              kodeHtlRel: "DEF",
+              namaJenisHtlRel: "Jenis HTL",
+              kodeJenisProduksiBkc: "HTL",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          list_jenis_htl_rel: [
+            {
+              idJenisHtlRel: 1,
+              kodeHtlRel: "GHI",
+              namaJenisHtlRel: "Jenis REL",
+              kodeJenisProduksiBkc: "REL",
             },
             {
-              golongan_code: "C",
-              golongan_name: "C",
+              idJenisHtlRel: 2,
+              kodeHtlRel: "JKL",
+              namaJenisHtlRel: "Jenis REL",
+              kodeJenisProduksiBkc: "REL",
             },
           ],
         });
       }
-    }
-  }
+      this.setState({ isJenisHtlRelLoading: false });
+    }, 2000);
+  };
 
   handleInputChange = (e) => {
     this.setState({ ...this.state, [e.target.id]: e.target.value });
   };
-  handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+  handleInputNumberChange = (field, value) => {
+    this.setState({ [field]: value });
   };
   handleDatepickerChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
@@ -183,8 +418,89 @@ export default class ReferensiTarifEdit extends Component {
   handleSelectChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
   };
-  handleUbah = () => {
-    console.log("ubah...");
+  handleUbah = async () => {
+    const {
+      nomor_surat,
+      tanggal_surat,
+      tanggal_awal_berlaku,
+      nomor_peraturan,
+      tanggal_peraturan,
+
+      jenis_bkc_id,
+      golongan_id,
+      golongan_name,
+      personal_id,
+      personal_name,
+      satuan,
+
+      jenis_produksi_id,
+      jenis_produksi_code,
+      jenis_produksi_name,
+      jenis_htl_rel_id,
+      jenis_htl_rel_name,
+      tarif,
+      batas_produksi1,
+      batas_produksi2,
+      hje1,
+      hje2,
+      layer,
+
+      kadar_atas,
+      kadar_bawah,
+      tarif_cukai_dalam_negeri,
+      tarif_cukai_impor,
+    } = this.state;
+
+    const payload = {
+      idReferensiSkep: this.props.match.params.id,
+      nomorSurat: nomor_surat,
+      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
+      tanggalAwalBerlaku: moment(tanggal_awal_berlaku).format("YYYY-MM-DD"),
+      nomorPeraturan: nomor_peraturan,
+      tanggalPeraturan: moment(tanggal_peraturan).format("YYYY-MM-DD"),
+      idJenisBKC: jenis_bkc_id,
+      idGolongan: golongan_id,
+      idJenisProduksi: jenis_produksi_id,
+    };
+
+    if (jenis_bkc_id === 3) {
+      jenis_htl_rel_id
+        ? (payload.idJenisHtlRel = jenis_htl_rel_id)
+        : (payload.idJenisHtlRel = null);
+      payload.tarif = tarif;
+      payload.batasProduksi1 = batas_produksi1;
+      payload.batasProduksi2 = batas_produksi2;
+      payload.hje1 = hje1;
+      payload.hje2 = hje2;
+      payload.layer = layer;
+    }
+
+    if (jenis_bkc_id === 2) {
+      payload.kadarAtas = kadar_atas;
+      payload.kadarBawah = kadar_bawah;
+      payload.tarifCukaiDalamNegeri = tarif_cukai_dalam_negeri;
+      payload.tarifCukaiImpor = tarif_cukai_impor;
+    }
+
+    //  const response = await api.referensi.json.post("/referensi/browse-update-tarif", payload);
+    //  console.log("response.data", response.data);
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-update-tarif",
+    //   payload,
+    //   setLoading: (bool) => this.setState({ isUbahLoading: bool }),
+    // });
+    // if (response) {
+    //   console.log("response.data", response.data);
+    // }
+
+    this.setState({ isUbahLoading: true });
+    setTimeout(() => {
+      console.log("payload", payload);
+      this.setState({ isUbahLoading: false });
+    }, 2000);
   };
   handleBatal = () => {
     this.props.history.goBack();
@@ -198,300 +514,410 @@ export default class ReferensiTarifEdit extends Component {
           contentName="Referensi Tarif Detail"
           hideContentHeader
         >
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Surat</FormLabel>
-                </div>
-                <Input
-                  id="nomor_surat"
-                  onChange={this.handleInputChange}
-                  value={this.state.nomor_surat}
-                />
-              </Col>
-              <Col span={6}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Surat</FormLabel>
-                </div>
-                <DatePicker
-                  id="tanggal_surat"
-                  onChange={(value) => this.handleDatepickerChange("tanggal_surat", value)}
-                  value={this.state.tanggal_surat}
-                />
-              </Col>
-              <Col span={6}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Awal Berlaku</FormLabel>
-                </div>
-                <DatePicker
-                  id="tanggal_awal_berlaku"
-                  onChange={(value) => this.handleDatepickerChange("tanggal_awal_berlaku", value)}
-                  value={this.state.tanggal_awal_berlaku}
-                  style={{ width: "100%" }}
-                />
-              </Col>
-            </Row>
-
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Peraturan</FormLabel>
-                </div>
-                <Input
-                  id="nomor_peraturan"
-                  onChange={this.handleInputChange}
-                  value={this.state.nomor_peraturan}
-                />
-              </Col>
-              <Col span={6}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Peraturan</FormLabel>
-                </div>
-                <DatePicker
-                  id="tanggal_peraturan"
-                  onChange={(value) => this.handleDatepickerChange("tanggal_peraturan", value)}
-                  style={{ width: "100%" }}
-                  value={this.state.tanggal_peraturan}
-                />
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle2}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jenis BKC</FormLabel>
-                </div>
-                <Select
-                  id="jenis_bkc"
-                  onChange={(value) => this.handleSelectChange("jenis_bkc", value)}
-                  value={this.state.jenis_bkc}
-                  style={{ width: "100%" }}
-                >
-                  {this.state.list_jenis_bkc.length > 0 &&
-                    this.state.list_jenis_bkc.map((item, index) => (
-                      <Select.Option key={`jenis-bkc-${index}`} value={item.jenis_bkc_code}>
-                        {item.jenis_bkc_name}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Col>
-
-              {this.state.jenis_bkc && (
-                <Col span={12}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Golongan</FormLabel>
-                  </div>
-                  <Select
-                    id="golongan"
-                    value={this.state.golongan}
-                    onChange={(value) => this.handleSelectChange("golongan", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_golongan.length > 0 &&
-                      this.state.list_golongan.map((item, index) => (
-                        <Select.Option key={`golongan-${index}`} value={item.golongan_code}>
-                          {item.golongan_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </Col>
-              )}
-
-              {this.state.jenis_bkc === "HT" && (
-                <>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Produksi</FormLabel>
-                    </div>
-                    <Select
-                      id="jenis_produksi"
-                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
-                      value={this.state.jenis_produksi}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_jenis_produksi.length > 0 &&
-                        this.state.list_jenis_produksi.map((item, index) => (
-                          <Select.Option
-                            key={`jenis-produksi-${index}`}
-                            value={item.jenis_produksi_code}
-                          >
-                            {item.jenis_produksi_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis HPTL/REL</FormLabel>
-                    </div>
-                    <Select
-                      id="jenis_hptl_rel"
-                      value={this.state.jenis_hptl_rel}
-                      onChange={(value) => this.handleSelectChange("jenis_hptl_rel", value)}
-                      style={{ width: "100%" }}
-                      disabled={
-                        !(
-                          this.state.jenis_produksi === "HTL" || this.state.jenis_produksi === "REL"
-                        )
-                      }
-                    >
-                      {this.state.list_jenis_hptl_rel.length > 0 &&
-                        this.state.list_jenis_hptl_rel.map((item, index) => (
-                          <Select.Option
-                            key={`jenis_hptl_rel-${index}`}
-                            value={item.jenis_hptl_rel_code}
-                          >
-                            {item.jenis_hptl_rel_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="tarif"
-                        onChange={this.handleInputChange}
-                        value={this.state.tarif}
-                      />
-                      <div>/</div>
-                      <div>{this.state.satuan}</div>
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Batas Produksi</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="batas_produksi1"
-                        onChange={this.handleInputChange}
-                        value={this.state.batas_produksi1}
-                      />
-                      <div>s.d</div>
-                      <Input
-                        id="batas_produksi2"
-                        onChange={this.handleInputChange}
-                        value={this.state.batas_produksi2}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>HJE</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>
-                        <Input
-                          id="hje1"
-                          onChange={this.handleInputChange}
-                          value={this.state.hje1}
-                        />
-                      </div>
-                      <div>s.d</div>
-                      <div>
-                        <Input
-                          id="hje2"
-                          onChange={this.handleInputChange}
-                          value={this.state.hje2}
-                        />
-                      </div>
-                      <div>/</div>
-                      <div>{this.state.satuan}</div>
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Layer</FormLabel>
-                    </div>
-                    <Input id="layer" onChange={this.handleInputChange} value={this.state.layer} />
-                  </Col>
-                </>
-              )}
-
-              {this.state.jenis_bkc === "MMEA" && (
-                <>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kadar Atas</FormLabel>
-                    </div>
-                    <Input
-                      id="kadar_atas"
-                      onChange={this.handleInputChange}
-                      value={this.state.kadar_atas}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kadar Bawah</FormLabel>
-                    </div>
-                    <Input
-                      id="kadar_bawah"
-                      onChange={this.handleInputChange}
-                      value={this.state.kadar_bawah}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
-                    </div>
-                    <Input
-                      id="tarif_cukai_dalam_negeri"
-                      onChange={this.handleInputChange}
-                      value={this.state.tarif_cukai_dalam_negeri}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif Cukai Impor</FormLabel>
-                    </div>
-                    <Input
-                      id="tarif_cukai_impor"
-                      onChange={this.handleInputChange}
-                      value={this.state.tarif_cukai_impor}
-                    />
-                  </Col>
-                </>
-              )}
-            </Row>
-
-            <Row>
-              <Col span={8} offset={8}>
+          {this.state.isDetailTarifLoading ? (
+            <LoadingWrapperSkeleton />
+          ) : (
+            <>
+              <Header>{this.state.subtitle1}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleUbah}>
-                      UBAH
-                    </Button>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nomor Surat</FormLabel>
+                    </div>
+                    <Input
+                      id="nomor_surat"
+                      onChange={this.handleInputChange}
+                      value={this.state.nomor_surat}
+                    />
                   </Col>
-
-                  <Col span={12}>
-                    <Button type="danger" block onClick={this.handleBatal}>
-                      BATAL
-                    </Button>
+                  <Col span={6}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Surat</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tanggal_surat"
+                      onChange={(value) => this.handleDatepickerChange("tanggal_surat", value)}
+                      value={this.state.tanggal_surat}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Awal Berlaku</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tanggal_awal_berlaku"
+                      onChange={(value) =>
+                        this.handleDatepickerChange("tanggal_awal_berlaku", value)
+                      }
+                      value={this.state.tanggal_awal_berlaku}
+                      style={{ width: "100%" }}
+                    />
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </div>
+
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nomor Peraturan</FormLabel>
+                    </div>
+                    <Input
+                      id="nomor_peraturan"
+                      onChange={this.handleInputChange}
+                      value={this.state.nomor_peraturan}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Peraturan</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tanggal_peraturan"
+                      onChange={(value) => this.handleDatepickerChange("tanggal_peraturan", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_peraturan}
+                    />
+                  </Col>
+                </Row>
+              </div>
+
+              <Header>{this.state.subtitle2}</Header>
+              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Jenis BKC</FormLabel>
+                    </div>
+                    <Select
+                      id="jenis_bkc"
+                      onChange={(value) => {
+                        this.setState({
+                          golongan_id: "",
+                          golongan_name: "",
+                          jenis_produksi_id: "",
+                          jenis_produksi_name: "",
+                          jenis_htl_rel_id: "",
+                          jenis_htl_rel_name: "",
+                          list_jenis_produksi: [],
+                          list_golongan: [],
+                        });
+                        this.handleSelectChange("jenis_bkc", value);
+                      }}
+                      style={{ width: "100%" }}
+                      value={this.state.jenis_bkc_id}
+                      loading={this.state.isJenisBkcLoading}
+                      disabled
+                    >
+                      {this.state.list_jenis_bkc.length > 0 &&
+                        this.state.list_jenis_bkc.map((item, index) => (
+                          <Select.Option key={`jenis-bkc-${index}`} value={item.idJenisBkc}>
+                            {item.namaJenisBkc}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+                  {this.state.jenis_bkc_id && (
+                    <>
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Golongan</FormLabel>
+                        </div>
+                        <Select
+                          id="golongan"
+                          onChange={(value) => this.handleSelectChange("golongan", value)}
+                          value={this.state.golongan_id}
+                          loading={this.state.isGolonganLoading}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_golongan.length > 0 &&
+                            this.state.list_golongan.map((item, index) => (
+                              <Select.Option key={`golongan-${index}`} value={item.idGolongan}>
+                                {item.namaGolongan}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Personal</FormLabel>
+                        </div>
+                        <Select
+                          id="personal"
+                          onChange={(value) => this.handleSelectChange("personal", value)}
+                          value={this.state.personal_id}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_personal.length > 0 &&
+                            this.state.list_personal.map((item, index) => (
+                              <Select.Option key={`personal-${index}`} value={item.personal_id}>
+                                {item.personal_name}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis Produksi</FormLabel>
+                        </div>
+                        <Select
+                          id="jenis_produksi"
+                          onChange={(value, option) => {
+                            this.setState({
+                              jenis_htl_rel_id: "",
+                              jenis_htl_rel_name: "",
+                              list_jenis_htl_rel: [],
+                              jenis_produksi_code: option.props.children
+                                .split("-")[0]
+                                .replace(/[()\s]/g, ""),
+                            });
+                            this.handleSelectChange("jenis_produksi", value);
+                          }}
+                          value={this.state.jenis_produksi_id}
+                          loading={this.state.isJenisProduksiLoading}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_jenis_produksi.length > 0 &&
+                            this.state.list_jenis_produksi.map((item, index) => (
+                              <Select.Option
+                                key={`jenis-produksi-${index}`}
+                                value={item.idJenisProduksi}
+                              >
+                                {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+                    </>
+                  )}
+
+                  {this.state.jenis_bkc_id === 3 && (
+                    <>
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis HPTL/REL</FormLabel>
+                        </div>
+                        <Select
+                          id="jenis_htl_rel"
+                          onChange={(value) => this.handleSelectChange("jenis_htl_rel", value)}
+                          value={this.state.jenis_htl_rel_id}
+                          loading={this.state.isJenisHtlRelLoading}
+                          style={{ width: "100%" }}
+                          disabled={
+                            !(
+                              this.state.jenis_produksi_code === "HTL" ||
+                              this.state.jenis_produksi_code === "REL"
+                            )
+                          }
+                        >
+                          {this.state.list_jenis_htl_rel.length > 0 &&
+                            this.state.list_jenis_htl_rel.map((item, index) => (
+                              <Select.Option
+                                key={`jenis_htl_rel-${index}`}
+                                value={item.idJenisHtlRel}
+                              >
+                                {item.namaJenisHtlRel}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tarif</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <InputNumber
+                            id="tarif"
+                            onChange={(value) => this.handleInputNumberChange("tarif", value)}
+                            value={this.state.tarif}
+                            style={{ flex: 1 }}
+                            min={0}
+                          />
+                          {this.state.satuan && (
+                            <>
+                              <div>/</div>
+                              <div>{this.state.satuan}</div>
+                            </>
+                          )}
+                        </div>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Batas Produksi</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <InputNumber
+                            id="batas_produksi1"
+                            onChange={(value) =>
+                              this.handleInputNumberChange("batas_produksi1", value)
+                            }
+                            value={this.state.batas_produksi1}
+                            style={{ flex: 1 }}
+                            min={0}
+                          />
+                          <div>s.d</div>
+                          <InputNumber
+                            id="batas_produksi2"
+                            onChange={(value) =>
+                              this.handleInputNumberChange("batas_produksi2", value)
+                            }
+                            value={this.state.batas_produksi2}
+                            style={{ flex: 1 }}
+                            min={0}
+                          />
+                        </div>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>HJE</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div>
+                            <InputNumber
+                              id="hje1"
+                              onChange={(value) => this.handleInputNumberChange("hje1", value)}
+                              value={this.state.hje1}
+                              style={{ width: "100%" }}
+                              min={0}
+                            />
+                          </div>
+                          <div>s.d</div>
+                          <div>
+                            <InputNumber
+                              id="hje2"
+                              onChange={(value) => this.handleInputNumberChange("hje2", value)}
+                              value={this.state.hje2}
+                              style={{ width: "100%" }}
+                              min={0}
+                            />
+                          </div>
+                          {this.state.satuan && (
+                            <>
+                              <div>/</div>
+                              <div>{this.state.satuan}</div>
+                            </>
+                          )}
+                        </div>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Layer</FormLabel>
+                        </div>
+                        <Input
+                          id="layer"
+                          onChange={this.handleInputChange}
+                          value={this.state.layer}
+                        />
+                      </Col>
+                    </>
+                  )}
+
+                  {this.state.jenis_bkc_id === 2 && (
+                    <>
+                      <Col span={12}>
+                        <Row gutter={[16, 16]}>
+                          <Col span={12}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Kadar Atas</FormLabel>
+                            </div>
+                            <InputNumber
+                              id="kadar_atas"
+                              onChange={(value) =>
+                                this.handleInputNumberChange("kadar_atas", value)
+                              }
+                              value={this.state.kadar_atas}
+                              style={{ width: "100%" }}
+                              min={0}
+                            />
+                          </Col>
+
+                          <Col span={12}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Kadar Bawah</FormLabel>
+                            </div>
+                            <InputNumber
+                              id="kadar_bawah"
+                              onChange={(value) =>
+                                this.handleInputNumberChange("kadar_bawah", value)
+                              }
+                              value={this.state.kadar_bawah}
+                              style={{ width: "100%" }}
+                              min={0}
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="tarif_cukai_dalam_negeri"
+                          onChange={(value) =>
+                            this.handleInputNumberChange("tarif_cukai_dalam_negeri", value)
+                          }
+                          value={this.state.tarif_cukai_dalam_negeri}
+                          style={{ width: "100%" }}
+                          min={0}
+                        />
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tarif Cukai Impor</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="tarif_cukai_impor"
+                          onChange={(value) =>
+                            this.handleInputNumberChange("tarif_cukai_impor", value)
+                          }
+                          value={this.state.tarif_cukai_impor}
+                          style={{ width: "100%" }}
+                          min={0}
+                        />
+                      </Col>
+                    </>
+                  )}
+                </Row>
+
+                <Row>
+                  <Col span={8} offset={8}>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <Button
+                          type="primary"
+                          block
+                          loading={this.state.isUbahLoading}
+                          onClick={this.handleUbah}
+                        >
+                          UBAH
+                        </Button>
+                      </Col>
+
+                      <Col span={12}>
+                        <Button type="danger" block onClick={this.handleBatal}>
+                          BATAL
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </div>
+            </>
+          )}
         </Container>
       </>
     );

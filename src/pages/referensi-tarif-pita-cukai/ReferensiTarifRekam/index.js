@@ -534,7 +534,6 @@ export default class ReferensiTarifRekam extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
@@ -1191,7 +1190,7 @@ export default class ReferensiTarifRekam extends Component {
                           id="hje1"
                           onChange={(value) => this.handleInputNumberChange("hje1", value)}
                           value={this.state.hje1}
-                          style={{ flex: 1 }}
+                          style={{ width: "100%" }}
                           min={0}
                         />
                       </div>
@@ -1201,7 +1200,7 @@ export default class ReferensiTarifRekam extends Component {
                           id="hje2"
                           onChange={(value) => this.handleInputNumberChange("hje2", value)}
                           value={this.state.hje2}
-                          style={{ flex: 1 }}
+                          style={{ width: "100%" }}
                           min={0}
                         />
                       </div>
