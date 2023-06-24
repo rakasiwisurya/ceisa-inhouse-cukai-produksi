@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
-import { api } from "configs/api";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
 export default class ReferensiTarifPitaCukai extends Component {
@@ -12,15 +11,15 @@ export default class ReferensiTarifPitaCukai extends Component {
       isReferensiTarifPitaCukaiLoading: true,
 
       page: 1,
-      totalData: 10,
+      totalData: 0,
 
       table: {
         nomor_surat: "",
         tanggal_surat: "",
         awal_berlaku: "",
         akhir_berlaku: "",
-        jenis_bkc: "",
-        jenis_referensi: "",
+        jenis_bkc_name: "",
+        jenis_referensi_name: "",
       },
 
       dataSource: [],
@@ -54,7 +53,6 @@ export default class ReferensiTarifPitaCukai extends Component {
             <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
           ),
         },
-
         {
           key: "nomor_surat",
           title: "Nomor Surat",
@@ -88,20 +86,20 @@ export default class ReferensiTarifPitaCukai extends Component {
           ...this.getColumnSearchProps("akhir_berlaku"),
         },
         {
-          key: "jenis_bkc",
+          key: "jenis_bkc_name",
           title: "Jenis BKC",
-          dataIndex: "jenis_bkc",
+          dataIndex: "jenis_bkc_name",
           editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_bkc"),
+          ...this.getColumnSearchProps("jenis_bkc_name"),
         },
         {
-          key: "jenis_referensi",
+          key: "jenis_referensi_name",
           title: "Jenis Referensi",
-          dataIndex: "jenis_referensi",
+          dataIndex: "jenis_referensi_name",
           editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_referensi"),
+          ...this.getColumnSearchProps("jenis_referensi_name"),
         },
       ],
     };
@@ -109,6 +107,12 @@ export default class ReferensiTarifPitaCukai extends Component {
 
   componentDidMount() {
     this.getReferensiTarifPitaCukai();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getReferensiTarifPitaCukai();
+    }
   }
 
   getReferensiTarifPitaCukai = async () => {
@@ -124,131 +128,29 @@ export default class ReferensiTarifPitaCukai extends Component {
     if (jenis_bkc) payload.jenisBkc = jenis_bkc;
     if (jenis_referensi) payload.jenisReferensi = jenis_referensi;
 
-    console.log("payload", payload);
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isReferensiTarifPitaCukaiLoading: bool }),
+    });
 
-    // const response = await api.referensi.json.get("/referensi/browse", payload)
-    // console.log('response.data', response.data)
-
-    //  const response = await requestApi({
-    //     service: "referensi",
-    //     method: "get",
-    //     endpoint: "/referensi/browse",
-    // payload,
-    //     setLoading: (bool) => this.setState({ isReferensiTarifPitaCukaiLoading: bool }),
-    //   });
-    //   if(response) {
-    //     console.log('response.data', response.data)
-    //   }
-
-    this.setState({ isReferensiTarifPitaCukaiLoading: true });
-    setTimeout(() => {
-      this.setState({
-        dataSource: [
-          {
-            key: 1,
-            id: 1,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Warna",
-          },
-          {
-            key: 2,
-            id: 2,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "MMEA",
-            jenis_referensi: "Warna",
-          },
-          {
-            key: 3,
-            id: 3,
-            nomor_surat: "191/PMK.010/2022",
-            tanggal_surat: "15-12-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tarif",
-          },
-          {
-            key: 4,
-            id: 4,
-            nomor_surat: "192/PMK.010/2022",
-            tanggal_surat: "15-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tarif",
-          },
-          {
-            key: 5,
-            id: 5,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Warna",
-            textAlign: "center",
-          },
-          {
-            key: 6,
-            id: 6,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "MMEA",
-            jenis_referensi: "Warna",
-          },
-          {
-            key: 7,
-            id: 7,
-            nomor_surat: "191/PMK.010/2022",
-            tanggal_surat: "15-12-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tarif",
-          },
-          {
-            key: 8,
-            id: 8,
-            nomor_surat: "192/PMK.010/2022",
-            tanggal_surat: "15-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tarif",
-          },
-          {
-            key: 9,
-            id: 9,
-            nomor_surat: "191/PMK.010/2022",
-            tanggal_surat: "15-12-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tarif",
-          },
-          {
-            key: 10,
-            id: 10,
-            nomor_surat: "192/PMK.010/2022",
-            tanggal_surat: "15-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc: "HT",
-            jenis_referensi: "Tanggal",
-          },
-        ],
-      });
-      this.setState({ isReferensiTarifPitaCukaiLoading: false });
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: item.idReferensiSkep,
+        referensi_skep_id: item.idReferensiSkep,
+        nomor_surat: item.nomorSurat,
+        tanggal_surat: item.tanggalSurat,
+        awal_berlaku: item.awalBerlaku,
+        akhir_berlaku: item.akhirBerlaku,
+        jenis_bkc_id: item.idJenisBkc,
+        jenis_bkc_name: item.namaJenisBkc,
+        jenis_referensi_id: item.idJenisReferensi,
+        jenis_referensi_name: item.namaJenisReferensi,
+      }));
+      this.setState({ dataSource: newData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -312,11 +214,8 @@ export default class ReferensiTarifPitaCukai extends Component {
       case jenisReferensi === "Tarif":
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-edit/${id}`);
         break;
-      case jenisReferensi === "Tanggal":
-        // this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-edit/${id}`);
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
-        break;
       default:
+        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
         break;
     }
   };
@@ -328,11 +227,8 @@ export default class ReferensiTarifPitaCukai extends Component {
       case jenisReferensi === "Tarif":
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-detail/${id}`);
         break;
-      case jenisReferensi === "Tanggal":
-        // this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tanggal-detail/${id}`);
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
-        break;
       default:
+        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
         break;
     }
   };
@@ -378,12 +274,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <Col span={8}>
                   <Button
                     style={{ backgroundColor: "#ec808d", color: "white", borderColor: " #ec808d" }}
-                    onClick={() =>
-                      // this.props.history.push(
-                      //   `${pathName}/referensi-tarif-warna/referensi-tanggal-rekam`
-                      // )
-                      this.props.history.push(`/referensi-penyediaan-pita-cukai`)
-                    }
+                    onClick={() => this.props.history.push(`/referensi-penyediaan-pita-cukai`)}
                     block
                   >
                     + Referesi Tanggal

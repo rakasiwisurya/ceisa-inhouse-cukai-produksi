@@ -4,7 +4,6 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import moment from "moment";
-import { api } from "configs/api";
 import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 
@@ -55,55 +54,49 @@ export default class ReferensiTarifDetail extends Component {
   }
 
   getDetailTarif = async () => {
-    // const payload = {idReferensiSkep: this.props.match.params.id}
+    const payload = { idReferensiSkep: this.props.match.params.id };
 
-    //  const response = await api.referensi.json.get("/referensi/browse-detail-tarif", payload);
-    // console.log("response.data", response.data);
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-detail-tarif",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/browse-detail-tarif",
-    //   payload,
-    //   setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
-    // });
-    // if (response) {
-    //   console.log("response.data", response.data);
-    // }
+    if (response) {
+      const { data } = response.data;
 
-    this.setState({ isDetailTarifLoading: true });
-    setTimeout(() => {
       this.setState({
-        nomor_surat: "A",
-        tanggal_surat: moment(new Date()),
-        tanggal_awal_berlaku: moment(new Date()),
-        nomor_peraturan: "B",
-        tanggal_peraturan: moment(new Date()),
-        golongan_id: 1,
-        golongan_name: "I",
-        jenis_bkc_id: 3,
-        jenis_bkc_name: "HT",
+        nomor_surat: data.nomorSurat,
+        tanggal_surat: moment(data.tanggalSurat),
+        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+        nomor_peraturan: data.nomorPeraturan,
+        tanggal_peraturan: moment(data.tanggalPeraturan),
+        jenis_bkc_id: data.idJenisBkc,
+        jenis_bkc_name: data.namaJenisBkc,
+        golongan_id: data.idGolonganBkc,
+        golongan_name: data.namaGolonganBkc,
 
-        jenis_produksi_id: 1,
-        jenis_produksi_code: "HTL",
-        jenis_produksi_name: "Hasil Tembakau Lainnya",
-        jenis_htl_rel_id: 1,
-        jenis_htl_rel_name: "B",
-        tarif: 100,
-        batas_produksi1: 200,
-        batas_produksi2: 300,
-        hje1: 400,
-        hje2: 500,
-        layer: "Layer 1",
-        satuan: "gram",
+        jenis_produksi_id: data.idJenisProduksi,
+        jenis_produksi_code: data.kodeJenisProduksi,
+        jenis_produksi_name: data.namaJenisProduksi,
+        jenis_htl_rel_id: data.idJenisHtlRel,
+        jenis_htl_rel_name: data.namaJenisHtlRel,
+        tarif: data.tarif,
+        batas_produksi1: data.batasProduksi1,
+        batas_produksi2: data.batasProduksi2,
+        hje1: data.hje1,
+        hje2: data.hje2,
+        layer: data.layer,
+        satuan: data.satuan,
 
-        kadar_atas: 0,
-        kadar_bawah: 0,
-        tarif_cukai_dalam_negeri: 0,
-        tarif_cukai_impor: 0,
+        kadar_atas: data.kadarAtas,
+        kadar_bawah: data.kadarBawah,
+        tarif_cukai_dalam_negeri: data.tarifCukaiDalamNegeri,
+        tarif_cukai_impor: data.tarifCukaiImpor,
       });
-      this.setState({ isDetailTarifLoading: false });
-    }, 2000);
+    }
   };
 
   render() {

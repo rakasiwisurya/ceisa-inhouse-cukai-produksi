@@ -1,10 +1,9 @@
-import { Button, Col, DatePicker, Icon, Input, Row, Select, Table } from "antd";
+import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import moment from "moment";
-import { api } from "configs/api";
 import { requestApi } from "utils/requestApi";
 
 export default class ReferensiWarnaRekam extends Component {
@@ -188,246 +187,54 @@ export default class ReferensiWarnaRekam extends Component {
   }
 
   getJenisBkc = async () => {
-    // const response = await api.referensi.json.get("/referensi/jenis-bkc")
-    // console.log('response.data', response.data)
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-bkc",
+      setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
+    });
 
-    //  const response = await requestApi({
-    //     service: "referensi",
-    //     method: "get",
-    //     endpoint: "/referensi/jenis-bkc",
-    //     setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
-    //   });
-    //   if(response) {
-    //     console.log('response.data', response.data)
-    //   }
-
-    this.setState({ isJenisBkcLoading: true });
-    setTimeout(() => {
-      this.setState({
-        list_jenis_bkc: [
-          {
-            idJenisBkc: 3,
-            namaJenisBkc: "HT",
-          },
-          {
-            idJenisBkc: 2,
-            namaJenisBkc: "MMEA",
-          },
-        ],
-      });
-      this.setState({ isJenisBkcLoading: false });
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.map((item) => item);
+      newData.splice(0, 1);
+      this.setState({ list_jenis_bkc: newData });
+    }
   };
   getListGolongan = async () => {
-    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
-    // const response = await api.referensi.json.get("/referensi/golongan", payload);
-    // console.log("response.data", response.data);
+    const payload = { idJenisBkc: this.state.jenis_bkc_id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/golongan",
-    //   payload,
-    //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
-    // });
-    // if (response) {
-    //   console.log("response.data", response.data);
-    // }
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/golongan",
+      params: payload,
+      setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
+    });
 
-    this.setState({ isGolonganLoading: true });
-    setTimeout(() => {
-      if (this.state.jenis_bkc_id === 3) {
-        this.setState({
-          list_golongan: [
-            {
-              idGolongan: 1,
-              namaGolongan: "I",
-            },
-            {
-              idGolongan: 2,
-              namaGolongan: "II",
-            },
-            {
-              idGolongan: 3,
-              namaGolongan: "III",
-            },
-            {
-              idGolongan: 4,
-              namaGolongan: "III/A",
-            },
-            {
-              idGolongan: 5,
-              namaGolongan: "III/B",
-            },
-            {
-              idGolongan: 6,
-              namaGolongan: "IMPORTIR HT",
-            },
-            {
-              idGolongan: 7,
-              namaGolongan: "TANPA GOLONGAN",
-            },
-          ],
-        });
-      } else {
-        this.setState({
-          list_golongan: [
-            {
-              idGolongan: 1,
-              namaGolongan: "A",
-            },
-            {
-              idGolongan: 2,
-              namaGolongan: "B",
-            },
-            {
-              idGolongan: 3,
-              namaGolongan: "C",
-            },
-          ],
-        });
-      }
-      this.setState({ isGolonganLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_golongan: response.data.data });
   };
   getListJenisProduksi = async () => {
-    // const payload = {idJenisBkc: this.state.jenis_bkc_id}
-    // const response = await api.referensi.json.get("/referensi/jenis-produksi", payload)
-    // console.log('response.data', response.data)
+    const payload = { idJenisBkc: this.state.jenis_bkc_id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/jenis-produksi",
-    //   payload,
-    //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
-    // });
-    // if(response) {
-    //   console.log('response.data', response.data)
-    // }
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-produksi",
+      params: payload,
+      setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    });
 
-    this.setState({ isJenisProduksiLoading: true });
-    setTimeout(() => {
-      if (this.state.jenis_bkc_id === 3) {
-        this.setState({
-          list_jenis_produksi: [
-            {
-              idJenisProduksi: 1,
-              kodeJenisProduksi: "SKM",
-              namaJenisProduksi: "SIGARET KRETEK MESIN",
-            },
-            {
-              idJenisProduksi: 2,
-              kodeJenisProduksi: "CRT",
-              namaJenisProduksi: "CERUTU",
-            },
-            {
-              idJenisProduksi: 3,
-              kodeJenisProduksi: "HTL",
-              namaJenisProduksi: "HASIL TEMBAKAU LAINNYA",
-            },
-            {
-              idJenisProduksi: 4,
-              kodeJenisProduksi: "STF",
-              namaJenisProduksi: "SIGARET KRETEK TANGAN FILTER",
-            },
-            {
-              idJenisProduksi: 5,
-              kodeJenisProduksi: "SPT",
-              namaJenisProduksi: "SIGARET PUTIH TANGAN",
-            },
-            {
-              idJenisProduksi: 6,
-              kodeJenisProduksi: "SPM",
-              namaJenisProduksi: "SIGARET PUTIH MESIN",
-            },
-            {
-              idJenisProduksi: 7,
-              kodeJenisProduksi: "TIS",
-              namaJenisProduksi: "TEMBAKAU IRIS",
-            },
-            {
-              idJenisProduksi: 8,
-              kodeJenisProduksi: "KLM",
-              namaJenisProduksi: "KELEMBAK MENYAN",
-            },
-            {
-              idJenisProduksi: 9,
-              kodeJenisProduksi: "KLB",
-              namaJenisProduksi: "KLOBOT",
-            },
-            {
-              idJenisProduksi: 10,
-              kodeJenisProduksi: "SKT",
-              namaJenisProduksi: "SIGARET KRETEK TANGAN",
-            },
-            {
-              idJenisProduksi: 11,
-              kodeJenisProduksi: "SPF",
-              namaJenisProduksi: "SIGARET PUTIH TANGAN FILTER",
-            },
-            {
-              idJenisProduksi: 12,
-              kodeJenisProduksi: "REL",
-              namaJenisProduksi: "ROKOK ELEKTRIK",
-            },
-          ],
-        });
-      } else {
-        this.setState({
-          list_jenis_produksi: [
-            {
-              idJenisProduksi: 1,
-              kodeJenisProduksi: "MMEA1",
-              namaJenisProduksi: "Nama MMEA1",
-            },
-            {
-              idJenisProduksi: 2,
-              kodeJenisProduksi: "MMEA2",
-              namaJenisProduksi: "Nama MMEA2",
-            },
-            {
-              idJenisProduksi: 3,
-              kodeJenisProduksi: "MMEA3",
-              namaJenisProduksi: "Nama MMEA3",
-            },
-          ],
-        });
-      }
-
-      this.setState({ isJenisProduksiLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
   getListJenisUsaha = async () => {
-    // const response = await api.referensi.json.get("/referensi/jenis-usaha");
-    // console.log("response.data", response.data);
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-usaha",
+      setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/jenis-usaha",
-    //   setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
-    // });
-    // if(response) {
-    //   console.log('response.data', response.data)
-    // }
-
-    this.setState({ isJenisUsahaLoading: true });
-    setTimeout(() => {
-      this.setState({
-        list_jenis_usaha: [
-          {
-            idJenisUsaha: 1,
-            namaJenisUsaha: "Dalam Negeri",
-          },
-          {
-            idJenisUsaha: 2,
-            namaJenisUsaha: "Importir",
-          },
-        ],
-      });
-      this.setState({ isJenisUsahaLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_jenis_usaha: response.data.data });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -656,55 +463,27 @@ export default class ReferensiWarnaRekam extends Component {
       }
 
       return data;
-
-      // if (this.state.jenis_bkc_id === 3) {
-      //   return {
-      //     idJenisBkc: item.jenis_bkc_id,
-      //     kodeWarna: item.kode_warna,
-      //     warna: item.warna,
-      //     idGolongan: item.golongan_id,
-      //     idJenisProduksi: item.jenis_produksi_id,
-      //   };
-      // }
-
-      // return {
-      //   idJenisBkc: item.jenis_bkc_id,
-      //   kodeWarna: item.kode_warna,
-      //   warna: item.warna,
-      //   idGolongan: item.golongan_id,
-      //   idJenisProduksi: item.jenis_produksi_id,
-      //   idJenisUsaha: item.jenis_usaha_id,
-      // };
     });
 
     const payload = {
-      header: {
-        noSurat: this.state.nomor_surat,
-        tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
-        tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
-      },
+      noSurat: this.state.nomor_surat,
+      tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+      tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
       details,
     };
 
-    // const response = await api.referensi.json.post("/referensi/browse-rekam-warna", payload);
-    // console.log("response.data", response.data);
+    const response = await requestApi({
+      service: "referensi",
+      method: "post",
+      endpoint: "/referensi/browse-rekam-warna",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "post",
-    //   endpoint: "/referensi/browse-rekam-warna",
-    //   payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
-    // if(response) {
-    //   console.log('response.data', response.data)
-    // }
-
-    this.setState({ isRekamLoading: true });
-    setTimeout(() => {
-      console.log("payload", payload);
-      this.setState({ isRekamLoading: false });
-    }, 2000);
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push("/cukai-produksi/referensi-tarif-warna");
+    }
   };
 
   render() {

@@ -1,10 +1,20 @@
 import { notification } from "antd";
 import { api } from "configs/api";
+import { queryParams } from "./queryParams";
 
-export const requestApi = async ({ service, method, endpoint, payload, setLoading }) => {
+export const requestApi = async ({
+  service,
+  contentType = "json", //json or formData
+  method, //get or post or put or delete or others http method
+  endpoint,
+  body,
+  params,
+  setLoading,
+}) => {
   if (setLoading) setLoading(false);
   try {
-    const response = await api[service][method](endpoint, payload);
+    const newParams = params ? queryParams(params) : "";
+    const response = await api[service][contentType][method](`${endpoint}${newParams}`, body);
     if (setLoading) setLoading(false);
     return response;
   } catch (error) {
