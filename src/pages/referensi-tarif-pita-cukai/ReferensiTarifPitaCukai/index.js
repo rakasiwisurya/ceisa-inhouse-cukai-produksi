@@ -34,12 +34,12 @@ export default class ReferensiTarifPitaCukai extends Component {
               <Button
                 icon="form"
                 type="primary"
-                onClick={() => this.handleEdit(record.id, record.jenis_referensi)}
+                onClick={() => this.handleEdit(record.id, record.jenis_referensi_id)}
               />
               <Button
                 icon="eye"
                 type="default"
-                onClick={() => this.handleDetail(record.id, record.jenis_referensi)}
+                onClick={() => this.handleDetail(record.id, record.jenis_referensi_id)}
               />
             </div>
           ),
@@ -116,8 +116,14 @@ export default class ReferensiTarifPitaCukai extends Component {
   }
 
   getReferensiTarifPitaCukai = async () => {
-    const { nomor_surat, tanggal_surat, awal_berlaku, akhir_berlaku, jenis_bkc, jenis_referensi } =
-      this.state.table;
+    const {
+      nomor_surat,
+      tanggal_surat,
+      awal_berlaku,
+      akhir_berlaku,
+      jenis_bkc_name,
+      jenis_referensi_name,
+    } = this.state.table;
 
     const payload = { page: this.state.page };
 
@@ -125,8 +131,8 @@ export default class ReferensiTarifPitaCukai extends Component {
     if (tanggal_surat) payload.tanggalSurat = moment(tanggal_surat).format("YYYY-MM-DD");
     if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
     if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
-    if (jenis_bkc) payload.jenisBkc = jenis_bkc;
-    if (jenis_referensi) payload.jenisReferensi = jenis_referensi;
+    if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
+    if (jenis_referensi_name) payload.jenisReferensi = jenis_referensi_name;
 
     const response = await requestApi({
       service: "referensi",
