@@ -367,29 +367,6 @@ export default class CK4MMEA extends Component {
       jumlah_kemasan_dilekati_pita,
     } = this.state;
 
-    console.log("tes", {
-      dataSource: [
-        ...this.state.dataSource,
-        {
-          key: new Date().getTime(),
-          jenis_mmea,
-          merk_mmea_id,
-          merk_mmea_name,
-          isi_mmea,
-          tarif_mmea,
-          jenis_kemasan_mmea,
-          golongan_mmea,
-          kadar_mmea,
-
-          nomor_produksi,
-          tanggal_produksi,
-          jumlah_kemasan,
-          jumlah_produksi,
-          jumlah_kemasan_dilekati_pita,
-        },
-      ],
-    });
-
     this.setState({
       dataSource: [
         ...this.state.dataSource,
