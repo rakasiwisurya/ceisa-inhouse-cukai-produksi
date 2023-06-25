@@ -143,7 +143,7 @@ export default class ReferensiTarifPitaCukai extends Component {
     });
 
     if (response) {
-      const newData = response.data.data.listData.map((item, index) => ({
+      const newData = response.data.data.listData.map((item) => ({
         key: item.idReferensiSkep,
         referensi_skep_id: item.idReferensiSkep,
         nomor_surat: item.nomorSurat,
@@ -155,7 +155,9 @@ export default class ReferensiTarifPitaCukai extends Component {
         jenis_referensi_id: item.idJenisReferensi,
         jenis_referensi_name: item.namaJenisReferensi,
       }));
-      this.setState({ dataSource: newData });
+      const page = response.data.currentPage;
+      const totalData = response.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
     }
   };
 
@@ -194,11 +196,12 @@ export default class ReferensiTarifPitaCukai extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
@@ -212,12 +215,16 @@ export default class ReferensiTarifPitaCukai extends Component {
     this.getReferensiTarifPitaCukai();
   };
 
-  handleEdit = (id, jenisReferensi) => {
+  handleEdit = (id, jenisReferensiid) => {
     switch (true) {
-      case jenisReferensi === "Warna":
+      case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-edit/${id}`);
         break;
-      case jenisReferensi === "Tarif":
+      case jenisReferensiid === 1 ||
+        jenisReferensiid === 2 ||
+        jenisReferensiid === 5 ||
+        jenisReferensiid === 6 ||
+        jenisReferensiid === 8:
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-edit/${id}`);
         break;
       default:
@@ -225,12 +232,16 @@ export default class ReferensiTarifPitaCukai extends Component {
         break;
     }
   };
-  handleDetail = (id, jenisReferensi) => {
+  handleDetail = (id, jenisReferensiid) => {
     switch (true) {
-      case jenisReferensi === "Warna":
+      case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-detail/${id}`);
         break;
-      case jenisReferensi === "Tarif":
+      case jenisReferensiid === 1 ||
+        jenisReferensiid === 2 ||
+        jenisReferensiid === 5 ||
+        jenisReferensiid === 6 ||
+        jenisReferensiid === 8:
         this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-detail/${id}`);
         break;
       default:

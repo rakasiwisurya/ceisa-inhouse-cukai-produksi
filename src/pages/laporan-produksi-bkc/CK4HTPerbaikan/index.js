@@ -16,8 +16,7 @@ import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import moment from "moment";
 import React, { Component } from "react";
-import { months } from "utils/months";
-import { years } from "utils/years";
+import { months, years } from "utils/times";
 
 export default class CK4HTPerbaikan extends Component {
   constructor(props) {
@@ -86,8 +85,8 @@ export default class CK4HTPerbaikan extends Component {
           nama_nppbkc_name: "B",
         },
       ],
-      list_periode_bulan: months(),
-      list_periode_tahun: years(),
+      // list_periode_bulan: months(),
+      // list_periode_tahun: years(),
 
       columns: [
         {
@@ -353,12 +352,11 @@ export default class CK4HTPerbaikan extends Component {
                         style={{ width: "100%" }}
                         value={this.state.periode_bulan}
                       >
-                        {this.state.list_periode_bulan.length > 0 &&
-                          this.state.list_periode_bulan.map((item, index) => (
-                            <Select.Option key={`periode-bulan-${index}`} value={item.month_code}>
-                              {item.month_name}
-                            </Select.Option>
-                          ))}
+                        {months.map((item, index) => (
+                          <Select.Option key={`periode-bulan-${index}`} value={item.month_code}>
+                            {item.month_name}
+                          </Select.Option>
+                        ))}
                       </Select>
 
                       <Select
@@ -367,12 +365,11 @@ export default class CK4HTPerbaikan extends Component {
                         style={{ width: "100%" }}
                         value={this.state.periode_tahun}
                       >
-                        {this.state.list_periode_tahun.length > 0 &&
-                          this.state.list_periode_tahun.map((item, index) => (
-                            <Select.Option key={`periode-tahun-${index}`} value={item.year_code}>
-                              {item.year_name}
-                            </Select.Option>
-                          ))}
+                        {years.map((item, index) => (
+                          <Select.Option key={`periode-tahun-${index}`} value={item.year_code}>
+                            {item.year_name}
+                          </Select.Option>
+                        ))}
                       </Select>
                     </div>
                   </div>

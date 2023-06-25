@@ -1,8 +1,12 @@
-import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select } from "antd";
+import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import React, { Component } from "react";
+import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { pathName } from "configs/constants";
+import { requestApi } from "utils/requestApi";
 
 export default class CK4EA extends Component {
   constructor(props) {
@@ -12,16 +16,22 @@ export default class CK4EA extends Component {
       subtitle2: "Rincian",
       subtitle3: "Pemberitahu",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      isRekamLoading: false,
+      isRincianDisabled: false,
+      isModalDaftarNppbkcVisible: false,
+      isModalDaftarKotaVisible: false,
 
-      nama_nppbkc: "",
+      nppbkc_id: "",
       nppbkc: "",
+      nama_nppbkc: "",
       alamat_nppbkc: "",
-      jenis_laporan: "",
+
+      jenis_laporan_id: "HARIAN",
+      jenis_laporan_name: "Harian",
       nomor_pemberitahuan: "",
       tanggal_pemberitahuan: "",
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
+
       tanggal_jam_produksi_awal: "",
       tanggal_jam_produksi_akhir: "",
       jumlah_produksi: "",
@@ -32,60 +42,112 @@ export default class CK4EA extends Component {
       identitas_tangki: "",
       keterangan: "",
 
-      list_jenis_laporan: [
-        {
-          jenis_laporan_code: "HARIAN",
-          jenis_laporan_name: "Harian",
-        },
-        {
-          jenis_laporan_code: "BULANAN",
-          jenis_laporan_name: "Bulanan",
-        },
-      ],
-      list_tempat_dibuat: [
-        {
-          tempat_dibuat_code: "A",
-          tempat_dibuat_name: "A",
-        },
-        {
-          tempat_dibuat_code: "B",
-          tempat_dibuat_name: "B",
-        },
-      ],
-      list_nama_nppbkc: [
-        {
-          nama_nppbkc_code: "A",
-          nama_nppbkc_name: "A",
-        },
-        {
-          nama_nppbkc_code: "B",
-          nama_nppbkc_name: "B",
-        },
-      ],
+      kota_id: "",
+      kota_name: "",
+      nama_pengusaha: "",
     };
   }
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
   handleInputNumberChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value._d });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
+  };
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
+  };
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
+  };
+
+  handleDataNppbkc = (record) => {
+    this.setState({
+      nppbkc_id: record.nppbkc_id,
+      nppbkc: record.nppbkc,
+      nama_nppbkc: record.nama_nppbkc,
+      alamat_nppbkc: record.alamat_nppbkc,
+    });
+    this.handleModalClose("isModalDaftarNppbkcVisible");
+  };
+  handleDataKota = (record) => {
+    this.setState({
+      kota_id: record.kota_id,
+      kota_name: record.kota_name,
+    });
+    this.handleModalClose("isModalDaftarKotaVisible");
   };
 
   handleSimpanRincian = () => {
-    console.log("simpan rincian...");
+    this.setState({ isRincianDisabled: true });
   };
   handleBatal = () => {
-    console.log("batal...");
+    this.setState({ isRincianDisabled: false });
   };
-  handleRekam = () => {
-    console.log("rekam...");
+  handleRekam = async () => {
+    // const {
+    //   nppbkc_id,
+
+    //   jenis_laporan_id,
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+
+    //   tanggal_jam_produksi_awal,
+    //   tanggal_jam_produksi_akhir,
+    //   jumlah_produksi,
+
+    //   nomor_dokumen_produksi,
+    //   tanggal_dokumen_produksi,
+    //   jumlah_isi,
+    //   identitas_tangki,
+    //   keterangan,
+
+    //   kota_id,
+    //   nama_pengusaha,
+    // } = this.state;
+
+    // const payload = {
+    //   idNppbkc: nppbkc_id,
+
+    //   jenisLaporan: jenis_laporan_id,
+    //   nomorPemberitahuan: nomor_pemberitahuan,
+    //   tanggalPemberitahuan: tanggal_pemberitahuan,
+
+    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+    //   jumlahProduksi: jumlah_produksi,
+
+    //   nomorDokumenProduksi: nomor_dokumen_produksi,
+    //   tanggalDokumenProduksi: tanggal_dokumen_produksi,
+    //   jumlahIsi: jumlah_isi,
+    //   identitasTangki: identitas_tangki,
+    //   keterangan: keterangan,
+
+    //   idKota: kota_id,
+    //   namaPengusaha: nama_pengusaha,
+    // };
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/ck4/rekam-ea",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/laporan-ck4`);
+    // }
+
+    notification.success({ message: "Success", description: "Success" });
+    this.props.history.push(`${pathName}/laporan-ck4`);
   };
 
   render() {
@@ -105,29 +167,21 @@ export default class CK4EA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama</FormLabel>
                     </div>
-                    <Select
-                      id="nama_nppbkc"
-                      onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_nama_nppbkc.length > 0 &&
-                        this.state.list_nama_nppbkc.map((item, index) => (
-                          <Select.Option key={`nama-nppbkc-${index}`} value={item.nama_nppbkc_code}>
-                            {item.nama_nppbkc_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                      />
+                    </div>
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>NPPBKC</FormLabel>
                     </div>
-                    <Input
-                      id="nppbkc"
-                      onChange={this.handleInputChange}
-                      value={this.state.nppbkc}
-                    />
+                    <Input id="nppbkc" value={this.state.nppbkc} disabled />
                   </div>
 
                   <div>
@@ -136,8 +190,9 @@ export default class CK4EA extends Component {
                     </div>
                     <Input.TextArea
                       id="alamat_nppbkc"
-                      onChange={this.handleInputChange}
                       value={this.state.alamat_nppbkc}
+                      rows={4}
+                      disabled
                     />
                   </div>
                 </Card>
@@ -150,18 +205,13 @@ export default class CK4EA extends Component {
                     </div>
                     <Select
                       id="jenis_laporan"
-                      onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
+                      value={this.state.jenis_laporan_id}
                       style={{ width: "100%" }}
+                      disabled
                     >
-                      {this.state.list_jenis_laporan.length > 0 &&
-                        this.state.list_jenis_laporan.map((item, index) => (
-                          <Select.Option
-                            key={`jenis-laporan-${index}`}
-                            value={item.jenis_laporan_code}
-                          >
-                            {item.jenis_laporan_name}
-                          </Select.Option>
-                        ))}
+                      <Select.Option value={this.state.jenis_laporan_id}>
+                        {this.state.jenis_laporan_name}
+                      </Select.Option>
                     </Select>
                   </div>
 
@@ -182,10 +232,10 @@ export default class CK4EA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
+                      value={this.state.tanggal_pemberitahuan}
                       style={{ width: "100%" }}
                     />
                   </div>
@@ -215,6 +265,7 @@ export default class CK4EA extends Component {
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
                       }
+                      value={this.state.tanggal_jam_produksi_awal}
                       style={{ width: "100%" }}
                     />
                   </div>
@@ -230,6 +281,7 @@ export default class CK4EA extends Component {
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
                       }
+                      value={this.state.tanggal_jam_produksi_akhir}
                       style={{ width: "100%" }}
                     />
                   </div>
@@ -271,6 +323,7 @@ export default class CK4EA extends Component {
                       id="nomor_dokumen_produksi"
                       onChange={this.handleInputChange}
                       value={this.state.nomor_dokumen_produksi}
+                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
 
@@ -280,11 +333,12 @@ export default class CK4EA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_dokumen_produksi"
-                      value={this.state.tanggal_dokumen_produksi}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_dokumen_produksi", date)
                       }
+                      value={this.state.tanggal_dokumen_produksi}
                       style={{ width: "100%" }}
+                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
                 </Card>
@@ -302,6 +356,7 @@ export default class CK4EA extends Component {
                         onChange={(value) => this.handleInputChange("jumlah_isi", value)}
                         value={this.state.jumlah_isi}
                         style={{ flex: 1 }}
+                        disabled={this.state.isRincianDisabled}
                       />
                       <div>Liter</div>
                     </div>
@@ -315,6 +370,7 @@ export default class CK4EA extends Component {
                       id="identitas_tangki"
                       onChange={this.handleInputChange}
                       value={this.state.identitas_tangki}
+                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
 
@@ -326,6 +382,7 @@ export default class CK4EA extends Component {
                       id="keterangan"
                       onChange={this.handleInputChange}
                       value={this.state.keterangan}
+                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
                 </Card>
@@ -336,13 +393,23 @@ export default class CK4EA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpanRincian}>
+                    <Button
+                      type="primary"
+                      onClick={this.handleSimpanRincian}
+                      block
+                      disabled={this.state.isRincianDisabled}
+                    >
                       Simpan Rincian
                     </Button>
                   </Col>
 
                   <Col span={12}>
-                    <Button type="danger" block onClick={this.handleBatal}>
+                    <Button
+                      type="danger"
+                      onClick={this.handleBatal}
+                      block
+                      disabled={!this.state.isRincianDisabled}
+                    >
                       Batal
                     </Button>
                   </Col>
@@ -359,21 +426,14 @@ export default class CK4EA extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
                   </div>
-                  <Select
-                    id="tempat_dibuat"
-                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_tempat_dibuat.length > 0 &&
-                      this.state.list_tempat_dibuat.map((item, index) => (
-                        <Select.Option
-                          key={`tempat-dibuat-${index}`}
-                          value={item.tempat_dibuat_code}
-                        >
-                          {item.tempat_dibuat_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <Input id="kota_name" value={this.state.kota_name} disabled />
+                    <Button
+                      type="default"
+                      icon="menu"
+                      onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -398,6 +458,18 @@ export default class CK4EA extends Component {
             </Row>
           </div>
         </Container>
+
+        <ModalDaftarNPPBKC
+          isVisible={this.state.isModalDaftarNppbkcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
+          onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarKota
+          isVisible={this.state.isModalDaftarKotaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
+          onDataDoubleClick={this.handleDataKota}
+        />
       </>
     );
   }

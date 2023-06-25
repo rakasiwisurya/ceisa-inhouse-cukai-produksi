@@ -206,7 +206,10 @@ export default class CK4HT extends Component {
     this.setState({ ...this.state, [field]: [file] });
   };
   handleDummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => onSuccess("ok"), 0);
+    const timeout = setTimeout(() => {
+      onSuccess("ok");
+      clearTimeout(timeout);
+    }, 0);
   };
 
   handleSimpanRincian = () => {

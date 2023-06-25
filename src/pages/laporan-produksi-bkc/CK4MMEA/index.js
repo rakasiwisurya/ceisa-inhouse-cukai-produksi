@@ -1,8 +1,25 @@
-import { Button, Card, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Upload } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Icon,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Table,
+  Upload,
+} from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import React, { Component } from "react";
+import { months, years } from "utils/times";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
+import moment from "moment";
 
 export default class CK4MMEA extends Component {
   constructor(props) {
@@ -12,103 +29,537 @@ export default class CK4MMEA extends Component {
       subtitle2: "Rincian",
       subtitle3: "Pemberitahu",
 
-      tempat_dibuat: "",
-      nama_pengusaha: "",
+      isEditRincian: false,
+      editIndexRincian: null,
 
+      isRekamLoading: false,
+      isRincianDisabled: false,
+      isModalDaftarNppbkcVisible: false,
+      isModalDaftarMerkMmeaVisible: false,
+      isModalDaftarKotaVisible: false,
+
+      nppbkc_id: "",
       nama_nppbkc: "",
       nppbkc: "",
       alamat_nppbkc: "",
-      jenis_laporan: "",
+
+      jenis_laporan_id: "",
+      jenis_laporan_name: "",
       nomor_pemberitahuan: "",
       tanggal_pemberitahuan: "",
       jenis_barang_kena_cukai: "Minuman Mengandung Etil Alkohol (MMEA)",
+
       tanggal_jam_produksi_awal: "",
       tanggal_jam_produksi_akhir: "",
-      jumlah_kemasan: "",
-      jumlah_kemasan_dilekati_pita: "",
-      jumlah_produksi: "",
+      periode_bulan: "",
+      periode_tahun: "",
+      data_produksi_jumlah_kemasan: "",
+      data_produksi_jumlah_kemasan_dilekati_pita: "",
+      data_produksi_jumlah_produksi: "",
 
       jenis_mmea: "",
-      merk_mmea: "",
-      isi: "",
-      jenis_kemasan: "",
-      golongan: "",
-      kadar: "",
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_kemasan_produksi: "",
-      jumlah_produksi_produksi: "",
-      jumlah_kemasan_dilekati_pita_pelekatan: "",
+      merk_mmea_id: "",
+      merk_mmea_name: "",
+      isi_mmea: "",
+      tarif_mmea: "",
+      jenis_kemasan_mmea: "",
+      golongan_mmea: "",
+      kadar_mmea: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+
+      kota_id: "",
+      kota_name: "",
+      nama_pengusaha: "",
 
       uraian_rincian_file: [],
 
-      list_tempat_dibuat: [
-        {
-          tempat_dibuat_code: "A",
-          tempat_dibuat_name: "A",
-        },
-        {
-          tempat_dibuat_code: "B",
-          tempat_dibuat_name: "B",
-        },
-      ],
-      list_nama_nppbkc: [
-        {
-          nama_nppbkc_code: "A",
-          nama_nppbkc_name: "A",
-        },
-        {
-          nama_nppbkc_code: "B",
-          nama_nppbkc_name: "B",
-        },
-      ],
+      searchText: "",
+      searchedColumn: "",
+      page: 1,
+
       list_jenis_laporan: [
         {
-          jenis_laporan_code: "HARIAN",
+          jenis_laporan_id: "HARIAN",
           jenis_laporan_name: "Harian",
         },
         {
-          jenis_laporan_code: "BULANAN",
+          jenis_laporan_id: "BULANAN",
           jenis_laporan_name: "Bulanan",
         },
       ],
-      list_merk_mmea: [
+
+      dataSource: [],
+      columns: [
         {
-          merk_mmea_code: "HARIAN",
-          merk_mmea_name: "Harian",
+          title: "Aksi",
+          dataIndex: "aksi",
+          key: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="primary"
+                icon="form"
+                onClick={() => this.handleEditRincian(record, index)}
+              />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+            </div>
+          ),
         },
         {
-          merk_mmea_code: "BULANAN",
-          merk_mmea_name: "Bulanan",
+          title: "Jenis MMEA",
+          dataIndex: "jenis_mmea",
+          key: "jenis_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jenis_mmea"),
+        },
+        {
+          title: "Merk MMEA",
+          dataIndex: "merk_mmea_name",
+          key: "merk_mmea_name",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("merk_mmea_name"),
+        },
+        {
+          title: "Isi (ml)",
+          dataIndex: "isi_mmea",
+          key: "isi_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("isi_mmea"),
+        },
+        {
+          title: "Kadar (%)",
+          dataIndex: "kadar_mmea",
+          key: "kadar_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("kadar_mmea"),
+        },
+        {
+          title: "Tarif (Rp)",
+          dataIndex: "tarif_mmea",
+          key: "tarif_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("tarif_mmea"),
+        },
+        {
+          title: "Jenis Kemasan",
+          dataIndex: "jenis_kemasan_mmea",
+          key: "jenis_kemasan_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jenis_kemasan_mmea"),
+        },
+        {
+          title: "Golongan",
+          dataIndex: "golongan_mmea",
+          key: "golongan_mmea",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("golongan_mmea"),
+        },
+        {
+          title: "Dokumen Produksi",
+          children: [
+            {
+              title: "Nomor",
+              dataIndex: "nomor_produksi",
+              key: "nomor_produksi",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("nomor_produksi"),
+            },
+            {
+              title: "Tanggal",
+              dataIndex: "tanggal_produksi",
+              key: "tanggal_produksi",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("tanggal_produksi"),
+            },
+          ],
+        },
+        {
+          title: "Jumlah Kemasan",
+          dataIndex: "jumlah_kemasan",
+          key: "jumlah_kemasan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jumlah_kemasan"),
+        },
+        {
+          title: "Jumlah Produksi",
+          dataIndex: "jumlah_produksi",
+          key: "jumlah_produksi",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jumlah_produksi"),
+        },
+        {
+          title: "Jumlah Kemasan Dilekati Pita",
+          dataIndex: "jumlah_kemasan_dilekati_pita",
+          key: "jumlah_kemasan_dilekati_pita",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jumlah_kemasan_dilekati_pita"),
         },
       ],
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource.length !== this.state.dataSource.length) {
+      const totalJumlahKemasan = this.state.dataSource.reduce(
+        (accumulator, object) => (accumulator.jumlah_kemasan ?? 0) + object.jumlah_kemasan,
+        0
+      );
+
+      const totalJumlahKemasanDilekatiPita = this.state.dataSource.reduce(
+        (accumulator, object) =>
+          (accumulator.jumlah_kemasan_dilekati_pita ?? 0) + object.jumlah_kemasan_dilekati_pita,
+        0
+      );
+
+      const totalJumlahProduksi = this.state.dataSource.reduce(
+        (accumulator, object) => (accumulator.jumlah_produksi ?? 0) + object.jumlah_produksi,
+        0
+      );
+
+      this.setState({
+        data_produksi_jumlah_kemasan: totalJumlahKemasan,
+        data_produksi_jumlah_kemasan_dilekati_pita: totalJumlahKemasanDilekatiPita,
+        data_produksi_jumlah_produksi: totalJumlahProduksi,
+      });
+    }
+  }
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => this.searchInput.select());
+        clearTimeout(timeout);
+      }
+    },
+  });
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+  handleColumnReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+  handleTableChange = (page) => {
+    this.setState({ page: page.current });
+  };
+
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
   handleInputNumberChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value._d });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
-  handleUploadFileChange = (field, file, fileList) => {
-    this.setState({ ...this.state, [field]: [file] });
+  handleUploadFile = (field, { file, onSuccess }) => {
+    const timeout = setTimeout(() => {
+      onSuccess("done");
+      this.setState({ [field]: [file] });
+      clearTimeout(timeout);
+    }, 0);
   };
-  handleDummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => onSuccess("ok"), 0);
+  handleRemoveFile = (field) => {
+    this.setState({ [field]: [] });
+  };
+  handleInsertFileToTable = () => {
+    console.log("insert file to table");
+  };
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
+  };
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
+  };
+
+  handleDataNppbkc = (record) => {
+    this.setState({
+      nppbkc_id: record.nppbkc_id,
+      nppbkc: record.nppbkc,
+      nama_nppbkc: record.nama_nppbkc,
+      alamat_nppbkc: record.alamat_nppbkc,
+    });
+    this.handleModalClose("isModalDaftarNppbkcVisible");
+  };
+  handleDataMerkMmea = (record) => {
+    this.setState({
+      jenis_mmea: record.jenis_mmea,
+      merk_mmea_id: record.merk_mmea_id,
+      merk_mmea_name: record.merk_mmea_name,
+      isi_mmea: record.isi_mmea,
+      tarif_mmea: record.tarif_mmea,
+      jenis_kemasan_mmea: record.jenis_kemasan_mmea,
+      golongan_mmea: record.golongan_mmea,
+      kadar_mmea: record.kadar_mmea,
+    });
+    this.handleModalClose("isModalDaftarMerkMmeaVisible");
+  };
+  handleDataKota = (record) => {
+    this.setState({
+      kota_id: record.kota_id,
+      kota_name: record.kota_name,
+    });
+    this.handleModalClose("isModalDaftarKotaVisible");
   };
 
   handleSimpanRincian = () => {
-    console.log("simpan rincian...");
+    const {
+      jenis_mmea,
+      merk_mmea_id,
+      merk_mmea_name,
+      isi_mmea,
+      tarif_mmea,
+      jenis_kemasan_mmea,
+      golongan_mmea,
+      kadar_mmea,
+
+      nomor_produksi,
+      tanggal_produksi,
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    } = this.state;
+
+    console.log("tes", {
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          jenis_mmea,
+          merk_mmea_id,
+          merk_mmea_name,
+          isi_mmea,
+          tarif_mmea,
+          jenis_kemasan_mmea,
+          golongan_mmea,
+          kadar_mmea,
+
+          nomor_produksi,
+          tanggal_produksi,
+          jumlah_kemasan,
+          jumlah_produksi,
+          jumlah_kemasan_dilekati_pita,
+        },
+      ],
+    });
+
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          jenis_mmea,
+          merk_mmea_id,
+          merk_mmea_name,
+          isi_mmea,
+          tarif_mmea,
+          jenis_kemasan_mmea,
+          golongan_mmea,
+          kadar_mmea,
+
+          nomor_produksi,
+          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          jumlah_kemasan,
+          jumlah_produksi,
+          jumlah_kemasan_dilekati_pita,
+        },
+      ],
+    });
+
+    this.setState({
+      jenis_mmea: "",
+      merk_mmea_id: "",
+      merk_mmea_name: "",
+      isi_mmea: "",
+      tarif_mmea: "",
+      jenis_kemasan_mmea: "",
+      golongan_mmea: "",
+      kadar_mmea: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+    });
+  };
+  handleEditRincian = (record, index) => {
+    this.setState({
+      isEditRincian: true,
+      editIndexRincian: index,
+      jenis_mmea: record.jenis_mmea,
+      merk_mmea_id: record.merk_mmea_id,
+      merk_mmea_name: record.merk_mmea_name,
+      isi_mmea: record.isi_mmea,
+      tarif_mmea: record.tarif_mmea,
+      jenis_kemasan_mmea: record.jenis_kemasan_mmea,
+      golongan_mmea: record.golongan_mmea,
+      kadar_mmea: record.kadar_mmea,
+
+      nomor_produksi: record.nomor_produksi,
+      tanggal_produksi: moment(record.tanggal_produksi),
+      jumlah_kemasan: record.jumlah_kemasan,
+      jumlah_produksi: record.jumlah_produksi,
+      jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
+    });
+  };
+  handleUbaheRincian = () => {
+    const {
+      jenis_mmea,
+      merk_mmea_id,
+      merk_mmea_name,
+      isi_mmea,
+      tarif_mmea,
+      jenis_kemasan_mmea,
+      golongan_mmea,
+      kadar_mmea,
+
+      nomor_produksi,
+      tanggal_produksi,
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    } = this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndexRincian, 1, {
+      key: new Date().getTime(),
+      jenis_mmea,
+      merk_mmea_id,
+      merk_mmea_name,
+      isi_mmea,
+      tarif_mmea,
+      jenis_kemasan_mmea,
+      golongan_mmea,
+      kadar_mmea,
+
+      nomor_produksi,
+      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    });
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      jenis_mmea: "",
+      merk_mmea_id: "",
+      merk_mmea_name: "",
+      isi_mmea: "",
+      tarif_mmea: "",
+      jenis_kemasan_mmea: "",
+      golongan_mmea: "",
+      kadar_mmea: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+      dataSource: newDataSource,
+    });
+  };
+  handleDeleteRincian = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
   };
   handleBatal = () => {
-    console.log("batal...");
+    this.setState({
+      isEditRincian: false,
+      jenis_mmea: "",
+      merk_mmea_id: "",
+      merk_mmea_name: "",
+      isi_mmea: "",
+      jenis_kemasan_mmea: "",
+      golongan_mmea: "",
+      kadar_mmea: "",
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+    });
+  };
+  handleReset = () => {
+    this.setState({
+      nppbkc_id: "",
+      nama_nppbkc: "",
+      nppbkc: "",
+      alamat_nppbkc: "",
+      jenis_laporan_id: "",
+      jenis_laporan_name: "",
+      nomor_pemberitahuan: "",
+      tanggal_pemberitahuan: "",
+      tanggal_jam_produksi_awal: "",
+      tanggal_jam_produksi_akhir: "",
+      periode_bulan: "",
+      periode_tahun: "",
+      data_produksi_jumlah_kemasan: "",
+      data_produksi_jumlah_kemasan_dilekati_pita: "",
+      data_produksi_jumlah_produksi: "",
+      jenis_mmea: "",
+      merk_mmea_id: "",
+      merk_mmea_name: "",
+      isi_mmea: "",
+      jenis_kemasan_mmea: "",
+      golongan_mmea: "",
+      kadar_mmea: "",
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+      uraian_rincian_file: [],
+      dataSource: [],
+    });
   };
   handleRekam = () => {
     console.log("rekam...");
@@ -131,18 +582,14 @@ export default class CK4MMEA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama</FormLabel>
                     </div>
-                    <Select
-                      id="nama_nppbkc"
-                      onChange={(value) => this.handleSelectChange("nama_nppbkc", value)}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_nama_nppbkc.length > 0 &&
-                        this.state.list_nama_nppbkc.map((item, index) => (
-                          <Select.Option key={`nama-nppbkc-${index}`} value={item.nama_nppbkc_code}>
-                            {item.nama_nppbkc_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                      />
+                    </div>
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -153,6 +600,7 @@ export default class CK4MMEA extends Component {
                       id="nppbkc"
                       onChange={this.handleInputChange}
                       value={this.state.nppbkc}
+                      disabled
                     />
                   </div>
 
@@ -164,6 +612,8 @@ export default class CK4MMEA extends Component {
                       id="alamat_nppbkc"
                       onChange={this.handleInputChange}
                       value={this.state.alamat_nppbkc}
+                      rows={4}
+                      disabled
                     />
                   </div>
                 </Card>
@@ -177,14 +627,15 @@ export default class CK4MMEA extends Component {
                     </div>
                     <Select
                       id="jenis_laporan"
-                      onChange={(value) => this.handleSelectChange("jenis_laporan", value)}
+                      onChange={(value) => this.handleSelectChange("jenis_laporan_id", value)}
+                      value={this.state.jenis_laporan_id}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_jenis_laporan.length > 0 &&
                         this.state.list_jenis_laporan.map((item, index) => (
                           <Select.Option
                             key={`jenis-laporan-${index}`}
-                            value={item.jenis_laporan_code}
+                            value={item.jenis_laporan_id}
                           >
                             {item.jenis_laporan_name}
                           </Select.Option>
@@ -209,10 +660,10 @@ export default class CK4MMEA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
-                      value={this.state.tanggal_pemberitahuan}
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
+                      value={this.state.tanggal_pemberitahuan}
                       style={{ width: "100%" }}
                     />
                   </div>
@@ -230,48 +681,87 @@ export default class CK4MMEA extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}></Col>
               <Col span={12}>
-                <Card title="Dokumen Produksi">
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggal_jam_produksi_awal"
-                      showTime={{ format: "HH:mm" }}
-                      format="YYYY-MM-DD HH:mm"
-                      onChange={(date) =>
-                        this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </div>
+                <Card title="Data Produksi">
+                  {this.state.jenis_laporan_id === "HARIAN" && (
+                    <>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="tanggal_jam_produksi_awal"
+                          showTime={{ format: "HH:mm" }}
+                          format="YYYY-MM-DD HH:mm"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
+                          }
+                          value={this.state.tanggal_jam_produksi_awal}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
 
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="tanggal_jam_produksi_akhir"
+                          showTime={{ format: "HH:mm" }}
+                          format="YYYY-MM-DD HH:mm"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
+                          }
+                          value={this.state.tanggal_jam_produksi_akhir}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {this.state.jenis_laporan_id === "BULANAN" && (
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Periode</FormLabel>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <Select
+                          id="periode_bulan"
+                          onChange={(value) => this.handleSelectChange("periode_bulan", value)}
+                          value={this.state.periode_bulan}
+                          style={{ width: "100%" }}
+                        >
+                          {months.map((item, index) => (
+                            <Select.Option key={`periode-${index}`} value={item.month_code}>
+                              {item.month_name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+
+                        <Select
+                          id="periode_tahun"
+                          onChange={(value) => this.handleSelectChange("periode_tahun", value)}
+                          value={this.state.periode_tahun}
+                          style={{ width: "100%" }}
+                        >
+                          {years.map((item, index) => (
+                            <Select.Option key={`periode-${index}`} value={item.year_code}>
+                              {item.year_name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </div>
                     </div>
-                    <DatePicker
-                      id="tanggal_jam_produksi_akhir"
-                      showTime={{ format: "HH:mm" }}
-                      format="YYYY-MM-DD HH:mm"
-                      onChange={(date) =>
-                        this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </div>
+                  )}
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jumlah Kemasan</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_kemasan"
-                        onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
-                        value={this.state.jumlah_kemasan}
-                        min={0}
-                        style={{ flex: 1 }}
+                      <Input
+                        id="data_produksi_jumlah_kemasan"
+                        value={this.state.data_produksi_jumlah_kemasan}
+                        disabled
                       />
                       <div>Kemasan</div>
                     </div>
@@ -281,14 +771,10 @@ export default class CK4MMEA extends Component {
                       <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_kemasan_dilekati_pita"
-                        onChange={(value) =>
-                          this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
-                        }
-                        value={this.state.jumlah_kemasan_dilekati_pita}
-                        min={0}
-                        style={{ flex: 1 }}
+                      <Input
+                        id="data_produksi_jumlah_kemasan_dilekati_pita"
+                        value={this.state.data_produksi_jumlah_kemasan_dilekati_pita}
+                        disabled
                       />
                       <div>Kemasan</div>
                     </div>
@@ -299,12 +785,10 @@ export default class CK4MMEA extends Component {
                       <FormLabel>Jumlah Produksi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_produksi"
-                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
-                        value={this.state.jumlah_produksi}
-                        min={0}
-                        style={{ flex: 1 }}
+                      <Input
+                        id="data_produksi_jumlah_produksi"
+                        value={this.state.data_produksi_jumlah_produksi}
+                        disabled
                       />
                       <div>Liter</div>
                     </div>
@@ -329,9 +813,9 @@ export default class CK4MMEA extends Component {
                     </div>
                     <Input
                       id="jenis_mmea"
-                      onChange={(value) => this.handleInputChange("jenis_mmea", value)}
                       value={this.state.jenis_mmea}
                       style={{ flex: 1 }}
+                      disabled
                     />
                   </div>
 
@@ -339,18 +823,14 @@ export default class CK4MMEA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Merk MMEA</FormLabel>
                     </div>
-                    <Select
-                      id="merk_mmea"
-                      onChange={(value) => this.handleSelectChange("merk_mmea", value)}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_merk_mmea.length > 0 &&
-                        this.state.list_merk_mmea.map((item, index) => (
-                          <Select.Option key={`merk-mmea-${index}`} value={item.merk_mmea_code}>
-                            {item.merk_mmea_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="merk_mmea_name" value={this.state.merk_mmea_name} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarMerkMmeaVisible")}
+                      />
+                    </div>
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -358,14 +838,11 @@ export default class CK4MMEA extends Component {
                       <FormLabel>Isi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="isi"
-                        onChange={(value) => this.handleInputNumberChange("isi", value)}
-                        value={this.state.isi}
-                        min={0}
-                        style={{ flex: 1 }}
-                      />
-                      <div>Mililiter (ml)</div>
+                      <Input id="isi_mmea" value={this.state.isi_mmea} disabled />
+                      <div style={{ display: "flex", gap: 3 }}>
+                        <div>Mililiter</div>
+                        <div>(ml)</div>
+                      </div>
                     </div>
                   </div>
 
@@ -373,24 +850,14 @@ export default class CK4MMEA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Kemasan</FormLabel>
                     </div>
-                    <Input
-                      id="jenis_kemasan"
-                      onChange={(value) => this.handleInputChange("jenis_kemasan", value)}
-                      value={this.state.jenis_kemasan}
-                      style={{ flex: 1 }}
-                    />
+                    <Input id="jenis_kemasan_mmea" value={this.state.jenis_kemasan_mmea} disabled />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Golongan</FormLabel>
                     </div>
-                    <Input
-                      id="golongan"
-                      onChange={(value) => this.handleInputChange("golongan", value)}
-                      value={this.state.golongan}
-                      style={{ flex: 1 }}
-                    />
+                    <Input id="golongan_mmea" value={this.state.golongan_mmea} disabled />
                   </div>
 
                   <div>
@@ -398,13 +865,7 @@ export default class CK4MMEA extends Component {
                       <FormLabel>Kadar</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="kadar"
-                        onChange={(value) => this.handleInputNumberChange("kadar", value)}
-                        value={this.state.kadar}
-                        min={0}
-                        style={{ flex: 1 }}
-                      />
+                      <Input id="kadar_mmea" value={this.state.kadar_mmea} disabled />
                       <div>%</div>
                     </div>
                   </div>
@@ -420,9 +881,9 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Nomor</FormLabel>
                         </div>
                         <Input
-                          id="nomor_dokumen_produksi"
+                          id="nomor_produksi"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_dokumen_produksi}
+                          value={this.state.nomor_produksi}
                         />
                       </div>
 
@@ -431,11 +892,9 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Tanggal Produksi</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_dokumen_produksi"
-                          value={this.state.tanggal_dokumen_produksi}
-                          onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_dokumen_produksi", date)
-                          }
+                          id="tanggal_produksi"
+                          onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
+                          value={this.state.tanggal_produksi}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -450,11 +909,11 @@ export default class CK4MMEA extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="jumlah_kemasan_produksi"
+                            id="jumlah_kemasan"
                             onChange={(value) =>
-                              this.handleInputNumberChange("jumlah_kemasan_produksi", value)
+                              this.handleInputNumberChange("jumlah_kemasan", value)
                             }
-                            value={this.state.jumlah_kemasan_produksi}
+                            value={this.state.jumlah_kemasan}
                             style={{ flex: 1 }}
                           />
                           <div>Liter</div>
@@ -466,11 +925,11 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Jumlah Produksi</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_produksi_produksi"
+                          id="jumlah_produksi"
                           onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_produksi_produksi", value)
+                            this.handleInputNumberChange("jumlah_produksi", value)
                           }
-                          value={this.state.jumlah_produksi_produksi}
+                          value={this.state.jumlah_produksi}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -484,14 +943,11 @@ export default class CK4MMEA extends Component {
                           <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_kemasan_dilekati_pita_pelekatan"
+                          id="jumlah_kemasan_dilekati_pita"
                           onChange={(value) =>
-                            this.handleInputNumberChange(
-                              "jumlah_kemasan_dilekati_pita_pelekatan",
-                              value
-                            )
+                            this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
                           }
-                          value={this.state.jumlah_kemasan_dilekati_pita_pelekatan}
+                          value={this.state.jumlah_kemasan_dilekati_pita}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -508,20 +964,31 @@ export default class CK4MMEA extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Uraian Rincian</FormLabel>
                     </div>
-                    <Upload
-                      id="uraian_rincian_file"
-                      name="uraian_rincian_file"
-                      customRequest={this.handleDummyRequest}
-                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                      onChange={({ file, fileList }) =>
-                        this.handleUploadFileChange("uraian_rincian_file", file, fileList)
-                      }
-                      fileList={this.state.uraian_rincian_file}
-                    >
-                      <Button>
-                        <Icon type="upload" /> Upload
+                    <div style={{ position: "relative" }}>
+                      <Upload
+                        id="uraian_rincian_file"
+                        name="uraian_rincian_file"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        customRequest={(options) =>
+                          this.handleUploadFile("uraian_rincian_file", options)
+                        }
+                        onRemove={() => this.handleRemoveFile("uraian_rincian_file")}
+                        fileList={this.state.uraian_rincian_file}
+                      >
+                        <Button>
+                          <Icon type="upload" /> Upload
+                        </Button>
+                      </Upload>
+
+                      <Button
+                        type="primary"
+                        onClick={this.handleInsertFileToTable}
+                        style={{ marginTop: 10 }}
+                        disabled={this.state.uraian_rincian_file.length === 0}
+                      >
+                        Insert To Table
                       </Button>
-                    </Upload>
+                    </div>
                   </div>
                 </Card>
               </Col>
@@ -531,19 +998,41 @@ export default class CK4MMEA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" block onClick={this.handleSimpanRincian}>
-                      Simpan Rincian
-                    </Button>
+                    {this.state.isEditRincian ? (
+                      <Button type="primary" block onClick={this.handleUbaheRincian}>
+                        Ubah Rincian
+                      </Button>
+                    ) : (
+                      <Button type="primary" block onClick={this.handleSimpanRincian}>
+                        Simpan Rincian
+                      </Button>
+                    )}
                   </Col>
 
                   <Col span={12}>
-                    <Button type="danger" block onClick={this.handleBatal}>
-                      Batal
-                    </Button>
+                    {this.state.isEditRincian ? (
+                      <Button type="danger" block onClick={this.handleBatal}>
+                        Batal
+                      </Button>
+                    ) : (
+                      <Button type="danger" block onClick={this.handleReset}>
+                        Reset
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               </Col>
             </Row>
+
+            <div style={{ marginTop: 30, marginBottom: 20 }}>
+              <Table
+                dataSource={this.state.dataSource}
+                columns={this.state.columns}
+                scroll={{ x: "max-content" }}
+                onChange={this.handleTableChange}
+                pagination={{ current: this.state.page }}
+              />
+            </div>
           </div>
 
           <Header>{this.state.subtitle3}</Header>
@@ -554,21 +1043,14 @@ export default class CK4MMEA extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
                   </div>
-                  <Select
-                    id="tempat_dibuat"
-                    onChange={(value) => this.handleSelectChange("tempat_dibuat", value)}
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_tempat_dibuat.length > 0 &&
-                      this.state.list_tempat_dibuat.map((item, index) => (
-                        <Select.Option
-                          key={`tempat-dibuat-${index}`}
-                          value={item.tempat_dibuat_code}
-                        >
-                          {item.tempat_dibuat_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <Input id="kota_name" value={this.state.kota_name} disabled />
+                    <Button
+                      type="default"
+                      icon="menu"
+                      onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -593,6 +1075,24 @@ export default class CK4MMEA extends Component {
             </Row>
           </div>
         </Container>
+
+        <ModalDaftarNPPBKC
+          isVisible={this.state.isModalDaftarNppbkcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
+          onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarMerkMMEA
+          isVisible={this.state.isModalDaftarMerkMmeaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarMerkMmeaVisible")}
+          onDataDoubleClick={this.handleDataMerkMmea}
+        />
+
+        <ModalDaftarKota
+          isVisible={this.state.isModalDaftarKotaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
+          onDataDoubleClick={this.handleDataKota}
+        />
       </>
     );
   }

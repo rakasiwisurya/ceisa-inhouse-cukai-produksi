@@ -6,6 +6,7 @@ import Header from "components/Header";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
+import { pathName } from "configs/constants";
 
 export default class ReferensiTarifEdit extends Component {
   constructor(props) {
@@ -185,16 +186,16 @@ export default class ReferensiTarifEdit extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleUbah = async () => {
     const {
@@ -263,7 +264,7 @@ export default class ReferensiTarifEdit extends Component {
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push("/cukai-produksi/referensi-tarif-warna");
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
     }
   };
   handleBatal = () => {

@@ -3,6 +3,7 @@ import Container from "components/Container";
 import React, { Component } from "react";
 import Header from "components/Header";
 import { pathName } from "configs/constants";
+import { requestApi } from "utils/requestApi";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -10,9 +11,25 @@ export default class CK4 extends Component {
     this.state = {
       subtitle1: "CK4",
 
-      searchText: "",
-      searchedColumn: "",
+      isCk4Loading: true,
 
+      page: 1,
+      totalData: 0,
+
+      table: {
+        kppbc: "",
+        nppbkc: "",
+        nama_perusahaan: "",
+        tanggal_pemberitahuan: "",
+        tanggal_produksi_awal: "",
+        tanggal_produksi_akhir: "",
+        jumlah_produksi_lt: "",
+        jumlah_produksi_btg: "",
+        jumlah_produksi_gram: "",
+        status: "",
+      },
+
+      dataSource: [],
       columns: [
         {
           title: "Aksi",
@@ -105,52 +122,127 @@ export default class CK4 extends Component {
           ...this.getColumnSearchProps("status"),
         },
       ],
-      dataSource: [
-        {
-          key: "1",
-          id: 1,
-          kppbc: "KPPBC",
-          nppbkc: "EA",
-          nama_perusahaan: "Nama Perusahaan",
-          tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-          tanggal_produksi_awal: "Tanggal Produksi Awal",
-          tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-          jumlah_produksi_lt: "Jumlah Produksi Lt",
-          jumlah_produksi_btg: "Jumlah Produksi Batang",
-          jumlah_produksi_gram: "Jumlah Produksi Gram",
-          status: "status",
-        },
-        {
-          key: "2",
-          id: 2,
-          kppbc: "KPPBC",
-          nppbkc: "MMEA",
-          nama_perusahaan: "Nama Perusahaan",
-          tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-          tanggal_produksi_awal: "Tanggal Produksi Awal",
-          tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-          jumlah_produksi_lt: "Jumlah Produksi Lt",
-          jumlah_produksi_btg: "Jumlah Produksi Batang",
-          jumlah_produksi_gram: "Jumlah Produksi Gram",
-          status: "status",
-        },
-        {
-          key: "3",
-          id: 3,
-          kppbc: "KPPBC",
-          nppbkc: "HT",
-          nama_perusahaan: "Nama Perusahaan",
-          tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-          tanggal_produksi_awal: "Tanggal Produksi Awal",
-          tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-          jumlah_produksi_lt: "Jumlah Produksi Lt",
-          jumlah_produksi_btg: "Jumlah Produksi Batang",
-          jumlah_produksi_gram: "Jumlah Produksi Gram",
-          status: "status",
-        },
-      ],
     };
   }
+
+  componentDidMount() {
+    this.getCk4();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getCk4();
+    }
+  }
+
+  getCk4 = async () => {
+    // const {
+    //   kppbc,
+    //   nppbkc,
+    //   nama_perusahaan,
+    //   tanggal_pemberitahuan,
+    //   tanggal_produksi_awal,
+    //   tanggal_produksi_akhir,
+    //   jumlah_produksi_lt,
+    //   jumlah_produksi_btg,
+    //   jumlah_produksi_gram,
+    //   status,
+    // } = this.state.table;
+
+    // const payload = { page: this.state.page };
+
+    // if (kppbc) payload.kppbc = kppbc;
+    // if (nppbkc) payload.nppbkc = nppbkc;
+    // if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    // if (tanggal_pemberitahuan) payload.tanggalPemberitahuan = tanggal_pemberitahuan;
+    // if (tanggal_produksi_awal) payload.tanggalProduksiAwal = tanggal_produksi_awal;
+    // if (tanggal_produksi_akhir) payload.tanggalProduksiAkhir = tanggal_produksi_akhir;
+    // if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
+    // if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
+    // if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
+    // if (status) payload.status = status;
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "get",
+    //   endpoint: "/ck4/browse",
+    //   params: payload,
+    //   setLoading: (bool) => this.setState({ isCk4Loading: bool }),
+    // });
+
+    // if (response) {
+    //   const newData = response.data.data.listData.map((item) => ({
+    //     key: item.idReferensiSkep,
+    //     id_ck4: item.idCk4,
+    //     nppbkc: item.nppbkc,
+    //     nama_perusahaan: item.namaPerusahaan,
+    //     tanggal_pemberitahuan: item.tanggalPemberitahuan,
+    //     tanggal_produksi_awal: item.tanggalProduksiAwal,
+    //     tanggal_produksi_akhir: item.tanggalProduksiAkhir,
+    //     jumlah_produksi_lt: item.jumlahProduksiLt,
+    //     jumlah_produksi_btg: item.jumlahProduksiBtg,
+    //     jumlah_produksi_gram: item.jumlahProduksiGram,
+    //     status: item.status,
+    //   }));
+    //   const page = response.data.currentPage;
+    //   const totalData = response.data.totalData;
+    //   this.setState({ dataSource: newData, page, totalData });
+    // }
+
+    this.setState({ isCk4Loading: true });
+    const timeout = setTimeout(() => {
+      this.setState({
+        page: 1,
+        totalData: 10,
+        dataSource: [
+          {
+            key: "1",
+            id: 1,
+            kppbc: "KPPBC",
+            nppbkc: "EA",
+            nama_perusahaan: "Nama Perusahaan",
+            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
+            tanggal_produksi_awal: "Tanggal Produksi Awal",
+            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
+            jumlah_produksi_lt: "Jumlah Produksi Lt",
+            jumlah_produksi_btg: "Jumlah Produksi Batang",
+            jumlah_produksi_gram: "Jumlah Produksi Gram",
+            status: "status",
+          },
+          {
+            key: "2",
+            id: 2,
+            kppbc: "KPPBC",
+            nppbkc: "MMEA",
+            nama_perusahaan: "Nama Perusahaan",
+            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
+            tanggal_produksi_awal: "Tanggal Produksi Awal",
+            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
+            jumlah_produksi_lt: "Jumlah Produksi Lt",
+            jumlah_produksi_btg: "Jumlah Produksi Batang",
+            jumlah_produksi_gram: "Jumlah Produksi Gram",
+            status: "status",
+          },
+          {
+            key: "3",
+            id: 3,
+            kppbc: "KPPBC",
+            nppbkc: "HT",
+            nama_perusahaan: "Nama Perusahaan",
+            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
+            tanggal_produksi_awal: "Tanggal Produksi Awal",
+            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
+            jumlah_produksi_lt: "Jumlah Produksi Lt",
+            jumlah_produksi_btg: "Jumlah Produksi Batang",
+            jumlah_produksi_gram: "Jumlah Produksi Gram",
+            status: "status",
+          },
+        ],
+      });
+      this.setState({ isCk4Loading: false });
+      clearTimeout(timeout);
+    }, 2000);
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -159,15 +251,16 @@ export default class CK4 extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearch(confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -175,7 +268,7 @@ export default class CK4 extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -186,24 +279,23 @@ export default class CK4 extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.getCk4();
   };
-  handleColumnReset = (clearFilters) => {
+  handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    this.getCk4();
   };
 
   handleDetail = (id, nppbkc) => {
@@ -214,10 +306,8 @@ export default class CK4 extends Component {
       case nppbkc === "MMEA":
         this.props.history.push(`${pathName}/ck4-mmea-detail/${id}`);
         break;
-      case nppbkc === "HT":
-        this.props.history.push(`${pathName}/ck4-ht-detail/${id}`);
-        break;
       default:
+        this.props.history.push(`${pathName}/ck4-ht-detail/${id}`);
         break;
     }
   };
@@ -226,10 +316,8 @@ export default class CK4 extends Component {
       case nppbkc === "EA" || nppbkc === "MMEA":
         this.props.history.push(`${pathName}/ck4-ea-mmea-perbaikan/${id}`);
         break;
-      case nppbkc === "HT":
-        this.props.history.push(`${pathName}/ck4-ht-perbaikan/${id}`);
-        break;
       default:
+        this.props.history.push(`${pathName}/ck4-ht-perbaikan/${id}`);
         break;
     }
   };
@@ -280,6 +368,8 @@ export default class CK4 extends Component {
               <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
+                loading={this.state.isCk4Loading}
+                pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
               />
             </div>

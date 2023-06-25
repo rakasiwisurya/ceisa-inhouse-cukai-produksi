@@ -16,6 +16,7 @@ import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
+import { pathName } from "configs/constants";
 
 export default class ReferensiTarifRekam extends Component {
   constructor(props) {
@@ -360,7 +361,8 @@ export default class ReferensiTarifRekam extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => this.searchInput.select());
+        clearTimeout(timeout);
       }
     },
   });
@@ -508,7 +510,7 @@ export default class ReferensiTarifRekam extends Component {
       dataSource: [],
     });
   };
-  handleUbah = (index) => {
+  handleUbah = () => {
     const {
       jenis_bkc_id,
       jenis_bkc_name,
@@ -536,7 +538,7 @@ export default class ReferensiTarifRekam extends Component {
     } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1, {
+    newDataSource.splice(this.state.editIndex, 1, {
       key: new Date().getTime(),
       jenis_bkc_id,
       jenis_bkc_name,
@@ -696,7 +698,7 @@ export default class ReferensiTarifRekam extends Component {
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push("/cukai-produksi/referensi-tarif-warna");
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
     }
   };
 

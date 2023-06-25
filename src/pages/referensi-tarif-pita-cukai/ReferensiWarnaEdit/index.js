@@ -141,13 +141,13 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleSelectChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value });
+    this.setState({ [field]: value });
   };
   handleUbah = async () => {
     const {
