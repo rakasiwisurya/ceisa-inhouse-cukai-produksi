@@ -10,16 +10,22 @@ import {
   Select,
   Table,
   Upload,
+  notification,
 } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import moment from "moment";
 import React, { Component } from "react";
+import { ExcelRenderer } from "react-excel-renderer";
+import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
-import moment from "moment";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { requestApi } from "utils/requestApi";
+import { pathName } from "configs/constants";
 
 export default class CK4MMEA extends Component {
   constructor(props) {
@@ -53,9 +59,9 @@ export default class CK4MMEA extends Component {
       tanggal_jam_produksi_akhir: "",
       periode_bulan: "",
       periode_tahun: "",
-      data_produksi_jumlah_kemasan: "",
-      data_produksi_jumlah_kemasan_dilekati_pita: "",
-      data_produksi_jumlah_produksi: "",
+      data_produksi_jumlah_kemasan: 0,
+      data_produksi_jumlah_kemasan_dilekati_pita: 0,
+      data_produksi_jumlah_produksi: 0,
 
       jenis_mmea: "",
       merk_mmea_id: "",
@@ -206,26 +212,14 @@ export default class CK4MMEA extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource.length !== this.state.dataSource.length) {
-      const totalJumlahKemasan = this.state.dataSource.reduce(
-        (accumulator, object) => (accumulator.jumlah_kemasan ?? 0) + object.jumlah_kemasan,
-        0
-      );
-
-      const totalJumlahKemasanDilekatiPita = this.state.dataSource.reduce(
-        (accumulator, object) =>
-          (accumulator.jumlah_kemasan_dilekati_pita ?? 0) + object.jumlah_kemasan_dilekati_pita,
-        0
-      );
-
-      const totalJumlahProduksi = this.state.dataSource.reduce(
-        (accumulator, object) => (accumulator.jumlah_produksi ?? 0) + object.jumlah_produksi,
-        0
-      );
-
+      const { dataSource } = this.state;
       this.setState({
-        data_produksi_jumlah_kemasan: totalJumlahKemasan,
-        data_produksi_jumlah_kemasan_dilekati_pita: totalJumlahKemasanDilekatiPita,
-        data_produksi_jumlah_produksi: totalJumlahProduksi,
+        data_produksi_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
+        data_produksi_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
+          dataSource,
+          "jumlah_kemasan_dilekati_pita"
+        ),
+        data_produksi_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi"),
       });
     }
   }
@@ -310,7 +304,11 @@ export default class CK4MMEA extends Component {
     this.setState({ [field]: [] });
   };
   handleInsertFileToTable = () => {
-    console.log("insert file to table");
+    ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
+      if (err) return console.error(err);
+      const data = convertArrayExcelToTable(res.rows);
+      this.setState({ dataSource: data });
+    });
   };
   handleModalShow = (visibleState) => {
     this.setState({ [visibleState]: true });
@@ -538,8 +536,55 @@ export default class CK4MMEA extends Component {
       dataSource: [],
     });
   };
-  handleRekam = () => {
-    console.log("rekam...");
+  handleRekam = async () => {
+    // const {
+    //   nppbkc_id,
+    //   jenis_laporan_id,
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+    //   tanggal_jam_produksi_awal,
+    //   tanggal_jam_produksi_akhir,
+    //   periode_bulan,
+    //   periode_tahun,
+    //   kota_id,
+    //   nama_pengusaha,
+    //   dataSource,
+    // } = this.state;
+    // const details = dataSource.map((item) => ({
+    //   idMerkMmea: item.merk_mmea_id,
+    //   nomorProduksi: item.nomor_produksi,
+    //   tanggalProduksi: item.tanggal_produksi,
+    //   jumlahKemasan: item.jumlah_kemasan,
+    //   jumlahProduksi: item.jumlah_produksi,
+    //   jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
+    // }));
+    // const payload = {
+    //   idNppbkc: nppbkc_id,
+    //   jenisLaporan: jenis_laporan_id,
+    //   nomorPemberitahuan: nomor_pemberitahuan,
+    //   tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+    //   tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
+    //   tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
+    //   periodeBulan: periode_bulan,
+    //   periodeTahun: periode_tahun,
+    //   idKota: kota_id,
+    //   namaPengusaha: nama_pengusaha,
+    //   details,
+    // };
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/ck4/rekam-mmea",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/laporan-ck4`);
+    // }
+
+    notification.success({ message: "Success", description: "Success" });
+    this.props.history.push(`${pathName}/laporan-ck4`);
   };
 
   render() {
