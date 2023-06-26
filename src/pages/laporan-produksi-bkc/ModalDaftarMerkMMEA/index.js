@@ -115,7 +115,7 @@ export default class ModalDaftarMerkMMEA extends Component {
     // const response = await requestApi({
     //   service: "produksi",
     //   method: "get",
-    //   endpoint: "/ck4/daftar-jenis_mmea",
+    //   endpoint: "/ck4/daftar-merk_mmea",
     //   params: payload,
     //   setLoading: (bool) => this.setState({ isDaftarMerkMmeaLoading: bool }),
     // });
@@ -245,7 +245,7 @@ export default class ModalDaftarMerkMMEA extends Component {
     const { isVisible, onCancel, onDataDoubleClick } = this.props;
 
     return (
-      <Modal title="Daftar NPPBKC" visible={isVisible} onCancel={onCancel} footer={null}>
+      <Modal title="Daftar Merk MMEA" visible={isVisible} onCancel={onCancel} footer={null}>
         <Table
           dataSource={this.state.dataSource}
           columns={this.state.columns}

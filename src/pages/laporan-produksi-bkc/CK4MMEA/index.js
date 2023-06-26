@@ -59,9 +59,9 @@ export default class CK4MMEA extends Component {
       tanggal_jam_produksi_akhir: "",
       periode_bulan: "",
       periode_tahun: "",
-      data_produksi_jumlah_kemasan: 0,
-      data_produksi_jumlah_kemasan_dilekati_pita: 0,
-      data_produksi_jumlah_produksi: 0,
+      total_jumlah_kemasan: 0,
+      total_jumlah_kemasan_dilekati_pita: 0,
+      total_jumlah_produksi: 0,
 
       jenis_mmea: "",
       merk_mmea_id: "",
@@ -214,12 +214,12 @@ export default class CK4MMEA extends Component {
     if (prevState.dataSource.length !== this.state.dataSource.length) {
       const { dataSource } = this.state;
       this.setState({
-        data_produksi_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
-        data_produksi_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
+        total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
+        total_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
           dataSource,
           "jumlah_kemasan_dilekati_pita"
         ),
-        data_produksi_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi"),
+        total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi"),
       });
     }
   }
@@ -307,7 +307,7 @@ export default class CK4MMEA extends Component {
     ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
       if (err) return console.error(err);
       const data = convertArrayExcelToTable(res.rows);
-      this.setState({ dataSource: data });
+      this.setState({ uraian_rincian_file: [], dataSource: [...this.state.dataSource, data] });
     });
   };
   handleModalShow = (visibleState) => {
@@ -486,7 +486,7 @@ export default class CK4MMEA extends Component {
     newDataSource.splice(index, 1);
     this.setState({ dataSource: newDataSource });
   };
-  handleBatal = () => {
+  handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,
       jenis_mmea: "",
@@ -517,9 +517,6 @@ export default class CK4MMEA extends Component {
       tanggal_jam_produksi_akhir: "",
       periode_bulan: "",
       periode_tahun: "",
-      data_produksi_jumlah_kemasan: "",
-      data_produksi_jumlah_kemasan_dilekati_pita: "",
-      data_produksi_jumlah_produksi: "",
       jenis_mmea: "",
       merk_mmea_id: "",
       merk_mmea_name: "",
@@ -753,7 +750,7 @@ export default class CK4MMEA extends Component {
                           style={{ width: "100%" }}
                         >
                           {months.map((item, index) => (
-                            <Select.Option key={`periode-${index}`} value={item.month_code}>
+                            <Select.Option key={`periode-bulan-${index}`} value={item.month_code}>
                               {item.month_name}
                             </Select.Option>
                           ))}
@@ -766,7 +763,7 @@ export default class CK4MMEA extends Component {
                           style={{ width: "100%" }}
                         >
                           {years.map((item, index) => (
-                            <Select.Option key={`periode-${index}`} value={item.year_code}>
+                            <Select.Option key={`periode-tahun-${index}`} value={item.year_code}>
                               {item.year_name}
                             </Select.Option>
                           ))}
@@ -781,8 +778,8 @@ export default class CK4MMEA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Input
-                        id="data_produksi_jumlah_kemasan"
-                        value={this.state.data_produksi_jumlah_kemasan}
+                        id="total_jumlah_kemasan"
+                        value={this.state.total_jumlah_kemasan}
                         disabled
                       />
                       <div>Kemasan</div>
@@ -794,8 +791,8 @@ export default class CK4MMEA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Input
-                        id="data_produksi_jumlah_kemasan_dilekati_pita"
-                        value={this.state.data_produksi_jumlah_kemasan_dilekati_pita}
+                        id="total_jumlah_kemasan_dilekati_pita"
+                        value={this.state.total_jumlah_kemasan_dilekati_pita}
                         disabled
                       />
                       <div>Kemasan</div>
@@ -808,8 +805,8 @@ export default class CK4MMEA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Input
-                        id="data_produksi_jumlah_produksi"
-                        value={this.state.data_produksi_jumlah_produksi}
+                        id="total_jumlah_produksi"
+                        value={this.state.total_jumlah_produksi}
                         disabled
                       />
                       <div>Liter</div>
@@ -1033,7 +1030,7 @@ export default class CK4MMEA extends Component {
 
                   <Col span={12}>
                     {this.state.isEditRincian ? (
-                      <Button type="danger" block onClick={this.handleBatal}>
+                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
                         Batal
                       </Button>
                     ) : (

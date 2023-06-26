@@ -65,10 +65,6 @@ export default class CK4EAMMEAPerbaikan extends Component {
           jenis_barang_kena_cukai_code: "MMEA",
           jenis_barang_kena_cukai_name: "MMEA",
         },
-        {
-          jenis_barang_kena_cukai_code: "HT",
-          jenis_barang_kena_cukai_name: "HT",
-        },
       ],
       list_merk_mmea: [
         {
