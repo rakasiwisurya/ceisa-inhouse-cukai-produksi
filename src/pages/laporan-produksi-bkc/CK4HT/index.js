@@ -15,14 +15,17 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import { pathName } from "configs/constants";
+import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import ModalDaftarHT from "../ModalDaftarMerkHT";
 import ModalDaftarKota from "../ModalDaftarKota";
-import { pathName } from "configs/constants";
+import ModalDaftarHT from "../ModalDaftarMerkHT";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { requestApi } from "utils/requestApi";
 
 export default class CK4HT extends Component {
   constructor(props) {
@@ -61,19 +64,19 @@ export default class CK4HT extends Component {
       total_jumlah_produksi_ht_gr: 0,
       total_jumlah_produksi_ht_ml: 0,
 
+      merk_ht_id: "",
       merk_ht_name: "",
       jenis_ht: "",
       hje_ht: "",
       isi_ht: "",
-      bahan_kemasan_ht: "",
+      bahan_ht: "",
+      tarif_ht: "",
       satuan_ht: "",
 
       nomor_produksi: "",
       tanggal_produksi: "",
-
-      jumlah_kemasan_produksi: "",
-      jumlah_produksi_per_merk: "",
-
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
       jumlah_kemasan_dilekati_pita: "",
 
       uraian_rincian_file: [],
@@ -87,6 +90,22 @@ export default class CK4HT extends Component {
       nama_pengusaha: "",
 
       columns: [
+        {
+          title: "Aksi",
+          dataIndex: "aksi",
+          key: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="primary"
+                icon="form"
+                onClick={() => this.handleEditRincian(record, index)}
+              />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+            </div>
+          ),
+        },
         {
           title: "Dokumen Produksi",
           children: [
@@ -139,40 +158,40 @@ export default class CK4HT extends Component {
           children: [
             {
               title: "Bahan",
-              dataIndex: "bahan",
-              key: "bahan",
+              dataIndex: "bahan_ht",
+              key: "bahan_ht",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("bahan"),
+              ...this.getColumnSearchProps("bahan_ht"),
             },
             {
               title: "Isi",
-              dataIndex: "isi",
-              key: "isi",
+              dataIndex: "isi_ht",
+              key: "isi_ht",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("isi"),
+              ...this.getColumnSearchProps("isi_ht"),
             },
             {
               title: "Satuan",
-              dataIndex: "satuan",
-              key: "satuan",
+              dataIndex: "satuan_ht",
+              key: "satuan_ht",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("satuan"),
+              ...this.getColumnSearchProps("satuan_ht"),
             },
             {
               title: "Jumlah",
-              dataIndex: "jumlah",
-              key: "jumlah",
+              dataIndex: "jumlah_kemasan",
+              key: "jumlah_kemasan",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jumlah"),
+              ...this.getColumnSearchProps("jumlah_kemasan"),
             },
           ],
         },
         {
           title: "Jumlah Isi",
-          dataIndex: "jumlah_isi",
-          key: "jumlah_isi",
+          dataIndex: "jumlah_produksi",
+          key: "jumlah_produksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jumlah_isi"),
+          ...this.getColumnSearchProps("jumlah_produksi"),
         },
         {
           title: "Jumlah Kemasan Dilekati Pita",
@@ -184,6 +203,27 @@ export default class CK4HT extends Component {
       ],
       dataSource: [],
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+
+      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
+      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
+      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+
+      this.setState({
+        total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
+        total_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
+          dataSource,
+          "jumlah_kemasan_dilekati_pita"
+        ),
+        total_jumlah_produksi_ht_btg: sumArrayOfObject(jumlahProduksiBtg, "jumlah_produksi"),
+        total_jumlah_produksi_ht_gr: sumArrayOfObject(jumlahProduksiGr, "jumlah_produksi"),
+        total_jumlah_produksi_ht_ml: sumArrayOfObject(jumlahProduksiMl, "jumlah_produksi"),
+      });
+    }
   }
 
   getColumnSearchProps = (dataIndex) => ({
@@ -250,7 +290,7 @@ export default class CK4HT extends Component {
     this.setState({ ...this.state, [field]: value });
   };
   handleDatepickerChange = (field, value) => {
-    this.setState({ ...this.state, [field]: value._d });
+    this.setState({ ...this.state, [field]: value });
   };
   handleSelectChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
@@ -298,7 +338,8 @@ export default class CK4HT extends Component {
       jenis_ht: record.jenis_ht,
       hje_ht: record.hje_ht,
       isi_ht: record.isi_ht,
-      bahan_kemasan_ht: record.bahan_kemasan_ht,
+      bahan_ht: record.bahan_ht,
+      tarif_ht: record.tarif_ht,
       satuan_ht: record.satuan_ht,
     });
     this.handleModalClose("isModalDaftarMerkHtVisible");
@@ -312,25 +353,250 @@ export default class CK4HT extends Component {
   };
 
   handleSimpanRincian = () => {
-    console.log("simpan...");
+    const {
+      merk_ht_id,
+      merk_ht_name,
+      jenis_ht,
+      hje_ht,
+      isi_ht,
+      bahan_ht,
+      tarif_ht,
+      satuan_ht,
+
+      nomor_produksi,
+      tanggal_produksi,
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    } = this.state;
+
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          merk_ht_id,
+          merk_ht_name,
+          jenis_ht,
+          hje_ht,
+          isi_ht,
+          bahan_ht,
+          tarif_ht,
+          satuan_ht,
+
+          nomor_produksi,
+          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          jumlah_kemasan,
+          jumlah_produksi,
+          jumlah_kemasan_dilekati_pita,
+        },
+      ],
+    });
+
+    this.setState({
+      merk_ht_id: "",
+      merk_ht_name: "",
+      jenis_ht: "",
+      hje_ht: "",
+      isi_ht: "",
+      bahan_ht: "",
+      tarif_ht: "",
+      satuan_ht: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+    });
   };
-  handleEditRincian = () => {
-    console.log("simpan...");
+  handleEditRincian = (record, index) => {
+    this.setState({
+      isEditRincian: true,
+      editIndexRincian: index,
+      merk_ht_id: record.merk_ht_id,
+      merk_ht_name: record.merk_ht_name,
+      jenis_ht: record.jenis_ht,
+      hje_ht: record.hje_ht,
+      isi_ht: record.isi_ht,
+      bahan_ht: record.bahan_ht,
+      tarif_ht: record.tarif_ht,
+      satuan_ht: record.satuan_ht,
+
+      nomor_produksi: record.nomor_produksi,
+      tanggal_produksi: moment(record.tanggal_produksi),
+      jumlah_kemasan: record.jumlah_kemasan,
+      jumlah_produksi: record.jumlah_produksi,
+      jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
+    });
   };
-  handleUbaheRincian = () => {
-    console.log("batal...");
+  handleUbahRincian = () => {
+    const {
+      merk_ht_id,
+      merk_ht_name,
+      jenis_ht,
+      hje_ht,
+      isi_ht,
+      bahan_ht,
+      tarif_ht,
+      satuan_ht,
+
+      nomor_produksi,
+      tanggal_produksi,
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    } = this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndexRincian, 1, {
+      key: new Date().getTime(),
+      merk_ht_id,
+      merk_ht_name,
+      jenis_ht,
+      hje_ht,
+      isi_ht,
+      bahan_ht,
+      tarif_ht,
+      satuan_ht,
+
+      nomor_produksi,
+      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      jumlah_kemasan,
+      jumlah_produksi,
+      jumlah_kemasan_dilekati_pita,
+    });
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      merk_ht_id: "",
+      merk_ht_name: "",
+      jenis_ht: "",
+      hje_ht: "",
+      isi_ht: "",
+      bahan_ht: "",
+      tarif_ht: "",
+      satuan_ht: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+      dataSource: newDataSource,
+    });
   };
-  handleDeleteRincian = () => {
-    console.log("batal...");
+  handleDeleteRincian = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
   };
   handleBatalEditRincian = () => {
-    console.log("batal...");
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      merk_ht_id: "",
+      merk_ht_name: "",
+      jenis_ht: "",
+      hje_ht: "",
+      isi_ht: "",
+      bahan_ht: "",
+      tarif_ht: "",
+      satuan_ht: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+    });
   };
   handleReset = () => {
-    console.log("batal...");
+    this.setState({
+      nppbkc_id: "",
+      nama_nppbkc: "",
+      nppbkc: "",
+      alamat_nppbkc: "",
+
+      nomor_pemberitahuan: "",
+      tanggal_pemberitahuan: "",
+      periode_bulan: "",
+      periode_tahun: "",
+
+      merk_ht_id: "",
+      merk_ht_name: "",
+      jenis_ht: "",
+      hje_ht: "",
+      isi_ht: "",
+      bahan_ht: "",
+      tarif_ht: "",
+      satuan_ht: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_kemasan: "",
+      jumlah_produksi: "",
+      jumlah_kemasan_dilekati_pita: "",
+      uraian_rincian_file: [],
+      dataSource: [],
+    });
   };
-  handleRekam = () => {
-    console.log("rekam...");
+  handleRekam = async () => {
+    // const {
+    //   nppbkc_id,
+    //   jenis_laporan_id,
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+    //   periode_bulan,
+    //   periode_tahun,
+    //   total_jumlah_kemasan,
+    //   total_jumlah_kemasan_dilekati_pita,
+    //   total_jumlah_produksi_ht_btg,
+    //   total_jumlah_produksi_ht_gr,
+    //   total_jumlah_produksi_ht_ml,
+    //   kota_id,
+    //   nama_pengusaha,
+    //   dataSource,
+    // } = this.state;
+
+    // const details = dataSource.map((item) => ({
+    //   idMerkHt: item.merk_ht_id,
+    //   nomorProduksi: item.nomor_produksi,
+    //   tanggalProduksi: item.tanggal_produksi,
+    //   jumlahKemasan: item.jumlah_kemasan,
+    //   jumlahProduksi: item.jumlah_produksi,
+    //   jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
+    // }));
+
+    // const payload = {
+    //   idNppbkc: nppbkc_id,
+    //   jenisLaporan: jenis_laporan_id,
+    //   nomorPemberitahuan: nomor_pemberitahuan,
+    //   tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+    //   periodeBulan: periode_bulan,
+    //   periodeTahun: periode_tahun,
+    //   totalJumlahKemasan: total_jumlah_kemasan,
+    //   totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
+    //   totalJumlahProduksiHtBtg: total_jumlah_produksi_ht_btg,
+    //   totalJumlahProduksiHtGr: total_jumlah_produksi_ht_gr,
+    //   totalJumlahProduksiHtMl: total_jumlah_produksi_ht_ml,
+    //   idKota: kota_id,
+    //   namaPengusaha: nama_pengusaha,
+    //   details,
+    // };
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/ck4/rekam-ht",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/laporan-ck4`);
+    // }
 
     notification.success({ message: "Success", description: "Success" });
     this.props.history.push(`${pathName}/laporan-ck4`);
@@ -610,7 +876,7 @@ export default class CK4HT extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Bahan Kemasan</FormLabel>
                     </div>
-                    <Input id="bahan_kemasan_ht" value={this.state.bahan_kemasan_ht} disabled />
+                    <Input id="bahan_ht" value={this.state.bahan_ht} disabled />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -662,11 +928,11 @@ export default class CK4HT extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="jumlah_kemasan_produksi"
+                            id="jumlah_kemasan"
                             onChange={(value) =>
-                              this.handleInputNumberChange("jumlah_kemasan_produksi", value)
+                              this.handleInputNumberChange("jumlah_kemasan", value)
                             }
-                            value={this.state.jumlah_kemasan_produksi}
+                            value={this.state.jumlah_kemasan}
                             style={{ flex: 1 }}
                           />
                           <div>Kemasan</div>
@@ -678,11 +944,11 @@ export default class CK4HT extends Component {
                           <FormLabel>Jumlah Produksi per Merk</FormLabel>
                         </div>
                         <InputNumber
-                          id="jumlah_produksi_per_merk"
+                          id="jumlah_produksi"
                           onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_produksi_per_merk", value)
+                            this.handleInputNumberChange("jumlah_produksi", value)
                           }
-                          value={this.state.jumlah_produksi_per_merk}
+                          value={this.state.jumlah_produksi}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -753,7 +1019,7 @@ export default class CK4HT extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbaheRincian}>
+                      <Button type="primary" block onClick={this.handleUbahRincian}>
                         Ubah Rincian
                       </Button>
                     ) : (

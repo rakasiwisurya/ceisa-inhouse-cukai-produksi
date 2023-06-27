@@ -16,7 +16,14 @@ export const requestApi = async ({
     const newParams = params ? queryParams(params) : "";
     const response = await api[service][contentType][method](`${endpoint}${newParams}`, body);
     if (setLoading) setLoading(false);
-    return response;
+
+    if (response.data.status === true) return response;
+
+    notification.error({
+      message: "Failed",
+      description: response.data.message,
+    });
+    return false;
   } catch (error) {
     if (setLoading) setLoading(false);
     notification["error"]({

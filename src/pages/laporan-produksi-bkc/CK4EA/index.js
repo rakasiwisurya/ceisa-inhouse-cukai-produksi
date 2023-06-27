@@ -1,4 +1,16 @@
-import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Icon,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Table,
+  notification,
+} from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
@@ -7,6 +19,8 @@ import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
+import moment from "moment";
 
 export default class CK4EA extends Component {
   constructor(props) {
@@ -16,8 +30,10 @@ export default class CK4EA extends Component {
       subtitle2: "Rincian",
       subtitle3: "Pemberitahu",
 
+      isEditRincian: false,
+      editIndexRincian: null,
+
       isRekamLoading: false,
-      isRincianDisabled: false,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarKotaVisible: false,
 
@@ -34,19 +50,147 @@ export default class CK4EA extends Component {
 
       tanggal_jam_produksi_awal: "",
       tanggal_jam_produksi_akhir: "",
-      jumlah_produksi: "",
+      total_jumlah_produksi: 0,
 
-      nomor_dokumen_produksi: "",
-      tanggal_dokumen_produksi: "",
-      jumlah_isi: "",
-      identitas_tangki: "",
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
       keterangan: "",
 
       kota_id: "",
       kota_name: "",
       nama_pengusaha: "",
+
+      searchText: "",
+      searchedColumn: "",
+      page: 1,
+
+      dataSource: [],
+      columns: [
+        {
+          title: "Aksi",
+          dataIndex: "aksi",
+          key: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="primary"
+                icon="form"
+                onClick={() => this.handleEditRincian(record, index)}
+              />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+            </div>
+          ),
+        },
+        {
+          title: "Dokumen Produksi",
+          children: [
+            {
+              title: "Nomor",
+              dataIndex: "nomor_produksi",
+              key: "nomor_produksi",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("nomor_produksi"),
+            },
+            {
+              title: "Tanggal",
+              dataIndex: "tanggal_produksi",
+              key: "tanggal_produksi",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("tanggal_produksi"),
+            },
+          ],
+        },
+        {
+          title: "Nomor / Identitas Tangki",
+          dataIndex: "nomor_tangki",
+          key: "nomor_tangki",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("nomor_tangki"),
+        },
+        {
+          title: "Jumlah (liter)",
+          dataIndex: "jumlah_produksi",
+          key: "jumlah_produksi",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jumlah_produksi"),
+        },
+        {
+          title: "Keterangan",
+          dataIndex: "keterangan",
+          key: "keterangan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("keterangan"),
+        },
+      ],
     };
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+      this.setState({ total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi") });
+    }
+  }
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => this.searchInput.select());
+        clearTimeout(timeout);
+      }
+    },
+  });
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+  handleColumnReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+  handleTableChange = (page) => {
+    this.setState({ page: page.current });
+  };
 
   handleInputChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
@@ -85,66 +229,150 @@ export default class CK4EA extends Component {
   };
 
   handleSimpanRincian = () => {
-    this.setState({ isRincianDisabled: true });
+    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
+      this.state;
+
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          nomor_produksi,
+          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          jumlah_produksi,
+          nomor_tangki,
+          keterangan,
+        },
+      ],
+    });
+
+    this.setState({
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
   };
-  handleBatal = () => {
-    this.setState({ isRincianDisabled: false });
+  handleEditRincian = (record, index) => {
+    this.setState({
+      isEditRincian: true,
+      editIndexRincian: index,
+      nomor_produksi: record.nomor_produksi,
+      tanggal_produksi: moment(record.tanggal_produksi),
+      jumlah_produksi: record.jumlah_produksi,
+      nomor_tangki: record.nomor_tangki,
+      keterangan: record.keterangan,
+    });
+  };
+  handleUbahRincian = () => {
+    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
+      this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndexRincian, 1, {
+      key: new Date().getTime(),
+      nomor_produksi,
+      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      jumlah_produksi,
+      nomor_tangki,
+      keterangan,
+    });
+
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+      dataSource: newDataSource,
+    });
+  };
+  handleDeleteRincian = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
+  };
+  handleBatalEditRincian = () => {
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
+  };
+  handleReset = () => {
+    this.setState({
+      nppbkc_id: "",
+      nppbkc: "",
+      nama_nppbkc: "",
+      alamat_nppbkc: "",
+
+      nomor_pemberitahuan: "",
+      tanggal_pemberitahuan: "",
+
+      tanggal_jam_produksi_awal: "",
+      tanggal_jam_produksi_akhir: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
   };
   handleRekam = async () => {
-    // const {
-    //   nppbkc_id,
+    const {
+      nppbkc_id,
+      jenis_laporan_id,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      tanggal_jam_produksi_awal,
+      tanggal_jam_produksi_akhir,
+      total_jumlah_produksi,
+      kota_id,
+      nama_pengusaha,
+      dataSource,
+    } = this.state;
 
-    //   jenis_laporan_id,
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
+    const details = dataSource.map((item) => ({
+      nomorProduksi: item.nomor_produksi,
+      tanggalProduksi: item.tanggal_produksi,
+      jumlahProduksi: item.jumlah_produksi,
+      identitasTangki: item.nomor_tangki,
+      keterangan: item.keterangan,
+    }));
 
-    //   tanggal_jam_produksi_awal,
-    //   tanggal_jam_produksi_akhir,
-    //   jumlah_produksi,
+    const payload = {
+      idNppbkc: nppbkc_id,
+      jenisLaporan: jenis_laporan_id,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      tanggalPemberitahuan: tanggal_pemberitahuan,
+      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+      totalJumlahProduksi: total_jumlah_produksi,
+      idKota: kota_id,
+      namaPengusaha: nama_pengusaha,
+      details,
+    };
 
-    //   nomor_dokumen_produksi,
-    //   tanggal_dokumen_produksi,
-    //   jumlah_isi,
-    //   identitas_tangki,
-    //   keterangan,
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/rekam-ea",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    //   kota_id,
-    //   nama_pengusaha,
-    // } = this.state;
-
-    // const payload = {
-    //   idNppbkc: nppbkc_id,
-
-    //   jenisLaporan: jenis_laporan_id,
-    //   nomorPemberitahuan: nomor_pemberitahuan,
-    //   tanggalPemberitahuan: tanggal_pemberitahuan,
-
-    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
-    //   jumlahProduksi: jumlah_produksi,
-
-    //   nomorDokumenProduksi: nomor_dokumen_produksi,
-    //   tanggalDokumenProduksi: tanggal_dokumen_produksi,
-    //   jumlahIsi: jumlah_isi,
-    //   identitasTangki: identitas_tangki,
-    //   keterangan: keterangan,
-
-    //   idKota: kota_id,
-    //   namaPengusaha: nama_pengusaha,
-    // };
-
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/rekam-ea",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
-
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/laporan-ck4`);
+    }
 
     notification.success({ message: "Success", description: "Success" });
     this.props.history.push(`${pathName}/laporan-ck4`);
@@ -291,12 +519,10 @@ export default class CK4EA extends Component {
                       <FormLabel>Jumlah Produksi</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <InputNumber
-                        id="jumlah_produksi"
-                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
-                        value={this.state.jumlah_produksi}
-                        min={0}
-                        style={{ flex: 1 }}
+                      <Input
+                        id="total_jumlah_produksi"
+                        value={this.state.total_jumlah_produksi}
+                        disabled
                       />
                       <div>Liter</div>
                     </div>
@@ -320,10 +546,9 @@ export default class CK4EA extends Component {
                       <FormLabel>Nomor</FormLabel>
                     </div>
                     <Input
-                      id="nomor_dokumen_produksi"
+                      id="nomor_produksi"
                       onChange={this.handleInputChange}
-                      value={this.state.nomor_dokumen_produksi}
-                      disabled={this.state.isRincianDisabled}
+                      value={this.state.nomor_produksi}
                     />
                   </div>
 
@@ -332,13 +557,10 @@ export default class CK4EA extends Component {
                       <FormLabel>Tanggal Produksi</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_dokumen_produksi"
-                      onChange={(date) =>
-                        this.handleDatepickerChange("tanggal_dokumen_produksi", date)
-                      }
-                      value={this.state.tanggal_dokumen_produksi}
+                      id="tanggal_produksi"
+                      onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
+                      value={this.state.tanggal_produksi}
                       style={{ width: "100%" }}
-                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
                 </Card>
@@ -352,11 +574,10 @@ export default class CK4EA extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="jumlah_isi"
-                        onChange={(value) => this.handleInputChange("jumlah_isi", value)}
-                        value={this.state.jumlah_isi}
+                        id="jumlah_produksi"
+                        onChange={(value) => this.handleInputChange("jumlah_produksi", value)}
+                        value={this.state.jumlah_produksi}
                         style={{ flex: 1 }}
-                        disabled={this.state.isRincianDisabled}
                       />
                       <div>Liter</div>
                     </div>
@@ -367,10 +588,9 @@ export default class CK4EA extends Component {
                       <FormLabel>Nomor / Identitas Tangki</FormLabel>
                     </div>
                     <Input
-                      id="identitas_tangki"
+                      id="nomor_tangki"
                       onChange={this.handleInputChange}
-                      value={this.state.identitas_tangki}
-                      disabled={this.state.isRincianDisabled}
+                      value={this.state.nomor_tangki}
                     />
                   </div>
 
@@ -382,7 +602,6 @@ export default class CK4EA extends Component {
                       id="keterangan"
                       onChange={this.handleInputChange}
                       value={this.state.keterangan}
-                      disabled={this.state.isRincianDisabled}
                     />
                   </div>
                 </Card>
@@ -393,29 +612,29 @@ export default class CK4EA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button
-                      type="primary"
-                      onClick={this.handleSimpanRincian}
-                      block
-                      disabled={this.state.isRincianDisabled}
-                    >
+                    <Button type="primary" onClick={this.handleSimpanRincian} block>
                       Simpan Rincian
                     </Button>
                   </Col>
 
                   <Col span={12}>
-                    <Button
-                      type="danger"
-                      onClick={this.handleBatal}
-                      block
-                      disabled={!this.state.isRincianDisabled}
-                    >
+                    <Button type="danger" onClick={this.handleBatal} block>
                       Batal
                     </Button>
                   </Col>
                 </Row>
               </Col>
             </Row>
+
+            <div style={{ marginTop: 30, marginBottom: 20 }}>
+              <Table
+                dataSource={this.state.dataSource}
+                columns={this.state.columns}
+                scroll={{ x: "max-content" }}
+                onChange={this.handleTableChange}
+                pagination={{ current: this.state.page }}
+              />
+            </div>
           </div>
 
           <Header>{this.state.subtitle3}</Header>

@@ -211,7 +211,7 @@ export default class CK4MMEA extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dataSource.length !== this.state.dataSource.length) {
+    if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
       this.setState({
         total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
@@ -425,7 +425,7 @@ export default class CK4MMEA extends Component {
       jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
     });
   };
-  handleUbaheRincian = () => {
+  handleUbahRincian = () => {
     const {
       jenis_mmea,
       merk_mmea_id,
@@ -489,6 +489,7 @@ export default class CK4MMEA extends Component {
   handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,
+      editIndexRincian: null,
       jenis_mmea: "",
       merk_mmea_id: "",
       merk_mmea_name: "",
@@ -496,6 +497,7 @@ export default class CK4MMEA extends Component {
       jenis_kemasan_mmea: "",
       golongan_mmea: "",
       kadar_mmea: "",
+
       nomor_produksi: "",
       tanggal_produksi: "",
       jumlah_kemasan: "",
@@ -509,6 +511,7 @@ export default class CK4MMEA extends Component {
       nama_nppbkc: "",
       nppbkc: "",
       alamat_nppbkc: "",
+
       jenis_laporan_id: "",
       jenis_laporan_name: "",
       nomor_pemberitahuan: "",
@@ -517,6 +520,7 @@ export default class CK4MMEA extends Component {
       tanggal_jam_produksi_akhir: "",
       periode_bulan: "",
       periode_tahun: "",
+
       jenis_mmea: "",
       merk_mmea_id: "",
       merk_mmea_name: "",
@@ -524,6 +528,7 @@ export default class CK4MMEA extends Component {
       jenis_kemasan_mmea: "",
       golongan_mmea: "",
       kadar_mmea: "",
+
       nomor_produksi: "",
       tanggal_produksi: "",
       jumlah_kemasan: "",
@@ -543,10 +548,14 @@ export default class CK4MMEA extends Component {
     //   tanggal_jam_produksi_akhir,
     //   periode_bulan,
     //   periode_tahun,
+    //   total_jumlah_kemasan,
+    //   total_jumlah_kemasan_dilekati_pita,
+    //   total_jumlah_produksi,
     //   kota_id,
     //   nama_pengusaha,
     //   dataSource,
     // } = this.state;
+
     // const details = dataSource.map((item) => ({
     //   idMerkMmea: item.merk_mmea_id,
     //   nomorProduksi: item.nomor_produksi,
@@ -555,6 +564,7 @@ export default class CK4MMEA extends Component {
     //   jumlahProduksi: item.jumlah_produksi,
     //   jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
     // }));
+
     // const payload = {
     //   idNppbkc: nppbkc_id,
     //   jenisLaporan: jenis_laporan_id,
@@ -564,10 +574,14 @@ export default class CK4MMEA extends Component {
     //   tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
     //   periodeBulan: periode_bulan,
     //   periodeTahun: periode_tahun,
+    //   totalJumlahKemasan: total_jumlah_kemasan,
+    //   totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
+    //   totalJumlahProduksi: total_jumlah_produksi,
     //   idKota: kota_id,
     //   namaPengusaha: nama_pengusaha,
     //   details,
     // };
+
     // const response = await requestApi({
     //   service: "produksi",
     //   method: "post",
@@ -1018,7 +1032,7 @@ export default class CK4MMEA extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbaheRincian}>
+                      <Button type="primary" block onClick={this.handleUbahRincian}>
                         Ubah Rincian
                       </Button>
                     ) : (
