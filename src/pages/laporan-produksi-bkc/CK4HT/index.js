@@ -26,6 +26,7 @@ import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarHT from "../ModalDaftarMerkHT";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { requestApi } from "utils/requestApi";
+import { idMenu } from "utils/idMenu";
 
 export default class CK4HT extends Component {
   constructor(props) {
@@ -569,6 +570,7 @@ export default class CK4HT extends Component {
     // }));
 
     // const payload = {
+    //   idMenu,
     //   idNppbkc: nppbkc_id,
     //   jenisLaporan: jenis_laporan_id,
     //   nomorPemberitahuan: nomor_pemberitahuan,
@@ -598,8 +600,11 @@ export default class CK4HT extends Component {
     //   this.props.history.push(`${pathName}/laporan-ck4`);
     // }
 
-    notification.success({ message: "Success", description: "Success" });
-    this.props.history.push(`${pathName}/laporan-ck4`);
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
+      this.props.history.push(`${pathName}/laporan-ck4`);
+      clearTimeout(timeout);
+    }, 2000);
   };
 
   render() {
@@ -1141,7 +1146,12 @@ export default class CK4HT extends Component {
 
             <Row>
               <Col span={4} offset={20}>
-                <Button type="primary" block onClick={this.handleRekam}>
+                <Button
+                  type="primary"
+                  loading={this.state.isRekamLoading}
+                  onClick={this.handleRekam}
+                  block
+                >
                   Rekam
                 </Button>
               </Col>

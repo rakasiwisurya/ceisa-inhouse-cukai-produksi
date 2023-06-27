@@ -20,7 +20,8 @@ import CK4HT from "./laporan-produksi-bkc/CK4HT";
 import CK4EADetail from "./laporan-produksi-bkc/CK4EADetail";
 import CK4MMEADetail from "./laporan-produksi-bkc/CK4MMEADetail";
 import CK4HTDetail from "./laporan-produksi-bkc/CK4HTDetail";
-import CK4EAMMEAPerbaikan from "./laporan-produksi-bkc/CK4EAMMEAPerbaikan";
+import CK4EAPerbaikan from "./laporan-produksi-bkc/CK4EAPerbaikan";
+import CK4MMEAPerbaikan from "./laporan-produksi-bkc/CK4MMEAPerbaikan";
 import CK4HTPerbaikan from "./laporan-produksi-bkc/CK4HTPerbaikan";
 import ReferensiTarifEdit from "./referensi-tarif-pita-cukai/ReferensiTarifEdit";
 import ReferensiTarifDetail from "./referensi-tarif-pita-cukai/ReferensiTarifDetail";
@@ -103,8 +104,8 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ea-mmea-perbaikan/:id"}
-        render={(props) => <CK4EAMMEAPerbaikan {...props} {...propsExtra} />}
+        path={pathName + "/ck4-ea-perbaikan/:id"}
+        render={(props) => <CK4EAPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -115,6 +116,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/ck4-mmea-detail/:id"}
         render={(props) => <CK4MMEADetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/ck4-mmea-perbaikan/:id"}
+        render={(props) => <CK4MMEAPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

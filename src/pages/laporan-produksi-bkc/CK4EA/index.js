@@ -21,6 +21,7 @@ import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import moment from "moment";
+import { idMenu } from "utils/idMenu";
 
 export default class CK4EA extends Component {
   constructor(props) {
@@ -327,58 +328,63 @@ export default class CK4EA extends Component {
     });
   };
   handleRekam = async () => {
-    const {
-      nppbkc_id,
-      jenis_laporan_id,
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
-      tanggal_jam_produksi_awal,
-      tanggal_jam_produksi_akhir,
-      total_jumlah_produksi,
-      kota_id,
-      nama_pengusaha,
-      dataSource,
-    } = this.state;
+    // const {
+    //   nppbkc_id,
+    //   jenis_laporan_id,
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+    //   tanggal_jam_produksi_awal,
+    //   tanggal_jam_produksi_akhir,
+    //   total_jumlah_produksi,
+    //   kota_id,
+    //   nama_pengusaha,
+    //   dataSource,
+    // } = this.state;
 
-    const details = dataSource.map((item) => ({
-      nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
-      jumlahProduksi: item.jumlah_produksi,
-      identitasTangki: item.nomor_tangki,
-      keterangan: item.keterangan,
-    }));
+    // const details = dataSource.map((item) => ({
+    //   nomorProduksi: item.nomor_produksi,
+    //   tanggalProduksi: item.tanggal_produksi,
+    //   jumlahProduksi: item.jumlah_produksi,
+    //   identitasTangki: item.nomor_tangki,
+    //   keterangan: item.keterangan,
+    // }));
 
-    const payload = {
-      idNppbkc: nppbkc_id,
-      jenisLaporan: jenis_laporan_id,
-      nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: tanggal_pemberitahuan,
-      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
-      totalJumlahProduksi: total_jumlah_produksi,
-      idKota: kota_id,
-      namaPengusaha: nama_pengusaha,
-      details,
-    };
+    // const payload = {
+    //   idMenu,
+    //   idNppbkc: nppbkc_id,
+    //   jenisLaporan: jenis_laporan_id,
+    //   nomorPemberitahuan: nomor_pemberitahuan,
+    //   tanggalPemberitahuan: tanggal_pemberitahuan,
+    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+    //   totalJumlahProduksi: total_jumlah_produksi,
+    //   idKota: kota_id,
+    //   namaPengusaha: nama_pengusaha,
+    //   details,
+    // };
 
-    const response = await requestApi({
-      service: "produksi",
-      method: "post",
-      endpoint: "/ck4/rekam-ea",
-      body: payload,
-      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    });
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/ck4/rekam-ea",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
 
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/laporan-ck4`);
+    // }
+
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
       this.props.history.push(`${pathName}/laporan-ck4`);
-    }
-
-    notification.success({ message: "Success", description: "Success" });
-    this.props.history.push(`${pathName}/laporan-ck4`);
+      clearTimeout(timeout);
+    }, 2000);
   };
 
   render() {
+    console.log("this.props.location.pathname", this.props.location.pathname);
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Rekam" hideContentHeader>
@@ -575,7 +581,7 @@ export default class CK4EA extends Component {
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
                         id="jumlah_produksi"
-                        onChange={(value) => this.handleInputChange("jumlah_produksi", value)}
+                        onChange={(value) => this.handleInputNumberChange("jumlah_produksi", value)}
                         value={this.state.jumlah_produksi}
                         style={{ flex: 1 }}
                       />
@@ -612,15 +618,27 @@ export default class CK4EA extends Component {
               <Col span={8} offset={16}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <Button type="primary" onClick={this.handleSimpanRincian} block>
-                      Simpan Rincian
-                    </Button>
+                    {this.state.isEditRincian ? (
+                      <Button type="primary" block onClick={this.handleUbahRincian}>
+                        Ubah Rincian
+                      </Button>
+                    ) : (
+                      <Button type="primary" block onClick={this.handleSimpanRincian}>
+                        Simpan Rincian
+                      </Button>
+                    )}
                   </Col>
 
                   <Col span={12}>
-                    <Button type="danger" onClick={this.handleBatal} block>
-                      Batal
-                    </Button>
+                    {this.state.isEditRincian ? (
+                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                        Batal
+                      </Button>
+                    ) : (
+                      <Button type="danger" block onClick={this.handleReset}>
+                        Reset
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               </Col>
@@ -670,7 +688,12 @@ export default class CK4EA extends Component {
 
             <Row>
               <Col span={4} offset={20}>
-                <Button type="primary" block onClick={this.handleRekam}>
+                <Button
+                  type="primary"
+                  loading={this.state.isRekamLoading}
+                  onClick={this.handleRekam}
+                  block
+                >
                   Rekam
                 </Button>
               </Col>

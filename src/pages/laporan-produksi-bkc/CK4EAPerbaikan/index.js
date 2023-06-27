@@ -1,22 +1,45 @@
-import { Button, Card, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Table } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Icon,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Table,
+  notification,
+} from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import moment from "moment";
 import React, { Component } from "react";
+import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
+import moment from "moment";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 
-export default class CK4EADetail extends Component {
+export default class CK4EAPerbaikan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Pemrakarsa",
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
-      subtitle4: "Pemberitahu",
+      subtitle4: "Keterangan Lain",
+      subtitle5: "Dasar Perbaikan",
 
-      isDetailCk4EaLoading: true,
+      isEditRincian: false,
+      editIndexRincian: null,
+
+      isSimpanPerbaikanLoading: false,
+      isPerbaikanCk4EaLoading: true,
+      isModalDaftarNppbkcVisible: false,
+      isModalDaftarKotaVisible: false,
 
       nama_pemrakarsa: "",
       id_process_pemrakarsa: "",
@@ -54,6 +77,22 @@ export default class CK4EADetail extends Component {
 
       dataSource: [],
       columns: [
+        {
+          title: "Aksi",
+          dataIndex: "aksi",
+          key: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="primary"
+                icon="form"
+                onClick={() => this.handleEditRincian(record, index)}
+              />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+            </div>
+          ),
+        },
         {
           title: "Dokumen Produksi",
           children: [
@@ -100,6 +139,13 @@ export default class CK4EADetail extends Component {
 
   componentDidMount() {
     this.getDetailCk4Ea();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+      this.setState({ total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi") });
+    }
   }
 
   getDetailCk4Ea = async () => {
@@ -319,11 +365,201 @@ export default class CK4EADetail extends Component {
     this.setState({ page: page.current });
   };
 
+  handleInputChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+  handleInputNumberChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleDatepickerChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleSelectChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
+  };
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
+  };
+
+  handleDataNppbkc = (record) => {
+    this.setState({
+      nppbkc_id: record.nppbkc_id,
+      nppbkc: record.nppbkc,
+      nama_nppbkc: record.nama_nppbkc,
+      alamat_nppbkc: record.alamat_nppbkc,
+    });
+    this.handleModalClose("isModalDaftarNppbkcVisible");
+  };
+  handleDataKota = (record) => {
+    this.setState({
+      kota_id: record.kota_id,
+      kota_name: record.kota_name,
+    });
+    this.handleModalClose("isModalDaftarKotaVisible");
+  };
+
+  handleSimpanRincian = () => {
+    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
+      this.state;
+
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          nomor_produksi,
+          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          jumlah_produksi,
+          nomor_tangki,
+          keterangan,
+        },
+      ],
+    });
+
+    this.setState({
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
+  };
+  handleEditRincian = (record, index) => {
+    this.setState({
+      isEditRincian: true,
+      editIndexRincian: index,
+      nomor_produksi: record.nomor_produksi,
+      tanggal_produksi: moment(record.tanggal_produksi),
+      jumlah_produksi: record.jumlah_produksi,
+      nomor_tangki: record.nomor_tangki,
+      keterangan: record.keterangan,
+    });
+  };
+  handleUbahRincian = () => {
+    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
+      this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndexRincian, 1, {
+      key: new Date().getTime(),
+      nomor_produksi,
+      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      jumlah_produksi,
+      nomor_tangki,
+      keterangan,
+    });
+
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+      dataSource: newDataSource,
+    });
+  };
+  handleDeleteRincian = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
+  };
+  handleBatalEditRincian = () => {
+    this.setState({
+      isEditRincian: false,
+      editIndexRincian: null,
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
+  };
+  handleReset = () => {
+    this.setState({
+      nppbkc_id: "",
+      nppbkc: "",
+      nama_nppbkc: "",
+      alamat_nppbkc: "",
+
+      nomor_pemberitahuan: "",
+      tanggal_pemberitahuan: "",
+
+      tanggal_jam_produksi_awal: "",
+      tanggal_jam_produksi_akhir: "",
+
+      nomor_produksi: "",
+      tanggal_produksi: "",
+      jumlah_produksi: "",
+      nomor_tangki: "",
+      keterangan: "",
+    });
+  };
+  handleSimpanPerbaikan = async () => {
+    // const {
+    //   nppbkc_id,
+    //   jenis_laporan_id,
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+    //   tanggal_jam_produksi_awal,
+    //   tanggal_jam_produksi_akhir,
+    //   total_jumlah_produksi,
+    //   kota_id,
+    //   nama_pengusaha,
+    //   dataSource,
+    // } = this.state;
+
+    // const details = dataSource.map((item) => ({
+    //   nomorProduksi: item.nomor_produksi,
+    //   tanggalProduksi: item.tanggal_produksi,
+    //   jumlahProduksi: item.jumlah_produksi,
+    //   nomorTangki: item.nomor_tangki,
+    //   keterangan: item.keterangan,
+    // }));
+
+    // const payload = {
+    //   idCk4: this.props.match.params.id,
+    //   idNppbkc: nppbkc_id,
+    //   jenisLaporan: jenis_laporan_id,
+    //   nomorPemberitahuan: nomor_pemberitahuan,
+    //   tanggalPemberitahuan: tanggal_pemberitahuan,
+    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+    //   totalJumlahProduksi: total_jumlah_produksi,
+    //   idKota: kota_id,
+    //   namaPengusaha: nama_pengusaha,
+    //   details,
+    // };
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/ck4/update-ea",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/laporan-ck4`);
+    // }
+
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
+      this.props.history.push(`${pathName}/laporan-ck4`);
+      clearTimeout(timeout);
+    }, 2000);
+  };
+
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Detail" hideContentHeader>
-          {this.state.isDetailCk4EaLoading ? (
+        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Perbaikan" hideContentHeader>
+          {this.state.isPerbaikanCk4EaLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
             <>
@@ -383,6 +619,11 @@ export default class CK4EADetail extends Component {
                         </div>
                         <div style={{ display: "flex", gap: 10 }}>
                           <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                          <Button
+                            type="default"
+                            icon="menu"
+                            onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                          />
                         </div>
                       </div>
 
@@ -430,8 +671,8 @@ export default class CK4EADetail extends Component {
                         </div>
                         <Input
                           id="nomor_pemberitahuan"
+                          onChange={this.handleInputChange}
                           value={this.state.nomor_pemberitahuan}
-                          disabled
                         />
                       </div>
 
@@ -441,9 +682,11 @@ export default class CK4EADetail extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_pemberitahuan"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_pemberitahuan", date)
+                          }
                           value={this.state.tanggal_pemberitahuan}
                           style={{ width: "100%" }}
-                          disabled
                         />
                       </div>
 
@@ -451,7 +694,7 @@ export default class CK4EADetail extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                         </div>
-                        <Input value={this.state.jenis_barang_kena_cukai} disabled />
+                        <Input disabled value={this.state.jenis_barang_kena_cukai} />
                       </div>
                     </Card>
                   </Col>
@@ -469,9 +712,11 @@ export default class CK4EADetail extends Component {
                           id="tanggal_jam_produksi_awal"
                           showTime={{ format: "HH:mm" }}
                           format="YYYY-MM-DD HH:mm"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
+                          }
                           value={this.state.tanggal_jam_produksi_awal}
                           style={{ width: "100%" }}
-                          disabled
                         />
                       </div>
 
@@ -483,9 +728,11 @@ export default class CK4EADetail extends Component {
                           id="tanggal_jam_produksi_akhir"
                           showTime={{ format: "HH:mm" }}
                           format="YYYY-MM-DD HH:mm"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
+                          }
                           value={this.state.tanggal_jam_produksi_akhir}
                           style={{ width: "100%" }}
-                          disabled
                         />
                       </div>
 
@@ -520,7 +767,11 @@ export default class CK4EADetail extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Nomor</FormLabel>
                         </div>
-                        <Input id="nomor_produksi" value={this.state.nomor_produksi} disabled />
+                        <Input
+                          id="nomor_produksi"
+                          onChange={this.handleInputChange}
+                          value={this.state.nomor_produksi}
+                        />
                       </div>
 
                       <div>
@@ -529,9 +780,9 @@ export default class CK4EADetail extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_produksi"
+                          onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
                           value={this.state.tanggal_produksi}
                           style={{ width: "100%" }}
-                          disabled
                         />
                       </div>
                     </Card>
@@ -546,9 +797,11 @@ export default class CK4EADetail extends Component {
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
                             id="jumlah_produksi"
+                            onChange={(value) =>
+                              this.handleInputNumberChange("jumlah_produksi", value)
+                            }
                             value={this.state.jumlah_produksi}
                             style={{ flex: 1 }}
-                            disabled
                           />
                           <div>Liter</div>
                         </div>
@@ -558,16 +811,54 @@ export default class CK4EADetail extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Nomor / Identitas Tangki</FormLabel>
                         </div>
-                        <Input id="nomor_tangki" value={this.state.nomor_tangki} disabled />
+                        <Input
+                          id="nomor_tangki"
+                          onChange={this.handleInputChange}
+                          value={this.state.nomor_tangki}
+                        />
                       </div>
 
                       <div>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Keterangan</FormLabel>
                         </div>
-                        <Input id="keterangan" value={this.state.keterangan} disabled />
+                        <Input
+                          id="keterangan"
+                          onChange={this.handleInputChange}
+                          value={this.state.keterangan}
+                        />
                       </div>
                     </Card>
+                  </Col>
+                </Row>
+
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={8} offset={16}>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        {this.state.isEditRincian ? (
+                          <Button type="primary" block onClick={this.handleUbahRincian}>
+                            Ubah Rincian
+                          </Button>
+                        ) : (
+                          <Button type="primary" block onClick={this.handleSimpanRincian}>
+                            Simpan Rincian
+                          </Button>
+                        )}
+                      </Col>
+
+                      <Col span={12}>
+                        {this.state.isEditRincian ? (
+                          <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                            Batal
+                          </Button>
+                        ) : (
+                          <Button type="danger" block onClick={this.handleReset}>
+                            Reset
+                          </Button>
+                        )}
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
 
@@ -583,30 +874,183 @@ export default class CK4EADetail extends Component {
               </div>
 
               <Header>{this.state.subtitle4}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Diterima</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tangal_diterima"
+                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_diterima}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Penyampaian CK-4</FormLabel>
+                    </div>
+                    <Select
+                      id="penyampaian_ck4"
+                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.penyampaian_ck4}
+                    >
+                      {this.state.list_penyampaian_ck4.length > 0 &&
+                        this.state.list_penyampaian_ck4.map((item, index) => (
+                          <Select.Option
+                            key={`penyampaian-ck4-${index}`}
+                            value={item.penyampaian_ck4_code}
+                          >
+                            {item.penyampaian_ck4_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="kota_name" value={this.state.kota_name} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                      />
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Pengusaha</FormLabel>
+                    </div>
+                    <Input
+                      id="nama_pengusaha"
+                      onChange={this.handleInputChange}
+                      value={this.state.nama_pengusaha}
+                    />
+                  </Col>
+                </Row>
+              </div>
+
+              <Header>{this.state.subtitle5}</Header>
               <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                      </div>
-                      <div style={{ display: "flex", gap: 10 }}>
-                        <Input id="kota_name" value={this.state.kota_name} disabled />
-                      </div>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nomor Surat</FormLabel>
                     </div>
+                    <Input
+                      id="nomor_surat"
+                      onChange={this.handleInputChange}
+                      value={this.state.nomor_surat}
+                    />
+                  </Col>
 
-                    <div>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Nama Pengusaha</FormLabel>
-                      </div>
-                      <Input id="nama_pengusaha" value={this.state.nama_pengusaha} disabled />
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Surat</FormLabel>
                     </div>
+                    <DatePicker
+                      id="tanggal_surat"
+                      onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_surat}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Penjabat BC</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <Input
+                        id="penjabat_bc_nip"
+                        onChange={this.handleInputChange}
+                        value={this.state.penjabat_bc_nip}
+                        style={{ flex: 1 }}
+                      />
+                      <Button type="primary">Cari</Button>
+                      <Input
+                        id="penjabat_bc_nama"
+                        onChange={this.handleInputChange}
+                        value={this.state.penjabat_bc_nama}
+                        style={{ flex: 2 }}
+                        disabled
+                      />
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Asal Kesalahan</FormLabel>
+                    </div>
+                    <Select
+                      id="asal_kesalahan"
+                      onChange={(value) => this.handleSelectChange("asal_kesalahan", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.asal_kesalahan}
+                    >
+                      {this.state.list_asal_kesalahan.length > 0 &&
+                        this.state.list_asal_kesalahan.map((item, index) => (
+                          <Select.Option
+                            key={`penyampaian-ck4-${index}`}
+                            value={item.asal_kesalahan_code}
+                          >
+                            {item.asal_kesalahan_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Keterangan</FormLabel>
+                    </div>
+                    <Input.TextArea
+                      id="keterangan"
+                      onChange={this.handleInputChange}
+                      value={this.state.keterangan}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col span={4} offset={19}>
+                    <Button
+                      type="primary"
+                      loading={this.state.isSimpanPerbaikan}
+                      onClick={this.handleSimpanPerbaikan}
+                      block
+                    >
+                      Simpan Perbaikan
+                    </Button>
                   </Col>
                 </Row>
               </div>
             </>
           )}
         </Container>
+
+        <ModalDaftarNPPBKC
+          isVisible={this.state.isModalDaftarNppbkcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
+          onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarKota
+          isVisible={this.state.isModalDaftarKotaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
+          onDataDoubleClick={this.handleDataKota}
+        />
       </>
     );
   }

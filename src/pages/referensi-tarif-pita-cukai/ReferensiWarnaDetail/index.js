@@ -39,35 +39,56 @@ export default class ReferensiWarnaDetail extends Component {
   }
 
   getDetailWarna = async () => {
-    const payload = { idReferensiSkep: this.props.match.params.id };
+    // const payload = { idReferensiSkep: this.props.match.params.id };
 
-    const response = await requestApi({
-      service: "referensi",
-      method: "get",
-      endpoint: "/referensi/browse-detail-warna",
-      params: payload,
-      setLoading: (bool) => this.setState({ isEditWarnaLoading: bool }),
-    });
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "get",
+    //   endpoint: "/referensi/browse-detail-warna",
+    //   params: payload,
+    //   setLoading: (bool) => this.setState({ isEditWarnaLoading: bool }),
+    // });
 
-    if (response) {
-      const { data } = response.data;
+    // if (response) {
+    //   const { data } = response.data;
 
+    //   this.setState({
+    //     nomor_surat: data.nomorSurat,
+    //     tanggal_surat: moment(data.tanggalSurat),
+    //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+    //     jenis_bkc_id: data.idJenisBkc,
+    //     jenis_bkc_name: data.namaJenisBkc,
+    //     kode_warna: data.kodeWarna,
+    //     warna: data.warna,
+    //     golongan_id: data.idGolongan,
+    //     golongan_name: data.namaGolongan,
+    //     jenis_produksi_id: data.idJenisProduksi,
+    //     jenis_produksi_code: data.kodeJenisProduksi,
+    //     jenis_usaha_id: data.idJenisUsaha,
+    //     jenis_usaha_name: data.namaJenisUsaha,
+    //   });
+    // }
+
+    this.setState({ isDetailWarnaLoading: true });
+    setTimeout(() => {
       this.setState({
-        nomor_surat: data.nomorSurat,
-        tanggal_surat: moment(data.tanggalSurat),
-        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-        jenis_bkc_id: data.idJenisBkc,
-        jenis_bkc_name: data.namaJenisBkc,
-        kode_warna: data.kodeWarna,
-        warna: data.warna,
-        golongan_id: data.idGolongan,
-        golongan_name: data.namaGolongan,
-        jenis_produksi_id: data.idJenisProduksi,
-        jenis_produksi_code: data.kodeJenisProduksi,
-        jenis_usaha_id: data.idJenisUsaha,
-        jenis_usaha_name: data.namaJenisUsaha,
+        nomor_surat: "A",
+        tanggal_surat: moment(new Date()),
+        tanggal_awal_berlaku: moment(new Date()),
+        jenis_bkc_id: 3,
+        jenis_bkc_name: "HT",
+        kode_warna: "HIJAU",
+        warna: "Hijau",
+        golongan_id: 1,
+        golongan_name: "I",
+        jenis_produksi_id: 1,
+        jenis_produksi_code: "REL",
+        jenis_produksi_name: "ROKOK ELEKTRIK",
+        jenis_usaha_id: 1,
+        jenis_usaha_name: "Dalam Negeri",
       });
-    }
+      this.setState({ isDetailWarnaLoading: false });
+    }, 2000);
   };
 
   render() {

@@ -26,23 +26,29 @@ import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
-import { idMenu } from "utils/idMenu";
 
-export default class CK4MMEA extends Component {
+export default class CK4MMEAPerbaikan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Pemberitahuan",
-      subtitle2: "Rincian",
-      subtitle3: "Pemberitahu",
+      subtitle1: "Pemrakarsa",
+      subtitle2: "Pemberitahuan",
+      subtitle3: "Rincian",
+      subtitle4: "Keterangan Lain",
+      subtitle5: "Dasar Perbaikan",
 
       isEditRincian: false,
       editIndexRincian: null,
 
-      isRekamLoading: false,
+      isSimpanPerbaikan: false,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
       isModalDaftarKotaVisible: false,
+
+      nama_pemrakarsa: "",
+      id_process_pemrakarsa: "",
+      jabatan_pemrakarsa: "",
+      nip_pemrakarsa: "",
 
       nppbkc_id: "",
       nama_nppbkc: "",
@@ -210,6 +216,10 @@ export default class CK4MMEA extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getDetailCk4Mmea();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
@@ -223,6 +233,290 @@ export default class CK4MMEA extends Component {
       });
     }
   }
+
+  getDetailCk4Mmea = async () => {
+    // const payload = { idCk4: this.props.match.params.id };
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "get",
+    //   endpoint: "/ck4/detail-mmea",
+    //   params: payload,
+    //   setLoading: (bool) => this.setState({ isDetailCk4MmeaLoading: bool }),
+    // });
+
+    // if (response) {
+    //   const { data } = response.data;
+
+    //   this.setState({
+    //     nama_pemrakarsa: data.namaPemrakarsa,
+    //     id_process_pemrakarsa: data.idProcessPemrakarsa,
+    //     jabatan_pemrakarsa: data.jabatanPemrakarsa,
+    //     nip_pemrakarsa: data.nipPemrakarsa,
+
+    //     nppbkc_id: data.idNppbkc,
+    //     nama_nppbkc: data.namaNppbkc,
+    //     nppbkc: data.nppbkc,
+    //     alamat_nppbkc: data.alamatNppbkc,
+
+    //     jenis_laporan_id: data.jenisLaporan,
+    //     nomor_pemberitahuan: data.nomorPemberitahuan,
+    //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
+
+    //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
+    //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
+    //     periode_bulan: data.periodeBulan,
+    //     periode_tahun: data.periodeTahun,
+    //     total_jumlah_kemasan: data.totalJumlahKemasan,
+    //     total_jumlah_kemasan_dilekati_pita: data.totalJumlahKemasanDilekatiPita,
+    //     total_jumlah_produksi: data.totalJumlahProduksi,
+
+    //     kota_id: data.idKota,
+    //     kota_name: data.namaKota,
+    //     nama_pengusaha: data.namaPengusaha,
+    //     dataSource: data.details.map((detail, index) => ({
+    //       key: `ck4-${index}`,
+    //       jenis_mmea: detail.jenisMmea,
+    //       merk_mmea_id: detail.idMerkMmea,
+    //       merk_mmea_name: detail.namaMerkMmea,
+    //       isi_mmea: detail.isiMmea,
+    //       tarif_mmea: detail.tarifMmea,
+    //       jenis_kemasan_mmea: detail.jenisKemasanMmea,
+    //       golongan_mmea: detail.golonganMmea,
+    //       kadar_mmea: detail.kadarMmea,
+
+    //       nomor_produksi: detail.nomorProduksi,
+    //       tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+    //       jumlah_kemasan: detail.jumlahKemasan,
+    //       jumlah_produksi: detail.jumlahProduksi,
+    //       jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
+    //     })),
+    //   });
+    // }
+
+    this.setState({ isDetailCk4MmeaLoading: true });
+    const timeout = setTimeout(() => {
+      this.setState({
+        nama_pemrakarsa: "SENDI BENI SUSANDI",
+        id_process_pemrakarsa: 7784590,
+        jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
+        nip_pemrakarsa: "199210122014021001",
+
+        nppbkc_id: 1,
+        nama_nppbkc: "0706.1.1.1001",
+        nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
+        alamat_nppbkc:
+          "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
+
+        jenis_laporan_id: "HARIAN",
+        nomor_pemberitahuan: "Nomor Pemberitahuan 1",
+        tanggal_pemberitahuan: moment(new Date()),
+
+        tanggal_jam_produksi_awal: moment(new Date()),
+        tanggal_jam_produksi_akhir: moment(new Date()),
+        periode_bulan: "JANUARY",
+        periode_tahun: 2003,
+        total_jumlah_kemasan: 110,
+        total_jumlah_kemasan_dilekati_pita: 220,
+        total_jumlah_produksi: 330,
+
+        kota_id: "489",
+        kota_name: "Kabupaten Kaimana",
+        nama_pengusaha: "Nama Pengusaha",
+        dataSource: [
+          {
+            key: 1,
+            jenis_mmea: "jenis_mmea_1",
+            merk_mmea_id: 1,
+            merk_mmea_name: "merk_mmea_name_1",
+            isi_mmea: "isi_mmea_1",
+            tarif_mmea: "tarif_mmea_1",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_1",
+            golongan_mmea: "golongan_mmea_1",
+            kadar_mmea: "kadar_mmea_1",
+
+            nomor_produksi: "Nomor Produksi 1",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 2,
+            jenis_mmea: "jenis_mmea_2",
+            merk_mmea_id: 2,
+            merk_mmea_name: "merk_mmea_name_2",
+            isi_mmea: "isi_mmea_2",
+            tarif_mmea: "tarif_mmea_2",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_2",
+            golongan_mmea: "golongan_mmea_2",
+            kadar_mmea: "kadar_mmea_2",
+
+            nomor_produksi: "Nomor Produksi 2",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 3,
+            jenis_mmea: "jenis_mmea_3",
+            merk_mmea_id: 3,
+            merk_mmea_name: "merk_mmea_name_3",
+            isi_mmea: "isi_mmea_3",
+            tarif_mmea: "tarif_mmea_3",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_3",
+            golongan_mmea: "golongan_mmea_3",
+            kadar_mmea: "kadar_mmea_3",
+
+            nomor_produksi: "Nomor Produksi 3",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 4,
+            jenis_mmea: "jenis_mmea_4",
+            merk_mmea_id: 4,
+            merk_mmea_name: "merk_mmea_name_4",
+            isi_mmea: "isi_mmea_4",
+            tarif_mmea: "tarif_mmea_4",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_4",
+            golongan_mmea: "golongan_mmea_4",
+            kadar_mmea: "kadar_mmea_4",
+
+            nomor_produksi: "Nomor Produksi 4",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 5,
+            jenis_mmea: "jenis_mmea_5",
+            merk_mmea_id: 5,
+            merk_mmea_name: "merk_mmea_name_5",
+            isi_mmea: "isi_mmea_5",
+            tarif_mmea: "tarif_mmea_5",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_5",
+            golongan_mmea: "golongan_mmea_5",
+            kadar_mmea: "kadar_mmea_5",
+
+            nomor_produksi: "Nomor Produksi 5",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 6,
+            jenis_mmea: "jenis_mmea_6",
+            merk_mmea_id: 6,
+            merk_mmea_name: "merk_mmea_name_6",
+            isi_mmea: "isi_mmea_6",
+            tarif_mmea: "tarif_mmea_6",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_6",
+            golongan_mmea: "golongan_mmea_6",
+            kadar_mmea: "kadar_mmea_6",
+
+            nomor_produksi: "Nomor Produksi 6",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 7,
+            jenis_mmea: "jenis_mmea_7",
+            merk_mmea_id: 7,
+            merk_mmea_name: "merk_mmea_name_7",
+            isi_mmea: "isi_mmea_7",
+            tarif_mmea: "tarif_mmea_7",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_7",
+            golongan_mmea: "golongan_mmea_7",
+            kadar_mmea: "kadar_mmea_7",
+
+            nomor_produksi: "Nomor Produksi 7",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 8,
+            jenis_mmea: "jenis_mmea_8",
+            merk_mmea_id: 8,
+            merk_mmea_name: "merk_mmea_name_8",
+            isi_mmea: "isi_mmea_8",
+            tarif_mmea: "tarif_mmea_8",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_8",
+            golongan_mmea: "golongan_mmea_8",
+            kadar_mmea: "kadar_mmea_8",
+
+            nomor_produksi: "Nomor Produksi 8",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 9,
+            jenis_mmea: "jenis_mmea_9",
+            merk_mmea_id: 9,
+            merk_mmea_name: "merk_mmea_name_9",
+            isi_mmea: "isi_mmea_9",
+            tarif_mmea: "tarif_mmea_9",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_9",
+            golongan_mmea: "golongan_mmea_9",
+            kadar_mmea: "kadar_mmea_9",
+
+            nomor_produksi: "Nomor Produksi 9",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 10,
+            jenis_mmea: "jenis_mmea_10",
+            merk_mmea_id: 10,
+            merk_mmea_name: "merk_mmea_name_10",
+            isi_mmea: "isi_mmea_10",
+            tarif_mmea: "tarif_mmea_10",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_10",
+            golongan_mmea: "golongan_mmea_10",
+            kadar_mmea: "kadar_mmea_10",
+
+            nomor_produksi: "Nomor Produksi 10",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+          {
+            key: 11,
+            jenis_mmea: "jenis_mmea_11",
+            merk_mmea_id: 11,
+            merk_mmea_name: "merk_mmea_name_11",
+            isi_mmea: "isi_mmea_11",
+            tarif_mmea: "tarif_mmea_11",
+            jenis_kemasan_mmea: "jenis_kemasan_mmea_11",
+            golongan_mmea: "golongan_mmea_11",
+            kadar_mmea: "kadar_mmea_11",
+
+            nomor_produksi: "Nomor Produksi 11",
+            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+            jumlah_kemasan: 10,
+            jumlah_produksi: 20,
+            jumlah_kemasan_dilekati_pita: 30,
+          },
+        ],
+      });
+      this.setState({ isDetailCk4MmeaLoading: false });
+      clearTimeout(timeout);
+    }, 2000);
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -538,7 +832,7 @@ export default class CK4MMEA extends Component {
       dataSource: [],
     });
   };
-  handleRekam = async () => {
+  handleSimpanPerbaikan = async () => {
     // const {
     //   nppbkc_id,
     //   jenis_laporan_id,
@@ -566,7 +860,7 @@ export default class CK4MMEA extends Component {
     // }));
 
     // const payload = {
-    //   idMenu,
+    //   idCk4: this.props.match.params.id,
     //   idNppbkc: nppbkc_id,
     //   jenisLaporan: jenis_laporan_id,
     //   nomorPemberitahuan: nomor_pemberitahuan,
@@ -586,9 +880,9 @@ export default class CK4MMEA extends Component {
     // const response = await requestApi({
     //   service: "produksi",
     //   method: "post",
-    //   endpoint: "/ck4/rekam-mmea",
+    //   endpoint: "/ck4/update-mmea",
     //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isSimpanPerbaikan: bool }),
     // });
 
     // if (response) {
@@ -608,6 +902,47 @@ export default class CK4MMEA extends Component {
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Rekam" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nama Pemrakarsa</FormLabel>
+                </div>
+                <Input id="nama_pemrakarsa" value={this.state.nama_pemrakarsa} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>ID Proses</FormLabel>
+                </div>
+                <Input
+                  id="id_process_pemrakarsa"
+                  value={this.state.id_process_pemrakarsa}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jabatan</FormLabel>
+                </div>
+                <Input id="jabatan_pemrakarsa" value={this.state.jabatan_pemrakarsa} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NIP</FormLabel>
+                </div>
+                <Input id="nip_pemrakarsa" value={this.state.nip_pemrakarsa} disabled />
+              </Col>
+            </Row>
+          </div>
+
+          <Header>{this.state.subtitle2}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
             id="kt_content"
@@ -836,7 +1171,7 @@ export default class CK4MMEA extends Component {
             </Row>
           </div>
 
-          <Header>{this.state.subtitle2}</Header>
+          <Header>{this.state.subtitle3}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
             id="kt_content"
@@ -1073,46 +1408,165 @@ export default class CK4MMEA extends Component {
             </div>
           </div>
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+          <Header>{this.state.subtitle4}</Header>
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+            style={{ paddingBottom: 10 }}
+          >
+            <Row gutter={[16, 16]}>
               <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <Input id="kota_name" value={this.state.kota_name} disabled />
-                    <Button
-                      type="default"
-                      icon="menu"
-                      onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                    />
-                  </div>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Diterima</FormLabel>
                 </div>
+                <DatePicker
+                  id="tangal_diterima"
+                  onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                  style={{ width: "100%" }}
+                  value={this.state.tanggal_diterima}
+                />
+              </Col>
 
-                <div>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Nama Pengusaha</FormLabel>
-                  </div>
-                  <Input
-                    id="nama_pengusaha"
-                    onChange={this.handleInputChange}
-                    value={this.state.nama_pengusaha}
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Penyampaian CK-4</FormLabel>
+                </div>
+                <Select
+                  id="penyampaian_ck4"
+                  onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
+                  style={{ width: "100%" }}
+                  value={this.state.penyampaian_ck4}
+                >
+                  {this.state.list_penyampaian_ck4.length > 0 &&
+                    this.state.list_penyampaian_ck4.map((item, index) => (
+                      <Select.Option
+                        key={`penyampaian-ck4-${index}`}
+                        value={item.penyampaian_ck4_code}
+                      >
+                        {item.penyampaian_ck4_name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="kota_name" value={this.state.kota_name} disabled />
+                  <Button
+                    type="default"
+                    icon="menu"
+                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
                   />
                 </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nama Pengusaha</FormLabel>
+                </div>
+                <Input
+                  id="nama_pengusaha"
+                  onChange={this.handleInputChange}
+                  value={this.state.nama_pengusaha}
+                />
+              </Col>
+            </Row>
+          </div>
+
+          <Header>{this.state.subtitle5}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Surat</FormLabel>
+                </div>
+                <Input
+                  id="nomor_surat"
+                  onChange={this.handleInputChange}
+                  value={this.state.nomor_surat}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Surat</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggal_surat"
+                  onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                  style={{ width: "100%" }}
+                  value={this.state.tanggal_surat}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Penjabat BC</FormLabel>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Input
+                    id="penjabat_bc_nip"
+                    onChange={this.handleInputChange}
+                    value={this.state.penjabat_bc_nip}
+                    style={{ flex: 1 }}
+                  />
+                  <Button type="primary">Cari</Button>
+                  <Input
+                    id="penjabat_bc_nama"
+                    onChange={this.handleInputChange}
+                    value={this.state.penjabat_bc_nama}
+                    style={{ flex: 2 }}
+                    disabled
+                  />
+                </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Asal Kesalahan</FormLabel>
+                </div>
+                <Select
+                  id="asal_kesalahan"
+                  onChange={(value) => this.handleSelectChange("asal_kesalahan", value)}
+                  style={{ width: "100%" }}
+                  value={this.state.asal_kesalahan}
+                >
+                  {this.state.list_asal_kesalahan.length > 0 &&
+                    this.state.list_asal_kesalahan.map((item, index) => (
+                      <Select.Option
+                        key={`penyampaian-ck4-${index}`}
+                        value={item.asal_kesalahan_code}
+                      >
+                        {item.asal_kesalahan_name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Keterangan</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="keterangan"
+                  onChange={this.handleInputChange}
+                  value={this.state.keterangan}
+                />
               </Col>
             </Row>
 
             <Row>
-              <Col span={4} offset={20}>
+              <Col span={4} offset={19}>
                 <Button
                   type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
+                  loading={this.state.isSimpanPerbaikan}
+                  onClick={this.handleSimpanPerbaikan}
                   block
                 >
-                  Rekam
+                  Simpan Perbaikan
                 </Button>
               </Col>
             </Row>
