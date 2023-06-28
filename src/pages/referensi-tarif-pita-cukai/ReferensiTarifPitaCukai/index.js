@@ -124,147 +124,49 @@ export default class ReferensiTarifPitaCukai extends Component {
   }
 
   getReferensiTarifPitaCukai = async () => {
-    // const {
-    //   nomor_surat,
-    //   tanggal_surat,
-    //   awal_berlaku,
-    //   akhir_berlaku,
-    //   jenis_bkc_name,
-    //   jenis_referensi_name,
-    // } = this.state.table;
+    const {
+      nomor_surat,
+      tanggal_surat,
+      awal_berlaku,
+      akhir_berlaku,
+      jenis_bkc_name,
+      jenis_referensi_name,
+    } = this.state.table;
 
-    // const payload = { page: this.state.page };
+    const payload = { page: this.state.page };
 
-    // if (nomor_surat) payload.nomorSurat = nomor_surat;
-    // if (tanggal_surat) payload.tanggalSurat = moment(tanggal_surat).format("YYYY-MM-DD");
-    // if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
-    // if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
-    // if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
-    // if (jenis_referensi_name) payload.jenisReferensi = jenis_referensi_name;
+    if (nomor_surat) payload.nomorSurat = nomor_surat;
+    if (tanggal_surat) payload.tanggalSurat = moment(tanggal_surat).format("YYYY-MM-DD");
+    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
+    if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
+    if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
+    if (jenis_referensi_name) payload.jenisReferensi = jenis_referensi_name;
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/browse",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isReferensiTarifPitaCukaiLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isReferensiTarifPitaCukaiLoading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item) => ({
-    //     key: item.idReferensiSkep,
-    //     referensi_skep_id: item.idReferensiSkep,
-    //     nomor_surat: item.nomorSurat,
-    //     tanggal_surat: item.tanggalSurat,
-    //     awal_berlaku: item.awalBerlaku,
-    //     akhir_berlaku: item.akhirBerlaku,
-    //     jenis_bkc_id: item.idJenisBkc,
-    //     jenis_bkc_name: item.namaJenisBkc,
-    //     jenis_referensi_id: item.idJenisReferensi,
-    //     jenis_referensi_name: item.namaJenisReferensi,
-    //   }));
-    //   const page = response.data.currentPage;
-    //   const totalData = response.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
-
-    this.setState({ isReferensiTarifPitaCukaiLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        dataSource: [
-          {
-            key: 1,
-            referensi_skep_id: 1,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "HT",
-            jenis_referensi_id: 1,
-            jenis_referensi_name: "TANGGAL P3C HT",
-          },
-          {
-            key: 2,
-            referensi_skep_id: 2,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "HT",
-            jenis_referensi_id: 2,
-            jenis_referensi_name: "TARIF HT",
-          },
-          {
-            key: 3,
-            referensi_skep_id: 3,
-            nomor_surat: "191/PMK.010/2022",
-            tanggal_surat: "15-12-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "HT",
-            jenis_referensi_id: 3,
-            jenis_referensi_name: "DESAIN WARNA PITA CUKAI HT",
-          },
-          {
-            key: 4,
-            referensi_skep_id: 4,
-            nomor_surat: "192/PMK.010/2022",
-            tanggal_surat: "15-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "MMEA",
-            jenis_referensi_id: 4,
-            jenis_referensi_name: "DESAIN WARNA PITA CUKAI MMEA",
-          },
-          {
-            key: 5,
-            referensi_skep_id: 5,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "HT",
-            jenis_referensi_id: 5,
-            jenis_referensi_name: "TARIF HPTL/REL",
-          },
-          {
-            key: 6,
-            referensi_skep_id: 6,
-            nomor_surat: "PER-12/BC/2022",
-            tanggal_surat: "25-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "HT",
-            jenis_referensi_id: 6,
-            jenis_referensi_name: "TARIF KLM",
-          },
-          {
-            key: 7,
-            referensi_skep_id: 7,
-            nomor_surat: "191/PMK.010/2022",
-            tanggal_surat: "15-12-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "MMEA",
-            jenis_referensi_id: 7,
-            jenis_referensi_name: "TANGGAL P3C MMEA",
-          },
-          {
-            key: 8,
-            referensi_skep_id: 8,
-            nomor_surat: "192/PMK.010/2022",
-            tanggal_surat: "15-11-2022",
-            awal_berlaku: "01-01-2023",
-            akhir_berlaku: "-",
-            jenis_bkc_name: "MMEA",
-            jenis_referensi_id: 8,
-            jenis_referensi_name: "TARIF MMEA",
-          },
-        ],
-      });
-      this.setState({ isReferensiTarifPitaCukaiLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `referensi-${index}`,
+        referensi_skep_id: item.idReferensiSkep,
+        nomor_surat: item.nomorSurat,
+        tanggal_surat: item.tanggalSurat,
+        awal_berlaku: item.awalBerlaku,
+        akhir_berlaku: item.akhirBerlaku,
+        jenis_bkc_id: item.idJenisBkc,
+        jenis_bkc_name: item.namaJenisBkc,
+        jenis_referensi_id: item.idJenisReferensi,
+        jenis_referensi_name: item.namaJenisReferensi,
+      }));
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
