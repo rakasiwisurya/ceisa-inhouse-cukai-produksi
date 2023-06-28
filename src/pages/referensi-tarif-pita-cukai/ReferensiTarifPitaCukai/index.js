@@ -31,16 +31,24 @@ export default class ReferensiTarifPitaCukai extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                icon="form"
-                type="primary"
-                onClick={() => this.handleEdit(record.id, record.jenis_referensi_id)}
-              />
-              <Button
-                icon="eye"
-                type="default"
-                onClick={() => this.handleDetail(record.id, record.jenis_referensi_id)}
-              />
+              {!(record.jenis_referensi_id === 1 || record.jenis_referensi_id === 7) && (
+                <>
+                  <Button
+                    icon="form"
+                    type="primary"
+                    onClick={() =>
+                      this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
+                    }
+                  />
+                  <Button
+                    icon="eye"
+                    type="default"
+                    onClick={() =>
+                      this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
+                    }
+                  />
+                </>
+              )}
             </div>
           ),
         },
@@ -166,7 +174,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         dataSource: [
           {
             key: 1,
-            id: 1,
+            referensi_skep_id: 1,
             nomor_surat: "PER-12/BC/2022",
             tanggal_surat: "25-11-2022",
             awal_berlaku: "01-01-2023",
@@ -177,7 +185,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 2,
-            id: 2,
+            referensi_skep_id: 2,
             nomor_surat: "PER-12/BC/2022",
             tanggal_surat: "25-11-2022",
             awal_berlaku: "01-01-2023",
@@ -188,7 +196,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 3,
-            id: 3,
+            referensi_skep_id: 3,
             nomor_surat: "191/PMK.010/2022",
             tanggal_surat: "15-12-2022",
             awal_berlaku: "01-01-2023",
@@ -199,7 +207,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 4,
-            id: 4,
+            referensi_skep_id: 4,
             nomor_surat: "192/PMK.010/2022",
             tanggal_surat: "15-11-2022",
             awal_berlaku: "01-01-2023",
@@ -210,7 +218,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 5,
-            id: 5,
+            referensi_skep_id: 5,
             nomor_surat: "PER-12/BC/2022",
             tanggal_surat: "25-11-2022",
             awal_berlaku: "01-01-2023",
@@ -221,7 +229,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 6,
-            id: 6,
+            referensi_skep_id: 6,
             nomor_surat: "PER-12/BC/2022",
             tanggal_surat: "25-11-2022",
             awal_berlaku: "01-01-2023",
@@ -232,7 +240,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 7,
-            id: 7,
+            referensi_skep_id: 7,
             nomor_surat: "191/PMK.010/2022",
             tanggal_surat: "15-12-2022",
             awal_berlaku: "01-01-2023",
@@ -243,7 +251,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           },
           {
             key: 8,
-            id: 8,
+            referensi_skep_id: 8,
             nomor_surat: "192/PMK.010/2022",
             tanggal_surat: "15-11-2022",
             awal_berlaku: "01-01-2023",
@@ -313,32 +321,40 @@ export default class ReferensiTarifPitaCukai extends Component {
     this.getReferensiTarifPitaCukai();
   };
 
-  handleEdit = (id, jenisReferensiid) => {
+  handleEdit = (referensi_skep_id, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-edit/${id}`);
+        this.props.history.push(
+          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensi_skep_id}`
+        );
         break;
       case jenisReferensiid === 2 ||
         jenisReferensiid === 5 ||
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-edit/${id}`);
+        this.props.history.push(
+          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensi_skep_id}`
+        );
         break;
       default:
         this.props.history.push(`/referensi-penyediaan-pita-cukai`);
         break;
     }
   };
-  handleDetail = (id, jenisReferensiid) => {
+  handleDetail = (referensi_skep_id, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-warna-detail/${id}`);
+        this.props.history.push(
+          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensi_skep_id}`
+        );
         break;
       case jenisReferensiid === 2 ||
         jenisReferensiid === 5 ||
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
-        this.props.history.push(`${pathName}/referensi-tarif-warna/referensi-tarif-detail/${id}`);
+        this.props.history.push(
+          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensi_skep_id}`
+        );
         break;
       default:
         this.props.history.push(`/referensi-penyediaan-pita-cukai`);

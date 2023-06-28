@@ -96,22 +96,6 @@ export default class CK4HTDetail extends Component {
       dataSource: [],
       columns: [
         {
-          title: "Aksi",
-          dataIndex: "aksi",
-          key: "aksi",
-          fixed: "left",
-          render: (text, record, index) => (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                type="primary"
-                icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
-              />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
-            </div>
-          ),
-        },
-        {
           title: "Dokumen Produksi",
           children: [
             {
@@ -556,8 +540,10 @@ export default class CK4HTDetail extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        const timeout = setTimeout(() => this.searchInput.select());
-        clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });

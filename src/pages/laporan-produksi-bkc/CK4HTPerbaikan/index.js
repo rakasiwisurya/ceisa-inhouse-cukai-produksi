@@ -641,8 +641,10 @@ export default class CK4HTPerbaikan extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        const timeout = setTimeout(() => this.searchInput.select());
-        clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });

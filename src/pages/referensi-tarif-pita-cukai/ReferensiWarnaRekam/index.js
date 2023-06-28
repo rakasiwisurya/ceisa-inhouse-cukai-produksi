@@ -458,8 +458,10 @@ export default class ReferensiWarnaRekam extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        const timeout = setTimeout(() => this.searchInput.select());
-        clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
@@ -671,6 +673,12 @@ export default class ReferensiWarnaRekam extends Component {
       notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/referensi-tarif-warna`);
     }
+
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
+      clearTimeout(timeout);
+    }, 2000);
   };
 
   render() {

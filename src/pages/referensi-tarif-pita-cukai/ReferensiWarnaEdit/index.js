@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Input, Row, Select, notification } from "antd";
+import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -6,6 +6,7 @@ import Header from "components/Header";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
+import { pathName } from "configs/constants";
 
 export default class ReferensiWarnaEdit extends Component {
   constructor(props) {
@@ -13,14 +14,15 @@ export default class ReferensiWarnaEdit extends Component {
     this.state = {
       subtitle1: "Surat Keputusan",
       subtitle2: "Rincian",
+      isEdit: false,
+      editIndex: null,
 
-      isEditWarnaLoading: true,
-      isUbahLoading: false,
+      isDetailWarnaLoading: true,
+      isSimpanPerubahanLoading: false,
       isJenisBkcLoading: true,
       isJenisProduksiLoading: true,
       isJenisUsahaLoading: true,
       isGolonganLoading: true,
-      isRekamLoading: false,
 
       nomor_surat: "",
       tanggal_surat: "",
@@ -38,10 +40,17 @@ export default class ReferensiWarnaEdit extends Component {
       jenis_usaha_id: "",
       jenis_usaha_name: "",
 
+      searchText: "",
+      searchedColumn: "",
+      page: 1,
+
       list_jenis_bkc: [],
       list_golongan: [],
       list_jenis_produksi: [],
       list_jenis_usaha: [],
+
+      columns: [],
+      dataSource: [],
     };
   }
 
@@ -55,6 +64,131 @@ export default class ReferensiWarnaEdit extends Component {
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
       this.getListGolongan();
       this.getListJenisProduksi();
+
+      if (this.state.jenis_bkc_id === 3) {
+        this.setState({
+          columns: [
+            {
+              title: "Aksi",
+              dataIndex: "aksi",
+              key: "aksi",
+              fixed: "left",
+              render: (text, record, index) => (
+                <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                </div>
+              ),
+            },
+            {
+              title: "Nomor",
+              dataIndex: "nomor",
+              key: "nomor",
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
+            },
+            {
+              title: "Kode Warna",
+              dataIndex: "kode_warna",
+              key: "kode_warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("kode_warna"),
+            },
+            {
+              title: "Warna",
+              dataIndex: "warna",
+              key: "warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("warna"),
+            },
+            {
+              title: "Golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("golongan_name"),
+            },
+            {
+              title: "Jenis Produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
+            },
+          ],
+        });
+      }
+
+      if (this.state.jenis_bkc_id === 2) {
+        this.setState({
+          columns: [
+            {
+              title: "Aksi",
+              dataIndex: "aksi",
+              key: "aksi",
+              fixed: "left",
+              render: (text, record, index) => (
+                <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+                  <Button
+                    type="primary"
+                    icon="form"
+                    onClick={() => this.handleEdit(record, index)}
+                  />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                </div>
+              ),
+            },
+            {
+              title: "Nomor",
+              dataIndex: "nomor",
+              key: "nomor",
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
+            },
+            {
+              title: "Kode Warna",
+              dataIndex: "kode_warna",
+              key: "kode_warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("kode_warna"),
+            },
+            {
+              title: "Warna",
+              dataIndex: "warna",
+              key: "warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("warna"),
+            },
+            {
+              title: "Golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("golongan_name"),
+            },
+            {
+              title: "Jenis Produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
+            },
+            {
+              title: "Jenis Usaha",
+              dataIndex: "jenis_usaha_name",
+              key: "jenis_usaha_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_usaha_name"),
+            },
+          ],
+        });
+      }
     }
   }
 
@@ -66,7 +200,7 @@ export default class ReferensiWarnaEdit extends Component {
     //   method: "get",
     //   endpoint: "/referensi/browse-detail-warna",
     //   params: payload,
-    //   setLoading: (bool) => this.setState({ isEditWarnaLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isDetailWarnaLoading: bool }),
     // });
 
     // if (response) {
@@ -75,39 +209,79 @@ export default class ReferensiWarnaEdit extends Component {
     //   this.setState({
     //     nomor_surat: data.nomorSurat,
     //     tanggal_surat: moment(data.tanggalSurat),
+    //     jenis_bkc_id: data.details[0].jenis_bkc_id,
+    //     jenis_bkc_name: data.details[0].jenis_bkc_id,
     //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-    //     jenis_bkc_id: data.idJenisBkc,
-    //     jenis_bkc_name: data.namaJenisBkc,
-    //     kode_warna: data.kodeWarna,
-    //     warna: data.warna,
-    //     golongan_id: data.idGolongan,
-    //     golongan_name: data.namaGolongan,
-    //     jenis_produksi_id: data.idJenisProduksi,
-    //     jenis_produksi_code: data.kodeJenisProduksi,
-    //     jenis_usaha_id: data.idJenisUsaha,
-    //     jenis_usaha_name: data.namaJenisUsaha,
+    //     dataSource: data.details.map((detail, index) => ({
+    //       key: `referensi-${index}`,
+    //       jenis_bkc_id: detail.idJenisBkc,
+    //       jenis_bkc_name: detail.namaJenisBkc,
+    //       kode_warna: detail.kodeWarna,
+    //       warna: detail.warna,
+    //       golongan_id: detail.idGolongan,
+    //       golongan_name: detail.namaGolongan,
+    //       jenis_produksi_id: detail.idJenisProduksi,
+    //       jenis_produksi_code: detail.kodeJenisProduksi,
+    //       jenis_usaha_id: detail.idJenisUsaha,
+    //       jenis_usaha_name: detail.namaJenisUsaha,
+    //     })),
     //   });
     // }
 
-    this.setState({ isEditWarnaLoading: true });
+    this.setState({ isDetailWarnaLoading: true });
     setTimeout(() => {
       this.setState({
-        nomor_surat: "A",
+        nomor_surat: "Nomor Surat 1",
         tanggal_surat: moment(new Date()),
         tanggal_awal_berlaku: moment(new Date()),
         jenis_bkc_id: 3,
         jenis_bkc_name: "HT",
-        kode_warna: "HIJAU",
-        warna: "Hijau",
-        golongan_id: 1,
-        golongan_name: "I",
-        jenis_produksi_id: 1,
-        jenis_produksi_code: "SKM",
-        jenis_produksi_name: "SIGARET KRETEK MESIN",
-        jenis_usaha_id: null,
-        jenis_usaha_name: null,
+        dataSource: [
+          {
+            key: 1,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "HIJAU",
+            warna: "Hijau",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+          {
+            key: 2,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "BIRU",
+            warna: "Biru",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+          {
+            key: 3,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "MERAH",
+            warna: "Merah",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+        ],
       });
-      this.setState({ isEditWarnaLoading: false });
+      this.setState({ isDetailWarnaLoading: false });
     }, 2000);
   };
   getJenisBkc = async () => {
@@ -343,6 +517,65 @@ export default class ReferensiWarnaEdit extends Component {
     }, 2000);
   };
 
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
+      }
+    },
+  });
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+  handleColumnReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+  handleTableChange = (page) => {
+    this.setState({ page: page.current });
+  };
+
   handleInputChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -352,48 +585,197 @@ export default class ReferensiWarnaEdit extends Component {
   handleSelectChange = (field, value) => {
     this.setState({ [field]: value });
   };
-  handleUbah = async () => {
+  handleSelectCustomChange = (field, value, option) => {
+    this.setState({
+      [`${field}_id`]: value,
+      [`${field}_name`]: option.props.children,
+    });
+  };
+
+  handleSimpan = () => {
     const {
-      nomor_surat,
-      tanggal_surat,
-      tanggal_awal_berlaku,
       jenis_bkc_id,
+      jenis_bkc_name,
       kode_warna,
       warna,
       golongan_id,
+      golongan_name,
       jenis_produksi_id,
+      jenis_produksi_name,
       jenis_usaha_id,
+      jenis_usaha_name,
     } = this.state;
 
-    const payload = {
-      idReferensiSkep: this.props.match.params.id,
-      nomorSurat: nomor_surat,
-      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
-      tanggalAwalBerlaku: moment(tanggal_awal_berlaku).format("YYYY-MM-DD"),
-      idJenisBKC: jenis_bkc_id,
-      kodeWarna: kode_warna,
-      warna: warna,
-      idGolongan: golongan_id,
-      idJenisProduksi: jenis_produksi_id,
-    };
-
-    if (this.state.jenis_bkc_id === 2) payload.idJenisUsaha = jenis_usaha_id;
-
-    const response = await requestApi({
-      service: "referensi",
-      method: "post",
-      endpoint: "/referensi/browse-update-warna",
-      body: payload,
-      setLoading: (bool) => this.setState({ isUbahLoading: bool }),
+    this.setState({
+      dataSource: [
+        ...this.state.dataSource,
+        {
+          key: new Date().getTime(),
+          jenis_bkc_id,
+          jenis_bkc_name,
+          kode_warna,
+          warna,
+          golongan_id,
+          golongan_name,
+          jenis_produksi_id,
+          jenis_produksi_name,
+          jenis_usaha_id,
+          jenis_usaha_name,
+        },
+      ],
     });
 
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push("/cukai-produksi/referensi-tarif-warna");
-    }
+    this.setState({
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
+    });
+  };
+  handleReset = () => {
+    this.setState({
+      isEdit: false,
+      jenis_bkc_id: "",
+      jenis_bkc_name: "",
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
+      dataSource: [],
+    });
+  };
+  handleUbah = () => {
+    const {
+      jenis_bkc_id,
+      jenis_bkc_name,
+      kode_warna,
+      warna,
+      golongan_id,
+      golongan_name,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      jenis_usaha_id,
+      jenis_usaha_name,
+    } = this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndex, 1, {
+      key: new Date().getTime(),
+      jenis_bkc_id,
+      jenis_bkc_name,
+      kode_warna,
+      warna,
+      golongan_id,
+      golongan_name,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      jenis_usaha_id,
+      jenis_usaha_name,
+    });
+    this.setState({
+      isEdit: false,
+      editIndex: null,
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
+      dataSource: newDataSource,
+    });
   };
   handleBatal = () => {
-    this.props.history.goBack();
+    this.setState({
+      isEdit: false,
+      kode_warna: "",
+      warna: "",
+      golongan_id: "",
+      golongan_name: "",
+      jenis_produksi_id: "",
+      jenis_produksi_name: "",
+      jenis_usaha_id: "",
+      jenis_usaha_name: "",
+    });
+  };
+
+  handleEdit = (record, index) => {
+    this.setState({
+      isEdit: true,
+      editIndex: index,
+      jenis_bkc_id: record.jenis_bkc_id,
+      jenis_bkc_name: record.jenis_bkc_name,
+      kode_warna: record.kode_warna,
+      warna: record.warna,
+      golongan_id: record.golongan_id,
+      golongan_name: record.golongan_name,
+      jenis_produksi_id: record.jenis_produksi_id,
+      jenis_produksi_name: record.jenis_produksi_name,
+      jenis_usaha_id: record.jenis_usaha_id,
+      jenis_usaha_name: record.jenis_usaha_name,
+    });
+  };
+  handleDelete = (index) => {
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(index, 1);
+    this.setState({ dataSource: newDataSource });
+  };
+
+  handleSimpanPerubahan = async () => {
+    // const details = this.state.dataSource.map((item) => {
+    //   const data = {
+    //     idJenisBkc: item.jenis_bkc_id,
+    //     kodeWarna: item.kode_warna,
+    //     warna: item.warna,
+    //     idGolongan: item.golongan_id,
+    //     idJenisProduksi: item.jenis_produksi_id,
+    //   };
+
+    //   if (this.state.jenis_bkc_id === 2) {
+    //     data.idJenisUsaha = item.jenis_usaha_id;
+    //     return data;
+    //   }
+
+    //   return data;
+    // });
+
+    // const payload = {
+    //   idReferensiSkep: this.props.match.params.id,
+    //   noSurat: this.state.nomor_surat,
+    //   tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+    //   tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
+    //   details,
+    // };
+
+    // if (this.state.jenis_bkc_id === 2) payload.idJenisUsaha = jenis_usaha_id;
+
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-update-warna",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isSimpanPerubahanLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/referensi-tarif-warna`);
+    // }
+
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
+      clearTimeout(timeout);
+    }, 2000);
   };
 
   render() {
@@ -404,7 +786,7 @@ export default class ReferensiWarnaEdit extends Component {
           contentName="Referensi Warna Edit"
           hideContentHeader
         >
-          {this.state.isEditWarnaLoading ? (
+          {this.state.isDetailWarnaLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
             <>
@@ -463,7 +845,7 @@ export default class ReferensiWarnaEdit extends Component {
                     </div>
                     <Select
                       id="jenis_bkc"
-                      onChange={(value) => {
+                      onChange={(value, option) => {
                         this.setState({
                           golongan_id: "",
                           golongan_name: "",
@@ -474,12 +856,12 @@ export default class ReferensiWarnaEdit extends Component {
                           list_golongan: [],
                           list_jenis_produksi: [],
                         });
-                        this.handleSelectChange("jenis_bkc", value);
+                        this.handleSelectCustomChange("jenis_bkc", value, option);
                       }}
                       style={{ width: "100%" }}
                       value={this.state.jenis_bkc_id}
                       loading={this.state.isJenisBkcLoading}
-                      disabled
+                      disabled={this.state.dataSource.length > 0}
                     >
                       {this.state.list_jenis_bkc.length > 0 &&
                         this.state.list_jenis_bkc.map((item, index) => (
@@ -517,7 +899,9 @@ export default class ReferensiWarnaEdit extends Component {
                       </div>
                       <Select
                         id="golongan"
-                        onChange={(value) => this.handleSelectChange("golongan", value)}
+                        onChange={(value, option) =>
+                          this.handleSelectCustomChange("golongan", value, option)
+                        }
                         value={this.state.golongan_id}
                         loading={this.state.isGolonganLoading}
                         style={{ width: "100%" }}
@@ -539,7 +923,9 @@ export default class ReferensiWarnaEdit extends Component {
                       </div>
                       <Select
                         id="jenis_produksi"
-                        onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
+                        onChange={(value, option) =>
+                          this.handleSelectCustomChange("jenis_produksi", value, option)
+                        }
                         value={this.state.jenis_produksi_id}
                         loading={this.state.isJenisProduksiLoading}
                         style={{ width: "100%" }}
@@ -565,7 +951,9 @@ export default class ReferensiWarnaEdit extends Component {
                         </div>
                         <Select
                           id="jenis_usaha"
-                          onChange={(value) => this.handleSelectChange("jenis_usaha", value)}
+                          onChange={(value, option) =>
+                            this.handleSelectCustomChange("jenis_usaha", value, option)
+                          }
                           value={this.state.jenis_usaha_id}
                           loading={this.state.isJenisUsahaLoading}
                           style={{ width: "100%" }}
@@ -586,24 +974,58 @@ export default class ReferensiWarnaEdit extends Component {
                   <Col span={8} offset={8}>
                     <Row gutter={[16, 16]}>
                       <Col span={12}>
-                        <Button
-                          type="primary"
-                          block
-                          loading={this.state.isUbahLoading}
-                          onClick={this.handleUbah}
-                        >
-                          UBAH
-                        </Button>
+                        {this.state.isEdit ? (
+                          <Button type="primary" block onClick={this.handleUbah}>
+                            UBAH
+                          </Button>
+                        ) : (
+                          <Button type="primary" block onClick={this.handleSimpan}>
+                            SIMPAN
+                          </Button>
+                        )}
                       </Col>
 
                       <Col span={12}>
-                        <Button type="danger" block onClick={this.handleBatal}>
-                          BATAL
-                        </Button>
+                        {this.state.isEdit ? (
+                          <Button type="danger" block onClick={this.handleBatal}>
+                            BATAL
+                          </Button>
+                        ) : (
+                          <Button type="danger" block onClick={this.handleReset}>
+                            RESET
+                          </Button>
+                        )}
                       </Col>
                     </Row>
                   </Col>
                 </Row>
+
+                {this.state.jenis_bkc_id && (
+                  <>
+                    <div style={{ marginTop: 30, marginBottom: 20 }}>
+                      <Table
+                        dataSource={this.state.dataSource}
+                        columns={this.state.columns}
+                        scroll={{ x: "max-content" }}
+                        onChange={this.handleTableChange}
+                        pagination={{ current: this.state.page }}
+                      />
+                    </div>
+
+                    <Row>
+                      <Col span={4} offset={20}>
+                        <Button
+                          type="primary"
+                          loading={this.state.isSimpanPerubahanLoading}
+                          onClick={this.handleSimpanPerubahan}
+                          block
+                        >
+                          Update
+                        </Button>
+                      </Col>
+                    </Row>
+                  </>
+                )}
               </div>
             </>
           )}

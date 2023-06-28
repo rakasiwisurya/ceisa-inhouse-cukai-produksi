@@ -1,4 +1,4 @@
-import { Col, DatePicker, Input, Row, Select } from "antd";
+import { Button, Col, DatePicker, Icon, Input, Row, Select, Table } from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -15,6 +15,7 @@ export default class ReferensiWarnaDetail extends Component {
       subtitle2: "Rincian",
 
       isDetailWarnaLoading: true,
+      isJenisBkcLoading: true,
 
       nomor_surat: "",
       tanggal_surat: "",
@@ -31,11 +32,115 @@ export default class ReferensiWarnaDetail extends Component {
       jenis_produksi_name: "",
       jenis_usaha_id: "",
       jenis_usaha_name: "",
+
+      searchText: "",
+      searchedColumn: "",
+      page: 1,
+
+      columns: [],
+      dataSource: [],
     };
   }
 
   componentDidMount() {
     this.getDetailWarna();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
+      if (this.state.jenis_bkc_id === 3) {
+        this.setState({
+          columns: [
+            {
+              title: "Nomor",
+              dataIndex: "nomor",
+              key: "nomor",
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
+            },
+            {
+              title: "Kode Warna",
+              dataIndex: "kode_warna",
+              key: "kode_warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("kode_warna"),
+            },
+            {
+              title: "Warna",
+              dataIndex: "warna",
+              key: "warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("warna"),
+            },
+            {
+              title: "Golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("golongan_name"),
+            },
+            {
+              title: "Jenis Produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
+            },
+          ],
+        });
+      }
+
+      if (this.state.jenis_bkc_id === 2) {
+        this.setState({
+          columns: [
+            {
+              title: "Nomor",
+              dataIndex: "nomor",
+              key: "nomor",
+              render: (text, record, index) => (
+                <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
+              ),
+            },
+            {
+              title: "Kode Warna",
+              dataIndex: "kode_warna",
+              key: "kode_warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("kode_warna"),
+            },
+            {
+              title: "Warna",
+              dataIndex: "warna",
+              key: "warna",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("warna"),
+            },
+            {
+              title: "Golongan",
+              dataIndex: "golongan_name",
+              key: "golongan_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("golongan_name"),
+            },
+            {
+              title: "Jenis Produksi",
+              dataIndex: "jenis_produksi_name",
+              key: "jenis_produksi_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_produksi_name"),
+            },
+            {
+              title: "Jenis Usaha",
+              dataIndex: "jenis_usaha_name",
+              key: "jenis_usaha_name",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_usaha_name"),
+            },
+          ],
+        });
+      }
+    }
   }
 
   getDetailWarna = async () => {
@@ -55,40 +160,139 @@ export default class ReferensiWarnaDetail extends Component {
     //   this.setState({
     //     nomor_surat: data.nomorSurat,
     //     tanggal_surat: moment(data.tanggalSurat),
+    //     jenis_bkc_id: data.details[0].idJenisBkc,
+    //     jenis_bkc_name: data.details[0].namaJenisBkc,
     //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-    //     jenis_bkc_id: data.idJenisBkc,
-    //     jenis_bkc_name: data.namaJenisBkc,
-    //     kode_warna: data.kodeWarna,
-    //     warna: data.warna,
-    //     golongan_id: data.idGolongan,
-    //     golongan_name: data.namaGolongan,
-    //     jenis_produksi_id: data.idJenisProduksi,
-    //     jenis_produksi_code: data.kodeJenisProduksi,
-    //     jenis_usaha_id: data.idJenisUsaha,
-    //     jenis_usaha_name: data.namaJenisUsaha,
+    //     dataSource: data.details.map((detail, index) => ({
+    //       key: `referensi-${index}`,
+    //       jenis_bkc_id: detail.idJenisBkc,
+    //       jenis_bkc_name: detail.namaJenisBkc,
+    //       kode_warna: detail.kodeWarna,
+    //       warna: detail.warna,
+    //       golongan_id: detail.idGolongan,
+    //       golongan_name: detail.namaGolongan,
+    //       jenis_produksi_id: detail.idJenisProduksi,
+    //       jenis_produksi_code: detail.kodeJenisProduksi,
+    //       jenis_usaha_id: detail.idJenisUsaha,
+    //       jenis_usaha_name: detail.namaJenisUsaha,
+    //     })),
     //   });
     // }
 
     this.setState({ isDetailWarnaLoading: true });
     setTimeout(() => {
       this.setState({
-        nomor_surat: "A",
+        nomor_surat: "Nomor Surat 1",
         tanggal_surat: moment(new Date()),
         tanggal_awal_berlaku: moment(new Date()),
         jenis_bkc_id: 3,
         jenis_bkc_name: "HT",
-        kode_warna: "HIJAU",
-        warna: "Hijau",
-        golongan_id: 1,
-        golongan_name: "I",
-        jenis_produksi_id: 1,
-        jenis_produksi_code: "REL",
-        jenis_produksi_name: "ROKOK ELEKTRIK",
-        jenis_usaha_id: 1,
-        jenis_usaha_name: "Dalam Negeri",
+        dataSource: [
+          {
+            key: 1,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "HIJAU",
+            warna: "Hijau",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+          {
+            key: 2,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "BIRU",
+            warna: "Biru",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+          {
+            key: 3,
+            jenis_bkc_id: 3,
+            jenis_bkc_name: "HT",
+            kode_warna: "MERAH",
+            warna: "Merah",
+            golongan_id: 1,
+            golongan_name: "I",
+            jenis_produksi_id: 1,
+            jenis_produksi_code: "REL",
+            jenis_produksi_name: "ROKOK ELEKTRIK",
+            jenis_usaha_id: 1,
+            jenis_usaha_name: "Dalam Negeri",
+          },
+        ],
       });
       this.setState({ isDetailWarnaLoading: false });
     }, 2000);
+  };
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
+      }
+    },
+  });
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+  handleColumnReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+  handleTableChange = (page) => {
+    this.setState({ page: page.current });
   };
 
   render() {
@@ -234,6 +438,20 @@ export default class ReferensiWarnaDetail extends Component {
                     )}
                   </Col>
                 </Row>
+
+                {this.state.jenis_bkc_id && (
+                  <>
+                    <div style={{ marginTop: 30, marginBottom: 20 }}>
+                      <Table
+                        dataSource={this.state.dataSource}
+                        columns={this.state.columns}
+                        scroll={{ x: "max-content" }}
+                        onChange={this.handleTableChange}
+                        pagination={{ current: this.state.page }}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </>
           )}

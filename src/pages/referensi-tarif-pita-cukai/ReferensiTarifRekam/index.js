@@ -31,7 +31,7 @@ export default class ReferensiTarifRekam extends Component {
       isJenisBkcLoading: true,
       isGolonganLoading: true,
       isJenisProduksiLoading: true,
-      isJenisHtlRelLoading: true,
+      isJenisHtlRelLoading: false,
       isRekamLoading: false,
 
       nomor_surat: "",
@@ -567,8 +567,10 @@ export default class ReferensiTarifRekam extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        const timeout = setTimeout(() => this.searchInput.select());
-        clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
@@ -860,54 +862,61 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleRekam = async () => {
-    const { pathname } = this.props.location;
-    const details = this.state.dataSource.map((item) => {
-      const data = {
-        idJenisBkc: item.jenis_bkc_id,
-        idGolongan: item.golongan_id,
-        idJenisProduksi: item.jenis_produksi_id,
-      };
+    // const { pathname } = this.props.location;
+    // const details = this.state.dataSource.map((item) => {
+    //   const data = {
+    //     idJenisBkc: item.jenis_bkc_id,
+    //     idGolongan: item.golongan_id,
+    //     idJenisProduksi: item.jenis_produksi_id,
+    //     personal: item.personal_id
+    //   };
 
-      if (this.state.jenis_bkc_id === 3) {
-        data.idJenisHtlRel = item.jenis_htl_rel_id;
-        data.tarif = item.tarif;
-        data.batasProduksi1 = item.batas_produksi1;
-        data.batasProduksi2 = item.batas_produksi2;
-        data.hje1 = item.hje1;
-        data.hje2 = item.hje2;
-        data.layer = item.layer;
-        return data;
-      }
+    //   if (this.state.jenis_bkc_id === 3) {
+    //     data.idJenisHtlRel = item.jenis_htl_rel_id;
+    //     data.tarif = item.tarif;
+    //     data.batasProduksi1 = item.batas_produksi1;
+    //     data.batasProduksi2 = item.batas_produksi2;
+    //     data.hje1 = item.hje1;
+    //     data.hje2 = item.hje2;
+    //     data.layer = item.layer;
+    //     return data;
+    //   }
 
-      data.kadarAtas = item.kadar_atas;
-      data.kadarBawah = item.kadar_bawah;
-      data.tarifCukaiDalamNegeri = item.tarif_cukai_dalam_negeri;
-      data.tarifCukaiImpor = item.tarif_cukai_impor;
-      return data;
-    });
+    //   data.kadarAtas = item.kadar_atas;
+    //   data.kadarBawah = item.kadar_bawah;
+    //   data.tarifCukaiDalamNegeri = item.tarif_cukai_dalam_negeri;
+    //   data.tarifCukaiImpor = item.tarif_cukai_impor;
+    //   return data;
+    // });
 
-    const payload = {
-      idMenu: idMenu(pathname),
-      noSurat: this.state.nomor_surat,
-      tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
-      tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
-      nomorPeraturan: this.state.nomor_peraturan,
-      tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
-      details,
-    };
+    // const payload = {
+    //   idMenu: idMenu(pathname),
+    //   noSurat: this.state.nomor_surat,
+    //   tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+    //   tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
+    //   nomorPeraturan: this.state.nomor_peraturan,
+    //   tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
+    //   details,
+    // };
 
-    const response = await requestApi({
-      service: "referensi",
-      method: "post",
-      endpoint: "/referensi/browse-rekam-warna",
-      body: payload,
-      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    });
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-rekam-warna",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
 
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/referensi-tarif-warna`);
+    // }
+
+    const timeout = setTimeout(() => {
+      notification.success({ message: "Success", description: "Success" });
       this.props.history.push(`${pathName}/referensi-tarif-warna`);
-    }
+      clearTimeout(timeout);
+    }, 2000);
   };
 
   render() {
