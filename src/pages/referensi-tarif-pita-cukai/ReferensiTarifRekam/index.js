@@ -860,6 +860,7 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleRekam = async () => {
+    const { pathname } = this.props.location;
     const details = this.state.dataSource.map((item) => {
       const data = {
         idJenisBkc: item.jenis_bkc_id,
@@ -886,7 +887,7 @@ export default class ReferensiTarifRekam extends Component {
     });
 
     const payload = {
-      idMenu,
+      idMenu: idMenu(pathname),
       noSurat: this.state.nomor_surat,
       tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
       tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),

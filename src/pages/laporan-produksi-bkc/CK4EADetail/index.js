@@ -16,7 +16,7 @@ export default class CK4EADetail extends Component {
       subtitle3: "Rincian",
       subtitle4: "Pemberitahu",
 
-      isDetailCk4EaLoading: true,
+      isDetailLoading: true,
 
       nama_pemrakarsa: "",
       id_process_pemrakarsa: "",
@@ -47,6 +47,8 @@ export default class CK4EADetail extends Component {
       kota_id: "",
       kota_name: "",
       nama_pengusaha: "",
+
+      uraian_rincian_file: [],
 
       searchText: "",
       searchedColumn: "",
@@ -110,7 +112,7 @@ export default class CK4EADetail extends Component {
     //   method: "get",
     //   endpoint: "/ck4/detail-ea",
     //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailCk4EaLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     // });
 
     // if (response) {
@@ -145,7 +147,7 @@ export default class CK4EADetail extends Component {
     //   });
     // }
 
-    this.setState({ isDetailCk4EaLoading: true });
+    this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
       this.setState({
         nama_pemrakarsa: "SENDI BENI SUSANDI",
@@ -257,7 +259,7 @@ export default class CK4EADetail extends Component {
           },
         ],
       });
-      this.setState({ isDetailCk4EaLoading: false });
+      this.setState({ isDetailLoading: false });
       clearTimeout(timeout);
     }, 2000);
   };
@@ -323,7 +325,7 @@ export default class CK4EADetail extends Component {
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Detail" hideContentHeader>
-          {this.state.isDetailCk4EaLoading ? (
+          {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
             <>

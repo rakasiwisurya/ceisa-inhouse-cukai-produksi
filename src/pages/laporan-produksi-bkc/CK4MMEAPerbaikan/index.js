@@ -15,6 +15,7 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
@@ -24,6 +25,7 @@ import { months, years } from "utils/times";
 import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
 
@@ -40,10 +42,12 @@ export default class CK4MMEAPerbaikan extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      isSimpanPerbaikan: false,
+      isSimpanPerbaikanLoading: false,
+      isDetailLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
       isModalDaftarKotaVisible: false,
+      isModalDaftarPenjabatBcVisible: false,
 
       nama_pemrakarsa: "",
       id_process_pemrakarsa: "",
@@ -84,9 +88,20 @@ export default class CK4MMEAPerbaikan extends Component {
       jumlah_produksi: "",
       jumlah_kemasan_dilekati_pita: "",
 
+      tanggal_diterima: "",
+      penyampaian_ck4_id: "",
+      penyampaian_ck4_name: "",
       kota_id: "",
       kota_name: "",
       nama_pengusaha: "",
+
+      nomor_surat: "",
+      tanggal_surat: "",
+      penjabat_bc_nip: "",
+      penjabat_bc_name: "",
+      asal_kesalahan_id: "",
+      asal_kesalahan_name: "",
+      keterangan_perbaikan: "",
 
       uraian_rincian_file: [],
 
@@ -102,6 +117,38 @@ export default class CK4MMEAPerbaikan extends Component {
         {
           jenis_laporan_id: "BULANAN",
           jenis_laporan_name: "Bulanan",
+        },
+      ],
+      list_penyampaian_ck4: [
+        {
+          penyampaian_ck4_id: "TEPAT WAKTU",
+          penyampaian_ck4_name: "Tepat Waktu",
+        },
+        {
+          penyampaian_ck4_id: "TERLAMBAT",
+          penyampaian_ck4_name: "Terlambat",
+        },
+      ],
+      list_asal_kesalahan: [
+        {
+          asal_kesalahan_id: "PENGGUNA JASA",
+          asal_kesalahan_name: "Pengguna Jasa",
+        },
+        {
+          asal_kesalahan_id: "PENGAWAS/PETUGAS",
+          asal_kesalahan_name: "Pengawas/Petugas",
+        },
+        {
+          asal_kesalahan_id: "APLIKASI SAC-2",
+          asal_kesalahan_name: "Aplikasi SAC-2",
+        },
+        {
+          asal_kesalahan_id: "JARINGAN",
+          asal_kesalahan_name: "Jaringan",
+        },
+        {
+          asal_kesalahan_id: "LAINNYA",
+          asal_kesalahan_name: "Lainnya",
         },
       ],
 
@@ -242,7 +289,7 @@ export default class CK4MMEAPerbaikan extends Component {
     //   method: "get",
     //   endpoint: "/ck4/detail-mmea",
     //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailCk4MmeaLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     // });
 
     // if (response) {
@@ -294,7 +341,7 @@ export default class CK4MMEAPerbaikan extends Component {
     //   });
     // }
 
-    this.setState({ isDetailCk4MmeaLoading: true });
+    this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
       this.setState({
         nama_pemrakarsa: "SENDI BENI SUSANDI",
@@ -513,7 +560,7 @@ export default class CK4MMEAPerbaikan extends Component {
           },
         ],
       });
-      this.setState({ isDetailCk4MmeaLoading: false });
+      this.setState({ isDetailLoading: false });
       clearTimeout(timeout);
     }, 2000);
   };
@@ -639,6 +686,13 @@ export default class CK4MMEAPerbaikan extends Component {
       kota_name: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
+  };
+  handleDataPenjabatBc = (record) => {
+    this.setState({
+      penjabat_bc_nip: record.penjabat_bc_nip,
+      penjabat_bc_name: record.penjabat_bc_name,
+    });
+    this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
 
   handleSimpanRincian = () => {
@@ -845,8 +899,16 @@ export default class CK4MMEAPerbaikan extends Component {
     //   total_jumlah_kemasan,
     //   total_jumlah_kemasan_dilekati_pita,
     //   total_jumlah_produksi,
+
+    //   tanggal_diterima,
+    //   penyampaian_ck4_id,
     //   kota_id,
     //   nama_pengusaha,
+    //   nomor_surat,
+    //   tanggal_surat,
+    //   penjabat_bc_nip,
+    //   asal_kesalahan_id,
+    //   keterangan_perbaikan,
     //   dataSource,
     // } = this.state;
 
@@ -872,17 +934,25 @@ export default class CK4MMEAPerbaikan extends Component {
     //   totalJumlahKemasan: total_jumlah_kemasan,
     //   totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
     //   totalJumlahProduksi: total_jumlah_produksi,
+
+    //   tanggalDiterima: tanggal_diterima,
+    //   penyampaianCk4: penyampaian_ck4_id,
     //   idKota: kota_id,
     //   namaPengusaha: nama_pengusaha,
+    //   nomorSurat: nomor_surat,
+    //   tanggalSurat: tanggal_surat,
+    //   nipPenjabatBc: penjabat_bc_nip,
+    //   asalKesalahan: asal_kesalahan_id,
+    //   keteranganPerbaikan: keterangan_perbaikan,
     //   details,
     // };
 
     // const response = await requestApi({
     //   service: "produksi",
     //   method: "post",
-    //   endpoint: "/ck4/update-mmea",
+    //   endpoint: "/ck4/perbaikan-mmea",
     //   body: payload,
-    //   setLoading: (bool) => this.setState({ isSimpanPerbaikan: bool }),
+    //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
     // });
 
     // if (response) {
@@ -901,395 +971,265 @@ export default class CK4MMEAPerbaikan extends Component {
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nama Pemrakarsa</FormLabel>
-                </div>
-                <Input id="nama_pemrakarsa" value={this.state.nama_pemrakarsa} disabled />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>ID Proses</FormLabel>
-                </div>
-                <Input
-                  id="id_process_pemrakarsa"
-                  value={this.state.id_process_pemrakarsa}
-                  disabled
-                />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jabatan</FormLabel>
-                </div>
-                <Input id="jabatan_pemrakarsa" value={this.state.jabatan_pemrakarsa} disabled />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>NIP</FormLabel>
-                </div>
-                <Input id="nip_pemrakarsa" value={this.state.nip_pemrakarsa} disabled />
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle2}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Card title="Data NPPBKC" style={{ height: 437 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
-                      <Button
-                        type="default"
-                        icon="menu"
-                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <Input
-                      id="nppbkc"
-                      onChange={this.handleInputChange}
-                      value={this.state.nppbkc}
-                      disabled
-                    />
-                  </div>
-
-                  <div>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Alamat</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="alamat_nppbkc"
-                      onChange={this.handleInputChange}
-                      value={this.state.alamat_nppbkc}
-                      rows={4}
-                      disabled
-                    />
-                  </div>
-                </Card>
-              </Col>
-
-              <Col span={12}>
-                <Card title="Data Pemberitahuan" style={{ height: 437 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Laporan</FormLabel>
-                    </div>
-                    <Select
-                      id="jenis_laporan"
-                      onChange={(value) => this.handleSelectChange("jenis_laporan_id", value)}
-                      value={this.state.jenis_laporan_id}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.list_jenis_laporan.length > 0 &&
-                        this.state.list_jenis_laporan.map((item, index) => (
-                          <Select.Option
-                            key={`jenis-laporan-${index}`}
-                            value={item.jenis_laporan_id}
-                          >
-                            {item.jenis_laporan_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor Pemberitahuan</FormLabel>
-                    </div>
-                    <Input
-                      id="nomor_pemberitahuan"
-                      onChange={this.handleInputChange}
-                      value={this.state.nomor_pemberitahuan}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Pemberitahuan</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggal_pemberitahuan"
-                      onChange={(date) =>
-                        this.handleDatepickerChange("tanggal_pemberitahuan", date)
-                      }
-                      value={this.state.tanggal_pemberitahuan}
-                      style={{ width: "100%" }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Barang Kena Cukai</FormLabel>
-                    </div>
-                    <Input disabled value={this.state.jenis_barang_kena_cukai} />
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row gutter={[16, 16]}>
-              <Col span={12}></Col>
-              <Col span={12}>
-                <Card title="Data Produksi">
-                  {this.state.jenis_laporan_id === "HARIAN" && (
-                    <>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
-                        </div>
-                        <DatePicker
-                          id="tanggal_jam_produksi_awal"
-                          showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
-                          onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
-                          }
-                          value={this.state.tanggal_jam_produksi_awal}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
-                        </div>
-                        <DatePicker
-                          id="tanggal_jam_produksi_akhir"
-                          showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
-                          onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
-                          }
-                          value={this.state.tanggal_jam_produksi_akhir}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {this.state.jenis_laporan_id === "BULANAN" && (
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Periode</FormLabel>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <Select
-                          id="periode_bulan"
-                          onChange={(value) => this.handleSelectChange("periode_bulan", value)}
-                          value={this.state.periode_bulan}
-                          style={{ width: "100%" }}
-                        >
-                          {months.map((item, index) => (
-                            <Select.Option key={`periode-bulan-${index}`} value={item.month_code}>
-                              {item.month_name}
-                            </Select.Option>
-                          ))}
-                        </Select>
-
-                        <Select
-                          id="periode_tahun"
-                          onChange={(value) => this.handleSelectChange("periode_tahun", value)}
-                          value={this.state.periode_tahun}
-                          style={{ width: "100%" }}
-                        >
-                          {years.map((item, index) => (
-                            <Select.Option key={`periode-tahun-${index}`} value={item.year_code}>
-                              {item.year_name}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </div>
-                    </div>
-                  )}
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Kemasan</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="total_jumlah_kemasan"
-                        value={this.state.total_jumlah_kemasan}
-                        disabled
-                      />
-                      <div>Kemasan</div>
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="total_jumlah_kemasan_dilekati_pita"
-                        value={this.state.total_jumlah_kemasan_dilekati_pita}
-                        disabled
-                      />
-                      <div>Kemasan</div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah Produksi</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="total_jumlah_produksi"
-                        value={this.state.total_jumlah_produksi}
-                        disabled
-                      />
-                      <div>Liter</div>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <Header>{this.state.subtitle3}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Card title="Kep Tarif" style={{ height: 705 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis MMEA</FormLabel>
-                    </div>
-                    <Input
-                      id="jenis_mmea"
-                      value={this.state.jenis_mmea}
-                      style={{ flex: 1 }}
-                      disabled
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Merk MMEA</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="merk_mmea_name" value={this.state.merk_mmea_name} disabled />
-                      <Button
-                        type="default"
-                        icon="menu"
-                        onClick={() => this.handleModalShow("isModalDaftarMerkMmeaVisible")}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Isi</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="isi_mmea" value={this.state.isi_mmea} disabled />
-                      <div style={{ display: "flex", gap: 3 }}>
-                        <div>Mililiter</div>
-                        <div>(ml)</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Kemasan</FormLabel>
-                    </div>
-                    <Input id="jenis_kemasan_mmea" value={this.state.jenis_kemasan_mmea} disabled />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Golongan</FormLabel>
-                    </div>
-                    <Input id="golongan_mmea" value={this.state.golongan_mmea} disabled />
-                  </div>
-
-                  <div>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kadar</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="kadar_mmea" value={this.state.kadar_mmea} disabled />
-                      <div>%</div>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-
-              <Col span={12}>
+          {this.state.isDetailLoading ? (
+            <LoadingWrapperSkeleton />
+          ) : (
+            <>
+              <Header>{this.state.subtitle1}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
                 <Row gutter={[16, 16]}>
-                  <Col span={24}>
-                    <Card title="Dokumen Produksi">
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Pemrakarsa</FormLabel>
+                    </div>
+                    <Input id="nama_pemrakarsa" value={this.state.nama_pemrakarsa} disabled />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>ID Proses</FormLabel>
+                    </div>
+                    <Input
+                      id="id_process_pemrakarsa"
+                      value={this.state.id_process_pemrakarsa}
+                      disabled
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Jabatan</FormLabel>
+                    </div>
+                    <Input id="jabatan_pemrakarsa" value={this.state.jabatan_pemrakarsa} disabled />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>NIP</FormLabel>
+                    </div>
+                    <Input id="nip_pemrakarsa" value={this.state.nip_pemrakarsa} disabled />
+                  </Col>
+                </Row>
+              </div>
+
+              <Header>{this.state.subtitle2}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Card title="Data NPPBKC" style={{ height: 437 }}>
                       <div style={{ marginBottom: 20 }}>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nomor</FormLabel>
+                          <FormLabel>Nama</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", gap: 10 }}>
+                          <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                          <Button
+                            type="default"
+                            icon="menu"
+                            onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>NPPBKC</FormLabel>
                         </div>
                         <Input
-                          id="nomor_produksi"
+                          id="nppbkc"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_produksi}
+                          value={this.state.nppbkc}
+                          disabled
                         />
                       </div>
 
                       <div>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal Produksi</FormLabel>
+                          <FormLabel>Alamat</FormLabel>
                         </div>
-                        <DatePicker
-                          id="tanggal_produksi"
-                          onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
-                          value={this.state.tanggal_produksi}
-                          style={{ width: "100%" }}
+                        <Input.TextArea
+                          id="alamat_nppbkc"
+                          onChange={this.handleInputChange}
+                          value={this.state.alamat_nppbkc}
+                          rows={4}
+                          disabled
                         />
                       </div>
                     </Card>
                   </Col>
 
-                  <Col span={24}>
-                    <Card title="Jumlah Produksi">
+                  <Col span={12}>
+                    <Card title="Data Pemberitahuan" style={{ height: 437 }}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis Laporan</FormLabel>
+                        </div>
+                        <Select
+                          id="jenis_laporan"
+                          onChange={(value) => this.handleSelectChange("jenis_laporan_id", value)}
+                          value={this.state.jenis_laporan_id}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_jenis_laporan.length > 0 &&
+                            this.state.list_jenis_laporan.map((item, index) => (
+                              <Select.Option
+                                key={`jenis-laporan-${index}`}
+                                value={item.jenis_laporan_id}
+                              >
+                                {item.jenis_laporan_name}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Nomor Pemberitahuan</FormLabel>
+                        </div>
+                        <Input
+                          id="nomor_pemberitahuan"
+                          onChange={this.handleInputChange}
+                          value={this.state.nomor_pemberitahuan}
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tanggal Pemberitahuan</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="tanggal_pemberitahuan"
+                          onChange={(date) =>
+                            this.handleDatepickerChange("tanggal_pemberitahuan", date)
+                          }
+                          value={this.state.tanggal_pemberitahuan}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis Barang Kena Cukai</FormLabel>
+                        </div>
+                        <Input disabled value={this.state.jenis_barang_kena_cukai} />
+                      </div>
+                    </Card>
+                  </Col>
+                </Row>
+
+                <Row gutter={[16, 16]}>
+                  <Col span={12}></Col>
+                  <Col span={12}>
+                    <Card title="Data Produksi">
+                      {this.state.jenis_laporan_id === "HARIAN" && (
+                        <>
+                          <div style={{ marginBottom: 20 }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
+                            </div>
+                            <DatePicker
+                              id="tanggal_jam_produksi_awal"
+                              showTime={{ format: "HH:mm" }}
+                              format="YYYY-MM-DD HH:mm"
+                              onChange={(date) =>
+                                this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
+                              }
+                              value={this.state.tanggal_jam_produksi_awal}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+
+                          <div style={{ marginBottom: 20 }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
+                            </div>
+                            <DatePicker
+                              id="tanggal_jam_produksi_akhir"
+                              showTime={{ format: "HH:mm" }}
+                              format="YYYY-MM-DD HH:mm"
+                              onChange={(date) =>
+                                this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
+                              }
+                              value={this.state.tanggal_jam_produksi_akhir}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        </>
+                      )}
+
+                      {this.state.jenis_laporan_id === "BULANAN" && (
+                        <div style={{ marginBottom: 20 }}>
+                          <div style={{ marginBottom: 10 }}>
+                            <FormLabel>Periode</FormLabel>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <Select
+                              id="periode_bulan"
+                              onChange={(value) => this.handleSelectChange("periode_bulan", value)}
+                              value={this.state.periode_bulan}
+                              style={{ width: "100%" }}
+                            >
+                              {months.map((item, index) => (
+                                <Select.Option
+                                  key={`periode-bulan-${index}`}
+                                  value={item.month_code}
+                                >
+                                  {item.month_name}
+                                </Select.Option>
+                              ))}
+                            </Select>
+
+                            <Select
+                              id="periode_tahun"
+                              onChange={(value) => this.handleSelectChange("periode_tahun", value)}
+                              value={this.state.periode_tahun}
+                              style={{ width: "100%" }}
+                            >
+                              {years.map((item, index) => (
+                                <Select.Option
+                                  key={`periode-tahun-${index}`}
+                                  value={item.year_code}
+                                >
+                                  {item.year_name}
+                                </Select.Option>
+                              ))}
+                            </Select>
+                          </div>
+                        </div>
+                      )}
+
                       <div style={{ marginBottom: 20 }}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jumlah Kemasan</FormLabel>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <InputNumber
-                            id="jumlah_kemasan"
-                            onChange={(value) =>
-                              this.handleInputNumberChange("jumlah_kemasan", value)
-                            }
-                            value={this.state.jumlah_kemasan}
-                            style={{ flex: 1 }}
+                          <Input
+                            id="total_jumlah_kemasan"
+                            value={this.state.total_jumlah_kemasan}
+                            disabled
                           />
-                          <div>Liter</div>
+                          <div>Kemasan</div>
+                        </div>
+                      </div>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input
+                            id="total_jumlah_kemasan_dilekati_pita"
+                            value={this.state.total_jumlah_kemasan_dilekati_pita}
+                            disabled
+                          />
+                          <div>Kemasan</div>
                         </div>
                       </div>
 
@@ -1297,280 +1237,502 @@ export default class CK4MMEAPerbaikan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jumlah Produksi</FormLabel>
                         </div>
-                        <InputNumber
-                          id="jumlah_produksi"
-                          onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_produksi", value)
-                          }
-                          value={this.state.jumlah_produksi}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-                    </Card>
-                  </Col>
-
-                  <Col span={24}>
-                    <Card title="Pelekatan">
-                      <div>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input
+                            id="total_jumlah_produksi"
+                            value={this.state.total_jumlah_produksi}
+                            disabled
+                          />
+                          <div>Liter</div>
                         </div>
-                        <InputNumber
-                          id="jumlah_kemasan_dilekati_pita"
-                          onChange={(value) =>
-                            this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
-                          }
-                          value={this.state.jumlah_kemasan_dilekati_pita}
-                          style={{ width: "100%" }}
-                        />
                       </div>
                     </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
+              </div>
 
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Card title="Upload Uraian Rincian">
-                  <div>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Uraian Rincian</FormLabel>
-                    </div>
-                    <div style={{ position: "relative" }}>
-                      <Upload
-                        id="uraian_rincian_file"
-                        name="uraian_rincian_file"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        customRequest={(options) =>
-                          this.handleUploadFile("uraian_rincian_file", options)
-                        }
-                        onRemove={() => this.handleRemoveFile("uraian_rincian_file")}
-                        fileList={this.state.uraian_rincian_file}
-                      >
-                        <Button>
-                          <Icon type="upload" /> Upload
-                        </Button>
-                      </Upload>
-
-                      <Button
-                        type="primary"
-                        onClick={this.handleInsertFileToTable}
-                        style={{ marginTop: 10 }}
-                        disabled={this.state.uraian_rincian_file.length === 0}
-                      >
-                        Insert To Table
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={16}>
+              <Header>{this.state.subtitle3}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbahRincian}>
-                        Ubah Rincian
-                      </Button>
-                    ) : (
-                      <Button type="primary" block onClick={this.handleSimpanRincian}>
-                        Simpan Rincian
-                      </Button>
-                    )}
+                    <Card title="Kep Tarif" style={{ height: 705 }}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis MMEA</FormLabel>
+                        </div>
+                        <Input
+                          id="jenis_mmea"
+                          value={this.state.jenis_mmea}
+                          style={{ flex: 1 }}
+                          disabled
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Merk MMEA</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", gap: 10 }}>
+                          <Input id="merk_mmea_name" value={this.state.merk_mmea_name} disabled />
+                          <Button
+                            type="default"
+                            icon="menu"
+                            onClick={() => this.handleModalShow("isModalDaftarMerkMmeaVisible")}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Isi</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input id="isi_mmea" value={this.state.isi_mmea} disabled />
+                          <div style={{ display: "flex", gap: 3 }}>
+                            <div>Mililiter</div>
+                            <div>(ml)</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis Kemasan</FormLabel>
+                        </div>
+                        <Input
+                          id="jenis_kemasan_mmea"
+                          value={this.state.jenis_kemasan_mmea}
+                          disabled
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Golongan</FormLabel>
+                        </div>
+                        <Input id="golongan_mmea" value={this.state.golongan_mmea} disabled />
+                      </div>
+
+                      <div>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Kadar</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input id="kadar_mmea" value={this.state.kadar_mmea} disabled />
+                          <div>%</div>
+                        </div>
+                      </div>
+                    </Card>
                   </Col>
 
                   <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                        Batal
-                      </Button>
-                    ) : (
-                      <Button type="danger" block onClick={this.handleReset}>
-                        Reset
-                      </Button>
-                    )}
+                    <Row gutter={[16, 16]}>
+                      <Col span={24}>
+                        <Card title="Dokumen Produksi">
+                          <div style={{ marginBottom: 20 }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Nomor</FormLabel>
+                            </div>
+                            <Input
+                              id="nomor_produksi"
+                              onChange={this.handleInputChange}
+                              value={this.state.nomor_produksi}
+                            />
+                          </div>
+
+                          <div>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Tanggal Produksi</FormLabel>
+                            </div>
+                            <DatePicker
+                              id="tanggal_produksi"
+                              onChange={(date) =>
+                                this.handleDatepickerChange("tanggal_produksi", date)
+                              }
+                              value={this.state.tanggal_produksi}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        </Card>
+                      </Col>
+
+                      <Col span={24}>
+                        <Card title="Jumlah Produksi">
+                          <div style={{ marginBottom: 20 }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Jumlah Kemasan</FormLabel>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                              <InputNumber
+                                id="jumlah_kemasan"
+                                onChange={(value) =>
+                                  this.handleInputNumberChange("jumlah_kemasan", value)
+                                }
+                                value={this.state.jumlah_kemasan}
+                                style={{ flex: 1 }}
+                              />
+                              <div>Liter</div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Jumlah Produksi</FormLabel>
+                            </div>
+                            <InputNumber
+                              id="jumlah_produksi"
+                              onChange={(value) =>
+                                this.handleInputNumberChange("jumlah_produksi", value)
+                              }
+                              value={this.state.jumlah_produksi}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        </Card>
+                      </Col>
+
+                      <Col span={24}>
+                        <Card title="Pelekatan">
+                          <div>
+                            <div style={{ marginBottom: 10 }}>
+                              <FormLabel>Jumlah Kemasan Dilekati Pita</FormLabel>
+                            </div>
+                            <InputNumber
+                              id="jumlah_kemasan_dilekati_pita"
+                              onChange={(value) =>
+                                this.handleInputNumberChange("jumlah_kemasan_dilekati_pita", value)
+                              }
+                              value={this.state.jumlah_kemasan_dilekati_pita}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        </Card>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                scroll={{ x: "max-content" }}
-                onChange={this.handleTableChange}
-                pagination={{ current: this.state.page }}
-              />
-            </div>
-          </div>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Card title="Upload Uraian Rincian">
+                      <div>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Uraian Rincian</FormLabel>
+                        </div>
+                        <div style={{ position: "relative" }}>
+                          <Upload
+                            id="uraian_rincian_file"
+                            name="uraian_rincian_file"
+                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                            customRequest={(options) =>
+                              this.handleUploadFile("uraian_rincian_file", options)
+                            }
+                            onRemove={() => this.handleRemoveFile("uraian_rincian_file")}
+                            fileList={this.state.uraian_rincian_file}
+                          >
+                            <Button>
+                              <Icon type="upload" /> Upload
+                            </Button>
+                          </Upload>
 
-          <Header>{this.state.subtitle4}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Diterima</FormLabel>
+                          <Button
+                            type="primary"
+                            onClick={this.handleInsertFileToTable}
+                            style={{ marginTop: 10 }}
+                            disabled={this.state.uraian_rincian_file.length === 0}
+                          >
+                            Insert To Table
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  </Col>
+                </Row>
+
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={8} offset={16}>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        {this.state.isEditRincian ? (
+                          <Button type="primary" block onClick={this.handleUbahRincian}>
+                            Ubah Rincian
+                          </Button>
+                        ) : (
+                          <Button type="primary" block onClick={this.handleSimpanRincian}>
+                            Simpan Rincian
+                          </Button>
+                        )}
+                      </Col>
+
+                      <Col span={12}>
+                        {this.state.isEditRincian ? (
+                          <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                            Batal
+                          </Button>
+                        ) : (
+                          <Button type="danger" block onClick={this.handleReset}>
+                            Reset
+                          </Button>
+                        )}
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
+                <div style={{ marginTop: 30, marginBottom: 20 }}>
+                  <Table
+                    dataSource={this.state.dataSource}
+                    columns={this.state.columns}
+                    scroll={{ x: "max-content" }}
+                    onChange={this.handleTableChange}
+                    pagination={{ current: this.state.page }}
+                  />
                 </div>
-                <DatePicker
-                  id="tangal_diterima"
-                  onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
-                  style={{ width: "100%" }}
-                  value={this.state.tanggal_diterima}
-                />
-              </Col>
+              </div>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Penyampaian CK-4</FormLabel>
-                </div>
-                <Select
-                  id="penyampaian_ck4"
-                  onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
-                  style={{ width: "100%" }}
-                  value={this.state.penyampaian_ck4}
-                >
-                  {this.state.list_penyampaian_ck4.length > 0 &&
-                    this.state.list_penyampaian_ck4.map((item, index) => (
-                      <Select.Option
-                        key={`penyampaian-ck4-${index}`}
-                        value={item.penyampaian_ck4_code}
+              <Header>{this.state.subtitle4}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Diterima</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tangal_diterima"
+                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_diterima}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Penyampaian CK-4</FormLabel>
+                    </div>
+                    <Select
+                      id="penyampaian_ck4"
+                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.penyampaian_ck4}
+                    >
+                      {this.state.list_penyampaian_ck4.length > 0 &&
+                        this.state.list_penyampaian_ck4.map((item, index) => (
+                          <Select.Option
+                            key={`penyampaian-ck4-${index}`}
+                            value={item.penyampaian_ck4_code}
+                          >
+                            {item.penyampaian_ck4_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="kota_name" value={this.state.kota_name} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                      />
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Pengusaha</FormLabel>
+                    </div>
+                    <Input
+                      id="nama_pengusaha"
+                      onChange={this.handleInputChange}
+                      value={this.state.nama_pengusaha}
+                    />
+                  </Col>
+                </Row>
+              </div>
+
+              <Header>{this.state.subtitle4}</Header>
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Diterima</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tangal_diterima"
+                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_diterima}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Penyampaian CK-4</FormLabel>
+                    </div>
+                    <Select
+                      id="penyampaian_ck4"
+                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.penyampaian_ck4}
+                    >
+                      {this.state.list_penyampaian_ck4.length > 0 &&
+                        this.state.list_penyampaian_ck4.map((item, index) => (
+                          <Select.Option
+                            key={`penyampaian-ck4-${index}`}
+                            value={item.penyampaian_ck4_id}
+                          >
+                            {item.penyampaian_ck4_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="kota_name" value={this.state.kota_name} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                      />
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Pengusaha</FormLabel>
+                    </div>
+                    <Input
+                      id="nama_pengusaha"
+                      onChange={this.handleInputChange}
+                      value={this.state.nama_pengusaha}
+                    />
+                  </Col>
+                </Row>
+              </div>
+
+              <Header>{this.state.subtitle5}</Header>
+              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nomor Surat</FormLabel>
+                    </div>
+                    <Input
+                      id="nomor_surat"
+                      onChange={this.handleInputChange}
+                      value={this.state.nomor_surat}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Surat</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tanggal_surat"
+                      onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                      style={{ width: "100%" }}
+                      value={this.state.tanggal_surat}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Penjabat BC</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <Input
+                        id="penjabat_bc_nip"
+                        onChange={this.handleInputChange}
+                        value={this.state.penjabat_bc_nip}
+                        style={{ flex: 1 }}
+                        disabled
+                      />
+                      <Button
+                        type="primary"
+                        onClick={() => this.handleModalShow("isModalDaftarPenjabatBcVisible")}
                       >
-                        {item.penyampaian_ck4_name}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Col>
+                        Cari
+                      </Button>
+                      <Input
+                        id="penjabat_bc_name"
+                        onChange={this.handleInputChange}
+                        value={this.state.penjabat_bc_name}
+                        style={{ flex: 2 }}
+                        disabled
+                      />
+                    </div>
+                  </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                </div>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <Input id="kota_name" value={this.state.kota_name} disabled />
-                  <Button
-                    type="default"
-                    icon="menu"
-                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                  />
-                </div>
-              </Col>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Asal Kesalahan</FormLabel>
+                    </div>
+                    <Select
+                      id="asal_kesalahan"
+                      onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
+                      style={{ width: "100%" }}
+                      value={this.state.asal_kesalahan_id}
+                    >
+                      {this.state.list_asal_kesalahan.length > 0 &&
+                        this.state.list_asal_kesalahan.map((item, index) => (
+                          <Select.Option
+                            key={`asal_kesalahan-${index}`}
+                            value={item.asal_kesalahan_id}
+                          >
+                            {item.asal_kesalahan_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nama Pengusaha</FormLabel>
-                </div>
-                <Input
-                  id="nama_pengusaha"
-                  onChange={this.handleInputChange}
-                  value={this.state.nama_pengusaha}
-                />
-              </Col>
-            </Row>
-          </div>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Keterangan</FormLabel>
+                    </div>
+                    <Input.TextArea
+                      id="keterangan_perbaikan"
+                      onChange={this.handleInputChange}
+                      value={this.state.keterangan_perbaikan}
+                    />
+                  </Col>
+                </Row>
 
-          <Header>{this.state.subtitle5}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Surat</FormLabel>
-                </div>
-                <Input
-                  id="nomor_surat"
-                  onChange={this.handleInputChange}
-                  value={this.state.nomor_surat}
-                />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Surat</FormLabel>
-                </div>
-                <DatePicker
-                  id="tanggal_surat"
-                  onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
-                  style={{ width: "100%" }}
-                  value={this.state.tanggal_surat}
-                />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Penjabat BC</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <Input
-                    id="penjabat_bc_nip"
-                    onChange={this.handleInputChange}
-                    value={this.state.penjabat_bc_nip}
-                    style={{ flex: 1 }}
-                  />
-                  <Button type="primary">Cari</Button>
-                  <Input
-                    id="penjabat_bc_nama"
-                    onChange={this.handleInputChange}
-                    value={this.state.penjabat_bc_nama}
-                    style={{ flex: 2 }}
-                    disabled
-                  />
-                </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Asal Kesalahan</FormLabel>
-                </div>
-                <Select
-                  id="asal_kesalahan"
-                  onChange={(value) => this.handleSelectChange("asal_kesalahan", value)}
-                  style={{ width: "100%" }}
-                  value={this.state.asal_kesalahan}
-                >
-                  {this.state.list_asal_kesalahan.length > 0 &&
-                    this.state.list_asal_kesalahan.map((item, index) => (
-                      <Select.Option
-                        key={`penyampaian-ck4-${index}`}
-                        value={item.asal_kesalahan_code}
-                      >
-                        {item.asal_kesalahan_name}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Keterangan</FormLabel>
-                </div>
-                <Input.TextArea
-                  id="keterangan"
-                  onChange={this.handleInputChange}
-                  value={this.state.keterangan}
-                />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col span={4} offset={19}>
-                <Button
-                  type="primary"
-                  loading={this.state.isSimpanPerbaikan}
-                  onClick={this.handleSimpanPerbaikan}
-                  block
-                >
-                  Simpan Perbaikan
-                </Button>
-              </Col>
-            </Row>
-          </div>
+                <Row>
+                  <Col span={4} offset={19}>
+                    <Button
+                      type="primary"
+                      loading={this.state.isSimpanPerbaikanLoading}
+                      onClick={this.handleSimpanPerbaikan}
+                      block
+                    >
+                      Simpan Perbaikan
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            </>
+          )}
         </Container>
 
         <ModalDaftarNPPBKC
@@ -1589,6 +1751,12 @@ export default class CK4MMEAPerbaikan extends Component {
           isVisible={this.state.isModalDaftarKotaVisible}
           onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
           onDataDoubleClick={this.handleDataKota}
+        />
+
+        <ModalDaftarPenjabatBc
+          isVisible={this.state.isModalDaftarPenjabatBcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarPenjabatBcVisible")}
+          onDataDoubleClick={this.handleDataPenjabatBc}
         />
       </>
     );

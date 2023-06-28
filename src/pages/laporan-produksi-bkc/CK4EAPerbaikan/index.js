@@ -22,6 +22,7 @@ import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
 
 export default class CK4EAPerbaikan extends Component {
   constructor(props) {
@@ -37,9 +38,10 @@ export default class CK4EAPerbaikan extends Component {
       editIndexRincian: null,
 
       isSimpanPerbaikanLoading: false,
-      isPerbaikanCk4EaLoading: true,
+      isDetailLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarKotaVisible: false,
+      isModalDaftarPenjabatBcVisible: false,
 
       nama_pemrakarsa: "",
       id_process_pemrakarsa: "",
@@ -67,13 +69,57 @@ export default class CK4EAPerbaikan extends Component {
       nomor_tangki: "",
       keterangan: "",
 
+      tanggal_diterima: "",
+      penyampaian_ck4_id: "",
+      penyampaian_ck4_name: "",
       kota_id: "",
       kota_name: "",
       nama_pengusaha: "",
 
+      nomor_surat: "",
+      tanggal_surat: "",
+      penjabat_bc_nip: "",
+      penjabat_bc_name: "",
+      asal_kesalahan_id: "",
+      asal_kesalahan_name: "",
+      keterangan_perbaikan: "",
+
       searchText: "",
       searchedColumn: "",
       page: 1,
+
+      list_penyampaian_ck4: [
+        {
+          penyampaian_ck4_id: "TEPAT WAKTU",
+          penyampaian_ck4_name: "Tepat Waktu",
+        },
+        {
+          penyampaian_ck4_id: "TERLAMBAT",
+          penyampaian_ck4_name: "Terlambat",
+        },
+      ],
+      list_asal_kesalahan: [
+        {
+          asal_kesalahan_id: "PENGGUNA JASA",
+          asal_kesalahan_name: "Pengguna Jasa",
+        },
+        {
+          asal_kesalahan_id: "PENGAWAS/PETUGAS",
+          asal_kesalahan_name: "Pengawas/Petugas",
+        },
+        {
+          asal_kesalahan_id: "APLIKASI SAC-2",
+          asal_kesalahan_name: "Aplikasi SAC-2",
+        },
+        {
+          asal_kesalahan_id: "JARINGAN",
+          asal_kesalahan_name: "Jaringan",
+        },
+        {
+          asal_kesalahan_id: "LAINNYA",
+          asal_kesalahan_name: "Lainnya",
+        },
+      ],
 
       dataSource: [],
       columns: [
@@ -156,7 +202,7 @@ export default class CK4EAPerbaikan extends Component {
     //   method: "get",
     //   endpoint: "/ck4/detail-ea",
     //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailCk4EaLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     // });
 
     // if (response) {
@@ -191,7 +237,7 @@ export default class CK4EAPerbaikan extends Component {
     //   });
     // }
 
-    this.setState({ isDetailCk4EaLoading: true });
+    this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
       this.setState({
         nama_pemrakarsa: "SENDI BENI SUSANDI",
@@ -303,7 +349,7 @@ export default class CK4EAPerbaikan extends Component {
           },
         ],
       });
-      this.setState({ isDetailCk4EaLoading: false });
+      this.setState({ isDetailLoading: false });
       clearTimeout(timeout);
     }, 2000);
   };
@@ -399,6 +445,13 @@ export default class CK4EAPerbaikan extends Component {
       kota_name: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
+  };
+  handleDataPenjabatBc = (record) => {
+    this.setState({
+      penjabat_bc_nip: record.penjabat_bc_nip,
+      penjabat_bc_name: record.penjabat_bc_name,
+    });
+    this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
 
   handleSimpanRincian = () => {
@@ -508,8 +561,16 @@ export default class CK4EAPerbaikan extends Component {
     //   tanggal_jam_produksi_awal,
     //   tanggal_jam_produksi_akhir,
     //   total_jumlah_produksi,
+
+    //   tanggal_diterima,
+    //   penyampaian_ck4_id,
     //   kota_id,
     //   nama_pengusaha,
+    //   nomor_surat,
+    //   tanggal_surat,
+    //   penjabat_bc_nip,
+    //   asal_kesalahan_id,
+    //   keterangan_perbaikan,
     //   dataSource,
     // } = this.state;
 
@@ -530,15 +591,23 @@ export default class CK4EAPerbaikan extends Component {
     //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
     //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
     //   totalJumlahProduksi: total_jumlah_produksi,
+
+    //   tanggalDiterima: tanggal_diterima,
+    //   penyampaianCk4: penyampaian_ck4_id,
     //   idKota: kota_id,
     //   namaPengusaha: nama_pengusaha,
+    //   nomorSurat: nomor_surat,
+    //   tanggalSurat: tanggal_surat,
+    //   nipPenjabatBc: penjabat_bc_nip,
+    //   asalKesalahan: asal_kesalahan_id,
+    //   keteranganPerbaikan: keterangan_perbaikan,
     //   details,
     // };
 
     // const response = await requestApi({
     //   service: "produksi",
     //   method: "post",
-    //   endpoint: "/ck4/update-ea",
+    //   endpoint: "/ck4/perbaikan-ea",
     //   body: payload,
     //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
     // });
@@ -559,7 +628,7 @@ export default class CK4EAPerbaikan extends Component {
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Perbaikan" hideContentHeader>
-          {this.state.isPerbaikanCk4EaLoading ? (
+          {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
             <>
@@ -906,7 +975,7 @@ export default class CK4EAPerbaikan extends Component {
                         this.state.list_penyampaian_ck4.map((item, index) => (
                           <Select.Option
                             key={`penyampaian-ck4-${index}`}
-                            value={item.penyampaian_ck4_code}
+                            value={item.penyampaian_ck4_id}
                           >
                             {item.penyampaian_ck4_name}
                           </Select.Option>
@@ -977,12 +1046,18 @@ export default class CK4EAPerbaikan extends Component {
                         onChange={this.handleInputChange}
                         value={this.state.penjabat_bc_nip}
                         style={{ flex: 1 }}
+                        disabled
                       />
-                      <Button type="primary">Cari</Button>
+                      <Button
+                        type="primary"
+                        onClick={() => this.handleModalShow("isModalDaftarPenjabatBcVisible")}
+                      >
+                        Cari
+                      </Button>
                       <Input
-                        id="penjabat_bc_nama"
+                        id="penjabat_bc_name"
                         onChange={this.handleInputChange}
-                        value={this.state.penjabat_bc_nama}
+                        value={this.state.penjabat_bc_name}
                         style={{ flex: 2 }}
                         disabled
                       />
@@ -995,15 +1070,15 @@ export default class CK4EAPerbaikan extends Component {
                     </div>
                     <Select
                       id="asal_kesalahan"
-                      onChange={(value) => this.handleSelectChange("asal_kesalahan", value)}
+                      onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
                       style={{ width: "100%" }}
-                      value={this.state.asal_kesalahan}
+                      value={this.state.asal_kesalahan_id}
                     >
                       {this.state.list_asal_kesalahan.length > 0 &&
                         this.state.list_asal_kesalahan.map((item, index) => (
                           <Select.Option
-                            key={`penyampaian-ck4-${index}`}
-                            value={item.asal_kesalahan_code}
+                            key={`asal_kesalahan-${index}`}
+                            value={item.asal_kesalahan_id}
                           >
                             {item.asal_kesalahan_name}
                           </Select.Option>
@@ -1016,9 +1091,9 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Keterangan</FormLabel>
                     </div>
                     <Input.TextArea
-                      id="keterangan"
+                      id="keterangan_perbaikan"
                       onChange={this.handleInputChange}
-                      value={this.state.keterangan}
+                      value={this.state.keterangan_perbaikan}
                     />
                   </Col>
                 </Row>
@@ -1050,6 +1125,12 @@ export default class CK4EAPerbaikan extends Component {
           isVisible={this.state.isModalDaftarKotaVisible}
           onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
           onDataDoubleClick={this.handleDataKota}
+        />
+
+        <ModalDaftarPenjabatBc
+          isVisible={this.state.isModalDaftarPenjabatBcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarPenjabatBcVisible")}
+          onDataDoubleClick={this.handleDataPenjabatBc}
         />
       </>
     );

@@ -18,7 +18,6 @@ import moment from "moment";
 import React, { Component } from "react";
 import { months, years } from "utils/times";
 import { requestApi } from "utils/requestApi";
-import { pathName } from "configs/constants";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 
 export default class CK4MMEADetail extends Component {
@@ -30,7 +29,7 @@ export default class CK4MMEADetail extends Component {
       subtitle3: "Rincian",
       subtitle4: "Pemberitahu",
 
-      isDetailCk4MmeaLoading: true,
+      isDetailLoading: true,
 
       nama_pemrakarsa: "",
       id_process_pemrakarsa: "",
@@ -74,6 +73,8 @@ export default class CK4MMEADetail extends Component {
       kota_id: "",
       kota_name: "",
       nama_pengusaha: "",
+
+      uraian_rincian_file: [],
 
       searchText: "",
       searchedColumn: "",
@@ -213,7 +214,7 @@ export default class CK4MMEADetail extends Component {
     //   method: "get",
     //   endpoint: "/ck4/detail-mmea",
     //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailCk4MmeaLoading: bool }),
+    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     // });
 
     // if (response) {
@@ -265,7 +266,7 @@ export default class CK4MMEADetail extends Component {
     //   });
     // }
 
-    this.setState({ isDetailCk4MmeaLoading: true });
+    this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
       this.setState({
         nama_pemrakarsa: "SENDI BENI SUSANDI",
@@ -484,7 +485,7 @@ export default class CK4MMEADetail extends Component {
           },
         ],
       });
-      this.setState({ isDetailCk4MmeaLoading: false });
+      this.setState({ isDetailLoading: false });
       clearTimeout(timeout);
     }, 2000);
   };
@@ -550,7 +551,7 @@ export default class CK4MMEADetail extends Component {
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Detail" hideContentHeader>
-          {this.state.isDetailCk4MmeaLoading ? (
+          {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
             <>
