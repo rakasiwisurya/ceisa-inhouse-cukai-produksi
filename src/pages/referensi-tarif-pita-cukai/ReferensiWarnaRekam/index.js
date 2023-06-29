@@ -1,4 +1,15 @@
-import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Icon,
+  Input,
+  Row,
+  Select,
+  Table,
+  message,
+  notification,
+} from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -24,8 +35,8 @@ export default class ReferensiWarnaRekam extends Component {
       isRekamLoading: false,
 
       nomor_surat: "",
-      tanggal_surat: "",
-      tanggal_awal_berlaku: "",
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
 
       jenis_bkc_id: "",
       jenis_bkc_name: "",
@@ -92,28 +103,28 @@ export default class ReferensiWarnaRekam extends Component {
               title: "Kode Warna",
               dataIndex: "kode_warna",
               key: "kode_warna",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("kode_warna"),
             },
             {
               title: "Warna",
               dataIndex: "warna",
               key: "warna",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("warna"),
             },
             {
               title: "Golongan",
               dataIndex: "golongan_name",
               key: "golongan_name",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("golongan_name"),
             },
             {
               title: "Jenis Produksi",
               dataIndex: "jenis_produksi_name",
               key: "jenis_produksi_name",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("jenis_produksi_name"),
             },
           ],
@@ -151,35 +162,35 @@ export default class ReferensiWarnaRekam extends Component {
               title: "Kode Warna",
               dataIndex: "kode_warna",
               key: "kode_warna",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("kode_warna"),
             },
             {
               title: "Warna",
               dataIndex: "warna",
               key: "warna",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("warna"),
             },
             {
               title: "Golongan",
               dataIndex: "golongan_name",
               key: "golongan_name",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("golongan_name"),
             },
             {
               title: "Jenis Produksi",
               dataIndex: "jenis_produksi_name",
               key: "jenis_produksi_name",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("jenis_produksi_name"),
             },
             {
               title: "Jenis Usaha",
               dataIndex: "jenis_usaha_name",
               key: "jenis_usaha_name",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("jenis_usaha_name"),
             },
           ],
@@ -189,236 +200,54 @@ export default class ReferensiWarnaRekam extends Component {
   }
 
   getJenisBkc = async () => {
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/jenis-bkc",
-    //   setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-bkc",
+      setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.map((item) => item);
-    //   newData.splice(0, 1);
-    //   this.setState({ list_jenis_bkc: newData });
-    // }
-
-    this.setState({ isJenisBkcLoading: true });
-    setTimeout(() => {
-      this.setState({
-        list_jenis_bkc: [
-          {
-            idJenisBkc: 3,
-            namaJenisBkc: "HT",
-          },
-          {
-            idJenisBkc: 2,
-            namaJenisBkc: "MMEA",
-          },
-        ],
-      });
-      this.setState({ isJenisBkcLoading: false });
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.map((item) => item);
+      newData.splice(0, 1);
+      this.setState({ list_jenis_bkc: newData });
+    }
   };
   getListGolongan = async () => {
-    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    const payload = { idJenisBkc: this.state.jenis_bkc_id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/golongan",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/golongan",
+      params: payload,
+      setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
+    });
 
-    // if (response) this.setState({ list_golongan: response.data.data });
-
-    this.setState({ isGolonganLoading: true });
-    setTimeout(() => {
-      if (this.state.jenis_bkc_id === 3) {
-        this.setState({
-          list_golongan: [
-            {
-              idGolongan: 1,
-              namaGolongan: "I",
-            },
-            {
-              idGolongan: 2,
-              namaGolongan: "II",
-            },
-            {
-              idGolongan: 3,
-              namaGolongan: "III",
-            },
-            {
-              idGolongan: 4,
-              namaGolongan: "III/A",
-            },
-            {
-              idGolongan: 5,
-              namaGolongan: "III/B",
-            },
-            {
-              idGolongan: 6,
-              namaGolongan: "IMPORTIR HT",
-            },
-            {
-              idGolongan: 7,
-              namaGolongan: "TANPA GOLONGAN",
-            },
-          ],
-        });
-      } else {
-        this.setState({
-          list_golongan: [
-            {
-              idGolongan: 1,
-              namaGolongan: "A",
-            },
-            {
-              idGolongan: 2,
-              namaGolongan: "B",
-            },
-            {
-              idGolongan: 3,
-              namaGolongan: "C",
-            },
-          ],
-        });
-      }
-      this.setState({ isGolonganLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_golongan: response.data.data });
   };
   getListJenisProduksi = async () => {
-    // const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    const payload = { idJenisBkc: this.state.jenis_bkc_id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/jenis-produksi",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-produksi",
+      params: payload,
+      setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    });
 
-    // if (response) this.setState({ list_jenis_produksi: response.data.data });
-
-    this.setState({ isJenisProduksiLoading: true });
-    setTimeout(() => {
-      if (this.state.jenis_bkc_id === 3) {
-        this.setState({
-          list_jenis_produksi: [
-            {
-              idJenisProduksi: 1,
-              kodeJenisProduksi: "SKM",
-              namaJenisProduksi: "SIGARET KRETEK MESIN",
-            },
-            {
-              idJenisProduksi: 2,
-              kodeJenisProduksi: "CRT",
-              namaJenisProduksi: "CERUTU",
-            },
-            {
-              idJenisProduksi: 3,
-              kodeJenisProduksi: "HTL",
-              namaJenisProduksi: "HASIL TEMBAKAU LAINNYA",
-            },
-            {
-              idJenisProduksi: 4,
-              kodeJenisProduksi: "STF",
-              namaJenisProduksi: "SIGARET KRETEK TANGAN FILTER",
-            },
-            {
-              idJenisProduksi: 5,
-              kodeJenisProduksi: "SPT",
-              namaJenisProduksi: "SIGARET PUTIH TANGAN",
-            },
-            {
-              idJenisProduksi: 6,
-              kodeJenisProduksi: "SPM",
-              namaJenisProduksi: "SIGARET PUTIH MESIN",
-            },
-            {
-              idJenisProduksi: 7,
-              kodeJenisProduksi: "TIS",
-              namaJenisProduksi: "TEMBAKAU IRIS",
-            },
-            {
-              idJenisProduksi: 8,
-              kodeJenisProduksi: "KLM",
-              namaJenisProduksi: "KELEMBAK MENYAN",
-            },
-            {
-              idJenisProduksi: 9,
-              kodeJenisProduksi: "KLB",
-              namaJenisProduksi: "KLOBOT",
-            },
-            {
-              idJenisProduksi: 10,
-              kodeJenisProduksi: "SKT",
-              namaJenisProduksi: "SIGARET KRETEK TANGAN",
-            },
-            {
-              idJenisProduksi: 11,
-              kodeJenisProduksi: "SPF",
-              namaJenisProduksi: "SIGARET PUTIH TANGAN FILTER",
-            },
-            {
-              idJenisProduksi: 12,
-              kodeJenisProduksi: "REL",
-              namaJenisProduksi: "ROKOK ELEKTRIK",
-            },
-          ],
-        });
-      } else {
-        this.setState({
-          list_jenis_produksi: [
-            {
-              idJenisProduksi: 1,
-              kodeJenisProduksi: "MMEA1",
-              namaJenisProduksi: "Nama MMEA1",
-            },
-            {
-              idJenisProduksi: 2,
-              kodeJenisProduksi: "MMEA2",
-              namaJenisProduksi: "Nama MMEA2",
-            },
-            {
-              idJenisProduksi: 3,
-              kodeJenisProduksi: "MMEA3",
-              namaJenisProduksi: "Nama MMEA3",
-            },
-          ],
-        });
-      }
-
-      this.setState({ isJenisProduksiLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
   getListJenisUsaha = async () => {
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/jenis-usaha",
-    //   setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-usaha",
+      setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
+    });
 
-    // if (response) this.setState({ list_jenis_usaha: response.data.data });
-
-    this.setState({ isJenisUsahaLoading: true });
-    setTimeout(() => {
-      this.setState({
-        list_jenis_usaha: [
-          {
-            idJenisUsaha: 1,
-            namaJenisUsaha: "Dalam Negeri",
-          },
-          {
-            idJenisUsaha: 2,
-            namaJenisUsaha: "Importir",
-          },
-        ],
-      });
-      this.setState({ isJenisUsahaLoading: false });
-    }, 2000);
+    if (response) this.setState({ list_jenis_usaha: response.data.data });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -494,6 +323,35 @@ export default class ReferensiWarnaRekam extends Component {
       [`${field}_id`]: value,
       [`${field}_name`]: option.props.children,
     });
+  };
+
+  validationForm = () => {
+    const { nomor_surat, tanggal_surat, tanggal_awal_berlaku, dataSource } = this.state;
+
+    if (!nomor_surat || !tanggal_surat || !tanggal_awal_berlaku || dataSource.length < 1) {
+      return false;
+    }
+
+    return true;
+  };
+  validationInsert = () => {
+    const { jenis_bkc_id, kode_warna, warna, golongan_id, jenis_produksi_id, jenis_usaha_id } =
+      this.state;
+
+    if (!jenis_bkc_id) return false;
+
+    if (jenis_bkc_id === 3 && (!kode_warna || !warna || !golongan_id || !jenis_produksi_id)) {
+      return false;
+    }
+
+    if (
+      jenis_bkc_id === 2 &&
+      (!kode_warna || !warna || !golongan_id || !jenis_produksi_id || !jenis_usaha_id)
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
   handleSimpan = () => {
@@ -635,10 +493,11 @@ export default class ReferensiWarnaRekam extends Component {
   };
 
   handleRekam = async () => {
+    if (!this.validationForm()) return;
+
     const { pathname } = this.props.location;
     const details = this.state.dataSource.map((item) => {
       const data = {
-        idJenisBkc: item.jenis_bkc_id,
         kodeWarna: item.kode_warna,
         warna: item.warna,
         idGolongan: item.golongan_id,
@@ -655,9 +514,10 @@ export default class ReferensiWarnaRekam extends Component {
 
     const payload = {
       idMenu: idMenu(pathname),
-      noSurat: this.state.nomor_surat,
-      tanggalSurat: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
+      nomorSkep: this.state.nomor_surat,
+      tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
       tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
+      idJenisBkc: this.state.jenis_bkc_id,
       details,
     };
 
@@ -673,12 +533,6 @@ export default class ReferensiWarnaRekam extends Component {
       notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/referensi-tarif-warna`);
     }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
-      this.props.history.push(`${pathName}/referensi-tarif-warna`);
-      clearTimeout(timeout);
-    }, 2000);
   };
 
   render() {
@@ -713,6 +567,7 @@ export default class ReferensiWarnaRekam extends Component {
                 </div>
                 <DatePicker
                   id="tanggal_surat"
+                  format="DD-MM-YYYY"
                   onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
                   value={this.state.tanggal_surat}
                   style={{ width: "100%" }}
@@ -725,6 +580,7 @@ export default class ReferensiWarnaRekam extends Component {
                 </div>
                 <DatePicker
                   id="tanggal_awal_berlaku"
+                  format="DD-MM-YYYY"
                   onChange={(value) => this.handleDatepickerChange("tanggal_awal_berlaku", value)}
                   value={this.state.tanggal_awal_berlaku}
                   style={{ width: "100%" }}
@@ -805,8 +661,8 @@ export default class ReferensiWarnaRekam extends Component {
                   >
                     {this.state.list_golongan.length > 0 &&
                       this.state.list_golongan.map((item, index) => (
-                        <Select.Option key={`golongan-${index}`} value={item.idGolongan}>
-                          {item.namaGolongan}
+                        <Select.Option key={`golongan-${index}`} value={item.idGolonganBkc}>
+                          {item.namaGolonganBkc}
                         </Select.Option>
                       ))}
                   </Select>
@@ -873,7 +729,12 @@ export default class ReferensiWarnaRekam extends Component {
                         UBAH
                       </Button>
                     ) : (
-                      <Button type="primary" block onClick={this.handleSimpan}>
+                      <Button
+                        type="primary"
+                        block
+                        onClick={this.handleSimpan}
+                        disabled={!this.validationInsert()}
+                      >
                         SIMPAN
                       </Button>
                     )}
@@ -912,6 +773,7 @@ export default class ReferensiWarnaRekam extends Component {
                       type="primary"
                       loading={this.state.isRekamLoading}
                       onClick={this.handleRekam}
+                      disabled={!this.validationForm()}
                       block
                     >
                       Rekam

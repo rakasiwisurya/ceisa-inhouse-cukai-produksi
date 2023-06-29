@@ -97,7 +97,9 @@ export default class ReferensiTarifEdit extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_produksi_id !== this.state.jenis_produksi_id) {
-      this.getJenisHtlRel();
+      if (this.state.jenis_produksi_id === 2 || this.state.jenis_produksi_id === 5) {
+        this.getJenisHtlRel();
+      }
     }
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
@@ -135,14 +137,14 @@ export default class ReferensiTarifEdit extends Component {
               key: "golongan_name",
               dataIndex: "golongan_name",
               title: "Golongan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("golongan_name"),
             },
             {
               key: "jenis_produksi_name",
               dataIndex: "jenis_produksi_name",
               title: "Jenis Produksi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("jenis_produksi_name"),
             },
             {
@@ -156,42 +158,42 @@ export default class ReferensiTarifEdit extends Component {
               key: "hje1",
               dataIndex: "hje1",
               title: "HJE I",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("hje1"),
             },
             {
               key: "hje2",
               dataIndex: "hje2",
               title: "HJE II",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("hje2"),
             },
             {
               key: "layer",
               dataIndex: "layer",
               title: "Layer",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("layer"),
             },
             {
               key: "tarif",
               title: "Tarif",
               dataIndex: "tarif",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("tarif"),
             },
             {
               key: "batas_produksi1",
               title: "Batas I",
               dataIndex: "batas_produksi1",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("batas_produksi1"),
             },
             {
               key: "batas_produksi2",
               title: "Batas II",
               dataIndex: "batas_produksi2",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("batas_produksi2"),
             },
           ],
@@ -230,42 +232,42 @@ export default class ReferensiTarifEdit extends Component {
               key: "golongan_name",
               dataIndex: "golongan_name",
               title: "Golongan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("golongan_name"),
             },
             {
               key: "jenis_produksi_name",
               dataIndex: "jenis_produksi_name",
               title: "Jenis Produksi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("jenis_produksi_name"),
             },
             {
               key: "kadar_atas",
               dataIndex: "kadar_atas",
               title: "Kadar Atas",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("kadar_atas"),
             },
             {
               key: "kadar_bawah",
               dataIndex: "kadar_bawah",
               title: "Kadar Bawah",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("kadar_bawah"),
             },
             {
               key: "tarif_cukai_dalam_negeri",
               dataIndex: "tarif_cukai_dalam_negeri",
               title: "Tarif Cukai Dalam Negeri",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("tarif_cukai_dalam_negeri"),
             },
             {
               key: "tarif_cukai_impor",
               dataIndex: "tarif_cukai_impor",
               title: "Tarif Cukai Impor",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
               ...this.getColumnSearchProps("tarif_cukai_impor"),
             },
           ],

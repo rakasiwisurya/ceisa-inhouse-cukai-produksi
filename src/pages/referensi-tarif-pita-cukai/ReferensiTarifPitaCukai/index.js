@@ -66,7 +66,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Nomor Surat",
           dataIndex: "nomor_surat",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_surat"),
         },
         {
@@ -74,7 +74,11 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Tanggal Surat",
           dataIndex: "tanggal_surat",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tanggal_surat"),
         },
         {
@@ -82,7 +86,11 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Awal Berlaku",
           dataIndex: "awal_berlaku",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("awal_berlaku"),
         },
         {
@@ -90,7 +98,11 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Akhir Berlaku",
           dataIndex: "akhir_berlaku",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("akhir_berlaku"),
         },
         {
@@ -98,7 +110,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Jenis BKC",
           dataIndex: "jenis_bkc_name",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_bkc_name"),
         },
         {
@@ -106,7 +118,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           title: "Jenis Referensi",
           dataIndex: "jenis_referensi_name",
           editable: true,
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_referensi_name"),
         },
       ],
@@ -135,8 +147,8 @@ export default class ReferensiTarifPitaCukai extends Component {
 
     const payload = { page: this.state.page };
 
-    if (nomor_surat) payload.nomorSurat = nomor_surat;
-    if (tanggal_surat) payload.tanggalSurat = moment(tanggal_surat).format("YYYY-MM-DD");
+    if (nomor_surat) payload.nomorSkep = nomor_surat;
+    if (tanggal_surat) payload.tanggalSkep = moment(tanggal_surat).format("YYYY-MM-DD");
     if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
     if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
     if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
@@ -154,8 +166,8 @@ export default class ReferensiTarifPitaCukai extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `referensi-${index}`,
         referensi_skep_id: item.idReferensiSkep,
-        nomor_surat: item.nomorSurat,
-        tanggal_surat: item.tanggalSurat,
+        nomor_surat: item.nomorSkep,
+        tanggal_surat: item.tanggalSkep,
         awal_berlaku: item.awalBerlaku,
         akhir_berlaku: item.akhirBerlaku,
         jenis_bkc_id: item.idJenisBkc,
@@ -321,6 +333,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               columns={this.state.columns}
               loading={this.state.isReferensiTarifPitaCukaiLoading}
               pagination={{ current: this.state.page, total: this.state.totalData }}
+              onChange={(page) => this.setState({ page: page.current })}
               scroll={{ x: "max-content" }}
             />
           </div>

@@ -11,7 +11,7 @@ export const requestApi = async ({
   params,
   setLoading,
 }) => {
-  if (setLoading) setLoading(false);
+  if (setLoading) setLoading(true);
   try {
     const newParams = params ? queryParams(params) : "";
     const response = await api[service][contentType][method](`${endpoint}${newParams}`, body);
