@@ -331,8 +331,6 @@ export default class CK4EA extends Component {
     });
   };
   handleRekam = async () => {
-    const { pathname } = this.props.location;
-
     const {
       nppbkc_id,
       jenis_laporan_id,
@@ -354,7 +352,7 @@ export default class CK4EA extends Component {
     }));
 
     const payload = {
-      idMenu: idMenu(pathname),
+      idMenu: idMenu("ck4"),
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
@@ -381,7 +379,6 @@ export default class CK4EA extends Component {
   };
 
   render() {
-    console.log("this.props.location.pathname", this.props.location.pathname);
     return (
       <>
         <Container menuName="Laporan Produksi BKC CK4" contentName="EA Rekam" hideContentHeader>

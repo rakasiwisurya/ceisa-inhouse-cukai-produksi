@@ -542,8 +542,6 @@ export default class CK4MMEA extends Component {
     });
   };
   handleRekam = async () => {
-    const { pathname } = this.props.location;
-
     const {
       nppbkc_id,
       jenis_laporan_id,
@@ -568,7 +566,7 @@ export default class CK4MMEA extends Component {
     }));
 
     const payload = {
-      idMenu: idMenu(pathname),
+      idMenu: idMenu("ck4"),
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,

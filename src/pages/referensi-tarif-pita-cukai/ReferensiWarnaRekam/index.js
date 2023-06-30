@@ -496,7 +496,6 @@ export default class ReferensiWarnaRekam extends Component {
   handleRekam = async () => {
     if (!this.validationForm()) return;
 
-    const { pathname } = this.props.location;
     const details = this.state.dataSource.map((item) => {
       const data = {
         kodeWarna: item.kode_warna,
@@ -514,7 +513,7 @@ export default class ReferensiWarnaRekam extends Component {
     });
 
     const payload = {
-      idMenu: idMenu(pathname),
+      idMenu: idMenu("referensi"),
       nomorSkep: this.state.nomor_surat,
       tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
       tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
