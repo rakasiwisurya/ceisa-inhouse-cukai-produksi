@@ -283,64 +283,61 @@ export default class CK4MMEAPerbaikan extends Component {
   }
 
   getDetailCk4Mmea = async () => {
-    // const payload = { idCk4: this.props.match.params.id };
+    const payload = { idCk4: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/detail-mmea",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/detail-mmea",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nama_pemrakarsa: data.namaPemrakarsa,
-    //     id_process_pemrakarsa: data.idProcessPemrakarsa,
-    //     jabatan_pemrakarsa: data.jabatanPemrakarsa,
-    //     nip_pemrakarsa: data.nipPemrakarsa,
+      this.setState({
+        nama_pemrakarsa: data.namaPemrakarsa,
+        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        jabatan_pemrakarsa: data.jabatanPemrakarsa,
+        nip_pemrakarsa: data.nipPemrakarsa,
 
-    //     nppbkc_id: data.idNppbkc,
-    //     nama_nppbkc: data.namaNppbkc,
-    //     nppbkc: data.nppbkc,
-    //     alamat_nppbkc: data.alamatNppbkc,
+        nppbkc_id: data.idNppbkc,
+        nama_nppbkc: data.namaNppbkc,
+        nppbkc: data.nppbkc,
+        alamat_nppbkc: data.alamatNppbkc,
 
-    //     jenis_laporan_id: data.jenisLaporan,
-    //     nomor_pemberitahuan: data.nomorPemberitahuan,
-    //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
+        jenis_laporan_id: data.jenisLaporan,
+        nomor_pemberitahuan: data.nomorPemberitahuan,
+        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
 
-    //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
-    //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
-    //     periode_bulan: data.periodeBulan,
-    //     periode_tahun: data.periodeTahun,
-    //     total_jumlah_kemasan: data.totalJumlahKemasan,
-    //     total_jumlah_kemasan_dilekati_pita: data.totalJumlahKemasanDilekatiPita,
-    //     total_jumlah_produksi: data.totalJumlahProduksi,
+        tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
+        tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
+        periode_bulan: data.periodeBulan,
+        periode_tahun: data.periodeTahun,
 
-    //     kota_id: data.idKota,
-    //     kota_name: data.namaKota,
-    //     nama_pengusaha: data.namaPengusaha,
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `ck4-${index}`,
-    //       jenis_mmea: detail.jenisMmea,
-    //       merk_mmea_id: detail.idMerkMmea,
-    //       merk_mmea_name: detail.namaMerkMmea,
-    //       isi_mmea: detail.isiMmea,
-    //       tarif_mmea: detail.tarifMmea,
-    //       jenis_kemasan_mmea: detail.jenisKemasanMmea,
-    //       golongan_mmea: detail.golonganMmea,
-    //       kadar_mmea: detail.kadarMmea,
+        kota_id: data.idKota,
+        kota_name: data.namaKota,
+        nama_pengusaha: data.namaPengusaha,
+        dataSource: data.details.map((detail, index) => ({
+          key: `ck4-${index}`,
+          jenis_mmea: detail.jenisMmea,
+          merk_mmea_id: detail.idMerkMmea,
+          merk_mmea_name: detail.namaMerkMmea,
+          isi_mmea: detail.isiMmea,
+          tarif_mmea: detail.tarifMmea,
+          jenis_kemasan_mmea: detail.jenisKemasanMmea,
+          golongan_mmea: detail.golonganMmea,
+          kadar_mmea: detail.kadarMmea,
 
-    //       nomor_produksi: detail.nomorProduksi,
-    //       tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
-    //       jumlah_kemasan: detail.jumlahKemasan,
-    //       jumlah_produksi: detail.jumlahProduksi,
-    //       jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
-    //     })),
-    //   });
-    // }
+          nomor_produksi: detail.nomorProduksi,
+          tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+          jumlah_kemasan: detail.jumlahKemasan,
+          jumlah_produksi: detail.jumlahProduksi,
+          jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
+        })),
+      });
+    }
 
     this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
@@ -364,9 +361,6 @@ export default class CK4MMEAPerbaikan extends Component {
         tanggal_jam_produksi_akhir: moment(new Date()),
         periode_bulan: "JANUARY",
         periode_tahun: 2003,
-        total_jumlah_kemasan: 110,
-        total_jumlah_kemasan_dilekati_pita: 220,
-        total_jumlah_produksi: 330,
 
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",
@@ -890,84 +884,72 @@ export default class CK4MMEAPerbaikan extends Component {
     });
   };
   handleSimpanPerbaikan = async () => {
-    // const {
-    //   nppbkc_id,
-    //   jenis_laporan_id,
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
-    //   tanggal_jam_produksi_awal,
-    //   tanggal_jam_produksi_akhir,
-    //   periode_bulan,
-    //   periode_tahun,
-    //   total_jumlah_kemasan,
-    //   total_jumlah_kemasan_dilekati_pita,
-    //   total_jumlah_produksi,
+    const {
+      nppbkc_id,
+      jenis_laporan_id,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      tanggal_jam_produksi_awal,
+      tanggal_jam_produksi_akhir,
+      periode_bulan,
+      periode_tahun,
 
-    //   tanggal_diterima,
-    //   penyampaian_ck4_id,
-    //   kota_id,
-    //   nama_pengusaha,
-    //   nomor_surat,
-    //   tanggal_surat,
-    //   penjabat_bc_nip,
-    //   asal_kesalahan_id,
-    //   keterangan_perbaikan,
-    //   dataSource,
-    // } = this.state;
+      tanggal_diterima,
+      penyampaian_ck4_id,
+      kota_id,
+      nama_pengusaha,
+      nomor_surat,
+      tanggal_surat,
+      penjabat_bc_nip,
+      asal_kesalahan_id,
+      keterangan_perbaikan,
+      dataSource,
+    } = this.state;
 
-    // const details = dataSource.map((item) => ({
-    //   idMerkMmea: item.merk_mmea_id,
-    //   nomorProduksi: item.nomor_produksi,
-    //   tanggalProduksi: item.tanggal_produksi,
-    //   jumlahKemasan: item.jumlah_kemasan,
-    //   jumlahProduksi: item.jumlah_produksi,
-    //   jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
-    // }));
+    const details = dataSource.map((item) => ({
+      idMerkMmea: item.merk_mmea_id,
+      nomorProduksi: item.nomor_produksi,
+      tanggalProduksi: item.tanggal_produksi,
+      jumlahKemasan: item.jumlah_kemasan,
+      jumlahProduksi: item.jumlah_produksi,
+      jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
+    }));
 
-    // const payload = {
-    //   idCk4: this.props.match.params.id,
-    //   idNppbkc: nppbkc_id,
-    //   jenisLaporan: jenis_laporan_id,
-    //   nomorPemberitahuan: nomor_pemberitahuan,
-    //   tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-    //   tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
-    //   tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
-    //   periodeBulan: periode_bulan,
-    //   periodeTahun: periode_tahun,
-    //   totalJumlahKemasan: total_jumlah_kemasan,
-    //   totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
-    //   totalJumlahProduksi: total_jumlah_produksi,
+    const payload = {
+      idCk4: this.props.match.params.id,
+      idNppbkc: nppbkc_id,
+      jenisLaporan: jenis_laporan_id,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
+      periodeBulan: periode_bulan,
+      periodeTahun: periode_tahun,
 
-    //   tanggalDiterima: tanggal_diterima,
-    //   penyampaianCk4: penyampaian_ck4_id,
-    //   idKota: kota_id,
-    //   namaPengusaha: nama_pengusaha,
-    //   nomorSurat: nomor_surat,
-    //   tanggalSurat: tanggal_surat,
-    //   nipPenjabatBc: penjabat_bc_nip,
-    //   asalKesalahan: asal_kesalahan_id,
-    //   keteranganPerbaikan: keterangan_perbaikan,
-    //   details,
-    // };
+      tanggalDiterima: tanggal_diterima,
+      penyampaianCk4: penyampaian_ck4_id,
+      idKota: kota_id,
+      namaPengusaha: nama_pengusaha,
+      nomorSurat: nomor_surat,
+      tanggalSurat: tanggal_surat,
+      nipPenjabatBc: penjabat_bc_nip,
+      asalKesalahan: asal_kesalahan_id,
+      keteranganPerbaikan: keterangan_perbaikan,
+      details,
+    };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/perbaikan-mmea",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/perbaikan-mmea",
+      body: payload,
+      setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
+    });
 
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/laporan-ck4`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {

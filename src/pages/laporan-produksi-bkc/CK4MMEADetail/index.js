@@ -20,6 +20,7 @@ import { months, years } from "utils/times";
 import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
 export default class CK4MMEADetail extends Component {
   constructor(props) {
@@ -191,6 +192,20 @@ export default class CK4MMEADetail extends Component {
     this.getDetailCk4Mmea();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+      this.setState({
+        total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
+        total_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
+          dataSource,
+          "jumlah_kemasan_dilekati_pita"
+        ),
+        total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi"),
+      });
+    }
+  }
+
   getDetailCk4Mmea = async () => {
     // const payload = { idCk4: this.props.match.params.id };
 
@@ -224,9 +239,6 @@ export default class CK4MMEADetail extends Component {
     //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
     //     periode_bulan: data.periodeBulan,
     //     periode_tahun: data.periodeTahun,
-    //     total_jumlah_kemasan: data.totalJumlahKemasan,
-    //     total_jumlah_kemasan_dilekati_pita: data.totalJumlahKemasanDilekatiPita,
-    //     total_jumlah_produksi: data.totalJumlahProduksi,
 
     //     kota_id: data.idKota,
     //     kota_name: data.namaKota,
@@ -273,9 +285,6 @@ export default class CK4MMEADetail extends Component {
         tanggal_jam_produksi_akhir: moment(new Date()),
         periode_bulan: "JANUARY",
         periode_tahun: 2003,
-        total_jumlah_kemasan: 110,
-        total_jumlah_kemasan_dilekati_pita: 220,
-        total_jumlah_produksi: 330,
 
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",

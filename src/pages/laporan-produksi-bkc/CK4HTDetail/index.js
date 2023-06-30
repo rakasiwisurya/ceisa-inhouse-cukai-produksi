@@ -19,6 +19,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
 
 export default class CK4HTDetail extends Component {
@@ -198,6 +199,27 @@ export default class CK4HTDetail extends Component {
     this.getDetailCk4Ht();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+
+      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
+      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
+      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+
+      this.setState({
+        total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
+        total_jumlah_kemasan_dilekati_pita: sumArrayOfObject(
+          dataSource,
+          "jumlah_kemasan_dilekati_pita"
+        ),
+        total_jumlah_produksi_ht_btg: sumArrayOfObject(jumlahProduksiBtg, "jumlah_produksi"),
+        total_jumlah_produksi_ht_gr: sumArrayOfObject(jumlahProduksiGr, "jumlah_produksi"),
+        total_jumlah_produksi_ht_ml: sumArrayOfObject(jumlahProduksiMl, "jumlah_produksi"),
+      });
+    }
+  }
+
   getDetailCk4Ht = async () => {
     // const payload = { idCk4: this.props.match.params.id };
 
@@ -231,11 +253,6 @@ export default class CK4HTDetail extends Component {
     //     periode_tahun: data.periodeTahun,
     //     tanggal_produksi_awal: moment(data.tanggalProduksiAwal).format("YYYY-MM-DD"),
     //     tanggal_produksi_akhir: moment(data.tanggalProduksiAkhir).format("YYYY-MM-DD"),
-    //     total_jumlah_kemasan: data.totalJumlahKemasan,
-    //     total_jumlah_kemasan_dilekati_pita: data.totalJumlahKemasanDilekatiPita,
-    //     total_jumlah_produksi_ht_btg: data.totalJumlahProduksiHtBtg,
-    //     total_jumlah_produksi_ht_gr: data.totalJumlahProduksiHtGr,
-    //     total_jumlah_produksi_ht_ml: data.totalJumlahProduksiHtMl,
 
     //     kota_id: data.idKota,
     //     kota_name: data.namaKota,
@@ -283,11 +300,6 @@ export default class CK4HTDetail extends Component {
         periode_tahun: 2003,
         tanggal_produksi_awal: moment(new Date()),
         tanggal_produksi_akhir: moment(new Date()),
-        total_jumlah_kemasan: 110,
-        total_jumlah_kemasan_dilekati_pita: 220,
-        total_jumlah_produksi_ht_btg: 80,
-        total_jumlah_produksi_ht_gr: 80,
-        total_jumlah_produksi_ht_ml: 80,
 
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",

@@ -542,70 +542,58 @@ export default class CK4MMEA extends Component {
     });
   };
   handleRekam = async () => {
-    // const { pathname } = this.props.location;
+    const { pathname } = this.props.location;
 
-    // const {
-    //   nppbkc_id,
-    //   jenis_laporan_id,
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
-    //   tanggal_jam_produksi_awal,
-    //   tanggal_jam_produksi_akhir,
-    //   periode_bulan,
-    //   periode_tahun,
-    //   total_jumlah_kemasan,
-    //   total_jumlah_kemasan_dilekati_pita,
-    //   total_jumlah_produksi,
-    //   kota_id,
-    //   nama_pengusaha,
-    //   dataSource,
-    // } = this.state;
+    const {
+      nppbkc_id,
+      jenis_laporan_id,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      tanggal_jam_produksi_awal,
+      tanggal_jam_produksi_akhir,
+      periode_bulan,
+      periode_tahun,
+      kota_id,
+      nama_pengusaha,
+      dataSource,
+    } = this.state;
 
-    // const details = dataSource.map((item) => ({
-    //   idMerkMmea: item.merk_mmea_id,
-    //   nomorProduksi: item.nomor_produksi,
-    //   tanggalProduksi: item.tanggal_produksi,
-    //   jumlahKemasan: item.jumlah_kemasan,
-    //   jumlahProduksi: item.jumlah_produksi,
-    //   jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
-    // }));
+    const details = dataSource.map((item) => ({
+      idMerkMmea: item.merk_mmea_id,
+      nomorProduksi: item.nomor_produksi,
+      tanggalProduksi: item.tanggal_produksi,
+      jumlahKemasan: item.jumlah_kemasan,
+      jumlahProduksi: item.jumlah_produksi,
+      jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
+    }));
 
-    // const payload = {
-    //   idMenu: idMenu(pathname),
-    //   idNppbkc: nppbkc_id,
-    //   jenisLaporan: jenis_laporan_id,
-    //   nomorPemberitahuan: nomor_pemberitahuan,
-    //   tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-    //   tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
-    //   tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
-    //   periodeBulan: periode_bulan,
-    //   periodeTahun: periode_tahun,
-    //   totalJumlahKemasan: total_jumlah_kemasan,
-    //   totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
-    //   totalJumlahProduksi: total_jumlah_produksi,
-    //   idKota: kota_id,
-    //   namaPengusaha: nama_pengusaha,
-    //   details,
-    // };
+    const payload = {
+      idMenu: idMenu(pathname),
+      idNppbkc: nppbkc_id,
+      jenisLaporan: jenis_laporan_id,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
+      periodeBulan: periode_bulan,
+      periodeTahun: periode_tahun,
+      idKota: kota_id,
+      namaPengusaha: nama_pengusaha,
+      details,
+    };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/rekam-mmea",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/rekam-mmea",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/laporan-ck4`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {

@@ -223,7 +223,6 @@ export default class CK4EAPerbaikan extends Component {
     //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan).format("YYYY-MM-DD"),
     //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal).format("YYYY-MM-DD HH:mm"),
     //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir).format("YYYY-MM-DD HH:mm"),
-    //     total_jumlah_produksi: data.totalJumlahProduksi,
     //     kota_id: data.idKota,
     //     kota_name: data.namaKota,
     //     nama_pengusaha: data.namaPengusaha,
@@ -255,7 +254,6 @@ export default class CK4EAPerbaikan extends Component {
         tanggal_pemberitahuan: moment(new Date()),
         tanggal_jam_produksi_awal: moment(new Date()),
         tanggal_jam_produksi_akhir: moment(new Date()),
-        total_jumlah_produksi: 20,
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",
         nama_pengusaha: "Nama Pengusaha",
@@ -556,75 +554,67 @@ export default class CK4EAPerbaikan extends Component {
     });
   };
   handleSimpanPerbaikan = async () => {
-    // const {
-    //   nppbkc_id,
-    //   jenis_laporan_id,
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
-    //   tanggal_jam_produksi_awal,
-    //   tanggal_jam_produksi_akhir,
-    //   total_jumlah_produksi,
+    const {
+      nppbkc_id,
+      jenis_laporan_id,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      tanggal_jam_produksi_awal,
+      tanggal_jam_produksi_akhir,
 
-    //   tanggal_diterima,
-    //   penyampaian_ck4_id,
-    //   kota_id,
-    //   nama_pengusaha,
-    //   nomor_surat,
-    //   tanggal_surat,
-    //   penjabat_bc_nip,
-    //   asal_kesalahan_id,
-    //   keterangan_perbaikan,
-    //   dataSource,
-    // } = this.state;
+      tanggal_diterima,
+      penyampaian_ck4_id,
+      kota_id,
+      nama_pengusaha,
+      nomor_surat,
+      tanggal_surat,
+      penjabat_bc_nip,
+      asal_kesalahan_id,
+      keterangan_perbaikan,
+      dataSource,
+    } = this.state;
 
-    // const details = dataSource.map((item) => ({
-    //   nomorProduksi: item.nomor_produksi,
-    //   tanggalProduksi: item.tanggal_produksi,
-    //   jumlahProduksi: item.jumlah_produksi,
-    //   nomorTangki: item.nomor_tangki,
-    //   keterangan: item.keterangan,
-    // }));
+    const details = dataSource.map((item) => ({
+      nomorProduksi: item.nomor_produksi,
+      tanggalProduksi: item.tanggal_produksi,
+      jumlahProduksi: item.jumlah_produksi,
+      nomorTangki: item.nomor_tangki,
+      keterangan: item.keterangan,
+    }));
 
-    // const payload = {
-    //   idCk4: this.props.match.params.id,
-    //   idNppbkc: nppbkc_id,
-    //   jenisLaporan: jenis_laporan_id,
-    //   nomorPemberitahuan: nomor_pemberitahuan,
-    //   tanggalPemberitahuan: tanggal_pemberitahuan,
-    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
-    //   totalJumlahProduksi: total_jumlah_produksi,
+    const payload = {
+      idCk4: this.props.match.params.id,
+      idNppbkc: nppbkc_id,
+      jenisLaporan: jenis_laporan_id,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      tanggalPemberitahuan: tanggal_pemberitahuan,
+      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
 
-    //   tanggalDiterima: tanggal_diterima,
-    //   penyampaianCk4: penyampaian_ck4_id,
-    //   idKota: kota_id,
-    //   namaPengusaha: nama_pengusaha,
-    //   nomorSurat: nomor_surat,
-    //   tanggalSurat: tanggal_surat,
-    //   nipPenjabatBc: penjabat_bc_nip,
-    //   asalKesalahan: asal_kesalahan_id,
-    //   keteranganPerbaikan: keterangan_perbaikan,
-    //   details,
-    // };
+      tanggalDiterima: tanggal_diterima,
+      penyampaianCk4: penyampaian_ck4_id,
+      idKota: kota_id,
+      namaPengusaha: nama_pengusaha,
+      nomorSurat: nomor_surat,
+      tanggalSurat: tanggal_surat,
+      nipPenjabatBc: penjabat_bc_nip,
+      asalKesalahan: asal_kesalahan_id,
+      keteranganPerbaikan: keterangan_perbaikan,
+      details,
+    };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/perbaikan-ea",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/perbaikan-ea",
+      body: payload,
+      setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
+    });
 
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/laporan-ck4`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {

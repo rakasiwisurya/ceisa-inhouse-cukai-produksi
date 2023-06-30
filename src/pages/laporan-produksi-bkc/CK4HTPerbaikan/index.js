@@ -332,11 +332,6 @@ export default class CK4HTPerbaikan extends Component {
     //     periode_tahun: data.periodeTahun,
     //     tanggal_produksi_awal: moment(data.tanggalProduksiAwal).format("YYYY-MM-DD"),
     //     tanggal_produksi_akhir: moment(data.tanggalProduksiAkhir).format("YYYY-MM-DD"),
-    //     total_jumlah_kemasan: data.totalJumlahKemasan,
-    //     total_jumlah_kemasan_dilekati_pita: data.totalJumlahKemasanDilekatiPita,
-    //     total_jumlah_produksi_ht_btg: data.totalJumlahProduksiHtBtg,
-    //     total_jumlah_produksi_ht_gr: data.totalJumlahProduksiHtGr,
-    //     total_jumlah_produksi_ht_ml: data.totalJumlahProduksiHtMl,
 
     //     kota_id: data.idKota,
     //     kota_name: data.namaKota,
@@ -384,11 +379,6 @@ export default class CK4HTPerbaikan extends Component {
         periode_tahun: 2003,
         tanggal_produksi_awal: moment(new Date()),
         tanggal_produksi_akhir: moment(new Date()),
-        total_jumlah_kemasan: 110,
-        total_jumlah_kemasan_dilekati_pita: 220,
-        total_jumlah_produksi_ht_btg: 80,
-        total_jumlah_produksi_ht_gr: 80,
-        total_jumlah_produksi_ht_ml: 80,
 
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",
@@ -937,11 +927,6 @@ export default class CK4HTPerbaikan extends Component {
       tanggal_pemberitahuan,
       periode_bulan,
       periode_tahun,
-      total_jumlah_kemasan,
-      total_jumlah_kemasan_dilekati_pita,
-      total_jumlah_produksi_ht_btg,
-      total_jumlah_produksi_ht_gr,
-      total_jumlah_produksi_ht_ml,
 
       tanggal_diterima,
       penyampaian_ck4_id,
@@ -972,11 +957,6 @@ export default class CK4HTPerbaikan extends Component {
       tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
-      totalJumlahKemasan: total_jumlah_kemasan,
-      totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
-      totalJumlahProduksiHtBtg: total_jumlah_produksi_ht_btg,
-      totalJumlahProduksiHtGr: total_jumlah_produksi_ht_gr,
-      totalJumlahProduksiHtMl: total_jumlah_produksi_ht_ml,
 
       tanggalDiterima: tanggal_diterima,
       penyampaianCk4: penyampaian_ck4_id,
@@ -1002,12 +982,6 @@ export default class CK4HTPerbaikan extends Component {
       notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/laporan-ck4`);
     }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
-      this.props.history.push(`${pathName}/laporan-ck4`);
-      clearTimeout(timeout);
-    }, 2000);
   };
 
   render() {

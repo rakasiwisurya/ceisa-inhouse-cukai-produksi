@@ -7,6 +7,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
 export default class CK4EADetail extends Component {
   constructor(props) {
@@ -105,6 +106,13 @@ export default class CK4EADetail extends Component {
     this.getDetailCk4Ea();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dataSource !== this.state.dataSource) {
+      const { dataSource } = this.state;
+      this.setState({ total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi") });
+    }
+  }
+
   getDetailCk4Ea = async () => {
     // const payload = { idCk4: this.props.match.params.id };
 
@@ -133,7 +141,6 @@ export default class CK4EADetail extends Component {
     //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan).format("YYYY-MM-DD"),
     //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal).format("YYYY-MM-DD HH:mm"),
     //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir).format("YYYY-MM-DD HH:mm"),
-    //     total_jumlah_produksi: data.totalJumlahProduksi,
     //     kota_id: data.idKota,
     //     kota_name: data.namaKota,
     //     nama_pengusaha: data.namaPengusaha,
@@ -165,7 +172,6 @@ export default class CK4EADetail extends Component {
         tanggal_pemberitahuan: moment(new Date()),
         tanggal_jam_produksi_awal: moment(new Date()),
         tanggal_jam_produksi_akhir: moment(new Date()),
-        total_jumlah_produksi: 20,
         kota_id: "489",
         kota_name: "Kabupaten Kaimana",
         nama_pengusaha: "Nama Pengusaha",

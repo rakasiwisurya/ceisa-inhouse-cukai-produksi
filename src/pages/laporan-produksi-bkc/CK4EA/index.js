@@ -331,61 +331,53 @@ export default class CK4EA extends Component {
     });
   };
   handleRekam = async () => {
-    // const { pathname } = this.props.location;
+    const { pathname } = this.props.location;
 
-    // const {
-    //   nppbkc_id,
-    //   jenis_laporan_id,
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
-    //   tanggal_jam_produksi_awal,
-    //   tanggal_jam_produksi_akhir,
-    //   total_jumlah_produksi,
-    //   kota_id,
-    //   nama_pengusaha,
-    //   dataSource,
-    // } = this.state;
+    const {
+      nppbkc_id,
+      jenis_laporan_id,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      tanggal_jam_produksi_awal,
+      tanggal_jam_produksi_akhir,
+      kota_id,
+      nama_pengusaha,
+      dataSource,
+    } = this.state;
 
-    // const details = dataSource.map((item) => ({
-    //   nomorProduksi: item.nomor_produksi,
-    //   tanggalProduksi: item.tanggal_produksi,
-    //   jumlahProduksi: item.jumlah_produksi,
-    //   identitasTangki: item.nomor_tangki,
-    //   keterangan: item.keterangan,
-    // }));
+    const details = dataSource.map((item) => ({
+      nomorProduksi: item.nomor_produksi,
+      tanggalProduksi: item.tanggal_produksi,
+      jumlahProduksi: item.jumlah_produksi,
+      identitasTangki: item.nomor_tangki,
+      keterangan: item.keterangan,
+    }));
 
-    // const payload = {
-    //   idMenu: idMenu(pathname),
-    //   idNppbkc: nppbkc_id,
-    //   jenisLaporan: jenis_laporan_id,
-    //   nomorPemberitahuan: nomor_pemberitahuan,
-    //   tanggalPemberitahuan: tanggal_pemberitahuan,
-    //   tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-    //   tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
-    //   totalJumlahProduksi: total_jumlah_produksi,
-    //   idKota: kota_id,
-    //   namaPengusaha: nama_pengusaha,
-    //   details,
-    // };
+    const payload = {
+      idMenu: idMenu(pathname),
+      idNppbkc: nppbkc_id,
+      jenisLaporan: jenis_laporan_id,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      tanggalPemberitahuan: tanggal_pemberitahuan,
+      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
+      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+      idKota: kota_id,
+      namaPengusaha: nama_pengusaha,
+      details,
+    };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/rekam-ea",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/rekam-ea",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
-
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/laporan-ck4`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
