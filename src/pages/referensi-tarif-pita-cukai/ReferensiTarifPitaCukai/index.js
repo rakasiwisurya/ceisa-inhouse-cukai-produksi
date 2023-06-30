@@ -4,6 +4,7 @@ import Container from "components/Container";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
+import ButtonCustom from "components/Button/ButtonCustom";
 export default class ReferensiTarifPitaCukai extends Component {
   constructor(props) {
     super(props);
@@ -33,16 +34,16 @@ export default class ReferensiTarifPitaCukai extends Component {
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
               {!(record.jenis_referensi_id === 1 || record.jenis_referensi_id === 7) && (
                 <>
-                  <Button
+                  <ButtonCustom
                     icon="form"
-                    type="primary"
+                    variant="warning"
                     onClick={() =>
                       this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
                     }
                   />
-                  <Button
+                  <ButtonCustom
                     icon="eye"
-                    type="default"
+                    variant="info"
                     onClick={() =>
                       this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
                     }
@@ -170,9 +171,9 @@ export default class ReferensiTarifPitaCukai extends Component {
         tanggal_surat: item.tanggalSkep,
         awal_berlaku: item.awalBerlaku,
         akhir_berlaku: item.akhirBerlaku,
-        jenis_bkc_id: item.idJenisBkc,
+        jenis_bkc_id: +item.idJenisBkc,
         jenis_bkc_name: item.namaJenisBkc,
-        jenis_referensi_id: item.idJenisReferensi,
+        jenis_referensi_id: +item.idJenisReferensi,
         jenis_referensi_name: item.namaJenisReferensi,
       }));
       const page = response.data.data.currentPage;
@@ -287,8 +288,8 @@ export default class ReferensiTarifPitaCukai extends Component {
             <Col span={14}>
               <Row gutter={[16, 16]}>
                 <Col span={8}>
-                  <Button
-                    style={{ backgroundColor: "#81d3f8", color: "white", borderColor: "#81d3f8" }}
+                  <ButtonCustom
+                    variant="info"
                     onClick={() =>
                       this.props.history.push(
                         `${pathName}/referensi-tarif-warna/referensi-warna-rekam`
@@ -297,12 +298,12 @@ export default class ReferensiTarifPitaCukai extends Component {
                     block
                   >
                     + Referesi Warna
-                  </Button>
+                  </ButtonCustom>
                 </Col>
 
                 <Col span={8}>
-                  <Button
-                    style={{ backgroundColor: "#facd91", color: "white", borderColor: "#facd91" }}
+                  <ButtonCustom
+                    variant="warning"
                     onClick={() =>
                       this.props.history.push(
                         `${pathName}/referensi-tarif-warna/referensi-tarif-rekam`
@@ -311,17 +312,17 @@ export default class ReferensiTarifPitaCukai extends Component {
                     block
                   >
                     + Referesi Tarif
-                  </Button>
+                  </ButtonCustom>
                 </Col>
 
                 <Col span={8}>
-                  <Button
-                    style={{ backgroundColor: "#ec808d", color: "white", borderColor: " #ec808d" }}
+                  <ButtonCustom
+                    variant="danger"
                     onClick={() => this.props.history.push(`/referensi-penyediaan-pita-cukai`)}
                     block
                   >
                     + Referesi Tanggal
-                  </Button>
+                  </ButtonCustom>
                 </Col>
               </Row>
             </Col>

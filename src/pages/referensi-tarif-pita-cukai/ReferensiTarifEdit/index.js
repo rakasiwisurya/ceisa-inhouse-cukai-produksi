@@ -18,6 +18,7 @@ import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class ReferensiTarifEdit extends Component {
   constructor(props) {
@@ -116,8 +117,8 @@ export default class ReferensiTarifEdit extends Component {
               fixed: "left",
               render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button
-                    type="primary"
+                  <ButtonCustom
+                    variant="warning"
                     icon="form"
                     onClick={() => this.handleEdit(record, index)}
                   />
@@ -210,8 +211,8 @@ export default class ReferensiTarifEdit extends Component {
               fixed: "left",
               render: (text, record, index) => (
                 <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                  <Button
-                    type="primary"
+                  <ButtonCustom
+                    variant="warning"
                     icon="form"
                     onClick={() => this.handleEdit(record, index)}
                   />
@@ -1467,9 +1468,9 @@ export default class ReferensiTarifEdit extends Component {
                     <Row gutter={[16, 16]}>
                       <Col span={12}>
                         {this.state.isEdit ? (
-                          <Button type="primary" block onClick={this.handleUbah}>
+                          <ButtonCustom variant="warning" block onClick={this.handleUbah}>
                             UBAH
-                          </Button>
+                          </ButtonCustom>
                         ) : (
                           <Button type="primary" block onClick={this.handleSimpan}>
                             SIMPAN
