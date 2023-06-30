@@ -6,6 +6,7 @@ import Header from "components/Header";
 import moment from "moment";
 import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class ReferensiWarnaDetail extends Component {
   constructor(props) {
@@ -439,19 +440,27 @@ export default class ReferensiWarnaDetail extends Component {
                   </Col>
                 </Row>
 
-                {this.state.jenis_bkc_id && (
-                  <>
-                    <div style={{ marginTop: 30, marginBottom: 20 }}>
-                      <Table
-                        dataSource={this.state.dataSource}
-                        columns={this.state.columns}
-                        scroll={{ x: "max-content" }}
-                        onChange={this.handleTableChange}
-                        pagination={{ current: this.state.page }}
-                      />
-                    </div>
-                  </>
-                )}
+                <div style={{ marginTop: 30, marginBottom: 20 }}>
+                  <Table
+                    dataSource={this.state.dataSource}
+                    columns={this.state.columns}
+                    scroll={{ x: "max-content" }}
+                    onChange={this.handleTableChange}
+                    pagination={{ current: this.state.page }}
+                  />
+                </div>
+
+                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+                  <Col span={4}>
+                    <ButtonCustom
+                      variant="secondary"
+                      onClick={() => this.props.history.goBack()}
+                      block
+                    >
+                      Kembali
+                    </ButtonCustom>
+                  </Col>
+                </Row>
               </div>
             </>
           )}

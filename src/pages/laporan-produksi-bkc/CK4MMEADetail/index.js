@@ -19,6 +19,7 @@ import React, { Component } from "react";
 import { months, years } from "utils/times";
 import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4MMEADetail extends Component {
   constructor(props) {
@@ -1022,6 +1023,18 @@ export default class CK4MMEADetail extends Component {
                       </div>
                       <Input id="nama_pengusaha" value={this.state.nama_pengusaha} disabled />
                     </div>
+                  </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+                  <Col span={4}>
+                    <ButtonCustom
+                      variant="secondary"
+                      onClick={() => this.props.history.goBack()}
+                      block
+                    >
+                      Kembali
+                    </ButtonCustom>
                   </Col>
                 </Row>
               </div>

@@ -22,6 +22,7 @@ import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import moment from "moment";
 import { idMenu } from "utils/idMenu";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4EA extends Component {
   constructor(props) {
@@ -76,8 +77,8 @@ export default class CK4EA extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                type="primary"
+              <ButtonCustom
+                variant="warning"
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
@@ -623,9 +624,9 @@ export default class CK4EA extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbahRincian}>
+                      <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
                         Ubah Rincian
-                      </Button>
+                      </ButtonCustom>
                     ) : (
                       <Button type="primary" block onClick={this.handleSimpanRincian}>
                         Simpan Rincian
@@ -690,8 +691,14 @@ export default class CK4EA extends Component {
               </Col>
             </Row>
 
-            <Row>
-              <Col span={4} offset={20}>
+            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+              <Col span={4}>
+                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                  Kembali
+                </ButtonCustom>
+              </Col>
+
+              <Col span={4}>
                 <Button
                   type="primary"
                   loading={this.state.isRekamLoading}

@@ -11,6 +11,7 @@ import {
   Table,
   Upload,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
@@ -1111,6 +1112,18 @@ export default class CK4HTDetail extends Component {
                       </div>
                       <Input id="nama_pengusaha" value={this.state.nama_pengusaha} disabled />
                     </div>
+                  </Col>
+                </Row>
+
+                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+                  <Col span={4}>
+                    <ButtonCustom
+                      variant="secondary"
+                      onClick={() => this.props.history.goBack()}
+                      block
+                    >
+                      Kembali
+                    </ButtonCustom>
                   </Col>
                 </Row>
               </div>

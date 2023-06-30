@@ -1209,33 +1209,35 @@ export default class ReferensiTarifRekam extends Component {
               </Col>
             </Row>
 
-            {this.state.jenis_bkc_id && (
-              <>
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    dataSource={this.state.dataSource}
-                    columns={this.state.columns}
-                    scroll={{ x: "max-content" }}
-                    onChange={this.handleTableChange}
-                    pagination={{ current: this.state.page }}
-                  />
-                </div>
+            <div style={{ marginTop: 30, marginBottom: 20 }}>
+              <Table
+                dataSource={this.state.dataSource}
+                columns={this.state.columns}
+                scroll={{ x: "max-content" }}
+                onChange={this.handleTableChange}
+                pagination={{ current: this.state.page }}
+              />
+            </div>
 
-                <Row>
-                  <Col span={4} offset={20}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isRekamLoading}
-                      onClick={this.handleRekam}
-                      disabled={!this.validationForm()}
-                      block
-                    >
-                      Rekam
-                    </Button>
-                  </Col>
-                </Row>
-              </>
-            )}
+            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+              <Col span={4}>
+                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                  Kembali
+                </ButtonCustom>
+              </Col>
+
+              <Col span={4}>
+                <Button
+                  type="primary"
+                  loading={this.state.isRekamLoading}
+                  onClick={this.handleRekam}
+                  disabled={!this.validationForm()}
+                  block
+                >
+                  Rekam
+                </Button>
+              </Col>
+            </Row>
           </div>
         </Container>
       </>

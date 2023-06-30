@@ -23,6 +23,7 @@ import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4EAPerbaikan extends Component {
   constructor(props) {
@@ -1100,8 +1101,18 @@ export default class CK4EAPerbaikan extends Component {
                   </Col>
                 </Row>
 
-                <Row>
-                  <Col span={4} offset={19}>
+                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+                  <Col span={4}>
+                    <ButtonCustom
+                      variant="secondary"
+                      onClick={() => this.props.history.goBack()}
+                      block
+                    >
+                      Kembali
+                    </ButtonCustom>
+                  </Col>
+
+                  <Col span={5}>
                     <Button
                       type="primary"
                       loading={this.state.isSimpanPerbaikan}

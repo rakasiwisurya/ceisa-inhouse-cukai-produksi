@@ -27,6 +27,7 @@ import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
 import { idMenu } from "utils/idMenu";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4MMEA extends Component {
   constructor(props) {
@@ -1108,8 +1109,14 @@ export default class CK4MMEA extends Component {
               </Col>
             </Row>
 
-            <Row>
-              <Col span={4} offset={20}>
+            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+              <Col span={4}>
+                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                  Kembali
+                </ButtonCustom>
+              </Col>
+
+              <Col span={4}>
                 <Button
                   type="primary"
                   loading={this.state.isRekamLoading}

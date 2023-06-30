@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import Header from "components/Header";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
+import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -38,15 +39,15 @@ export default class CK4 extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                type="default"
-                icon="eye"
-                onClick={() => this.handleDetail(record.id, record.nppbkc)}
-              />
-              <Button
-                type="primary"
+              <ButtonCustom
+                variant="warning"
                 icon="form"
                 onClick={() => this.handleEdit(record.id, record.nppbkc)}
+              />
+              <ButtonCustom
+                variant="info"
+                icon="eye"
+                onClick={() => this.handleDetail(record.id, record.nppbkc)}
               />
             </div>
           ),
@@ -335,33 +336,33 @@ export default class CK4 extends Component {
               <Col span={12}>
                 <Row gutter={[16, 16]}>
                   <Col span={8}>
-                    <Button
-                      block
-                      type="default"
+                    <ButtonCustom
+                      variant="info"
                       onClick={() => this.props.history.push(`${pathName}/ck4-ea-rekam`)}
+                      block
                     >
                       CK4A Rekam
-                    </Button>
+                    </ButtonCustom>
                   </Col>
 
                   <Col span={8}>
-                    <Button
-                      block
-                      type="default"
+                    <ButtonCustom
+                      variant="warning"
                       onClick={() => this.props.history.push(`${pathName}/ck4-mmea-rekam`)}
+                      block
                     >
                       CK4B Rekam
-                    </Button>
+                    </ButtonCustom>
                   </Col>
 
                   <Col span={8}>
-                    <Button
-                      block
-                      type="default"
+                    <ButtonCustom
+                      variant="danger"
                       onClick={() => this.props.history.push(`${pathName}/ck4-ht-rekam`)}
+                      block
                     >
                       CK4C Rekam
-                    </Button>
+                    </ButtonCustom>
                   </Col>
                 </Row>
               </Col>
