@@ -436,7 +436,12 @@ export default class ReferensiTarifDetail extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tanggal Surat</FormLabel>
                     </div>
-                    <DatePicker id="tanggal_surat" value={this.state.tanggal_surat} disabled />
+                    <DatePicker
+                      id="tanggal_surat"
+                      format="DD-MM-YYYY"
+                      value={this.state.tanggal_surat}
+                      disabled
+                    />
                   </Col>
                   <Col span={6}>
                     <div style={{ marginBottom: 10 }}>
@@ -444,6 +449,7 @@ export default class ReferensiTarifDetail extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_awal_berlaku"
+                      format="DD-MM-YYYY"
                       value={this.state.tanggal_awal_berlaku}
                       style={{ width: "100%" }}
                       disabled
@@ -464,6 +470,7 @@ export default class ReferensiTarifDetail extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_peraturan"
+                      format="DD-MM-YYYY"
                       style={{ width: "100%" }}
                       value={this.state.tanggal_peraturan}
                       disabled

@@ -150,10 +150,10 @@ export default class ReferensiTarifPitaCukai extends Component {
 
     if (nomor_surat) payload.nomorSkep = nomor_surat;
     if (tanggal_surat) payload.tanggalSkep = moment(tanggal_surat).format("YYYY-MM-DD");
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
-    if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
-    if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
-    if (jenis_referensi_name) payload.jenisReferensi = jenis_referensi_name;
+    if (awal_berlaku) payload.tanggalAwalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
+    if (akhir_berlaku) payload.tanggalAkhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
+    if (jenis_bkc_name) payload.namaJenisBkc = jenis_bkc_name;
+    if (jenis_referensi_name) payload.namaJenisReferensi = jenis_referensi_name;
 
     const response = await requestApi({
       service: "referensi",
@@ -166,14 +166,14 @@ export default class ReferensiTarifPitaCukai extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `referensi-${index}`,
-        referensi_skep_id: item.idReferensiSkep,
+        referensi_skep_id: item.idSkepHeader,
         nomor_surat: item.nomorSkep,
         tanggal_surat: item.tanggalSkep,
-        awal_berlaku: item.awalBerlaku,
-        akhir_berlaku: item.akhirBerlaku,
-        jenis_bkc_id: +item.idJenisBkc,
+        awal_berlaku: item.tanggalAwalBerlaku,
+        akhir_berlaku: item.tanggalAkhirBerlaku,
+        jenis_bkc_id: item.idJenisBkc,
         jenis_bkc_name: item.namaJenisBkc,
-        jenis_referensi_id: +item.idJenisReferensi,
+        jenis_referensi_id: item.idJenisReferensi,
         jenis_referensi_name: item.namaJenisReferensi,
       }));
       const page = response.data.data.currentPage;

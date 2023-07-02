@@ -8,6 +8,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
+import { idMenu } from "utils/idMenu";
 
 export default class ReferensiWarnaEdit extends Component {
   constructor(props) {
@@ -26,8 +27,8 @@ export default class ReferensiWarnaEdit extends Component {
       isGolonganLoading: true,
 
       nomor_surat: "",
-      tanggal_surat: "",
-      tanggal_awal_berlaku: "",
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
 
       jenis_bkc_id: "",
       jenis_bkc_name: "",
@@ -63,8 +64,10 @@ export default class ReferensiWarnaEdit extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.getListGolongan();
-      this.getListJenisProduksi();
+      if (this.state.jenis_bkc_id) {
+        this.getListGolongan();
+        this.getListJenisProduksi();
+      }
 
       if (this.state.jenis_bkc_id === 3) {
         this.setState({
@@ -194,94 +197,42 @@ export default class ReferensiWarnaEdit extends Component {
   }
 
   getDetailWarna = async () => {
-    // const payload = { idSkepHeader: this.props.match.params.id };
+    const payload = { idSkepHeader: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/browse-detail-warna",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailWarnaLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-detail-warna",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailWarnaLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nomor_surat: data.nomorSkep,
-    //     tanggal_surat: moment(data.tanggalSkep),
-    //     jenis_bkc_id: data.idJenisBkc,
-    //     jenis_bkc_name: data.namaJenisBkc,
-    //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `referensi-${index}`,
-    //       kode_warna: detail.kodeWarna,
-    //       warna: detail.warna,
-    //       golongan_id: detail.idGolongan,
-    //       golongan_name: detail.namaGolongan,
-    //       jenis_produksi_id: detail.idJenisProduksi,
-    //       jenis_produksi_code: detail.kodeJenisProduksi,
-    //       jenis_usaha_id: detail.idJenisUsaha,
-    //       jenis_usaha_name: detail.namaJenisUsaha,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailWarnaLoading: true });
-    setTimeout(() => {
       this.setState({
-        nomor_surat: "Nomor Surat 1",
-        tanggal_surat: moment(new Date()),
-        tanggal_awal_berlaku: moment(new Date()),
-        jenis_bkc_id: 3,
-        jenis_bkc_name: "HT",
-        dataSource: [
-          {
-            key: 1,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "HIJAU",
-            warna: "Hijau",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-          {
-            key: 2,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "BIRU",
-            warna: "Biru",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-          {
-            key: 3,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "MERAH",
-            warna: "Merah",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-        ],
+        nomor_surat: data.nomorSkep,
+        tanggal_surat: moment(data.tanggalSkep),
+        jenis_bkc_id: data.idJenisBkc,
+        jenis_bkc_name: data.namaJenisBkc,
+        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+        dataSource: data.details.map((detail, index) => ({
+          key: `referensi-${index}`,
+          warna_detail_id: detail.idWarnaBkcDetail,
+          jenis_bkc_id: detail.idJenisBkc,
+          jenis_bkc_name: detail.namaJenisBkc,
+          kode_warna: detail.kodeWarna,
+          warna: detail.warna,
+          golongan_id: detail.idGolonganBkc,
+          golongan_name: detail.namaGolonganBkc,
+          jenis_produksi_id: detail.idJenisProduksiBkc,
+          jenis_produksi_code: detail.kodeJenisProduksiBkc,
+          jenis_produksi_name: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
+          jenis_usaha_id: detail.idJenisUsaha,
+          jenis_usaha_name: detail.namaJenisUsaha,
+        })),
       });
-      this.setState({ isDetailWarnaLoading: false });
-    }, 2000);
+    }
   };
   getJenisBkc = async () => {
     const response = await requestApi({
@@ -407,6 +358,35 @@ export default class ReferensiWarnaEdit extends Component {
       [`${field}_id`]: value,
       [`${field}_name`]: option.props.children,
     });
+  };
+
+  validationForm = () => {
+    const { nomor_surat, tanggal_surat, tanggal_awal_berlaku, dataSource } = this.state;
+
+    if (!nomor_surat || !tanggal_surat || !tanggal_awal_berlaku || dataSource.length < 1) {
+      return false;
+    }
+
+    return true;
+  };
+  validationInsert = () => {
+    const { jenis_bkc_id, kode_warna, warna, golongan_id, jenis_produksi_id, jenis_usaha_id } =
+      this.state;
+
+    if (!jenis_bkc_id) return false;
+
+    if (jenis_bkc_id === 3 && (!kode_warna || !warna || !golongan_id || !jenis_produksi_id)) {
+      return false;
+    }
+
+    if (
+      jenis_bkc_id === 2 &&
+      (!kode_warna || !warna || !golongan_id || !jenis_produksi_id || !jenis_usaha_id)
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
   handleSimpan = () => {
@@ -548,6 +528,8 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   handleSimpanPerubahan = async () => {
+    if (!this.validationForm()) return;
+
     const details = this.state.dataSource.map((item) => {
       const data = {
         kodeWarna: item.kode_warna,
@@ -561,10 +543,13 @@ export default class ReferensiWarnaEdit extends Component {
         return data;
       }
 
+      if (item.warna_detail_id) data.idWarnaBkcDetail = item.warna_detail_id;
+
       return data;
     });
 
     const payload = {
+      idMenu: idMenu("referensi"),
       idSkepHeader: this.props.match.params.id,
       nomorSkep: this.state.nomor_surat,
       tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
@@ -623,6 +608,7 @@ export default class ReferensiWarnaEdit extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
                       value={this.state.tanggal_surat}
                       style={{ width: "100%" }}
@@ -635,6 +621,7 @@ export default class ReferensiWarnaEdit extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_awal_berlaku"
+                      format="DD-MM-YYYY"
                       onChange={(value) =>
                         this.handleDatepickerChange("tanggal_awal_berlaku", value)
                       }
@@ -717,8 +704,8 @@ export default class ReferensiWarnaEdit extends Component {
                       >
                         {this.state.list_golongan.length > 0 &&
                           this.state.list_golongan.map((item, index) => (
-                            <Select.Option key={`golongan-${index}`} value={item.idGolongan}>
-                              {item.namaGolongan}
+                            <Select.Option key={`golongan-${index}`} value={item.idGolonganBkc}>
+                              {item.namaGolonganBkc}
                             </Select.Option>
                           ))}
                       </Select>
@@ -745,7 +732,7 @@ export default class ReferensiWarnaEdit extends Component {
                               key={`jenis-produksi-${index}`}
                               value={item.idJenisProduksi}
                             >
-                              {`${item.kodeJenisProduksi} - ${item.namaJenisProduksi}`}
+                              {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
                             </Select.Option>
                           ))}
                       </Select>
@@ -788,7 +775,12 @@ export default class ReferensiWarnaEdit extends Component {
                             UBAH
                           </ButtonCustom>
                         ) : (
-                          <Button type="primary" block onClick={this.handleSimpan}>
+                          <Button
+                            type="primary"
+                            block
+                            onClick={this.handleSimpan}
+                            disabled={!this.validationInsert()}
+                          >
                             SIMPAN
                           </Button>
                         )}
@@ -834,6 +826,7 @@ export default class ReferensiWarnaEdit extends Component {
                       type="primary"
                       loading={this.state.isSimpanPerubahanLoading}
                       onClick={this.handleSimpanPerubahan}
+                      disabled={!this.validationForm()}
                       block
                     >
                       Update

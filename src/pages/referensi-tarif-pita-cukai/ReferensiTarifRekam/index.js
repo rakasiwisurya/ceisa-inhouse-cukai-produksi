@@ -101,8 +101,10 @@ export default class ReferensiTarifRekam extends Component {
     }
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.getListGolongan();
-      this.getListJenisProduksi();
+      if (this.state.jenis_bkc_id !== "") {
+        this.getListGolongan();
+        this.getListJenisProduksi();
+      }
 
       if (this.state.jenis_bkc_id === 3) {
         this.setState({
@@ -315,14 +317,14 @@ export default class ReferensiTarifRekam extends Component {
     if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
   getJenisHtlRel = async () => {
-    const payload = { idJenisProduksi: this.state.jenis_produksi_id };
+    const payload = { idJenisProduksiBkc: this.state.jenis_produksi_id };
 
     const response = await requestApi({
       service: "referensi",
       method: "get",
       endpoint: "/referensi/jenis-htl-rel",
       params: payload,
-      setLoading: (bool) => this.setState({ isJenisHtlRel: bool }),
+      setLoading: (bool) => this.setState({ isJenisHtlRelLoading: bool }),
     });
 
     if (response) this.setState({ list_jenis_htl_rel: response.data.data });
@@ -558,11 +560,6 @@ export default class ReferensiTarifRekam extends Component {
       personal_id: "",
       personal_name: "",
 
-      jenis_produksi_id: "",
-      jenis_produksi_code: "",
-      jenis_produksi_name: "",
-      jenis_htl_rel_id: "",
-      jenis_htl_rel_name: "",
       tarif: "",
       batas_produksi1: "",
       batas_produksi2: "",
@@ -667,11 +664,6 @@ export default class ReferensiTarifRekam extends Component {
       personal_id: "",
       personal_name: "",
 
-      jenis_produksi_id: "",
-      jenis_produksi_code: "",
-      jenis_produksi_name: "",
-      jenis_htl_rel_id: "",
-      jenis_htl_rel_name: "",
       tarif: "",
       batas_produksi1: "",
       batas_produksi2: "",
@@ -980,6 +972,7 @@ export default class ReferensiTarifRekam extends Component {
                       value={this.state.jenis_produksi_id}
                       loading={this.state.isJenisProduksiLoading}
                       style={{ width: "100%" }}
+                      disabled={this.state.dataSource.length > 0}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
                         this.state.list_jenis_produksi.map((item, index) => (
@@ -1019,7 +1012,7 @@ export default class ReferensiTarifRekam extends Component {
                       {this.state.list_jenis_htl_rel.length > 0 &&
                         this.state.list_jenis_htl_rel.map((item, index) => (
                           <Select.Option key={`jenis_htl_rel-${index}`} value={item.idJenisHtlRel}>
-                            {item.namaJenisHtlRel}
+                            {`(${item.kodeHtlRel}) - ${item.namaJenisHtlRel}`}
                           </Select.Option>
                         ))}
                     </Select>

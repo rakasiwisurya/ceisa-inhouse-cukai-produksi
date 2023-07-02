@@ -19,8 +19,8 @@ export default class ReferensiWarnaDetail extends Component {
       isJenisBkcLoading: true,
 
       nomor_surat: "",
-      tanggal_surat: "",
-      tanggal_awal_berlaku: "",
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
 
       jenis_bkc_id: "",
       jenis_bkc_name: "",
@@ -145,96 +145,42 @@ export default class ReferensiWarnaDetail extends Component {
   }
 
   getDetailWarna = async () => {
-    // const payload = { idReferensiSkep: this.props.match.params.id };
+    const payload = { idSkepHeader: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/browse-detail-warna",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isEditWarnaLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-detail-warna",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailWarnaLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nomor_surat: data.nomorSurat,
-    //     tanggal_surat: moment(data.tanggalSurat),
-    //     jenis_bkc_id: data.details[0].idJenisBkc,
-    //     jenis_bkc_name: data.details[0].namaJenisBkc,
-    //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `referensi-${index}`,
-    //       jenis_bkc_id: detail.idJenisBkc,
-    //       jenis_bkc_name: detail.namaJenisBkc,
-    //       kode_warna: detail.kodeWarna,
-    //       warna: detail.warna,
-    //       golongan_id: detail.idGolongan,
-    //       golongan_name: detail.namaGolongan,
-    //       jenis_produksi_id: detail.idJenisProduksi,
-    //       jenis_produksi_code: detail.kodeJenisProduksi,
-    //       jenis_usaha_id: detail.idJenisUsaha,
-    //       jenis_usaha_name: detail.namaJenisUsaha,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailWarnaLoading: true });
-    setTimeout(() => {
       this.setState({
-        nomor_surat: "Nomor Surat 1",
-        tanggal_surat: moment(new Date()),
-        tanggal_awal_berlaku: moment(new Date()),
-        jenis_bkc_id: 3,
-        jenis_bkc_name: "HT",
-        dataSource: [
-          {
-            key: 1,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "HIJAU",
-            warna: "Hijau",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-          {
-            key: 2,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "BIRU",
-            warna: "Biru",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-          {
-            key: 3,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            kode_warna: "MERAH",
-            warna: "Merah",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            jenis_usaha_id: 1,
-            jenis_usaha_name: "Dalam Negeri",
-          },
-        ],
+        nomor_surat: data.nomorSkep,
+        tanggal_surat: moment(data.tanggalSkep),
+        jenis_bkc_id: data.idJenisBkc,
+        jenis_bkc_name: data.namaJenisBkc,
+        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+        dataSource: data.details.map((detail, index) => ({
+          key: `referensi-${index}`,
+          warna_detail_id: detail.idWarnaBkcDetail,
+          jenis_bkc_id: detail.idJenisBkc,
+          jenis_bkc_name: detail.namaJenisBkc,
+          kode_warna: detail.kodeWarna,
+          warna: detail.warna,
+          golongan_id: detail.idGolonganBkc,
+          golongan_name: detail.namaGolonganBkc,
+          jenis_produksi_id: detail.idJenisProduksiBkc,
+          jenis_produksi_code: detail.kodeJenisProduksiBkc,
+          jenis_produksi_name: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
+          jenis_usaha_id: detail.idJenisUsaha,
+          jenis_usaha_name: detail.namaJenisUsaha,
+        })),
       });
-      this.setState({ isDetailWarnaLoading: false });
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -328,6 +274,7 @@ export default class ReferensiWarnaDetail extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       value={this.state.tanggal_surat}
                       style={{ width: "100%" }}
                       disabled
@@ -340,6 +287,7 @@ export default class ReferensiWarnaDetail extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_awal_berlaku"
+                      format="DD-MM-YYYY"
                       value={this.state.tanggal_awal_berlaku}
                       style={{ width: "100%" }}
                       disabled
@@ -413,7 +361,7 @@ export default class ReferensiWarnaDetail extends Component {
                         disabled
                       >
                         <Select.Option value={this.state.jenis_produksi_id}>
-                          {`${this.state.jenis_produksi_code} - ${this.state.jenis_produksi_name}`}
+                          {`(${this.state.jenis_produksi_code}) - ${this.state.jenis_produksi_name}`}
                         </Select.Option>
                       </Select>
                     </Col>

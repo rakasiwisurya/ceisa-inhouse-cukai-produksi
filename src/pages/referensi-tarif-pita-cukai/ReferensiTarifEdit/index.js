@@ -104,8 +104,10 @@ export default class ReferensiTarifEdit extends Component {
     }
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.getListGolongan();
-      this.getListJenisProduksi();
+      if (this.state.jenis_bkc_id !== "") {
+        this.getListGolongan();
+        this.getListJenisProduksi();
+      }
 
       if (this.state.jenis_bkc_id === 3) {
         this.setState({
@@ -462,14 +464,14 @@ export default class ReferensiTarifEdit extends Component {
     if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
   getJenisHtlRel = async () => {
-    const payload = { idJenisProduksi: this.state.jenis_produksi_id };
+    const payload = { idJenisProduksiBkc: this.state.jenis_produksi_id };
 
     const response = await requestApi({
       service: "referensi",
       method: "get",
       endpoint: "/referensi/jenis-htl-rel",
       params: payload,
-      setLoading: (bool) => this.setState({ isJenisHtlRel: bool }),
+      setLoading: (bool) => this.setState({ isJenisHtlRelLoading: bool }),
     });
 
     if (response) this.setState({ list_jenis_htl_rel: response.data.data });
@@ -891,6 +893,7 @@ export default class ReferensiTarifEdit extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       onChange={(value) => this.handleDatepickerChange("tanggal_surat", value)}
                       value={this.state.tanggal_surat}
                     />
@@ -901,6 +904,7 @@ export default class ReferensiTarifEdit extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_awal_berlaku"
+                      format="DD-MM-YYYY"
                       onChange={(value) =>
                         this.handleDatepickerChange("tanggal_awal_berlaku", value)
                       }
@@ -927,6 +931,7 @@ export default class ReferensiTarifEdit extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_peraturan"
+                      format="DD-MM-YYYY"
                       onChange={(value) => this.handleDatepickerChange("tanggal_peraturan", value)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_peraturan}
@@ -1038,6 +1043,7 @@ export default class ReferensiTarifEdit extends Component {
                           value={this.state.jenis_produksi_id}
                           loading={this.state.isJenisProduksiLoading}
                           style={{ width: "100%" }}
+                          disabled={this.state.dataSource.length > 0}
                         >
                           {this.state.list_jenis_produksi.length > 0 &&
                             this.state.list_jenis_produksi.map((item, index) => (
@@ -1080,7 +1086,7 @@ export default class ReferensiTarifEdit extends Component {
                                 key={`jenis_htl_rel-${index}`}
                                 value={item.idJenisHtlRel}
                               >
-                                {item.namaJenisHtlRel}
+                                {`(${item.kodeHtlRel}) - ${item.namaJenisHtlRel}`}
                               </Select.Option>
                             ))}
                         </Select>
