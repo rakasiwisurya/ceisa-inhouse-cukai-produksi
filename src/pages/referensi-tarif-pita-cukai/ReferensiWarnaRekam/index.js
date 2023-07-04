@@ -510,6 +510,8 @@ export default class ReferensiWarnaRekam extends Component {
         data.idJenisUsaha = item.jenis_usaha_id;
         return data;
       }
+
+      return data;
     });
 
     const payload = {

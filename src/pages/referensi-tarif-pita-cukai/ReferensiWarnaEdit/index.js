@@ -41,6 +41,7 @@ export default class ReferensiWarnaEdit extends Component {
       jenis_produksi_name: "",
       jenis_usaha_id: "",
       jenis_usaha_name: "",
+      warna_detail_id: "",
 
       searchText: "",
       searchedColumn: "",
@@ -84,7 +85,10 @@ export default class ReferensiWarnaEdit extends Component {
                     icon="form"
                     onClick={() => this.handleEdit(record, index)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+
+                  {!record.warna_detail_id && (
+                    <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  )}
                 </div>
               ),
             },
@@ -438,6 +442,7 @@ export default class ReferensiWarnaEdit extends Component {
       isEdit: false,
       jenis_bkc_id: "",
       jenis_bkc_name: "",
+      warna_detail_id: "",
       kode_warna: "",
       warna: "",
       golongan_id: "",
@@ -453,6 +458,7 @@ export default class ReferensiWarnaEdit extends Component {
     const {
       jenis_bkc_id,
       jenis_bkc_name,
+      warna_detail_id,
       kode_warna,
       warna,
       golongan_id,
@@ -468,6 +474,7 @@ export default class ReferensiWarnaEdit extends Component {
       key: new Date().getTime(),
       jenis_bkc_id,
       jenis_bkc_name,
+      warna_detail_id,
       kode_warna,
       warna,
       golongan_id,
@@ -480,6 +487,7 @@ export default class ReferensiWarnaEdit extends Component {
     this.setState({
       isEdit: false,
       editIndex: null,
+      warna_detail_id: "",
       kode_warna: "",
       warna: "",
       golongan_id: "",
@@ -494,6 +502,7 @@ export default class ReferensiWarnaEdit extends Component {
   handleBatal = () => {
     this.setState({
       isEdit: false,
+      warna_detail_id: "",
       kode_warna: "",
       warna: "",
       golongan_id: "",
@@ -509,8 +518,7 @@ export default class ReferensiWarnaEdit extends Component {
     this.setState({
       isEdit: true,
       editIndex: index,
-      jenis_bkc_id: record.jenis_bkc_id,
-      jenis_bkc_name: record.jenis_bkc_name,
+      warna_detail_id: record.warna_detail_id,
       kode_warna: record.kode_warna,
       warna: record.warna,
       golongan_id: record.golongan_id,
@@ -538,12 +546,8 @@ export default class ReferensiWarnaEdit extends Component {
         idJenisProduksi: item.jenis_produksi_id,
       };
 
-      if (this.state.jenis_bkc_id === 2) {
-        data.idJenisUsaha = item.jenis_usaha_id;
-        return data;
-      }
-
       if (item.warna_detail_id) data.idWarnaBkcDetail = item.warna_detail_id;
+      if (this.state.jenis_bkc_id === 2) data.idJenisUsaha = item.jenis_usaha_id;
 
       return data;
     });
@@ -573,6 +577,7 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   render() {
+    console.log("this.state.dataSource", this.state.dataSource);
     return (
       <>
         <Container
@@ -787,13 +792,18 @@ export default class ReferensiWarnaEdit extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {this.state.isEdit ? (
+                        {/* {this.state.isEdit ? (
                           <Button type="danger" block onClick={this.handleBatal}>
                             BATAL
                           </Button>
                         ) : (
                           <Button type="danger" block onClick={this.handleReset}>
                             RESET
+                          </Button>
+                        )} */}
+                        {this.state.isEdit && (
+                          <Button type="danger" block onClick={this.handleBatal}>
+                            BATAL
                           </Button>
                         )}
                       </Col>
