@@ -485,15 +485,24 @@ export default class ReferensiTarifRekam extends Component {
       return false;
     }
 
+    if (jenis_bkc_id === 2 && !golongan_id) return false;
+
     if (
       jenis_bkc_id === 2 &&
-      (!golongan_id ||
-        !personal_id ||
+      golongan_id === 4 &&
+      (!personal_id || !jenis_produksi_id || !kadar_atas || !kadar_bawah || !tarif_cukai_impor)
+    ) {
+      return false;
+    }
+
+    if (
+      jenis_bkc_id === 2 &&
+      golongan_id === 5 &&
+      (!personal_id ||
         !jenis_produksi_id ||
         !kadar_atas ||
         !kadar_bawah ||
-        !tarif_cukai_dalam_negeri ||
-        !tarif_cukai_impor)
+        !tarif_cukai_dalam_negeri)
     ) {
       return false;
     }
@@ -567,6 +576,8 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: "",
       personal_id: "",
       personal_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
 
       tarif: "",
       batas_produksi1: "",
@@ -582,6 +593,10 @@ export default class ReferensiTarifRekam extends Component {
       tarif_cukai_dalam_negeri: "",
       tarif_cukai_impor: "",
     });
+
+    if (this.state.jenis_bkc_id === 2) {
+      this.setState({ jenis_produksi_id: "", jenis_produksi_code: "", jenis_produksi_name: "" });
+    }
   };
   handleReset = () => {
     this.setState({
@@ -679,6 +694,8 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: "",
       personal_id: "",
       personal_name: "",
+      jenis_htl_rel_id: "",
+      jenis_htl_rel_name: "",
 
       tarif: "",
       batas_produksi1: "",
@@ -695,6 +712,10 @@ export default class ReferensiTarifRekam extends Component {
       tarif_cukai_impor: "",
       dataSource: newDataSource,
     });
+
+    if (this.state.jenis_bkc_id === 2) {
+      this.setState({ jenis_produksi_id: "", jenis_produksi_code: "", jenis_produksi_name: "" });
+    }
   };
   handleBatal = () => {
     this.setState({
@@ -763,7 +784,7 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleRekam = async () => {
-    // if (!this.validationForm()) return;
+    if (!this.validationForm()) return;
 
     const details = this.state.dataSource.map((item) => {
       const data = {
@@ -797,7 +818,7 @@ export default class ReferensiTarifRekam extends Component {
 
     const payload = {
       idMenu: idMenu("referensi"),
-      noSkep: this.state.nomor_surat,
+      nomorSkep: this.state.nomor_surat,
       tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
       tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
       nomorPeraturan: this.state.nomor_peraturan,
@@ -807,20 +828,18 @@ export default class ReferensiTarifRekam extends Component {
       details,
     };
 
-    console.log("payload", payload);
+    const response = await requestApi({
+      service: "referensi",
+      method: "post",
+      endpoint: "/referensi/browse-rekam-tarif",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "post",
-    //   endpoint: "/referensi/browse-rekam-warna",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
-
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/referensi-tarif-warna`);
-    // }
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
+    }
   };
 
   render() {
@@ -1005,7 +1024,7 @@ export default class ReferensiTarifRekam extends Component {
                       value={`${this.state.jenis_produksi_id}`}
                       loading={this.state.isJenisProduksiLoading}
                       style={{ width: "100%" }}
-                      disabled={this.state.dataSource.length > 0}
+                      disabled={this.state.jenis_bkc_id === 3 && this.state.dataSource.length > 0}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
                         this.state.list_jenis_produksi.map((item, index) => (
@@ -1147,7 +1166,7 @@ export default class ReferensiTarifRekam extends Component {
                     </div>
                     <InputNumber
                       id="layer"
-                      onChange={(value) => this.handleInputNumberChange(value)}
+                      onChange={(value) => this.handleInputNumberChange("layer", value)}
                       value={this.state.layer}
                       min={0}
                       style={{ width: "100%" }}
@@ -1282,7 +1301,7 @@ export default class ReferensiTarifRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  // disabled={!this.validationForm()}
+                  disabled={!this.validationForm()}
                   block
                 >
                   Rekam

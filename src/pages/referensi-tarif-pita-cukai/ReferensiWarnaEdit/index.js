@@ -8,7 +8,6 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
-import { idMenu } from "utils/idMenu";
 
 export default class ReferensiWarnaEdit extends Component {
   constructor(props) {
@@ -25,6 +24,7 @@ export default class ReferensiWarnaEdit extends Component {
       isJenisProduksiLoading: true,
       isJenisUsahaLoading: true,
       isGolonganLoading: true,
+      isTableLoading: false,
 
       nomor_surat: "",
       tanggal_surat: null,
@@ -86,7 +86,13 @@ export default class ReferensiWarnaEdit extends Component {
                     onClick={() => this.handleEdit(record, index)}
                   />
 
-                  {!record.warna_detail_id && (
+                  {record.warna_detail_id ? (
+                    <Button
+                      type="danger"
+                      icon="delete"
+                      onClick={() => this.handleDeleteApi(index, record.warna_detail_id)}
+                    />
+                  ) : (
                     <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
                   )}
                 </div>
@@ -147,7 +153,15 @@ export default class ReferensiWarnaEdit extends Component {
                     icon="form"
                     onClick={() => this.handleEdit(record, index)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  {record.warna_detail_id ? (
+                    <Button
+                      type="danger"
+                      icon="delete"
+                      onClick={() => this.handleDeleteApi(index, record.warna_detail_id)}
+                    />
+                  ) : (
+                    <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  )}
                 </div>
               ),
             },
@@ -535,6 +549,21 @@ export default class ReferensiWarnaEdit extends Component {
     this.setState({ dataSource: newDataSource });
   };
 
+  handleDeleteApi = async (index, id) => {
+    const response = await requestApi({
+      service: "referensi",
+      method: "post",
+      endpoint: "/referensi/browse-delete-warna",
+      body: { idWarnaBkcDetail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDelete(index);
+    }
+  };
+
   handleSimpanPerubahan = async () => {
     if (!this.validationForm()) return;
 
@@ -553,7 +582,6 @@ export default class ReferensiWarnaEdit extends Component {
     });
 
     const payload = {
-      idMenu: idMenu("referensi"),
       idSkepHeader: this.props.match.params.id,
       nomorSkep: this.state.nomor_surat,
       tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
@@ -577,7 +605,6 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   render() {
-    console.log("this.state.dataSource", this.state.dataSource);
     return (
       <>
         <Container
@@ -792,15 +819,6 @@ export default class ReferensiWarnaEdit extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {/* {this.state.isEdit ? (
-                          <Button type="danger" block onClick={this.handleBatal}>
-                            BATAL
-                          </Button>
-                        ) : (
-                          <Button type="danger" block onClick={this.handleReset}>
-                            RESET
-                          </Button>
-                        )} */}
                         {this.state.isEdit && (
                           <Button type="danger" block onClick={this.handleBatal}>
                             BATAL
@@ -815,6 +833,7 @@ export default class ReferensiWarnaEdit extends Component {
                   <Table
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
+                    loading={this.state.isTableLoading}
                     scroll={{ x: "max-content" }}
                     onChange={this.handleTableChange}
                     pagination={{ current: this.state.page }}

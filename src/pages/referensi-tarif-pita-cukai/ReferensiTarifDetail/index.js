@@ -18,10 +18,10 @@ export default class ReferensiTarifDetail extends Component {
       isDetailTarifLoading: true,
 
       nomor_surat: "",
-      tanggal_surat: "",
-      tanggal_awal_berlaku: "",
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
       nomor_peraturan: "",
-      tanggal_peraturan: "",
+      tanggal_peraturan: null,
 
       jenis_bkc_id: "",
       jenis_bkc_name: "",
@@ -35,6 +35,7 @@ export default class ReferensiTarifDetail extends Component {
       jenis_produksi_code: "",
       jenis_produksi_name: "",
       jenis_htl_rel_id: "",
+      jenis_htl_rel_code: "",
       jenis_htl_rel_name: "",
       tarif: "",
       batas_produksi1: "",
@@ -202,150 +203,61 @@ export default class ReferensiTarifDetail extends Component {
   }
 
   getDetailTarif = async () => {
-    // const payload = { idReferensiSkep: this.props.match.params.id };
+    const payload = { idSkepHeader: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "get",
-    //   endpoint: "/referensi/browse-detail-tarif",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-detail-tarif",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nomor_surat: data.nomorSurat,
-    //     tanggal_surat: moment(data.tanggalSurat),
-    //     tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-    //     nomor_peraturan: data.nomorPeraturan,
-    //     tanggal_peraturan: moment(data.tanggalPeraturan),
-    //     jenis_bkc_id: data.details[0].idJenisBkc,
-    //     jenis_bkc_name: data.details[0].namaJenisBkc,
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `referensi-${index}`,
-    //       jenis_bkc_id: detail.idJenisBkc,
-    //       jenis_bkc_name: detail.namaJenisBkc,
-    //       golongan_id: detail.idGolonganBkc,
-    //       golongan_name: detail.namaGolonganBkc,
-    //       jenis_produksi_id: detail.idJenisProduksi,
-    //       jenis_produksi_code: detail.kodeJenisProduksi,
-    //       jenis_produksi_name: detail.namaJenisProduksi,
-    //       personal: detail.personal_id,
-
-    //       jenis_htl_rel_id: detail.idJenisHtlRel,
-    //       jenis_htl_rel_name: detail.namaJenisHtlRel,
-    //       tarif: detail.tarif,
-    //       batas_produksi1: detail.batasProduksi1,
-    //       batas_produksi2: detail.batasProduksi2,
-    //       hje1: detail.hje1,
-    //       hje2: detail.hje2,
-    //       layer: detail.layer,
-    //       satuan: detail.satuan,
-
-    //       kadar_atas: detail.kadarAtas,
-    //       kadar_bawah: detail.kadarBawah,
-    //       tarif_cukai_dalam_negeri: detail.tarifCukaiDalamNegeri,
-    //       tarif_cukai_impor: detail.tarifCukaiImpor,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailTarifLoading: true });
-    const timeout = setTimeout(() => {
       this.setState({
-        nomor_surat: "Nomor Surat 1",
-        tanggal_surat: moment(new Date()),
-        tanggal_awal_berlaku: moment(new Date()),
-        nomor_peraturan: "Nomor Peraturan 1",
-        tanggal_peraturan: moment(new Date()),
-        jenis_bkc_id: 3,
-        jenis_bkc_name: "HT",
-        dataSource: [
-          {
-            key: 1,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "HTL",
-            jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
-            personal: "YA",
+        nomor_surat: data.nomorSkep,
+        tanggal_surat: moment(data.tanggalSkep),
+        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+        nomor_peraturan: data.nomorPeraturan,
+        tanggal_peraturan: moment(data.tanggalPeraturan),
+        jenis_bkc_id: data.idJenisBkc,
+        jenis_bkc_name: data.namaJenisBkc,
+        jenis_produksi_id: `${data.idJenisProduksiBkc} ${data.satuanJenisProduksiBkc}`,
+        jenis_produksi_code: data.kodeJenisProduksiBkc,
+        jenis_produksi_name: data.namaJenisProduksiBkc,
+        dataSource: data.details.map((detail, index) => ({
+          key: `referensi-${index}`,
+          tarif_detail_id: detail.idTarifBkcDetail,
+          jenis_bkc_id: detail.idJenisBkc,
+          jenis_bkc_name: detail.namaJenisBkc,
+          golongan_id: detail.idGolonganBkc,
+          golongan_name: detail.namaGolonganBkc,
+          personal_id: detail.flagPersonal,
+          jenis_produksi_id: `${detail.idJenisProduksiBkc} ${detail.satuanJenisProduksiBkc}`,
+          jenis_produksi_code: detail.kodeJenisProduksiBkc,
+          jenis_produksi_name: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
+          jenis_produksi_bkc_satuan: detail.satuanJenisProduksiBkc,
+          jenis_htl_rel_satuan: detail.satuanJenisHtlRel,
 
-            jenis_htl_rel_id: 1,
-            jenis_htl_rel_name: "B",
-            tarif: 100,
-            batas_produksi1: 200,
-            batas_produksi2: 300,
-            hje1: 400,
-            hje2: 500,
-            layer: "Layer 1",
-            satuan: "GR",
+          jenis_htl_rel_id: `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`,
+          jenis_htl_rel_code: detail.kodeJenisHtlRel,
+          jenis_htl_rel_name: `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`,
+          tarif: detail.tarif,
+          batas_produksi1: detail.batasProduksi1,
+          batas_produksi2: detail.batasProduksi2,
+          hje1: detail.hje1,
+          hje2: detail.hje2,
+          layer: detail.layer,
 
-            kadar_atas: 0,
-            kadar_bawah: 0,
-            tarif_cukai_dalam_negeri: 0,
-            tarif_cukai_impor: 0,
-          },
-          {
-            key: 2,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "SKM",
-            jenis_produksi_name: "SIGARET KRETEK MESIN",
-            personal: "YA",
-
-            jenis_htl_rel_id: 1,
-            jenis_htl_rel_name: "B",
-            tarif: 100,
-            batas_produksi1: 200,
-            batas_produksi2: 300,
-            hje1: 400,
-            hje2: 500,
-            layer: "Layer 1",
-            satuan: "GR",
-
-            kadar_atas: 0,
-            kadar_bawah: 0,
-            tarif_cukai_dalam_negeri: 0,
-            tarif_cukai_impor: 0,
-          },
-          {
-            key: 3,
-            jenis_bkc_id: 3,
-            jenis_bkc_name: "HT",
-            golongan_id: 1,
-            golongan_name: "I",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "CRT",
-            jenis_produksi_name: "CERUTU",
-            personal: "YA",
-
-            jenis_htl_rel_id: 1,
-            jenis_htl_rel_name: "B",
-            tarif: 100,
-            batas_produksi1: 200,
-            batas_produksi2: 300,
-            hje1: 400,
-            hje2: 500,
-            layer: "Layer 1",
-            satuan: "GR",
-
-            kadar_atas: 0,
-            kadar_bawah: 0,
-            tarif_cukai_dalam_negeri: 0,
-            tarif_cukai_impor: 0,
-          },
-        ],
+          kadar_atas: detail.kadarAtas,
+          kadar_bawah: detail.kadarBawah,
+          tarif_cukai_dalam_negeri: detail.tarifCukaiDalamNegeri,
+          tarif_cukai_impor: detail.tarifCukaiImpor,
+        })),
       });
-      this.setState({ isDetailTarifLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
