@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Row, Input, Icon, Table, Col } from "antd";
+import { Button, Row, Input, Icon, Table, Col, DatePicker } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
@@ -16,9 +16,9 @@ export default class ReferensiTarifPitaCukai extends Component {
 
       table: {
         nomor_surat: "",
-        tanggal_surat: "",
-        awal_berlaku: "",
-        akhir_berlaku: "",
+        tanggal_surat: null,
+        awal_berlaku: null,
+        akhir_berlaku: null,
         jenis_bkc_name: "",
         jenis_referensi_name: "",
       },
@@ -80,7 +80,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_surat"),
+          ...this.getColumnSearchProps("tanggal_surat", "date"),
         },
         {
           key: "awal_berlaku",
@@ -92,7 +92,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("awal_berlaku", "date"),
         },
         {
           key: "akhir_berlaku",
@@ -104,7 +104,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("akhir_berlaku"),
+          ...this.getColumnSearchProps("akhir_berlaku", "date"),
         },
         {
           key: "jenis_bkc_name",
@@ -182,20 +182,33 @@ export default class ReferensiTarifPitaCukai extends Component {
     }
   };
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, inputType) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          value={this.state.table[dataIndex]}
-          onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-          }
-          onPressEnter={() => this.handleColumnSearch(confirm)}
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
+        {inputType === "date" ? (
+          <DatePicker
+            value={this.state.table[dataIndex]}
+            onChange={(date) =>
+              this.setState({ table: { ...this.state.table, [dataIndex]: date } })
+            }
+            format="DD-MM-YYYY"
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+            allowClear={false}
+          />
+        ) : (
+          <Input
+            ref={(node) => {
+              this.searchInput = node;
+            }}
+            value={this.state.table[dataIndex]}
+            onChange={(e) =>
+              this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            }
+            onPressEnter={() => this.handleColumnSearch(confirm)}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+        )}
+
         <Button
           type="primary"
           onClick={() => this.handleColumnSearch(confirm)}
@@ -220,7 +233,7 @@ export default class ReferensiTarifPitaCukai extends Component {
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
-          this.searchInput.select();
+          if (inputType !== "date") this.searchInput.select();
           clearTimeout(timeout);
         });
       }
@@ -232,7 +245,7 @@ export default class ReferensiTarifPitaCukai extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
     this.getReferensiTarifPitaCukai();
   };
 
