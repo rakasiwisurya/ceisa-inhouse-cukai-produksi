@@ -300,7 +300,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                     }
                     block
                   >
-                    + Referesi Warna
+                    + Referensi Warna
                   </ButtonCustom>
                 </Col>
 
@@ -314,7 +314,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                     }
                     block
                   >
-                    + Referesi Tarif
+                    + Referensi Tarif
                   </ButtonCustom>
                 </Col>
 
@@ -326,7 +326,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                     }}
                     block
                   >
-                    + Referesi Tanggal
+                    + Referensi Tanggal
                   </ButtonCustom>
                 </Col>
               </Row>
