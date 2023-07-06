@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Row, Input, Icon, Table, Col, DatePicker } from "antd";
+import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
@@ -80,7 +80,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_surat", "date"),
+          ...this.getColumnSearchProps("tanggal_surat"),
         },
         {
           key: "awal_berlaku",
@@ -92,7 +92,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku", "date"),
+          ...this.getColumnSearchProps("awal_berlaku"),
         },
         {
           key: "akhir_berlaku",
@@ -104,7 +104,7 @@ export default class ReferensiTarifPitaCukai extends Component {
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("akhir_berlaku", "date"),
+          ...this.getColumnSearchProps("akhir_berlaku"),
         },
         {
           key: "jenis_bkc_name",
@@ -149,9 +149,12 @@ export default class ReferensiTarifPitaCukai extends Component {
     const payload = { page: this.state.page };
 
     if (nomor_surat) payload.nomorSkep = nomor_surat;
-    if (tanggal_surat) payload.tanggalSkep = moment(tanggal_surat).format("YYYY-MM-DD");
-    if (awal_berlaku) payload.tanggalAwalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
-    if (akhir_berlaku) payload.tanggalAkhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
+    if (tanggal_surat)
+      payload.tanggalSkep = moment(tanggal_surat, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (awal_berlaku)
+      payload.tanggalAwalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (akhir_berlaku)
+      payload.tanggalAkhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (jenis_bkc_name) payload.namaJenisBkc = jenis_bkc_name;
     if (jenis_referensi_name) payload.namaJenisReferensi = jenis_referensi_name;
 
@@ -185,30 +188,17 @@ export default class ReferensiTarifPitaCukai extends Component {
   getColumnSearchProps = (dataIndex, inputType) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
-        {inputType === "date" ? (
-          <DatePicker
-            value={this.state.table[dataIndex]}
-            onChange={(date) =>
-              this.setState({ table: { ...this.state.table, [dataIndex]: date } })
-            }
-            format="DD-MM-YYYY"
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-            allowClear={false}
-          />
-        ) : (
-          <Input
-            ref={(node) => {
-              this.searchInput = node;
-            }}
-            value={this.state.table[dataIndex]}
-            onChange={(e) =>
-              this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-            }
-            onPressEnter={() => this.handleColumnSearch(confirm)}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          />
-        )}
-
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
         <Button
           type="primary"
           onClick={() => this.handleColumnSearch(confirm)}
@@ -233,7 +223,7 @@ export default class ReferensiTarifPitaCukai extends Component {
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
-          if (inputType !== "date") this.searchInput.select();
+          this.searchInput.select();
           clearTimeout(timeout);
         });
       }
