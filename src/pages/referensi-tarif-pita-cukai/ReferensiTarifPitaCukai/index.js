@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { baseUrlCeisaInhouse, pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
@@ -255,7 +255,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         );
         break;
       default:
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
         break;
     }
   };
@@ -275,7 +275,7 @@ export default class ReferensiTarifPitaCukai extends Component {
         );
         break;
       default:
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
         break;
     }
   };
@@ -321,7 +321,9 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <Col span={8}>
                   <ButtonCustom
                     variant="danger"
-                    onClick={() => this.props.history.push(`/referensi-penyediaan-pita-cukai`)}
+                    onClick={() => {
+                      window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
+                    }}
                     block
                   >
                     + Referesi Tanggal
