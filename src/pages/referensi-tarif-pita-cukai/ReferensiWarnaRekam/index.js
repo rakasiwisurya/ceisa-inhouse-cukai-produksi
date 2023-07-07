@@ -508,7 +508,6 @@ export default class ReferensiWarnaRekam extends Component {
 
       if (this.state.jenis_bkc_id === 2) {
         data.idJenisUsaha = item.jenis_usaha_id;
-        return data;
       }
 
       return data;

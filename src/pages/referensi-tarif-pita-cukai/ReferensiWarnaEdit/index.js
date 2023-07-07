@@ -571,8 +571,8 @@ export default class ReferensiWarnaEdit extends Component {
       const data = {
         kodeWarna: item.kode_warna,
         warna: item.warna,
-        idGolongan: item.golongan_id,
-        idJenisProduksi: item.jenis_produksi_id,
+        idGolonganBkc: item.golongan_id,
+        idJenisProduksiBkc: item.jenis_produksi_id,
       };
 
       if (item.warna_detail_id) data.idWarnaBkcDetail = item.warna_detail_id;
