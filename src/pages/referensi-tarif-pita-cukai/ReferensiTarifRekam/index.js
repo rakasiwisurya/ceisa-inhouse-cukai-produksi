@@ -831,22 +831,18 @@ export default class ReferensiTarifRekam extends Component {
       details,
     };
 
-    console.log("this.state.jenis_produksi_id", this.state.jenis_produksi_id);
-    console.log("this.state.jenis_produksi_id.split(' ')", this.state.jenis_produksi_id.split(" "));
-    console.log("payload", payload);
+    const response = await requestApi({
+      service: "referensi",
+      method: "post",
+      endpoint: "/referensi/browse-rekam-tarif",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "referensi",
-    //   method: "post",
-    //   endpoint: "/referensi/browse-rekam-tarif",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
-
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/referensi-tarif-warna`);
-    // }
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/referensi-tarif-warna`);
+    }
   };
 
   render() {
