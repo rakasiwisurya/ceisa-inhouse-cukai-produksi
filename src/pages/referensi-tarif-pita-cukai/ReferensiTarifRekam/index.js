@@ -784,7 +784,7 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleRekam = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const details = this.state.dataSource.map((item) => {
       const data = {
@@ -824,22 +824,29 @@ export default class ReferensiTarifRekam extends Component {
       nomorPeraturan: this.state.nomor_peraturan,
       tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
       idJenisBkc: this.state.jenis_bkc_id,
-      idJenisProduksiBkc: +this.state.jenis_produksi_id.split(" ")[0],
+      idJenisProduksiBkc:
+        this.state.jenis_bkc_id === 3
+          ? +this.state.jenis_produksi_id.split(" ")[0]
+          : +this.state.dataSource[0].jenis_produksi_id.split(" ")[0],
       details,
     };
 
-    const response = await requestApi({
-      service: "referensi",
-      method: "post",
-      endpoint: "/referensi/browse-rekam-tarif",
-      body: payload,
-      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    });
+    console.log("this.state.jenis_produksi_id", this.state.jenis_produksi_id);
+    console.log("this.state.jenis_produksi_id.split(' ')", this.state.jenis_produksi_id.split(" "));
+    console.log("payload", payload);
 
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push(`${pathName}/referensi-tarif-warna`);
-    }
+    // const response = await requestApi({
+    //   service: "referensi",
+    //   method: "post",
+    //   endpoint: "/referensi/browse-rekam-tarif",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/referensi-tarif-warna`);
+    // }
   };
 
   render() {
@@ -1301,7 +1308,7 @@ export default class ReferensiTarifRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam

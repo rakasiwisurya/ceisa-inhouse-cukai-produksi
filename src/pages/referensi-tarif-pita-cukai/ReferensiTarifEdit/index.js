@@ -916,7 +916,10 @@ export default class ReferensiTarifEdit extends Component {
       nomorPeraturan: this.state.nomor_peraturan,
       tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
       idJenisBkc: this.state.jenis_bkc_id,
-      idJenisProduksiBkc: +this.state.jenis_produksi_id.split(" ")[0],
+      idJenisProduksiBkc:
+        this.state.jenis_bkc_id === 3
+          ? +this.state.jenis_produksi_id.split(" ")[0]
+          : +this.state.dataSource[0].jenis_produksi_id.split(" ")[0],
       details,
     };
 
