@@ -9,8 +9,9 @@ export default class ModalDaftarKota extends Component {
       isDaftarKotaLoading: true,
       isMouseEnter: false,
 
+      searchText: "",
+      searchedColumn: "",
       page: 1,
-      totalData: 0,
 
       table: {
         kota_id: "",
@@ -42,58 +43,49 @@ export default class ModalDaftarKota extends Component {
   }
 
   getDaftarKota = async () => {
-    // const { kota_id, kota_name } = this.state.table;
+    const response = await requestApi({
+      service: "referensi_beacukai",
+      method: "get",
+      endpoint: "Referensi/v1/kabupaten/all",
+      setLoading: (bool) => this.setState({ isDaftarKotaLoading: bool }),
+    });
 
-    // const payload = { page: this.state.page };
+    if (response) {
+      const newData = response.data.data.map((item, index) => ({
+        key: `kota-${index}`,
+        kota_id: item.kodeKabupaten,
+        kota_name: item.namaKabupaten,
+      }));
 
-    // if (kota_id) payload.idKota = kota_id;
-    // if (kota_name) payload.namaKota = kota_name;
+      this.setState({ dataSource: newData });
+    }
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/daftar-kota",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDaftarKotaLoading: bool }),
-    // });
-
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item) => ({
-    //     key: item.idKota,
-    //     kota_id: item.idKota,
-    //     kota_name: item.namaKota,
-    //   }));
-    //   const page = response.data.currentPage;
-    //   const totalData = response.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
-
-    this.setState({ isDaftarKotaLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        page: 1,
-        totalData: 10,
-        dataSource: [
-          {
-            key: "489",
-            kota_id: "489",
-            kota_name: "Kabupaten Kaimana",
-          },
-          {
-            key: "490",
-            kota_id: "490",
-            kota_name: "Kabupaten Manokwari",
-          },
-          {
-            key: "491",
-            kota_id: "491",
-            kota_name: "Kabupaten Maybrat",
-          },
-        ],
-      });
-      this.setState({ isDaftarKotaLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    // this.setState({ isDaftarKotaLoading: true });
+    // const timeout = setTimeout(() => {
+    //   this.setState({
+    //     page: 1,
+    //     totalData: 10,
+    //     dataSource: [
+    //       {
+    //         key: "489",
+    //         kota_id: "489",
+    //         kota_name: "Kabupaten Kaimana",
+    //       },
+    //       {
+    //         key: "490",
+    //         kota_id: "490",
+    //         kota_name: "Kabupaten Manokwari",
+    //       },
+    //       {
+    //         key: "491",
+    //         kota_id: "491",
+    //         kota_name: "Kabupaten Maybrat",
+    //       },
+    //     ],
+    //   });
+    //   this.setState({ isDaftarKotaLoading: false });
+    //   clearTimeout(timeout);
+    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -103,16 +95,14 @@ export default class ModalDaftarKota extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
-          onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-          }
-          onPressEnter={() => this.handleColumnSearch(confirm)}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(confirm)}
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -120,7 +110,7 @@ export default class ModalDaftarKota extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
+          onClick={() => this.handleColumnReset(clearFilters)}
           size="small"
           style={{ width: 90 }}
         >
@@ -131,6 +121,8 @@ export default class ModalDaftarKota extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
@@ -140,14 +132,16 @@ export default class ModalDaftarKota extends Component {
       }
     },
   });
-  handleColumnSearch = (confirm) => {
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.getDaftarKota();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = async (clearFilters) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarKota();
+    this.setState({ searchText: "" });
   };
 
   render() {
@@ -159,6 +153,7 @@ export default class ModalDaftarKota extends Component {
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           loading={this.state.isDaftarKotaLoading}
+          onChange={(page) => this.setState({ page: page.current })}
           pagination={{ current: this.state.page, total: this.state.totalData }}
           onRow={(record, rowIndex) => ({
             onDoubleClick: (event) => onDataDoubleClick(record),

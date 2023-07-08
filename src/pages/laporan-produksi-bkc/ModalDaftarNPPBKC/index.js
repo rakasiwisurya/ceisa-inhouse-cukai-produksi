@@ -50,72 +50,44 @@ export default class ModalDaftarNPPBKC extends Component {
     this.getDaftarNppbkc();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getDaftarNppbkc();
+    }
+  }
+
   getDaftarNppbkc = async () => {
-    // const { nppbkc_id, nama_nppbkc, nppbkc, alamat_nppbkc } = this.state.table;
+    const { nppbkc_id, nama_nppbkc, nppbkc, alamat_nppbkc } = this.state.table;
 
     // const payload = { page: this.state.page };
+    const payload = { pageNumber: this.state.page, pageSize: 10 };
 
-    // if (nppbkc_id) payload.idNppbkc = nppbkc_id;
-    // if (nama_nppbkc) payload.namaNppbkc = nama_nppbkc;
-    // if (nppbkc) payload.nppbkc = nppbkc;
-    // if (alamat_nppbkc) payload.alamatNppbkc = alamat_nppbkc;
+    if (nppbkc_id) payload.idNppbkc = nppbkc_id;
+    if (nama_nppbkc) payload.namaNppbkc = nama_nppbkc;
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (alamat_nppbkc) payload.alamatNppbkc = alamat_nppbkc;
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/daftar-nppbkc",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDaftarNppbkcLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      // endpoint: "/ck4/daftar-nppbkc",
+      endpoint: "/ck4/daftar_nppbkc",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDaftarNppbkcLoading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item) => ({
-    //     key: item.idNppbkc,
-    //     nppbkc_id: item.idNppbkc,
-    //     nama_nppbkc: item.namaNppbkc,
-    //     nppbkc: item.nppbkc,
-    //     alamat_nppbkc: item.alamatNppbkc,
-    //   }));
-    //   const page = response.data.currentPage;
-    //   const totalData = response.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
-
-    this.setState({ isDaftarNppbkcLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        page: 1,
-        totalData: 10,
-        dataSource: [
-          {
-            key: 1,
-            nppbkc_id: 1,
-            nama_nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
-            nppbkc: "0706.1.1.1001",
-            alamat_nppbkc:
-              "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALANG",
-          },
-          {
-            key: 2,
-            nppbkc_id: 2,
-            nama_nppbkc: "Test 2 MOLINDO RAYA INDUSTRIAL, PT.",
-            nppbkc: "0706.1.1.1001",
-            alamat_nppbkc:
-              "Test 2 Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALANG",
-          },
-          {
-            key: 3,
-            nppbkc_id: 3,
-            nama_nppbkc: "Test 3 MOLINDO RAYA INDUSTRIAL, PT.",
-            nppbkc: "0706.1.1.1001",
-            alamat_nppbkc:
-              "Test 3 Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALANG",
-          },
-        ],
-      });
-      this.setState({ isDaftarNppbkcLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `nppbkc-${index}`,
+        nppbkc_id: item.idNppbkc,
+        nama_nppbkc: item.namaNppbkc,
+        nppbkc: item.nppbkc,
+        alamat_nppbkc: item.alamatNppbkc,
+      }));
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -181,6 +153,7 @@ export default class ModalDaftarNPPBKC extends Component {
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           loading={this.state.isDaftarNppbkcLoading}
+          onChange={(page) => this.setState({ page: page.current })}
           pagination={{ current: this.state.page, total: this.state.totalData }}
           onRow={(record, rowIndex) => ({
             onDoubleClick: (event) => onDataDoubleClick(record),
