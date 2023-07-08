@@ -32,24 +32,22 @@ export default class ReferensiTarifPitaCukai extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              {!(record.jenis_referensi_id === 1 || record.jenis_referensi_id === 7) && (
-                <>
-                  <ButtonCustom
-                    icon="form"
-                    variant="warning"
-                    onClick={() =>
-                      this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
-                    }
-                  />
-                  <ButtonCustom
-                    icon="eye"
-                    variant="info"
-                    onClick={() =>
-                      this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
-                    }
-                  />
-                </>
-              )}
+              <>
+                <ButtonCustom
+                  icon="form"
+                  variant="warning"
+                  onClick={() =>
+                    this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
+                  }
+                />
+                <ButtonCustom
+                  icon="eye"
+                  variant="info"
+                  onClick={() =>
+                    this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
+                  }
+                />
+              </>
             </div>
           ),
         },
@@ -239,11 +237,11 @@ export default class ReferensiTarifPitaCukai extends Component {
     this.getReferensiTarifPitaCukai();
   };
 
-  handleEdit = (referensi_skep_id, jenisReferensiid) => {
+  handleEdit = (referensiSkepId, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensiSkepId}`
         );
         break;
       case jenisReferensiid === 2 ||
@@ -251,19 +249,19 @@ export default class ReferensiTarifPitaCukai extends Component {
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensiSkepId}`
         );
         break;
       default:
-        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/edit/${referensiSkepId}`;
         break;
     }
   };
-  handleDetail = (referensi_skep_id, jenisReferensiid) => {
+  handleDetail = (referensiSkepId, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensiSkepId}`
         );
         break;
       case jenisReferensiid === 2 ||
@@ -271,11 +269,11 @@ export default class ReferensiTarifPitaCukai extends Component {
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensiSkepId}`
         );
         break;
       default:
-        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/detail/${referensiSkepId}`;
         break;
     }
   };
@@ -322,7 +320,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                   <ButtonCustom
                     variant="danger"
                     onClick={() => {
-                      window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai`;
+                      window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/rekam`;
                     }}
                     block
                   >
