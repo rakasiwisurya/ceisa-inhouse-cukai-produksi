@@ -18,7 +18,7 @@ import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
-import { requestApi } from "utils/requestApi";
+// import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
 

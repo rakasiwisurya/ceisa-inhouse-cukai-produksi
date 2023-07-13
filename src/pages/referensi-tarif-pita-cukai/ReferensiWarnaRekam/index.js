@@ -1,15 +1,4 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Icon,
-  Input,
-  Row,
-  Select,
-  Table,
-  message,
-  notification,
-} from "antd";
+import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";

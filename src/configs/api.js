@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { getUserAccessToken } from "utils/DataUser";
+// import { getUserAccessToken } from "utils/DataUser";
 
 const axiosConfig = (baseURL, contentType, apiKey) => {
   const instance = Axios.create({ baseURL });

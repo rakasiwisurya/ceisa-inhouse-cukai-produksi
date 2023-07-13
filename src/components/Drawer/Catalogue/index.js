@@ -1,7 +1,7 @@
 import React from "react";
 import { Drawer } from "antd";
 import TableCustom from "components/Table/TableCustom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const DrawerCatalogue = ({
   activeDrawer = "",
@@ -14,7 +14,7 @@ export const DrawerCatalogue = ({
   },
 }) => {
   const { Cnpibk } = useSelector((state) => state);
-	
+
   const columns = [
     { width: 170, title: "Kode Marketplace", dataIndex: "kdMp", key: "kdMp" },
     { width: 150, title: "Kode Barang", dataIndex: "kdBrg", key: "kdBrg" },
@@ -29,7 +29,7 @@ export const DrawerCatalogue = ({
     { width: 150, title: "Tanggal Awal Invoice", dataIndex: "tglAwal", key: "tglAwal" },
   ];
   return (
-    <Drawer 
+    <Drawer
       title="Catalogue"
       placement={"right"}
       visible={activeDrawer === "catalogue"}
@@ -37,7 +37,7 @@ export const DrawerCatalogue = ({
         // setSelectedInvoice("");
         setActiveDrawer("invoice");
       }}
-      width={'80vw'}
+      width={"80vw"}
       className={`text-center`}
     >
       <TableCustom

@@ -59,33 +59,6 @@ export default class ModalDaftarKota extends Component {
 
       this.setState({ dataSource: newData });
     }
-
-    // this.setState({ isDaftarKotaLoading: true });
-    // const timeout = setTimeout(() => {
-    //   this.setState({
-    //     page: 1,
-    //     totalData: 10,
-    //     dataSource: [
-    //       {
-    //         key: "489",
-    //         kota_id: "489",
-    //         kota_name: "Kabupaten Kaimana",
-    //       },
-    //       {
-    //         key: "490",
-    //         kota_id: "490",
-    //         kota_name: "Kabupaten Manokwari",
-    //       },
-    //       {
-    //         key: "491",
-    //         kota_id: "491",
-    //         kota_name: "Kabupaten Maybrat",
-    //       },
-    //     ],
-    //   });
-    //   this.setState({ isDaftarKotaLoading: false });
-    //   clearTimeout(timeout);
-    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({

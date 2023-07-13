@@ -55,7 +55,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "nomor",
           title: "Nomor",
           dataIndex: "nomor",
-          editable: true,
           render: (text, record, index) => (
             <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
           ),
@@ -64,7 +63,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "nomor_surat",
           title: "Nomor Surat",
           dataIndex: "nomor_surat",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_surat"),
         },
@@ -72,7 +70,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "tanggal_surat",
           title: "Tanggal Surat",
           dataIndex: "tanggal_surat",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -84,7 +81,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "awal_berlaku",
           title: "Awal Berlaku",
           dataIndex: "awal_berlaku",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -96,7 +92,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "akhir_berlaku",
           title: "Akhir Berlaku",
           dataIndex: "akhir_berlaku",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -108,7 +103,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "jenis_bkc_name",
           title: "Jenis BKC",
           dataIndex: "jenis_bkc_name",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_bkc_name"),
         },
@@ -116,7 +110,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "jenis_referensi_name",
           title: "Jenis Referensi",
           dataIndex: "jenis_referensi_name",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_referensi_name"),
         },

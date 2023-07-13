@@ -26,7 +26,6 @@ import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarHT from "../ModalDaftarMerkHT";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { requestApi } from "utils/requestApi";
-import { idMenu } from "utils/idMenu";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 

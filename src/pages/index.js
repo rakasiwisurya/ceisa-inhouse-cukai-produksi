@@ -29,6 +29,15 @@ import ReferensiWarnaRekam from "./referensi-tarif-pita-cukai/ReferensiWarnaReka
 import ReferensiWarnaEdit from "./referensi-tarif-pita-cukai/ReferensiWarnaEdit";
 import ReferensiWarnaDetail from "./referensi-tarif-pita-cukai/ReferensiWarnaDetail";
 import ReferensiTarifRekam from "./referensi-tarif-pita-cukai/ReferensiTarifRekam";
+import PermohonanTarifDetail from "./tarif-cukai/PermohonanTarifDetail";
+import PermohonanTarifRekam from "./tarif-cukai/PermohonanTarifRekam";
+import PermohonanTarifPerbaikan from "./tarif-cukai/PermohonanTarifPerbaikan";
+import SPLRekam from "./laporan-produksi-bkc/SPLRekam";
+import PencabutanTarifCabut from "./tarif-cukai/PencabutanTarifCabut";
+import SPLDetail from "./laporan-produksi-bkc/SPLDetail";
+import SPLPerbaikan from "./laporan-produksi-bkc/SPLPerbaikan";
+import RekamJenisPitaRekam from "./rekam-jenis-pita/RekamJenisPitaRekam";
+import RekamJenisPitaPerbaikan from "./rekam-jenis-pita/RekamJenisPitaPerbaikan";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -74,8 +83,28 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/permohonan-tarif/rekam"}
+        render={(props) => <PermohonanTarifRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/detail/:id"}
+        render={(props) => <PermohonanTarifDetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/perbaikan/:id"}
+        render={(props) => <PermohonanTarifPerbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/pencabutan-tarif"}
         render={(props) => <PencabutanTarif {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/pencabutan-tarif/cabut/:id"}
+        render={(props) => <PencabutanTarifCabut {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -86,6 +115,16 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/rekam-jenis-pita"}
         render={(props) => <RekamJenisPita {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/rekam"}
+        render={(props) => <RekamJenisPitaRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/perbaikan/:id"}
+        render={(props) => <RekamJenisPitaPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -146,6 +185,21 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/spl"}
         render={(props) => <SPL {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/spl/rekam"}
+        render={(props) => <SPLRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/spl/detail/:id"}
+        render={(props) => <SPLDetail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/spl/perbaikan/:id"}
+        render={(props) => <SPLPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table, Tabs } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
 import Container from "components/Container";
 import React, { Component } from "react";
 import Header from "components/Header";
