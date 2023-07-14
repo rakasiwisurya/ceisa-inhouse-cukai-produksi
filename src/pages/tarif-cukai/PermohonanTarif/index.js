@@ -246,7 +246,7 @@ export default class PermohonanTarif extends Component {
         hje: item.hjePerKemasan,
         isi: item.isiPerKemasan,
         tarif: item.tarifSpesifik,
-        tujuan: null,
+        tujuan: item.tujuan,
         awal_berlaku: item.awalBerlaku,
         akhir_berlaku: item.akhirBerlaku,
       }));
