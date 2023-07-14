@@ -4,6 +4,7 @@ import Container from "components/Container";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class RekamJenisPita extends Component {
   constructor(props) {
@@ -132,30 +133,65 @@ export default class RekamJenisPita extends Component {
   }
 
   getRekamJenisPita = async () => {
-    this.setState({ isRekamJenisPitaLoading: true });
-    const timeout = setTimeout(() => {
+    const {
+      kode_kantor,
+      nama_kantor,
+      nppbkc,
+      nama_perusahaan,
+      jenis_produksi,
+      hje,
+      isi,
+      awal_berlaku,
+      tarif,
+      warna,
+      tahun_pita,
+    } = this.state.table;
+
+    const payload = { page: this.state.page };
+
+    if (kode_kantor) payload.kodeKantor = kode_kantor;
+    if (nama_kantor) payload.namaKantor = nama_kantor;
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
+    if (hje) payload.hje = hje;
+    if (isi) payload.isiKemasan = isi;
+    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tarif) payload.tarif = tarif;
+    if (warna) payload.warna = warna;
+    if (tahun_pita) payload.tahunPita = tahun_pita;
+
+    const response = await requestApi({
+      service: "pita_cukai",
+      method: "get",
+      endpoint: "pita/browse-jenis",
+      params: payload,
+      setLoading: (bool) => this.setState({ isRekamJenisPitaLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `rekam-jenis-pita-${index}`,
+        rekam_jenis_pita_id: null,
+        kode_kantor: item.kodeKantor,
+        nama_kantor: item.namaKantor,
+        nppbkc: item.nppbkc,
+        nama_perusahaan: item.namaPerusahaan,
+        jenis_produksi: item.namaJenisProduksiBkc,
+        hje: item.hje,
+        isi: item.isiKemasan,
+        awal_berlaku: item.awalBerlaku,
+        tarif: item.tarif,
+        warna: item.warna,
+        tahun_pita: item.tahunPita,
+      }));
+
       this.setState({
-        dataSource: [
-          {
-            key: "1",
-            id: "1",
-            kode_kantor: "kode_kantor",
-            nama_kantor: "nama_kantor",
-            nppbkc: "nppbkc",
-            nama_perusahaan: "nama_perusahaan",
-            jenis_produksi: "jenis_produksi",
-            hje: 20,
-            isi: 10,
-            awal_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-            tarif: 300,
-            warna: "warna",
-            tahun_pita: "2020",
-          },
-        ],
+        dataSource: newData,
+        page: response.data.data.currentPage,
+        totalData: response.data.data.totalData,
       });
-      this.setState({ isRekamJenisPitaLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({
