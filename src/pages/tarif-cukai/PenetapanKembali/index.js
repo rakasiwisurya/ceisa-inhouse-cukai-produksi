@@ -3,12 +3,11 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import React, { Component } from "react";
-import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
-import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
-import ModalDaftarKota from "../ModalDaftarKota";
 import moment from "moment";
+import React, { Component } from "react";
+import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 
 export default class PenetapanKembali extends Component {
   constructor(props) {
@@ -17,9 +16,9 @@ export default class PenetapanKembali extends Component {
       subtitle1: "Pabrik / Importir",
       subtitle2: "Detail Merk",
 
-      isRekamLoading: false,
-      isKotaLoading: true,
+      isPenetapanLoading: false,
       isJenisProduksiLoading: true,
+      isDetailMerkLoading: true,
       isModalDaftarKotaVisible: false,
       isModalDaftarNppbkcVisible: false,
 
@@ -32,69 +31,62 @@ export default class PenetapanKembali extends Component {
 
       jenis_produksi_id: "",
       jenis_produksi_name: "",
-      jenis_penetapan_id: "",
-      jenis_penetapan_name: "",
+      jenis_penetapan: "PENETAPAN KEMBALI",
 
       list_kota: [],
-      list_jenis_penetapan: [],
       list_jenis_produksi: [],
 
-      searchText: "",
-      searchedColumn: "",
-      page: 1,
+      searchTextTop: "",
+      searchedColumnTop: "",
+      pageTop: 1,
 
-      dataSource: [],
-      columns: [
-        {
-          title: "Aksi",
-          dataIndex: "aksi",
-          key: "aksi",
-          fixed: "left",
-          render: (text, record, index) => (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <ButtonCustom
-                variant="warning"
-                icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
-              />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
-            </div>
-          ),
-        },
+      searchTextBottom: "",
+      searchedColumnBottom: "",
+      pageBottom: 1,
+
+      dataSourceTop: [],
+      dataSourceBottom: [],
+
+      selectedRowKeysTop: [],
+      dataRowsTop: [],
+      selectedRowKeysBottom: [],
+      dataRowsBottom: [],
+
+      columnTop: [
         {
           title: "Nama",
           dataIndex: "nama_merk",
           key: "nama_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_merk"),
+          ...this.getColumnSearchPropsTop("nama_merk"),
         },
         {
           title: "Jenis Produksi",
           dataIndex: "jenis_produksi_merk",
           key: "jenis_produksi_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_produksi_merk"),
+          ...this.getColumnSearchPropsTop("jenis_produksi_merk"),
         },
         {
           title: "Isi Kemasan",
           dataIndex: "isi_merk",
           key: "isi_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("isi_merk"),
+          ...this.getColumnSearchPropsTop("isi_merk"),
         },
         {
           title: "Volume",
           dataIndex: "volume_merk",
           key: "volume_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("volume_merk"),
+          ...this.getColumnSearchPropsTop("volume_merk"),
         },
         {
           title: "Nomor Kep",
           dataIndex: "nomor_kep_merk",
           key: "nomor_kep_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_kep_merk"),
+          ...this.getColumnSearchPropsTop("nomor_kep_merk"),
         },
         {
           title: "Tanggal Kep",
@@ -105,92 +97,241 @@ export default class PenetapanKembali extends Component {
               {text ? moment(text).format("DD-MM-YYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_kep_merk"),
+          ...this.getColumnSearchPropsTop("tanggal_kep_merk"),
         },
         {
           title: "Golongan Pabrik",
           dataIndex: "golongan_merk",
           key: "golongan_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("golongan_merk"),
+          ...this.getColumnSearchPropsTop("golongan_merk"),
         },
         {
           title: "HJE Lama",
           dataIndex: "hje_lama_merk",
           key: "hje_lama_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje_lama_merk"),
+          ...this.getColumnSearchPropsTop("hje_lama_merk"),
         },
         {
           title: "HJE Baru",
           dataIndex: "hje_baru_merk",
           key: "hje_baru_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje_baru_merk"),
+          ...this.getColumnSearchPropsTop("hje_baru_merk"),
         },
         {
           title: "HJE/Satuan Lama",
           dataIndex: "hje_satuan_lama_merk",
           key: "hje_satuan_lama_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje_satuan_lama_merk"),
+          ...this.getColumnSearchPropsTop("hje_satuan_lama_merk"),
         },
         {
           title: "HJE/Satuan Baru",
           dataIndex: "hje_satuan_baru_merk",
           key: "hje_satuan_baru_merk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje_satuan_baru_merk"),
+          ...this.getColumnSearchPropsTop("hje_satuan_baru_merk"),
         },
         {
           title: "Tarif Lama",
           dataIndex: "tarif_lama",
           key: "tarif_lama",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tarif_lama"),
+          ...this.getColumnSearchPropsTop("tarif_lama"),
         },
         {
           title: "Tarif Baru",
           dataIndex: "tarif_baru",
           key: "tarif_baru",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tarif_baru"),
+          ...this.getColumnSearchPropsTop("tarif_baru"),
         },
         {
           title: "Seri Pita",
           dataIndex: "seri_pita",
           key: "seri_pita",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("seri_pita"),
+          ...this.getColumnSearchPropsTop("seri_pita"),
         },
         {
           title: "Warna Dasar",
           dataIndex: "warna_dasar",
           key: "warna_dasar",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("warna_dasar"),
+          ...this.getColumnSearchPropsTop("warna_dasar"),
+        },
+      ],
+      columnBottom: [
+        {
+          title: "Nama",
+          dataIndex: "nama_merk",
+          key: "nama_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("nama_merk"),
+        },
+        {
+          title: "Jenis Produksi",
+          dataIndex: "jenis_produksi_merk",
+          key: "jenis_produksi_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("jenis_produksi_merk"),
+        },
+        {
+          title: "Isi Kemasan",
+          dataIndex: "isi_merk",
+          key: "isi_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("isi_merk"),
+        },
+        {
+          title: "Volume",
+          dataIndex: "volume_merk",
+          key: "volume_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("volume_merk"),
+        },
+        {
+          title: "Nomor Kep",
+          dataIndex: "nomor_kep_merk",
+          key: "nomor_kep_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("nomor_kep_merk"),
+        },
+        {
+          title: "Tanggal Kep",
+          dataIndex: "tanggal_kep_merk",
+          key: "tanggal_kep_merk",
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYY") : "-"}
+            </div>
+          ),
+          ...this.getColumnSearchPropsBottom("tanggal_kep_merk"),
+        },
+        {
+          title: "Golongan Pabrik",
+          dataIndex: "golongan_merk",
+          key: "golongan_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("golongan_merk"),
+        },
+        {
+          title: "HJE Lama",
+          dataIndex: "hje_lama_merk",
+          key: "hje_lama_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("hje_lama_merk"),
+        },
+        {
+          title: "HJE Baru",
+          dataIndex: "hje_baru_merk",
+          key: "hje_baru_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("hje_baru_merk"),
+        },
+        {
+          title: "HJE/Satuan Lama",
+          dataIndex: "hje_satuan_lama_merk",
+          key: "hje_satuan_lama_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("hje_satuan_lama_merk"),
+        },
+        {
+          title: "HJE/Satuan Baru",
+          dataIndex: "hje_satuan_baru_merk",
+          key: "hje_satuan_baru_merk",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("hje_satuan_baru_merk"),
+        },
+        {
+          title: "Tarif Lama",
+          dataIndex: "tarif_lama",
+          key: "tarif_lama",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("tarif_lama"),
+        },
+        {
+          title: "Tarif Baru",
+          dataIndex: "tarif_baru",
+          key: "tarif_baru",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("tarif_baru"),
+        },
+        {
+          title: "Seri Pita",
+          dataIndex: "seri_pita",
+          key: "seri_pita",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("seri_pita"),
+        },
+        {
+          title: "Warna Dasar",
+          dataIndex: "warna_dasar",
+          key: "warna_dasar",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchPropsBottom("warna_dasar"),
         },
       ],
     };
   }
 
   componentDidMount() {
-    this.getJenisProduksi();
+    this.getDetailMerk();
   }
 
-  getJenisProduksi = async () => {
-    const response = await requestApi({
-      service: "referensi",
-      method: "get",
-      endpoint: "/referensi/jenis-produksi",
-      params: { idJenisBkc: 3 },
-      setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
-    });
-
-    if (response) this.setState({ list_jenis_produksi: response.data.data });
+  getDetailMerk = async () => {
+    this.setState({ isDetailMerkLoading: true });
+    const timeout = setTimeout(() => {
+      this.setState({
+        dataSourceTop: [
+          {
+            key: "1",
+            id: "1",
+            nama_merk: "nama_merk_1",
+            jenis_produksi_merk: "jenis_produksi_merk_1",
+            isi_merk: "isi_merk_1",
+            volume_merk: "volume_merk_1",
+            nomor_kep_merk: "nomor_kep_merk_1",
+            tanggal_kep_merk: "tanggal_kep_merk_1",
+            golongan_merk: "golongan_merk_1",
+            hje_lama_merk: "hje_lama_merk_1",
+            hje_baru_merk: "hje_baru_merk_1",
+            hje_satuan_lama_merk: "hje_satuan_lama_merk_1",
+            hje_satuan_baru_merk: "hje_satuan_baru_merk_1",
+            tarif_lama: "tarif_lama_1",
+            tarif_baru: "tarif_baru_1",
+            seri_pita: "seri_pita_1",
+            warna_dasar: "warna_dasar_1",
+          },
+          {
+            key: "2",
+            id: "2",
+            nama_merk: "nama_merk_2",
+            jenis_produksi_merk: "jenis_produksi_merk_2",
+            isi_merk: "isi_merk_2",
+            volume_merk: "volume_merk_2",
+            nomor_kep_merk: "nomor_kep_merk_2",
+            tanggal_kep_merk: "tanggal_kep_merk_2",
+            golongan_merk: "golongan_merk_2",
+            hje_lama_merk: "hje_lama_merk_2",
+            hje_baru_merk: "hje_baru_merk_2",
+            hje_satuan_lama_merk: "hje_satuan_lama_merk_2",
+            hje_satuan_baru_merk: "hje_satuan_baru_merk_2",
+            tarif_lama: "tarif_lama_2",
+            tarif_baru: "tarif_baru_2",
+            seri_pita: "seri_pita_2",
+            warna_dasar: "warna_dasar_2",
+          },
+        ],
+      });
+      this.setState({ isDetailMerkLoading: false });
+      clearTimeout(timeout);
+    }, 2000);
   };
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchPropsTop = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -199,12 +340,12 @@ export default class PenetapanKembali extends Component {
           }}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => this.handleColumnSearchTop(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearchTop(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -212,7 +353,7 @@ export default class PenetapanKembali extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnResetTop(clearFilters)}
           size="small"
           style={{ width: 90 }}
         >
@@ -234,16 +375,84 @@ export default class PenetapanKembali extends Component {
       }
     },
   });
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearchTop = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
+      searchTextTop: selectedKeys[0],
+      searchedColumnTop: dataIndex,
     });
   };
-  handleColumnReset = (clearFilters) => {
+  handleColumnResetTop = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchTextTop: "" });
+  };
+  handleSelectRowTopChange = (selectedRowKeys) => {
+    const dataRowsTop = this.state.dataSourceTop.filter((item) =>
+      selectedRowKeys.includes(item.key)
+    );
+    this.setState({ selectedRowKeysTop: selectedRowKeys, dataRowsTop });
+  };
+
+  getColumnSearchPropsBottom = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearchBottom(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearchBottom(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnResetBottom(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
+      }
+    },
+  });
+  handleColumnSearchBottom = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchTextBottom: selectedKeys[0],
+      searchedColumnBottom: dataIndex,
+    });
+  };
+  handleColumnResetBottom = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchTextBottom: "" });
+  };
+  handleSelectRowBottomChange = (selectedRowKeys) => {
+    const dataRowsBottom = this.state.dataSourceBottom.filter((item) =>
+      selectedRowKeys.includes(item.key)
+    );
+    this.setState({ selectedRowKeysBottom: selectedRowKeys, dataRowsBottom });
   };
 
   handleInputChange = (e) => {
@@ -287,14 +496,36 @@ export default class PenetapanKembali extends Component {
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
-  validationForm = () => {
-    return true;
+  handleToTableTop = () => {
+    const resultDataSourceBottom = this.state.dataSourceBottom.filter(
+      (itemBottom) =>
+        !this.state.dataRowsBottom.some((rowBottom) => rowBottom.key === itemBottom.key)
+    );
+    const resultDataSourceTop = [...this.state.dataSourceTop, ...this.state.dataRowsBottom];
+    this.setState({
+      dataSourceTop: resultDataSourceTop,
+      dataSourceBottom: resultDataSourceBottom,
+      selectedRowKeysBottom: [],
+      dataRowsBottom: [],
+    });
+  };
+  handleToTableBottom = () => {
+    const resultDataSourceTop = this.state.dataSourceTop.filter(
+      (itemTop) => !this.state.dataRowsTop.some((rowTop) => rowTop.key === itemTop.key)
+    );
+    const resultDataSourceBottom = [...this.state.dataSourceBottom, ...this.state.dataRowsTop];
+    this.setState({
+      dataSourceBottom: resultDataSourceBottom,
+      dataSourceTop: resultDataSourceTop,
+      selectedRowKeysTop: [],
+      dataRowsTop: [],
+    });
   };
 
-  handleRekam = async () => {
-    this.setState({ isRekamLoading: true });
+  handlePenetapan = async () => {
+    this.setState({ isPenetapanLoading: true });
     const timeout = setTimeout(() => {
-      this.setState({ isRekamLoading: false });
+      this.setState({ isPenetapanLoading: false });
       notification.success({ message: "Success", description: "Success" });
       this.props.history.push(`${pathName}/rekam-jenis-pita`);
       clearTimeout(timeout);
@@ -304,7 +535,7 @@ export default class PenetapanKembali extends Component {
   render() {
     return (
       <>
-        <Container menuName="Rekam Jenis Pita" contentName="Rekam" hideContentHeader>
+        <Container menuName="Tarif Cukai" contentName="Penetapan Kembali" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div
             className="kt-content  kt-grid__item kt-grid__item--fluid"
@@ -385,41 +616,66 @@ export default class PenetapanKembali extends Component {
                   </Select>
                 </div>
               </Col>
+            </Row>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Jenis Penetapan</FormLabel>
-                  </div>
-                  <Select
-                    id="jenis_penetapan"
-                    value={this.state.jenis_penetapan_id}
-                    onChange={(value, option) =>
-                      this.handleSelectCustomChange("jenis_penetapan", value, option)
-                    }
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_jenis_penetapan.length > 0 &&
-                      this.state.list_jenis_penetapan.map((item, index) => (
-                        <Select.Option
-                          key={`jenis-penetapan-${index}`}
-                          value={item.jenis_penetapan_id}
-                        >
-                          {item.jenis_penetapan_name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </div>
+            <div style={{ marginTop: 30, marginBottom: 20 }}>
+              <Table
+                dataSource={this.state.dataSourceTop}
+                columns={this.state.columnTop}
+                scroll={{ x: "max-content" }}
+                loading={this.state.isDetailMerkLoading}
+                onChange={(page) => this.setState({ pageTop: page.current })}
+                pagination={{ current: this.state.pageTop }}
+                rowSelection={{
+                  selectedRowKeys: this.state.selectedRowKeysTop,
+                  onChange: this.handleSelectRowTopChange,
+                }}
+              />
+            </div>
+
+            <Row gutter={[16, 16]}>
+              <Col span={4} offset={10}>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <ButtonCustom
+                      variant="success"
+                      onClick={this.handleToTableTop}
+                      icon="arrow-up"
+                      block
+                      disabled={
+                        !this.state.dataSourceBottom.length > 0 ||
+                        !this.state.selectedRowKeysBottom.length > 0
+                      }
+                    />
+                  </Col>
+                  <Col span={12}>
+                    <ButtonCustom
+                      variant="danger"
+                      onClick={this.handleToTableBottom}
+                      icon="arrow-down"
+                      block
+                      disabled={
+                        !this.state.dataSourceTop.length > 0 ||
+                        !this.state.selectedRowKeysTop.length > 0
+                      }
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
 
             <div style={{ marginTop: 30, marginBottom: 20 }}>
               <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
+                dataSource={this.state.dataSourceBottom}
+                columns={this.state.columnBottom}
+                loading={this.state.isDetailMerkLoading}
                 scroll={{ x: "max-content" }}
-                onChange={(page) => this.setState({ page: page.current })}
-                pagination={{ current: this.state.page }}
+                onChange={(page) => this.setState({ pageBottom: page.current })}
+                pagination={{ current: this.state.pageBottom }}
+                rowSelection={{
+                  selectedRowKeys: this.state.selectedRowKeysBottom,
+                  onChange: this.handleSelectRowBottomChange,
+                }}
               />
             </div>
 
@@ -430,15 +686,14 @@ export default class PenetapanKembali extends Component {
                 </ButtonCustom>
               </Col>
 
-              <Col span={4}>
+              <Col span={5}>
                 <Button
                   type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  loading={this.state.isPenetapanLoading}
+                  onClick={this.handlePenetapan}
                   block
                 >
-                  Rekam
+                  Simpan Penetapan
                 </Button>
               </Col>
             </Row>

@@ -401,7 +401,7 @@ export default class PermohonanTarifRekam extends Component {
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Alamat</FormLabel>
                 </div>
-                <Input id="alamat" value={this.state.alamat_nppbkc} disabled />
+                <Input id="alamat_nppbkc" value={this.state.alamat_nppbkc} disabled />
               </Col>
 
               {this.state.jenis_bkc_id === 2 && (
