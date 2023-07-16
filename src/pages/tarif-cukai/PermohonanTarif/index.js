@@ -218,7 +218,7 @@ export default class PermohonanTarif extends Component {
     if (hje) payload.hjePerKemasan = hje;
     if (isi) payload.isiPerKemasan = isi;
     if (tarif) payload.tarifSpesifik = tarif;
-    if (tujuan) payload.tujuan = tujuan;
+    if (tujuan) payload.tujuanPemasaran = tujuan;
     if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
     if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
 
@@ -246,7 +246,7 @@ export default class PermohonanTarif extends Component {
         hje: item.hjePerKemasan,
         isi: item.isiPerKemasan,
         tarif: item.tarifSpesifik,
-        tujuan: item.tujuan,
+        tujuan: item.tujuanPemasaran,
         awal_berlaku: item.awalBerlaku,
         akhir_berlaku: item.akhirBerlaku,
       }));
