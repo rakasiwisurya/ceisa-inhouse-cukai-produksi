@@ -43,12 +43,12 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEdit(record.id, record.nppbkc)}
+                onClick={() => this.handleEdit(record.kppbc, record.nppbkc)}
               />
               <ButtonCustom
                 variant="info"
                 icon="eye"
-                onClick={() => this.handleDetail(record.id, record.nppbkc)}
+                onClick={() => this.handleDetail(record.kppbc, record.nppbkc)}
               />
             </div>
           ),
@@ -78,21 +78,30 @@ export default class CK4 extends Component {
           title: "Tanggal Pemberitahuan",
           dataIndex: "tanggal_pemberitahuan",
           key: "tanggal_pemberitahuan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
         },
         {
           title: "Tanggal Produksi Awal",
           dataIndex: "tanggal_produksi_awal",
           key: "tanggal_produksi_awal",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_produksi_awal"),
         },
         {
           title: "Tanggal Produksi Akhir",
           dataIndex: "tanggal_produksi_akhir",
           key: "tanggal_produksi_akhir",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_produksi_akhir"),
         },
         {
@@ -151,8 +160,8 @@ export default class CK4 extends Component {
       status,
     } = this.state.table;
 
-    // const payload = { page: this.state.page };
-    const payload = { pageNumber: this.state.page, pageSize: 10 };
+    const payload = { page: this.state.page };
+    // const payload = { pageNumber: this.state.page, pageSize: 10 };
 
     if (kppbc) payload.kppbc = kppbc;
     if (nppbkc) payload.nppbkc = nppbkc;
@@ -179,17 +188,18 @@ export default class CK4 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `ck4-${index}`,
-        id_ck4: item.idCk4,
+        kppbc: item.kppbc,
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
-        tanggal_pemberitahuan: moment(item.tanggalPemberitahuan).format("DD-MM-YYYY"),
-        tanggal_produksi_awal: moment(item.tanggalProduksiAwal).format("DD-MM-YYYY"),
-        tanggal_produksi_akhir: moment(item.tanggalProduksiAkhir).format("DD-MM-YYYY"),
+        tanggal_pemberitahuan: item.tanggalPemberitahuan,
+        tanggal_produksi_awal: item.tanggalProduksiAwal,
+        tanggal_produksi_akhir: item.tanggalProduksiAkhir,
         jumlah_produksi_lt: item.jumlahProduksiLt,
         jumlah_produksi_btg: item.jumlahProduksiBtg,
         jumlah_produksi_gram: item.jumlahProduksiGram,
         status: item.status,
       }));
+      // console.log(newData)
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
       this.setState({ dataSource: newData, page, totalData });

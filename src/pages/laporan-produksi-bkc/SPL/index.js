@@ -35,12 +35,12 @@ export default class SPL extends Component {
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail(record.id)}
+                  onClick={() => this.handleDetail(record.idSpl)}
                 />
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handlePerbaikan(record.id)}
+                  onClick={() => this.handlePerbaikan(record.idSpl)}
                 />
               </>
             </div>

@@ -9,6 +9,8 @@ import ModalDaftarKota from "../ModalDaftarKota";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { requestApi } from "utils/requestApi";
+import { idMenu } from "utils/idMenu";
 
 export default class SPLPerbaikan extends Component {
   constructor(props) {
@@ -48,30 +50,38 @@ export default class SPLPerbaikan extends Component {
   }
 
   getSplDetail = async () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
+    const payload = { idSpl: this.props.match.params.id };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/spl/browse-by-id",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+      console.log(data)
+
+      
       this.setState({
-        nomor_spl: "nomor_spl",
-        tanggal_spl: moment(new Date()),
-        nama_pengusaha: "nama_pengusaha",
-        jabatan: "jabatan",
-        alamat_pemohon: "alamat_pemohon",
-
-        nppbkc_id: "fe3c9198-0d65-05e6-e054-0021f60abd54",
-        nama_nppbkc: "KOPERASI BERLIAN EMAS SEJAHTERA TERUS",
-        nppbkc: "0866114705044000070652",
-        alamat_nppbkc:
-          "Pergudangan TANRISE K-Walk B-9 Dusun Karanglo Desa Banjar Arum Kecamatan Singosari Kabupaten Malang",
-
-        tanggal_libur_awal: moment(new Date()),
-        tanggal_libur_akhir: moment(new Date()),
-        pernyataan_tanggal: moment(new Date()),
-        pernyataan_kota_id: "285",
-        pernyataan_kota_name: "SUMBAWA BARAT",
+        nomor_spl:data.nomorSpl,
+        tanggal_spl:moment(data.tanggalSpl),
+        nama_pengusaha:data.namaPengusaha,
+        jabatan:data.jabatanPengusaha,
+        alamat_pemohon:data.alamatPengusaha,
+        nppbkc_id:data.idNppbkc,
+        nama_nppbkc:data.namaPerusahaan,
+        nppbkc:data.nppbkc,
+        alamat_nppbkc:data.alamatPerusahaan,
+        tanggal_libur_awal:moment(data.awalLibur),
+        tanggal_libur_akhir:moment(data.akhirLibur),
+        pernyataan_tanggal:moment(data.tanggalPernyataan),
+        // pernyataan_kota_id:data.pernyataan_kota_id,
+        pernyataan_kota_name:data.tempatPernyataan
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   handleInputChange = (e) => {
@@ -149,33 +159,65 @@ export default class SPLPerbaikan extends Component {
     return true;
   };
 
-  handleUpdate = () => {
-    // const {
-    //   nomor_spl,
-    //   tanggal_spl,
-    //   nama_pengusaha,
-    //   jabatan,
-    //   alamat_pemohon,
+  handleUpdate = async () => {
+    const {
+      nomor_spl,
+      tanggal_spl,
+      nama_pengusaha,
+      jabatan,
+      alamat_pemohon,
 
-    //   nppbkc_id,
-    //   nama_nppbkc,
-    //   nppbkc,
-    //   alamat_nppbkc,
+      nppbkc_id,
+      nama_nppbkc,
+      nppbkc,
+      alamat_nppbkc,
 
-    //   tanggal_libur_awal,
-    //   tanggal_libur_akhir,
-    //   pernyataan_tanggal,
-    //   pernyataan_kota_id,
-    //   pernyataan_kota_name,
-    // } = this.state;
+      tanggal_libur_awal,
+      tanggal_libur_akhir,
+      pernyataan_tanggal,
+      pernyataan_kota_id,
+      pernyataan_kota_name,
+    } = this.state;
 
-    this.setState({ isUpdateLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
-      this.setState({ isUpdateLoading: false });
-      this.props.history.push(`${pathName}/spl`);
-      clearTimeout(timeout);
-    }, 2000);
+    const payload = {
+      nomorSpl: nomor_spl,
+      tanggalSpl: moment(tanggal_spl).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      namaPengusaha: nama_pengusaha,
+      jabatanPengusaha: jabatan,
+      alamatPengusaha: alamat_pemohon,
+      idNppbkc: nppbkc_id,
+      namaPerusahaan: nama_nppbkc,
+      nppbkc: nppbkc,
+      alamatPerusahaan: alamat_nppbkc,
+      awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      // pernyataan_kota_id: pernyataan_kota_id,
+      tempatPernyataan: pernyataan_kota_name,
+      idProses: idMenu("spl")
+    };
+
+    console.log(payload)
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/spl/perbaikan",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    // });
+
+    // if (response) {
+    //   notification.success({ message: "Success", description: response.data.message });
+    //   this.props.history.push(`${pathName}/spl`);
+    // }
+    // this.setState({ isRekamLoading: true });
+    // const timeout = setTimeout(() => {
+    //   notification.success({ message: "Success", description: "Success" });
+    //   this.setState({ isRekamLoading: false });
+    //   this.props.history.push(`${pathName}/spl`);
+    //   clearTimeout(timeout);
+    // }, 2000);
   };
 
   render() {
