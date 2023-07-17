@@ -22,7 +22,7 @@ import { pathName } from "configs/constants";
 import { idMenu } from "utils/idMenu";
 import { api } from "configs/api";
 
-export default class BRCK2Rekam extends Component {
+export default class BRCK2Detil extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -761,11 +761,13 @@ export default class BRCK2Rekam extends Component {
                 <DatePicker
                   onChange={this.handlePeriodeAwalChange}
                   style={{ width: "100%" }}
+                  disabled
                 />
                 <div>s.d</div>
                 <DatePicker
                   onChange={this.handlePeriodeAkhirChange}
                   style={{ width: "100%" }}
+                  disabled
                 />
               </div>
             </div>
@@ -799,10 +801,11 @@ export default class BRCK2Rekam extends Component {
                         </div>
                         <div>
                           <InputNumber
-                            value={this.state.saldoAwalKemasan}
+                            value={5000}
                             onChange={this.handleSaldoAwalKemasanChange}
                             min={0}
                             style={{ width: 200 }}
+                              disabled
                           />
                         </div>
                       </div>
@@ -816,10 +819,11 @@ export default class BRCK2Rekam extends Component {
                         </div>
                         <div>
                           <InputNumber
-                            value={this.state.saldoAwalLiter}
+                            value={50}
                             onChange={this.handleSaldoAwalLtChange}
                             min={0}
                             style={{ width: 200 }}
+                            disabled
                           />
                         </div>
                       </div>
@@ -1011,16 +1015,18 @@ export default class BRCK2Rekam extends Component {
                       <Input
                         id="hasil_pencacahan_back5_1"
                         // value={updateSaldoBukuKemasan}
-                        value={hasil_pencacahan_back5_1}
+                        value={5000}
                         onChange={this.handleInputChange}
+                        disabled
                       />
                     </div>
                     <div style={{ width: 125 }}>
                       <Input
                         id="hasil_pencacahan_back5_2"
                         // value={updateSaldoBukuLt}
-                        value={hasil_pencacahan_back5_2}
+                        value={5000}
                         onChange={this.handleInputChange}
+                        disabled
                       />
                     </div>
                     <div style={{ width: 125 }}>
@@ -1039,7 +1045,8 @@ export default class BRCK2Rekam extends Component {
                   >
                     <div>No. BACK-5</div>
                     <div style={{ width: 125 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} />
+                      <Input id="no_back5" onChange={this.handleInputChange} 
+                      disabled/>
                     </div>
                     <div style={{ width: 125 }}></div>
                     <div style={{ width: 125 }}></div>
@@ -1050,7 +1057,7 @@ export default class BRCK2Rekam extends Component {
                   >
                     <div>Tgl. BACK-5</div>
                     <div style={{ width: 125 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} />
+                      <DatePicker onChange={this.handleTanggalBack5Change} disabled/>
                     </div>
                     <div style={{ width: 125 }}></div>
                     <div style={{ width: 125 }}></div>
@@ -1175,16 +1182,12 @@ export default class BRCK2Rekam extends Component {
                     justifyContent: "end",
                     marginTop: 30,
                     marginRight:20,
-                  }}
-                >
-                  <Button type="primary" onClick={this.handleRekam}>
-                    Rekam
-                  </Button>
+                  }}>
                   <ButtonCustom
                     variant="secondary"
                     width={200}
                     onClick={() =>
-                      this.props.history.push(`${pathName}/brck-1`)
+                      this.props.history.push(`${pathName}/brck-2`)
                     }
                   >
                     Kembali

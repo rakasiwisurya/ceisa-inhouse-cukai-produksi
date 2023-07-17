@@ -1,13 +1,54 @@
-import { Button, Icon, Input, Table } from "antd";
+import { Button, Icon, Input, Table, message } from "antd";
+import { withRouter } from "react-router-dom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import React, { Component } from "react";
-export default class BRCK1 extends Component {
+import { requestApi } from "utils/requestApi";
+import { api } from "configs/api";
+class BRCK1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Browse dan Perbaikan BRCK-1",
+      selectedData:null,
+      currentBrckPage: 1,
+      // limitBrckPage: 100,
+      kppbc: "",
+      perusahaan: "",
+      warna: "",
+      tanggal_awal: "",
+      tanggal_akhir: "",
+      saldo_awal: "",
+      saldo_buku: "",
+      saldo_penutupan_brck: "",
+      selisih: "",
+      potongan: "",
+      kekurangan: "",
       columns: [
+        {
+          key: "aksi",
+          title: "Aksi",
+          fixed: "left",
+          render: (_, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Button
+                type="primary"
+                icon="eye"
+                onClick={() => this.handleDetail()}
+                // onClick={() => this.handleEditRincian(record, index)}
+              />
+              <Button
+                style={{
+                  backgroundColor: "#F79327",
+                  color: "white",
+                  borderColor: "#F79327",
+                }}
+                icon="edit"
+                onClick={() => this.handleEdit()}
+              />
+            </div>
+          ),
+        },
         {
           title: "KPPBC",
           dataIndex: "kppbc",
@@ -17,10 +58,10 @@ export default class BRCK1 extends Component {
         },
         {
           title: "Perusahaan",
-          dataIndex: "perusahaan",
-          key: "perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Warna",
@@ -31,38 +72,38 @@ export default class BRCK1 extends Component {
         },
         {
           title: "Tanggal Awal",
-          dataIndex: "tanggal_awal",
-          key: "tanggal_awal",
+          dataIndex: "tanggalAwal",
+          key: "tanggalAwal",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggal_awal"),
+          ...this.getColumnSearchProps("tanggalAwal"),
         },
         {
           title: "Tanggal Akhir",
-          dataIndex: "tanggal_akhir",
-          key: "tanggal_akhir",
+          dataIndex: "tanggalAkhir",
+          key: "tanggalAkhir",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggal_akhir"),
+          ...this.getColumnSearchProps("tanggalAkhir"),
         },
         {
           title: "Saldo Awal",
-          dataIndex: "saldo_awal",
-          key: "saldo_awal",
+          dataIndex: "saldoAwal",
+          key: "saldoAwal",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldo_awal"),
+          ...this.getColumnSearchProps("saldoAwal"),
         },
         {
           title: "Saldo Buku",
-          dataIndex: "saldo_buku",
-          key: "saldo_buku",
+          dataIndex: "saldoBuku",
+          key: "saldoBuku",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldo_buku"),
+          ...this.getColumnSearchProps("saldoBuku"),
         },
         {
           title: "Saldo Penutupan BRCK",
-          dataIndex: "saldo_penutupan_brck",
-          key: "saldo_penutupan_brck",
+          dataIndex: "saldoPenutupanBrck",
+          key: "saldoPenutupanBrck",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldo_penutupan_brck"),
+          ...this.getColumnSearchProps("saldoPenutupanBrck"),
         },
         {
           title: "Selisih",
@@ -87,26 +128,17 @@ export default class BRCK1 extends Component {
         },
       ],
       dataSource: [
-        {
-          key: "1",
-          kppbc: "kppbc",
-          perusahaan: "perusahaan",
-          warna: "warna",
-          tanggal_awal: "tanggal_awal",
-          tanggal_akhir: "tanggal_akhir",
-          saldo_awal: "saldo_awal",
-          saldo_buku: "saldo_buku",
-          saldo_penutupan_brck: "saldo_penutupan_brck",
-          selisih: "selisih",
-          potongan: "potongan",
-          kekurangan: "kekurangan",
-        },
       ],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -114,13 +146,19 @@ export default class BRCK1 extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -160,10 +198,55 @@ export default class BRCK1 extends Component {
     this.setState({ searchText: "" });
   };
 
+  handleGetBrck1 = async () => {
+    this.setState({ isLoading: true });
+    try {
+      const response = await api.produksi.json.get("/brck/browse-brck1", {
+        params: {
+          // pageSize: this.state.limitBrckPage,
+          pageNumber: this.state.currentBrckPage,
+        },
+      });
+      console.log(response);
+      this.setState({ dataSource: response.data.data.listData });
+      this.setState({ isLoading: false });
+      console.log(this.state.dataSource);
+      return;
+    } catch (error) {
+      this.setState({ error: "An error occurred" });
+      message.error("Tidak bisa memuat data");
+      this.setState({ isLoading: false });
+      return;
+    }
+  };
+
+  componentDidMount() {
+    this.handleGetBrck1();
+  }
+
+  handleSelectData = (dataSource, selectedData) => {
+    this.setState({ selectedData: dataSource});
+    console.log("selected",selectedData)
+  };
+
+  handleDetail = () => {
+    const { selectedData } = this.state;
+    this.props.history.push(`${pathName}/brck-1-Detail`, {selectedData});
+  };
+
+  handleEdit = () => {
+    const { selectedData } = this.state;
+    this.props.history.push(`${pathName}/brck-1-Perbaikan`, { selectedData });
+  };
+
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1" hideContentHeader>
+        <Container
+          menuName="Buku Rekening Cukai"
+          contentName="BRCK-1"
+          hideContentHeader
+        >
           <div className="kt-portlet__head kt-portlet__head--lg">
             <div
               style={{
@@ -177,25 +260,33 @@ export default class BRCK1 extends Component {
                 <span className="kt-portlet__head-icon">
                   <i className="kt-font-brand flaticon2-folder"></i>
                 </span>
-                <h3 className="kt-portlet__head-title kt-font-bolder">{this.state.subtitle1}</h3>
+                <h3 className="kt-portlet__head-title kt-font-bolder">
+                  {this.state.subtitle1}
+                </h3>
               </div>
 
               <div>
                 <Button
                   type="primary"
-                  onClick={() => this.props.history.push(`${pathName}/brck-1-rekam`)}
+                  onClick={() =>
+                    this.props.history.push(`${pathName}/brck-1-rekam`)
+                  }
                 >
                   Rekam BRCK-1
                 </Button>
               </div>
             </div>
           </div>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+          >
             <div style={{ marginTop: 50, marginBottom: 50 }}>
               <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 scroll={{ x: "max-content" }}
+                loading={this.state.isLoading}
               />
             </div>
           </div>
@@ -204,3 +295,5 @@ export default class BRCK1 extends Component {
     );
   }
 }
+
+export default withRouter(BRCK1);

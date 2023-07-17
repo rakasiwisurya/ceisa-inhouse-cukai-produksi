@@ -16,7 +16,7 @@ import Header from "components/Header";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { api } from "configs/api";
-export default class BRCK1Rekam extends Component {
+export default class BRCK1Perbaikan extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -378,7 +378,7 @@ export default class BRCK1Rekam extends Component {
       };
 
       const response = await api.produksi.formData.post(
-        "/brck/rekam-brck1",
+        "/brck/perbaikan-brc1",
         JSON.stringify(payload)
       );
 
@@ -542,16 +542,14 @@ export default class BRCK1Rekam extends Component {
                 <Input
                   id="nppbkc"
                   onChange={this.handleInputChange}
-                  value={this.state.nppbkc}
+                  value={1234567890}
                   style={{ flex: 3 }}
-                  disabled
                 />
                 <Button type="primary" onClick={() => this.handleCari()}>
                   Cari
                 </Button>
                 <Input
-                  disabled
-                  value={this.state.namaPerusahaan}
+                  value={"PT Molindo"}
                   style={{ flex: 3 }}
                 />
               </div>
@@ -604,7 +602,7 @@ export default class BRCK1Rekam extends Component {
                       </div>
                       <div>
                         <InputNumber
-                          value={this.state.saldo_awal}
+                          value={5000}
                           onChange={this.handleSaldoAwalChange}
                           min={0}
                           style={{ width: 200 }}
@@ -744,14 +742,13 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="hasil_pencacahan_back5"
-                        value={this.state.hasil_pencacahan_back5}
+                        value={5000}
                         onChange={this.handleInputChange}
                       />
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
                         id="hasil_pencarian_back5_text_area"
-                        disabled
                         onChange={this.handleInputChange}
                         autoSize
                       />
@@ -763,7 +760,8 @@ export default class BRCK1Rekam extends Component {
                   >
                     <div>No. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} />
+                      <Input id="no_back5" onChange={this.handleInputChange} 
+                      value={12/12/21}/>
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
@@ -785,7 +783,6 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="selisihKurang"
-                        disabled
                         onChange={this.handleInputChange}
                         value={5000}
                         // value={totalSelisih}
@@ -793,7 +790,6 @@ export default class BRCK1Rekam extends Component {
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
-                        disabled
                         onChange={this.handleInputChange}
                         autoSize
                         value={"12000-7000"}
@@ -816,7 +812,6 @@ export default class BRCK1Rekam extends Component {
                         <div style={{ width: 200 }}>
                           <Input
                             id="selisihlebih"
-                            disabled
                             onChange={this.handleInputChange}
                             value = {"1.000"}
                             // value={totalSelisihLebih}
@@ -824,7 +819,6 @@ export default class BRCK1Rekam extends Component {
                         </div>
                         <div style={{ width: 200 }}>
                           <Input.TextArea
-                            disabled
                             onChange={this.handleInputChange}
                             value = {"13.000 -12.000"}
                             // value={keteranaganSelisihLebih}
@@ -845,14 +839,12 @@ export default class BRCK1Rekam extends Component {
                         <div style={{ width: 200 }}>
                           <Input
                             id="potongan"
-                            disabled
                             onChange={this.handleInputChange}
                             // value={totalBatasLebih}
                           />
                         </div>
                         <div style={{ width: 200 }}>
                           <Input.TextArea
-                            disabled
                             onChange={this.handleInputChange}
                             value={12}
                             // value={keteranaganBatasLebih}
@@ -871,7 +863,6 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="potongan"
-                        disabled
                         onChange={this.handleInputChange}
                         value={90}
                         // value={totalPotongan}
@@ -879,7 +870,6 @@ export default class BRCK1Rekam extends Component {
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
-                        disabled
                         onChange={this.handleInputChange}
                         value={"0,5% x (6000 + 12000)"}
                         // value={keteranganPotongan}
@@ -896,7 +886,6 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="Kekuranagan"
-                        disabled
                         onChange={this.handleInputChange}
                         value={4080}
                         // value={totalKekurangan}
@@ -905,7 +894,6 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input.TextArea
                         id="hasil_pencarian_back5_text_area"
-                        disabled
                         onChange={this.handleInputChange}
                         value ={"5000 - 90"}
                         // value={keteranganKekurangan}
@@ -981,11 +969,14 @@ export default class BRCK1Rekam extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginTop: 30,
-                    marginRight:20,
+                    marginRight:30,
                   }}
                 >
-                  <Button type="primary" onClick={this.handleRekam}>
-                    Rekam
+                   <Button type="primary" 
+                   width={300}
+                   onClick={this.handleRekam}
+                   style={{marginRight:30}} >
+                    Simpan Perbaikan
                   </Button>
                   <ButtonCustom
                     variant="secondary"
