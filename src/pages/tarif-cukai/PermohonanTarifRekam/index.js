@@ -274,6 +274,10 @@ export default class PermohonanTarifRekam extends Component {
     return true;
   };
 
+  handleRekam = async () => {
+    console.log("rekam");
+  };
+
   render() {
     return (
       <>
@@ -324,6 +328,7 @@ export default class PermohonanTarifRekam extends Component {
                 </div>
                 <DatePicker
                   id="tanggal_permohonan"
+                  format="DD-MM-YYYY"
                   onChange={(date) => this.handleDatepickerChange("tanggal_permohonan", date)}
                   value={this.state.tanggal_permohonan}
                   style={{ width: "100%" }}
@@ -347,6 +352,7 @@ export default class PermohonanTarifRekam extends Component {
                 </div>
                 <DatePicker
                   id="tanggal_kep"
+                  format="DD-MM-YYYY"
                   onChange={(date) => this.handleDatepickerChange("tanggal_kep", date)}
                   value={this.state.tanggal_kep}
                   style={{ width: "100%" }}
@@ -359,6 +365,7 @@ export default class PermohonanTarifRekam extends Component {
                 </div>
                 <DatePicker
                   id="awal_berlaku"
+                  format="DD-MM-YYYY"
                   onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
                   value={this.state.awal_berlaku}
                   style={{ width: "100%" }}
@@ -608,6 +615,7 @@ export default class PermohonanTarifRekam extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_surat_lisensi"
+                          format="DD-MM-YYYY"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_surat_lisensi", date)
                           }
