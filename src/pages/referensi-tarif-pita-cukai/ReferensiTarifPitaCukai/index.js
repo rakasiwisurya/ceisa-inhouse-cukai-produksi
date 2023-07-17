@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { baseUrlCeisaInhouse, pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
@@ -16,9 +16,9 @@ export default class ReferensiTarifPitaCukai extends Component {
 
       table: {
         nomor_surat: "",
-        tanggal_surat: "",
-        awal_berlaku: "",
-        akhir_berlaku: "",
+        tanggal_surat: null,
+        awal_berlaku: null,
+        akhir_berlaku: null,
         jenis_bkc_name: "",
         jenis_referensi_name: "",
       },
@@ -32,24 +32,22 @@ export default class ReferensiTarifPitaCukai extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              {!(record.jenis_referensi_id === 1 || record.jenis_referensi_id === 7) && (
-                <>
-                  <ButtonCustom
-                    icon="form"
-                    variant="warning"
-                    onClick={() =>
-                      this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
-                    }
-                  />
-                  <ButtonCustom
-                    icon="eye"
-                    variant="info"
-                    onClick={() =>
-                      this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
-                    }
-                  />
-                </>
-              )}
+              <>
+                <ButtonCustom
+                  icon="form"
+                  variant="warning"
+                  onClick={() =>
+                    this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
+                  }
+                />
+                <ButtonCustom
+                  icon="eye"
+                  variant="info"
+                  onClick={() =>
+                    this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
+                  }
+                />
+              </>
             </div>
           ),
         },
@@ -57,7 +55,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "nomor",
           title: "Nomor",
           dataIndex: "nomor",
-          editable: true,
           render: (text, record, index) => (
             <div style={{ textAlign: "center" }}>{index + 1 + (this.state.page - 1) * 10}</div>
           ),
@@ -66,7 +63,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "nomor_surat",
           title: "Nomor Surat",
           dataIndex: "nomor_surat",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_surat"),
         },
@@ -74,7 +70,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "tanggal_surat",
           title: "Tanggal Surat",
           dataIndex: "tanggal_surat",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -86,7 +81,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "awal_berlaku",
           title: "Awal Berlaku",
           dataIndex: "awal_berlaku",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -98,7 +92,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "akhir_berlaku",
           title: "Akhir Berlaku",
           dataIndex: "akhir_berlaku",
-          editable: true,
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
@@ -110,7 +103,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "jenis_bkc_name",
           title: "Jenis BKC",
           dataIndex: "jenis_bkc_name",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_bkc_name"),
         },
@@ -118,7 +110,6 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "jenis_referensi_name",
           title: "Jenis Referensi",
           dataIndex: "jenis_referensi_name",
-          editable: true,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_referensi_name"),
         },
@@ -149,11 +140,14 @@ export default class ReferensiTarifPitaCukai extends Component {
     const payload = { page: this.state.page };
 
     if (nomor_surat) payload.nomorSkep = nomor_surat;
-    if (tanggal_surat) payload.tanggalSkep = moment(tanggal_surat).format("YYYY-MM-DD");
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
-    if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
-    if (jenis_bkc_name) payload.jenisBkc = jenis_bkc_name;
-    if (jenis_referensi_name) payload.jenisReferensi = jenis_referensi_name;
+    if (tanggal_surat)
+      payload.tanggalSkep = moment(tanggal_surat, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (awal_berlaku)
+      payload.tanggalAwalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (akhir_berlaku)
+      payload.tanggalAkhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jenis_bkc_name) payload.namaJenisBkc = jenis_bkc_name;
+    if (jenis_referensi_name) payload.namaJenisReferensi = jenis_referensi_name;
 
     const response = await requestApi({
       service: "referensi",
@@ -166,14 +160,14 @@ export default class ReferensiTarifPitaCukai extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `referensi-${index}`,
-        referensi_skep_id: item.idReferensiSkep,
+        referensi_skep_id: item.idSkepHeader,
         nomor_surat: item.nomorSkep,
         tanggal_surat: item.tanggalSkep,
-        awal_berlaku: item.awalBerlaku,
-        akhir_berlaku: item.akhirBerlaku,
-        jenis_bkc_id: +item.idJenisBkc,
+        awal_berlaku: item.tanggalAwalBerlaku,
+        akhir_berlaku: item.tanggalAkhirBerlaku,
+        jenis_bkc_id: item.idJenisBkc,
         jenis_bkc_name: item.namaJenisBkc,
-        jenis_referensi_id: +item.idJenisReferensi,
+        jenis_referensi_id: item.idJenisReferensi,
         jenis_referensi_name: item.namaJenisReferensi,
       }));
       const page = response.data.data.currentPage;
@@ -182,7 +176,7 @@ export default class ReferensiTarifPitaCukai extends Component {
     }
   };
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, inputType) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -232,15 +226,15 @@ export default class ReferensiTarifPitaCukai extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
     this.getReferensiTarifPitaCukai();
   };
 
-  handleEdit = (referensi_skep_id, jenisReferensiid) => {
+  handleEdit = (referensiSkepId, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensiSkepId}`
         );
         break;
       case jenisReferensiid === 2 ||
@@ -248,19 +242,19 @@ export default class ReferensiTarifPitaCukai extends Component {
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensiSkepId}`
         );
         break;
       default:
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/edit/${referensiSkepId}`;
         break;
     }
   };
-  handleDetail = (referensi_skep_id, jenisReferensiid) => {
+  handleDetail = (referensiSkepId, jenisReferensiid) => {
     switch (true) {
       case jenisReferensiid === 3 || jenisReferensiid === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensiSkepId}`
         );
         break;
       case jenisReferensiid === 2 ||
@@ -268,11 +262,11 @@ export default class ReferensiTarifPitaCukai extends Component {
         jenisReferensiid === 6 ||
         jenisReferensiid === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensi_skep_id}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensiSkepId}`
         );
         break;
       default:
-        this.props.history.push(`/referensi-penyediaan-pita-cukai`);
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/detail/${referensiSkepId}`;
         break;
     }
   };
@@ -297,7 +291,7 @@ export default class ReferensiTarifPitaCukai extends Component {
                     }
                     block
                   >
-                    + Referesi Warna
+                    + Referensi Warna
                   </ButtonCustom>
                 </Col>
 
@@ -311,17 +305,19 @@ export default class ReferensiTarifPitaCukai extends Component {
                     }
                     block
                   >
-                    + Referesi Tarif
+                    + Referensi Tarif
                   </ButtonCustom>
                 </Col>
 
                 <Col span={8}>
                   <ButtonCustom
                     variant="danger"
-                    onClick={() => this.props.history.push(`/referensi-penyediaan-pita-cukai`)}
+                    onClick={() => {
+                      window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/rekam`;
+                    }}
                     block
                   >
-                    + Referesi Tanggal
+                    + Referensi Tanggal
                   </ButtonCustom>
                 </Col>
               </Row>

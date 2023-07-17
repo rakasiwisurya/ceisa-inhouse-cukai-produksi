@@ -111,7 +111,10 @@ export default class CK4HTDetail extends Component {
               title: "Tanggal",
               dataIndex: "tanggal_produksi",
               key: "tanggal_produksi",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => 
+                <div style={{ textAlign: "center" }}>
+                  {text ? moment(text).format("DD-MM-YYYY") : "-"}
+                </div>,
               ...this.getColumnSearchProps("tanggal_produksi"),
             },
           ],
@@ -221,299 +224,301 @@ export default class CK4HTDetail extends Component {
   }
 
   getDetailCk4Ht = async () => {
-    // const payload = { idCk4: this.props.match.params.id };
+    const payload = { idCk4: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/detail-ht",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/detail-ht",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
+      console.log(data)
 
-    //   this.setState({
-    //     nama_pemrakarsa: data.namaPemrakarsa,
-    //     id_process_pemrakarsa: data.idProcessPemrakarsa,
-    //     jabatan_pemrakarsa: data.jabatanPemrakarsa,
-    //     nip_pemrakarsa: data.nipPemrakarsa,
-
-    //     nppbkc_id: data.idNppbkc,
-    //     nama_nppbkc: data.namaNppbkc,
-    //     nppbkc: data.nppbkc,
-    //     alamat_nppbkc: data.alamatNppbkc,
-
-    //     jenis_laporan_id: data.jenisLaporan,
-    //     nomor_pemberitahuan: data.nomorPemberitahuan,
-    //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
-
-    //     periode_bulan: data.periodeBulan,
-    //     periode_tahun: data.periodeTahun,
-    //     tanggal_produksi_awal: moment(data.tanggalProduksiAwal).format("YYYY-MM-DD"),
-    //     tanggal_produksi_akhir: moment(data.tanggalProduksiAkhir).format("YYYY-MM-DD"),
-
-    //     kota_id: data.idKota,
-    //     kota_name: data.namaKota,
-    //     nama_pengusaha: data.namaPengusaha,
-
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `ck4-${index}`,
-    //       merk_ht_id: detail.idMerkHt,
-    //       merk_ht_name: detail.namaMerkHt,
-    //       jenis_ht: detail.jenisHt,
-    //       hje_ht: detail.hjeHt,
-    //       isi_ht: detail.isiHt,
-    //       bahan_ht: detail.bahanHt,
-    //       tarif_ht: detail.tarifHt,
-    //       satuan_ht: detail.satuanHt,
-
-    //       nomor_produksi: detail.nomorProduksi,
-    //       tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
-    //       jumlah_kemasan: detail.jumlahKemasan,
-    //       jumlah_produksi: detail.jumlahProduksi,
-    //       jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
+      
       this.setState({
-        nama_pemrakarsa: "SENDI BENI SUSANDI",
-        id_process_pemrakarsa: 7784590,
-        jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
-        nip_pemrakarsa: "199210122014021001",
+        nama_pemrakarsa: data.namaPemrakarsa,
+        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        jabatan_pemrakarsa: data.jabatanPemrakarsa,
+        nip_pemrakarsa: data.nipPemrakarsa,
 
-        nppbkc_id: 1,
-        nama_nppbkc: "0706.1.1.1001",
-        nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
-        alamat_nppbkc:
-          "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
+        nppbkc_id: data.idNppbkc,
+        nama_nppbkc: data.namaNppbkc,
+        nppbkc: data.nppbkc,
+        alamat_nppbkc: data.alamatNppbkc,
 
-        jenis_laporan_id: "HARIAN",
-        nomor_pemberitahuan: "Nomor Pemberitahuan 1",
-        tanggal_pemberitahuan: moment(new Date()),
+        jenis_laporan_id: data.jenisLaporan,
+        nomor_pemberitahuan: data.nomorPemberitahuan,
+        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
 
-        periode_bulan: "JANUARY",
-        periode_tahun: 2003,
-        tanggal_produksi_awal: moment(new Date()),
-        tanggal_produksi_akhir: moment(new Date()),
+        periode_bulan: data.periodeBulan,
+        periode_tahun: data.periodeTahun,
+        tanggal_produksi_awal: moment(data.tanggalProduksiAwal),
+        tanggal_produksi_akhir: moment(data.tanggalProduksiAkhir),
 
-        kota_id: "489",
-        kota_name: "Kabupaten Kaimana",
-        nama_pengusaha: "Nama Pengusaha",
-        dataSource: [
-          {
-            key: 1,
-            merk_ht_id: "idMerkHt 1",
-            merk_ht_name: "namaMerkHt 1",
-            jenis_ht: "jenisHt 1",
-            hje_ht: "hjeHt 1",
-            isi_ht: "isiHt 1",
-            bahan_ht: "bahanHt 1",
-            tarif_ht: "tarifHt 1",
-            satuan_ht: "BTG",
+        kota_id: data.idKota,
+        kota_name: data.namaKota,
+        nama_pengusaha: data.namaPengusaha,
 
-            nomor_produksi: "Nomor Produksi 1",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 2,
-            merk_ht_id: "idMerkHt 2",
-            merk_ht_name: "namaMerkHt 2",
-            jenis_ht: "jenisHt 2",
-            hje_ht: "hjeHt 2",
-            isi_ht: "isiHt 2",
-            bahan_ht: "bahanHt 2",
-            tarif_ht: "tarifHt 2",
-            satuan_ht: "BTG",
+        dataSource: data.details.map((detail, index) => ({
+          key: `ck4-${index}`,
+          merk_ht_id: detail.idMerkHt,
+          merk_ht_name: detail.namaMerkHt,
+          jenis_ht: detail.jenisHt,
+          hje_ht: detail.hjeHt,
+          isi_ht: detail.isiHt,
+          bahan_ht: detail.bahanHt,
+          tarif_ht: detail.tarifHt,
+          satuan_ht: detail.satuanHt,
 
-            nomor_produksi: "Nomor Produksi 2",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 3,
-            merk_ht_id: "idMerkHt 3",
-            merk_ht_name: "namaMerkHt 3",
-            jenis_ht: "jenisHt 3",
-            hje_ht: "hjeHt 3",
-            isi_ht: "isiHt 3",
-            bahan_ht: "bahanHt 3",
-            tarif_ht: "tarifHt 3",
-            satuan_ht: "BTG",
-
-            nomor_produksi: "Nomor Produksi 3",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 4,
-            merk_ht_id: "idMerkHt 4",
-            merk_ht_name: "namaMerkHt 4",
-            jenis_ht: "jenisHt 4",
-            hje_ht: "hjeHt 4",
-            isi_ht: "isiHt 4",
-            bahan_ht: "bahanHt 4",
-            tarif_ht: "tarifHt 4",
-            satuan_ht: "BTG",
-
-            nomor_produksi: "Nomor Produksi 4",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 5,
-            merk_ht_id: "idMerkHt 5",
-            merk_ht_name: "namaMerkHt 5",
-            jenis_ht: "jenisHt 5",
-            hje_ht: "hjeHt 5",
-            isi_ht: "isiHt 5",
-            bahan_ht: "bahanHt 5",
-            tarif_ht: "tarifHt 5",
-            satuan_ht: "GR",
-
-            nomor_produksi: "Nomor Produksi 5",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 6,
-            merk_ht_id: "idMerkHt 6",
-            merk_ht_name: "namaMerkHt 6",
-            jenis_ht: "jenisHt 6",
-            hje_ht: "hjeHt 6",
-            isi_ht: "isiHt 6",
-            bahan_ht: "bahanHt 6",
-            tarif_ht: "tarifHt 6",
-            satuan_ht: "GR",
-
-            nomor_produksi: "Nomor Produksi 6",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 7,
-            merk_ht_id: "idMerkHt 7",
-            merk_ht_name: "namaMerkHt 7",
-            jenis_ht: "jenisHt 7",
-            hje_ht: "hjeHt 7",
-            isi_ht: "isiHt 7",
-            bahan_ht: "bahanHt 7",
-            tarif_ht: "tarifHt 7",
-            satuan_ht: "GR",
-
-            nomor_produksi: "Nomor Produksi 7",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 8,
-            merk_ht_id: "idMerkHt 8",
-            merk_ht_name: "namaMerkHt 8",
-            jenis_ht: "jenisHt 8",
-            hje_ht: "hjeHt 8",
-            isi_ht: "isiHt 8",
-            bahan_ht: "bahanHt 8",
-            tarif_ht: "tarifHt 8",
-            satuan_ht: "GR",
-
-            nomor_produksi: "Nomor Produksi 8",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 9,
-            merk_ht_id: "idMerkHt 9",
-            merk_ht_name: "namaMerkHt 9",
-            jenis_ht: "jenisHt 9",
-            hje_ht: "hjeHt 9",
-            isi_ht: "isiHt 9",
-            bahan_ht: "bahanHt 9",
-            tarif_ht: "tarifHt 9",
-            satuan_ht: "ML",
-
-            nomor_produksi: "Nomor Produksi 9",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 10,
-            merk_ht_id: "idMerkHt 10",
-            merk_ht_name: "namaMerkHt 10",
-            jenis_ht: "jenisHt 10",
-            hje_ht: "hjeHt 10",
-            isi_ht: "isiHt 10",
-            bahan_ht: "bahanHt 10",
-            tarif_ht: "tarifHt 10",
-            satuan_ht: "ML",
-
-            nomor_produksi: "Nomor Produksi 10",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 11,
-            merk_ht_id: "idMerkHt 11",
-            merk_ht_name: "namaMerkHt 11",
-            jenis_ht: "jenisHt 11",
-            hje_ht: "hjeHt 11",
-            isi_ht: "isiHt 11",
-            bahan_ht: "bahanHt 11",
-            tarif_ht: "tarifHt 11",
-            satuan_ht: "ML",
-
-            nomor_produksi: "Nomor Produksi 11",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 12,
-            merk_ht_id: "idMerkHt 12",
-            merk_ht_name: "namaMerkHt 12",
-            jenis_ht: "jenisHt 12",
-            hje_ht: "hjeHt 12",
-            isi_ht: "isiHt 12",
-            bahan_ht: "bahanHt 12",
-            tarif_ht: "tarifHt 12",
-            satuan_ht: "ML",
-
-            nomor_produksi: "Nomor Produksi 12",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-        ],
+          nomor_produksi: detail.nomorProduksi,
+          tanggal_produksi: moment(detail.tanggalProduksi),
+          jumlah_kemasan: detail.jumlahKemasan,
+          jumlah_produksi: detail.jumlahProduksi,
+          jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
+
+    // this.setState({ isDetailLoading: true });
+    // const timeout = setTimeout(() => {
+    //   this.setState({
+    //     nama_pemrakarsa: "SENDI BENI SUSANDI",
+    //     id_process_pemrakarsa: 7784590,
+    //     jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
+    //     nip_pemrakarsa: "199210122014021001",
+
+    //     nppbkc_id: 1,
+    //     nama_nppbkc: "0706.1.1.1001",
+    //     nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
+    //     alamat_nppbkc:
+    //       "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
+
+    //     jenis_laporan_id: "HARIAN",
+    //     nomor_pemberitahuan: "Nomor Pemberitahuan 1",
+    //     tanggal_pemberitahuan: moment(new Date()),
+
+    //     periode_bulan: "JANUARY",
+    //     periode_tahun: 2003,
+    //     tanggal_produksi_awal: moment(new Date()),
+    //     tanggal_produksi_akhir: moment(new Date()),
+
+    //     kota_id: "489",
+    //     kota_name: "Kabupaten Kaimana",
+    //     nama_pengusaha: "Nama Pengusaha",
+    //     dataSource: [
+    //       {
+    //         key: 1,
+    //         merk_ht_id: "idMerkHt 1",
+    //         merk_ht_name: "namaMerkHt 1",
+    //         jenis_ht: "jenisHt 1",
+    //         hje_ht: "hjeHt 1",
+    //         isi_ht: "isiHt 1",
+    //         bahan_ht: "bahanHt 1",
+    //         tarif_ht: "tarifHt 1",
+    //         satuan_ht: "BTG",
+
+    //         nomor_produksi: "Nomor Produksi 1",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 2,
+    //         merk_ht_id: "idMerkHt 2",
+    //         merk_ht_name: "namaMerkHt 2",
+    //         jenis_ht: "jenisHt 2",
+    //         hje_ht: "hjeHt 2",
+    //         isi_ht: "isiHt 2",
+    //         bahan_ht: "bahanHt 2",
+    //         tarif_ht: "tarifHt 2",
+    //         satuan_ht: "BTG",
+
+    //         nomor_produksi: "Nomor Produksi 2",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 3,
+    //         merk_ht_id: "idMerkHt 3",
+    //         merk_ht_name: "namaMerkHt 3",
+    //         jenis_ht: "jenisHt 3",
+    //         hje_ht: "hjeHt 3",
+    //         isi_ht: "isiHt 3",
+    //         bahan_ht: "bahanHt 3",
+    //         tarif_ht: "tarifHt 3",
+    //         satuan_ht: "BTG",
+
+    //         nomor_produksi: "Nomor Produksi 3",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 4,
+    //         merk_ht_id: "idMerkHt 4",
+    //         merk_ht_name: "namaMerkHt 4",
+    //         jenis_ht: "jenisHt 4",
+    //         hje_ht: "hjeHt 4",
+    //         isi_ht: "isiHt 4",
+    //         bahan_ht: "bahanHt 4",
+    //         tarif_ht: "tarifHt 4",
+    //         satuan_ht: "BTG",
+
+    //         nomor_produksi: "Nomor Produksi 4",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 5,
+    //         merk_ht_id: "idMerkHt 5",
+    //         merk_ht_name: "namaMerkHt 5",
+    //         jenis_ht: "jenisHt 5",
+    //         hje_ht: "hjeHt 5",
+    //         isi_ht: "isiHt 5",
+    //         bahan_ht: "bahanHt 5",
+    //         tarif_ht: "tarifHt 5",
+    //         satuan_ht: "GR",
+
+    //         nomor_produksi: "Nomor Produksi 5",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 6,
+    //         merk_ht_id: "idMerkHt 6",
+    //         merk_ht_name: "namaMerkHt 6",
+    //         jenis_ht: "jenisHt 6",
+    //         hje_ht: "hjeHt 6",
+    //         isi_ht: "isiHt 6",
+    //         bahan_ht: "bahanHt 6",
+    //         tarif_ht: "tarifHt 6",
+    //         satuan_ht: "GR",
+
+    //         nomor_produksi: "Nomor Produksi 6",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 7,
+    //         merk_ht_id: "idMerkHt 7",
+    //         merk_ht_name: "namaMerkHt 7",
+    //         jenis_ht: "jenisHt 7",
+    //         hje_ht: "hjeHt 7",
+    //         isi_ht: "isiHt 7",
+    //         bahan_ht: "bahanHt 7",
+    //         tarif_ht: "tarifHt 7",
+    //         satuan_ht: "GR",
+
+    //         nomor_produksi: "Nomor Produksi 7",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 8,
+    //         merk_ht_id: "idMerkHt 8",
+    //         merk_ht_name: "namaMerkHt 8",
+    //         jenis_ht: "jenisHt 8",
+    //         hje_ht: "hjeHt 8",
+    //         isi_ht: "isiHt 8",
+    //         bahan_ht: "bahanHt 8",
+    //         tarif_ht: "tarifHt 8",
+    //         satuan_ht: "GR",
+
+    //         nomor_produksi: "Nomor Produksi 8",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 9,
+    //         merk_ht_id: "idMerkHt 9",
+    //         merk_ht_name: "namaMerkHt 9",
+    //         jenis_ht: "jenisHt 9",
+    //         hje_ht: "hjeHt 9",
+    //         isi_ht: "isiHt 9",
+    //         bahan_ht: "bahanHt 9",
+    //         tarif_ht: "tarifHt 9",
+    //         satuan_ht: "ML",
+
+    //         nomor_produksi: "Nomor Produksi 9",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 10,
+    //         merk_ht_id: "idMerkHt 10",
+    //         merk_ht_name: "namaMerkHt 10",
+    //         jenis_ht: "jenisHt 10",
+    //         hje_ht: "hjeHt 10",
+    //         isi_ht: "isiHt 10",
+    //         bahan_ht: "bahanHt 10",
+    //         tarif_ht: "tarifHt 10",
+    //         satuan_ht: "ML",
+
+    //         nomor_produksi: "Nomor Produksi 10",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 11,
+    //         merk_ht_id: "idMerkHt 11",
+    //         merk_ht_name: "namaMerkHt 11",
+    //         jenis_ht: "jenisHt 11",
+    //         hje_ht: "hjeHt 11",
+    //         isi_ht: "isiHt 11",
+    //         bahan_ht: "bahanHt 11",
+    //         tarif_ht: "tarifHt 11",
+    //         satuan_ht: "ML",
+
+    //         nomor_produksi: "Nomor Produksi 11",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //       {
+    //         key: 12,
+    //         merk_ht_id: "idMerkHt 12",
+    //         merk_ht_name: "namaMerkHt 12",
+    //         jenis_ht: "jenisHt 12",
+    //         hje_ht: "hjeHt 12",
+    //         isi_ht: "isiHt 12",
+    //         bahan_ht: "bahanHt 12",
+    //         tarif_ht: "tarifHt 12",
+    //         satuan_ht: "ML",
+
+    //         nomor_produksi: "Nomor Produksi 12",
+    //         tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
+    //         jumlah_kemasan: 10,
+    //         jumlah_produksi: 20,
+    //         jumlah_kemasan_dilekati_pita: 30,
+    //       },
+    //     ],
+    //   });
+    //   this.setState({ isDetailLoading: false });
+    //   clearTimeout(timeout);
+    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -697,6 +702,7 @@ export default class CK4HTDetail extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_pemberitahuan"
+                          format="DD-MM-YYYY"
                           value={this.state.tanggal_pemberitahuan}
                           style={{ width: "100%" }}
                           disabled
@@ -757,12 +763,14 @@ export default class CK4HTDetail extends Component {
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <DatePicker
                             id="tanggal_produksi_awal"
+                            format="DD-MM-YYYY"
                             value={this.state.tanggal_produksi_awal}
                             disabled
                           />
                           <div>s/d</div>
                           <DatePicker
                             id="tanggal_produksi_akhir"
+                            format="DD-MM-YYYY"
                             value={this.state.tanggal_produksi_akhir}
                             disabled
                           />
@@ -914,6 +922,7 @@ export default class CK4HTDetail extends Component {
                             </div>
                             <DatePicker
                               id="tanggal_produksi"
+                              format="DD-MM-YYYY"
                               value={this.state.tanggal_produksi}
                               style={{ width: "100%" }}
                               disabled

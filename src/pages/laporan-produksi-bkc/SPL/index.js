@@ -1,57 +1,142 @@
-import { Button, Card, Col, DatePicker, Form, Icon, Input, Row, Select, Table } from "antd";
+import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import FormLabel from "components/FormLabel";
-import Header from "components/Header";
+import { pathName } from "configs/constants";
+import moment from "moment";
 import React, { Component } from "react";
 
 export default class SPL extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Rekam Surat Pernyataan Libur",
-      card_title_1: "Data Pemohon",
-      card_title_2: "Data Pabrik",
-      card_title_3: "Pernyataan",
+      isSplLoading: true,
 
-      searchText: "",
-      searchedColumn: "",
+      page: 1,
+      totalData: 0,
 
-      nomor_spl: "",
-      tanggal_spl: "",
-      nama_pengusaha: "",
-      jabatan: "",
-      alamat_pemohon: "",
+      table: {
+        status: "",
+        nppbkc: "",
+        nama_perusahaan: "",
+        nomor_spl: "",
+        tanggal_spl: null,
+      },
 
-      nama_perusahaan: "",
-      nppbkc: "",
-      alamat_perusahaan: "",
-
-      tanggal_libur_awal: "",
-      tanggal_libur_akhir: "",
-      pernyataan_tanggal: "",
-      pernyataan_tempat: "",
-
-      list_nama_perusahaan: [],
-      list_tempat: [],
+      dataSource: [],
+      columns: [
+        {
+          key: "aksi",
+          title: "Aksi",
+          dataIndex: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <>
+                <ButtonCustom
+                  icon="eye"
+                  variant="info"
+                  onClick={() => this.handleDetail(record.idSpl)}
+                />
+                <ButtonCustom
+                  icon="form"
+                  variant="warning"
+                  onClick={() => this.handlePerbaikan(record.idSpl)}
+                />
+              </>
+            </div>
+          ),
+        },
+        {
+          key: "status",
+          title: "Status",
+          dataIndex: "status",
+          render: (text) => (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {text ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
+            </div>
+          ),
+          ...this.getColumnSearchProps("status"),
+        },
+        {
+          key: "nppbkc",
+          title: "NPPBKC",
+          dataIndex: "nppbkc",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("nppbkc"),
+        },
+        {
+          key: "nama_perusahaan",
+          title: "Nama Perusahaan",
+          dataIndex: "nama_perusahaan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("nama_perusahaan"),
+        },
+        {
+          key: "nomor_spl",
+          title: "Nomor SPL",
+          dataIndex: "nomor_spl",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("nomor_spl"),
+        },
+        {
+          key: "tanggal_spl",
+          title: "Tanggal SPL",
+          dataIndex: "tanggal_spl",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("tanggal_spl"),
+        },
+      ],
     };
   }
 
-  getColumnSearchProps = (dataIndex) => ({
+  componentDidMount() {
+    this.getSpl();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getSpl();
+    }
+  }
+
+  getSpl = async () => {
+    this.setState({ isSplLoading: true });
+    const timeout = setTimeout(() => {
+      this.setState({
+        dataSource: [
+          {
+            key: "1",
+            id: "1",
+            status: "AKTIF",
+            nppbkc: "nppbkc",
+            nama_perusahaan: "nama_perusahaan",
+            nomor_spl: "nomor_spl",
+            tanggal_spl: moment(new Date()).format("DD-MM-YYYY"),
+          },
+        ],
+      });
+      this.setState({ isSplLoading: false });
+      clearTimeout(timeout);
+    }, 2000);
+  };
+
+  getColumnSearchProps = (dataIndex, inputType) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearch(confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -59,7 +144,7 @@ export default class SPL extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -70,215 +155,60 @@ export default class SPL extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.getSpl();
   };
-  handleColumnReset = (clearFilters) => {
+  handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    this.getSpl();
   };
 
-  handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+  handleDetail = (id) => {
+    this.props.history.push(`${pathName}/spl/detail/${id}`);
   };
-  handleTanggalSPLChange = (date, dateString) => {
-    this.setState({ ...this.state, tanggal_spl: dateString });
-  };
-  handleNamaPerusahaanChange = (value) => {
-    this.setState({ ...this.state, nama_perusahaan: value });
-  };
-  handleTanggalLiburAwalChange = (value) => {
-    this.setState({ ...this.state, tanggal_libur_awal: value });
-  };
-  handleTanggalLiburAkhirChange = (value) => {
-    this.setState({ ...this.state, tanggal_libur_akhir: value });
-  };
-  handlePernyataanTanggalChange = (date, dateString) => {
-    this.setState({ ...this.state, pernyataan_tanggal: dateString });
-  };
-  handlePernyataanTempatChange = (value) => {
-    this.setState({ ...this.state, pernyataan_tempat: value });
-  };
-  handleSimpan = () => {
-    console.log("simpan...");
-  };
-  handleBatal = () => {
-    console.log("batal...");
+  handlePerbaikan = (id) => {
+    this.props.history.push(`${pathName}/spl/perbaikan/${id}`);
   };
 
   render() {
     return (
-      <Container menuName="Laporan Produksi BKC" contentName="CK4 Belum Lapor" hideContentHeader>
-        <Header>{this.state.subtitle1}</Header>
-        <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-          <Form>
-            <Row gutter={[20, 20]}>
-              <Col span={12}>
-                <Card title={this.state.card_title_1} style={{ height: 563 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor SPL</FormLabel>
-                    </div>
-                    <Input
-                      id="nomor_spl"
-                      onChange={this.handleInputChange}
-                      value={this.state.nomor_spl}
-                    />
-                  </div>
+      <>
+        <Container menuName="Laporan Produksi BKC" contentName="SPL">
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom
+                variant="info"
+                onClick={() => this.props.history.push(`${pathName}/spl/rekam`)}
+                block
+              >
+                + Tarif Rekam
+              </ButtonCustom>
+            </Col>
+          </Row>
 
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal SPL</FormLabel>
-                    </div>
-                    <DatePicker onChange={this.handleTanggalSPLChange} style={{ width: "100%" }} />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama Pengusaha</FormLabel>
-                    </div>
-                    <Input
-                      id="nama_pengusaha"
-                      onChange={this.handleInputChange}
-                      value={this.state.nama_pengusaha}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jabatan</FormLabel>
-                    </div>
-                    <Input
-                      id="jabatan"
-                      onChange={this.handleInputChange}
-                      value={this.state.jabatan}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Alamat</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="alamat_pemohon"
-                      onChange={this.handleInputChange}
-                      value={this.state.alamat_pemohon}
-                    />
-                  </div>
-                </Card>
-              </Col>
-
-              <Col span={12}>
-                <Card title={this.state.card_title_2} style={{ height: 563 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama Perusahaan</FormLabel>
-                    </div>
-                    <Select onChange={this.handleNamaPerusahaanChange}>
-                      {this.state.list_nama_perusahaan.length > 0 &&
-                        this.state.list_nama_perusahaan.map((item, index) => (
-                          <Select.Option
-                            key={`nama-perusahaan-${index}`}
-                            value={item.nama_perusahaan_code}
-                          >
-                            {item.nama_perusahaan_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <Input
-                      id="nppbkc"
-                      onChange={this.handleInputChange}
-                      value={this.state.nppbkc}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Alamat</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="alamat_perusahaan"
-                      onChange={this.handleInputChange}
-                      value={this.state.alamat_perusahaan}
-                    />
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row gutter={[20, 20]}>
-              <Col span={12}>
-                <Card title={this.state.card_title_3}>
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Libur</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <DatePicker
-                        onChange={this.handleTanggalLiburAwalChange}
-                        style={{ width: "100%" }}
-                      />
-                      <div>s.d</div>
-                      <DatePicker
-                        onChange={this.handleTanggalLiburAkhirChange}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal, Tempat</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <DatePicker onChange={this.handlePernyataanTanggalChange} />
-                      <div>,</div>
-                      <Select onChange={this.handlePernyataanTempatChange}>
-                        {this.state.list_tempat.length > 0 &&
-                          this.state.list_tempat.map((item, index) => (
-                            <Select.Option
-                              key={`pernyataan-tempat-${index}`}
-                              value={item.pernyataan_tempat_code}
-                            >
-                              {item.pernyataan_tempat_name}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                    <Button type="primary" onClick={this.handleSimpan}>
-                      Simpan
-                    </Button>
-                    <Button type="danger" onClick={this.handleBatal}>
-                      Batal
-                    </Button>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      </Container>
+          <div style={{ marginTop: 30, marginBottom: 20 }}>
+            <Table
+              dataSource={this.state.dataSource}
+              columns={this.state.columns}
+              loading={this.state.isSplLoading}
+              pagination={{ current: this.state.page, total: this.state.totalData }}
+              onChange={(page) => this.setState({ page: page.current })}
+              scroll={{ x: "max-content" }}
+            />
+          </div>
+        </Container>
+      </>
     );
   }
 }

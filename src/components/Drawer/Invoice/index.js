@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Drawer, Button } from "antd";
 import TableCustom from "components/Table/TableCustom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const DrawerInvoice = ({
   activeDrawer = "",
@@ -13,23 +13,25 @@ export const DrawerInvoice = ({
     data: [],
   },
 }) => {
-  const dispatch = useDispatch();
   const { Cnpibk } = useSelector((state) => state);
-  const HandleClickCatalogue = useCallback((item) => {
-    handleShowCatalog(item);
-    setActiveDrawer('catalogue');
-  },[handleShowCatalog, setActiveDrawer]);
+  const HandleClickCatalogue = useCallback(
+    (item) => {
+      handleShowCatalog(item);
+      setActiveDrawer("catalogue");
+    },
+    [handleShowCatalog, setActiveDrawer]
+  );
 
-  const RenderAction = useCallback((text, item) => {
-    return (
-      <Button 
-        type="primary"
-        onClick={() => HandleClickCatalogue(item)} 
-      >
+  const RenderAction = useCallback(
+    (text, item) => {
+      return (
+        <Button type="primary" onClick={() => HandleClickCatalogue(item)}>
           Catalogue
-      </Button>
-    );
-  },[HandleClickCatalogue]);
+        </Button>
+      );
+    },
+    [HandleClickCatalogue]
+  );
 
   const columns = [
     { width: 170, title: "Kode Marketplace", dataIndex: "kdMp", key: "kdMp" },
@@ -44,7 +46,7 @@ export const DrawerInvoice = ({
     { title: "Actions", key: "operation", fixed: "right", render: RenderAction },
   ];
   return (
-    <Drawer 
+    <Drawer
       title="Invoice"
       placement={"right"}
       visible={activeDrawer === "invoice"}
@@ -52,7 +54,7 @@ export const DrawerInvoice = ({
         // setSelectedInvoice("");
         setActiveDrawer("");
       }}
-      width={'80vw'}
+      width={"80vw"}
       className={`text-center`}
     >
       <TableCustom

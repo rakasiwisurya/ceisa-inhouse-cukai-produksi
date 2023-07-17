@@ -1,15 +1,4 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Icon,
-  Input,
-  Row,
-  Select,
-  Table,
-  message,
-  notification,
-} from "antd";
+import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
 import React, { Component } from "react";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -70,8 +59,10 @@ export default class ReferensiWarnaRekam extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.getListGolongan();
-      this.getListJenisProduksi();
+      if (this.state.jenis_bkc_id) {
+        this.getListGolongan();
+        this.getListJenisProduksi();
+      }
 
       if (this.state.jenis_bkc_id === 3) {
         this.setState({
@@ -500,13 +491,12 @@ export default class ReferensiWarnaRekam extends Component {
       const data = {
         kodeWarna: item.kode_warna,
         warna: item.warna,
-        idGolongan: item.golongan_id,
-        idJenisProduksi: item.jenis_produksi_id,
+        idGolonganBkc: item.golongan_id,
+        idJenisProduksiBkc: item.jenis_produksi_id,
       };
 
       if (this.state.jenis_bkc_id === 2) {
         data.idJenisUsaha = item.jenis_usaha_id;
-        return data;
       }
 
       return data;

@@ -47,7 +47,8 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: "",
       personal_id: "",
       personal_name: "",
-      satuan: "[Satuan]",
+      jenis_produksi_bkc_satuan: "",
+      jenis_htl_rel_satuan: "",
 
       jenis_produksi_id: "",
       jenis_produksi_code: "",
@@ -95,14 +96,19 @@ export default class ReferensiTarifRekam extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_produksi_id !== this.state.jenis_produksi_id) {
-      if (this.state.jenis_produksi_id === 2 || this.state.jenis_produksi_id === 5) {
+      if (
+        +this.state.jenis_produksi_id.split(" ")[0] === 2 ||
+        +this.state.jenis_produksi_id.split(" ")[0] === 5
+      ) {
         this.getJenisHtlRel();
       }
     }
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.getListGolongan();
-      this.getListJenisProduksi();
+      if (this.state.jenis_bkc_id !== "") {
+        this.getListGolongan();
+        this.getListJenisProduksi();
+      }
 
       if (this.state.jenis_bkc_id === 3) {
         this.setState({
@@ -315,14 +321,14 @@ export default class ReferensiTarifRekam extends Component {
     if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
   getJenisHtlRel = async () => {
-    const payload = { idJenisProduksi: this.state.jenis_produksi_id };
+    const payload = { idJenisProduksiBkc: +this.state.jenis_produksi_id.split(" ")[0] };
 
     const response = await requestApi({
       service: "referensi",
       method: "get",
       endpoint: "/referensi/jenis-htl-rel",
       params: payload,
-      setLoading: (bool) => this.setState({ isJenisHtlRel: bool }),
+      setLoading: (bool) => this.setState({ isJenisHtlRelLoading: bool }),
     });
 
     if (response) this.setState({ list_jenis_htl_rel: response.data.data });
@@ -479,15 +485,24 @@ export default class ReferensiTarifRekam extends Component {
       return false;
     }
 
+    if (jenis_bkc_id === 2 && !golongan_id) return false;
+
     if (
       jenis_bkc_id === 2 &&
-      (!golongan_id ||
-        !personal_id ||
+      golongan_id === 4 &&
+      (!personal_id || !jenis_produksi_id || !kadar_atas || !kadar_bawah || !tarif_cukai_impor)
+    ) {
+      return false;
+    }
+
+    if (
+      jenis_bkc_id === 2 &&
+      golongan_id === 5 &&
+      (!personal_id ||
         !jenis_produksi_id ||
         !kadar_atas ||
         !kadar_bawah ||
-        !tarif_cukai_dalam_negeri ||
-        !tarif_cukai_impor)
+        !tarif_cukai_dalam_negeri)
     ) {
       return false;
     }
@@ -515,6 +530,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1,
       hje2,
       layer,
+      jenis_produksi_bkc_satuan,
+      jenis_htl_rel_satuan,
 
       kadar_atas,
       kadar_bawah,
@@ -541,6 +558,8 @@ export default class ReferensiTarifRekam extends Component {
           tarif,
           batas_produksi1,
           batas_produksi2,
+          jenis_produksi_bkc_satuan,
+          jenis_htl_rel_satuan,
           hje1,
           hje2,
           layer,
@@ -557,24 +576,27 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: "",
       personal_id: "",
       personal_name: "",
-
-      jenis_produksi_id: "",
-      jenis_produksi_code: "",
-      jenis_produksi_name: "",
       jenis_htl_rel_id: "",
       jenis_htl_rel_name: "",
+
       tarif: "",
       batas_produksi1: "",
       batas_produksi2: "",
       hje1: "",
       hje2: "",
       layer: "",
+      jenis_produksi_bkc_satuan: "",
+      jenis_htl_rel_satuan: "",
 
       kadar_atas: "",
       kadar_bawah: "",
       tarif_cukai_dalam_negeri: "",
       tarif_cukai_impor: "",
     });
+
+    if (this.state.jenis_bkc_id === 2) {
+      this.setState({ jenis_produksi_id: "", jenis_produksi_code: "", jenis_produksi_name: "" });
+    }
   };
   handleReset = () => {
     this.setState({
@@ -597,6 +619,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1: "",
       hje2: "",
       layer: "",
+      jenis_produksi_bkc_satuan: "",
+      jenis_htl_rel_satuan: "",
 
       kadar_atas: "",
       kadar_bawah: "",
@@ -625,6 +649,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1,
       hje2,
       layer,
+      jenis_produksi_bkc_satuan,
+      jenis_htl_rel_satuan,
 
       kadar_atas,
       kadar_bawah,
@@ -653,6 +679,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1,
       hje2,
       layer,
+      jenis_produksi_bkc_satuan,
+      jenis_htl_rel_satuan,
 
       kadar_atas,
       kadar_bawah,
@@ -666,18 +694,17 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: "",
       personal_id: "",
       personal_name: "",
-
-      jenis_produksi_id: "",
-      jenis_produksi_code: "",
-      jenis_produksi_name: "",
       jenis_htl_rel_id: "",
       jenis_htl_rel_name: "",
+
       tarif: "",
       batas_produksi1: "",
       batas_produksi2: "",
       hje1: "",
       hje2: "",
       layer: "",
+      jenis_produksi_bkc_satuan: "",
+      jenis_htl_rel_satuan: "",
 
       kadar_atas: "",
       kadar_bawah: "",
@@ -685,6 +712,10 @@ export default class ReferensiTarifRekam extends Component {
       tarif_cukai_impor: "",
       dataSource: newDataSource,
     });
+
+    if (this.state.jenis_bkc_id === 2) {
+      this.setState({ jenis_produksi_id: "", jenis_produksi_code: "", jenis_produksi_name: "" });
+    }
   };
   handleBatal = () => {
     this.setState({
@@ -705,6 +736,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1: "",
       hje2: "",
       layer: "",
+      jenis_produksi_bkc_satuan: "",
+      jenis_htl_rel_satuan: "",
 
       kadar_atas: "",
       kadar_bawah: "",
@@ -735,6 +768,8 @@ export default class ReferensiTarifRekam extends Component {
       hje1: record.hje1,
       hje2: record.hje2,
       layer: record.layer,
+      jenis_produksi_bkc_satuan: record.jenis_produksi_bkc_satuan,
+      jenis_htl_rel_satuan: record.jenis_htl_rel_satuan,
 
       kadar_atas: record.kadar_atas,
       kadar_bawah: record.kadar_bawah,
@@ -749,17 +784,16 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleRekam = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const details = this.state.dataSource.map((item) => {
       const data = {
-        idGolongan: item.golongan_id,
-        idJenisProduksi: item.jenis_produksi_id,
-        personal: item.personal_id,
+        idGolonganBkc: item.golongan_id,
+        flagPersonal: item.personal_id,
       };
 
       if (this.state.jenis_bkc_id === 3) {
-        data.idJenisHtlRel = item.jenis_htl_rel_id;
+        data.idJenisHtlRel = +item.jenis_htl_rel_id.split(" ")[0];
         data.tarif = item.tarif;
         data.batasProduksi1 = item.batas_produksi1;
         data.batasProduksi2 = item.batas_produksi2;
@@ -769,28 +803,38 @@ export default class ReferensiTarifRekam extends Component {
         return data;
       }
 
+      if (this.state.jenis_bkc_id === 2) {
+        if (item.golongan_id === 4) {
+          data.tarif = item.tarif_cukai_impor;
+        } else {
+          data.tarif = item.tarif_cukai_dalam_negeri;
+        }
+      }
+
       data.kadarAtas = item.kadar_atas;
       data.kadarBawah = item.kadar_bawah;
-      data.tarifCukaiDalamNegeri = item.tarif_cukai_dalam_negeri;
-      data.tarifCukaiImpor = item.tarif_cukai_impor;
       return data;
     });
 
     const payload = {
       idMenu: idMenu("referensi"),
-      noSkep: this.state.nomor_surat,
+      nomorSkep: this.state.nomor_surat,
       tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
       tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
       nomorPeraturan: this.state.nomor_peraturan,
       tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
       idJenisBkc: this.state.jenis_bkc_id,
+      idJenisProduksiBkc:
+        this.state.jenis_bkc_id === 3
+          ? +this.state.jenis_produksi_id.split(" ")[0]
+          : +this.state.dataSource[0].jenis_produksi_id.split(" ")[0],
       details,
     };
 
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-rekam-warna",
+      endpoint: "/referensi/browse-rekam-tarif",
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });
@@ -967,6 +1011,7 @@ export default class ReferensiTarifRekam extends Component {
                     <Select
                       id="jenis_produksi"
                       onChange={(value, option) => {
+                        const splitValues = value.split(" ");
                         this.setState({
                           jenis_htl_rel_id: "",
                           jenis_htl_rel_name: "",
@@ -974,18 +1019,21 @@ export default class ReferensiTarifRekam extends Component {
                           jenis_produksi_code: option.props.children
                             .split("-")[0]
                             .replace(/[()\s]/g, ""),
+                          jenis_produksi_bkc_satuan:
+                            splitValues[1] !== "null" ? splitValues[1] : null,
                         });
                         this.handleSelectCustomChange("jenis_produksi", value, option);
                       }}
-                      value={this.state.jenis_produksi_id}
+                      value={`${this.state.jenis_produksi_id}`}
                       loading={this.state.isJenisProduksiLoading}
                       style={{ width: "100%" }}
+                      disabled={this.state.jenis_bkc_id === 3 && this.state.dataSource.length > 0}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
                         this.state.list_jenis_produksi.map((item, index) => (
                           <Select.Option
                             key={`jenis-produksi-${index}`}
-                            value={item.idJenisProduksi}
+                            value={`${item.idJenisProduksi} ${item.satuan}`}
                           >
                             {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
                           </Select.Option>
@@ -1003,9 +1051,11 @@ export default class ReferensiTarifRekam extends Component {
                     </div>
                     <Select
                       id="jenis_htl_rel"
-                      onChange={(value, option) =>
-                        this.handleSelectCustomChange("jenis_htl_rel", value, option)
-                      }
+                      onChange={(value, option) => {
+                        const splitValues = value.split(" ");
+                        this.setState({ jenis_htl_rel_satuan: splitValues[1] });
+                        this.handleSelectCustomChange("jenis_htl_rel", value, option);
+                      }}
                       value={this.state.jenis_htl_rel_id}
                       loading={this.state.isJenisHtlRelLoading}
                       style={{ width: "100%" }}
@@ -1018,8 +1068,11 @@ export default class ReferensiTarifRekam extends Component {
                     >
                       {this.state.list_jenis_htl_rel.length > 0 &&
                         this.state.list_jenis_htl_rel.map((item, index) => (
-                          <Select.Option key={`jenis_htl_rel-${index}`} value={item.idJenisHtlRel}>
-                            {item.namaJenisHtlRel}
+                          <Select.Option
+                            key={`jenis_htl_rel-${index}`}
+                            value={`${item.idJenisHtlRel} ${item.satuan}`}
+                          >
+                            {`(${item.kodeHtlRel}) - ${item.namaJenisHtlRel}`}
                           </Select.Option>
                         ))}
                     </Select>
@@ -1037,10 +1090,14 @@ export default class ReferensiTarifRekam extends Component {
                         style={{ flex: 1 }}
                         min={0}
                       />
-                      {this.state.satuan && (
+                      {(this.state.jenis_produksi_bkc_satuan ||
+                        this.state.jenis_htl_rel_satuan) && (
                         <>
                           <div>/</div>
-                          <div>{this.state.satuan}</div>
+                          <div>
+                            {this.state.jenis_produksi_bkc_satuan ??
+                              this.state.jenis_htl_rel_satuan}
+                          </div>
                         </>
                       )}
                     </div>
@@ -1093,10 +1150,14 @@ export default class ReferensiTarifRekam extends Component {
                           min={0}
                         />
                       </div>
-                      {this.state.satuan && (
+                      {(this.state.jenis_produksi_bkc_satuan ||
+                        this.state.jenis_htl_rel_satuan) && (
                         <>
                           <div>/</div>
-                          <div>{this.state.satuan}</div>
+                          <div>
+                            {this.state.jenis_produksi_bkc_satuan ??
+                              this.state.jenis_htl_rel_satuan}
+                          </div>
                         </>
                       )}
                     </div>
@@ -1106,7 +1167,13 @@ export default class ReferensiTarifRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Layer</FormLabel>
                     </div>
-                    <Input id="layer" onChange={this.handleInputChange} value={this.state.layer} />
+                    <InputNumber
+                      id="layer"
+                      onChange={(value) => this.handleInputNumberChange("layer", value)}
+                      value={this.state.layer}
+                      min={0}
+                      style={{ width: "100%" }}
+                    />
                   </Col>
                 </>
               )}
@@ -1143,33 +1210,39 @@ export default class ReferensiTarifRekam extends Component {
                     </Row>
                   </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="tarif_cukai_dalam_negeri"
-                      onChange={(value) =>
-                        this.handleInputNumberChange("tarif_cukai_dalam_negeri", value)
-                      }
-                      value={this.state.tarif_cukai_dalam_negeri}
-                      style={{ width: "100%" }}
-                      min={0}
-                    />
-                  </Col>
+                  {this.state.golongan_id === 5 && (
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
+                      </div>
+                      <InputNumber
+                        id="tarif_cukai_dalam_negeri"
+                        onChange={(value) =>
+                          this.handleInputNumberChange("tarif_cukai_dalam_negeri", value)
+                        }
+                        value={this.state.tarif_cukai_dalam_negeri}
+                        style={{ width: "100%" }}
+                        min={0}
+                      />
+                    </Col>
+                  )}
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif Cukai Impor</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="tarif_cukai_impor"
-                      onChange={(value) => this.handleInputNumberChange("tarif_cukai_impor", value)}
-                      value={this.state.tarif_cukai_impor}
-                      style={{ width: "100%" }}
-                      min={0}
-                    />
-                  </Col>
+                  {this.state.golongan_id === 4 && (
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Tarif Cukai Impor</FormLabel>
+                      </div>
+                      <InputNumber
+                        id="tarif_cukai_impor"
+                        onChange={(value) =>
+                          this.handleInputNumberChange("tarif_cukai_impor", value)
+                        }
+                        value={this.state.tarif_cukai_impor}
+                        style={{ width: "100%" }}
+                        min={0}
+                      />
+                    </Col>
+                  )}
                 </>
               )}
             </Row>
@@ -1231,7 +1304,7 @@ export default class ReferensiTarifRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam

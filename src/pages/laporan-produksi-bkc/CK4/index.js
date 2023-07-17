@@ -1,10 +1,11 @@
-import { Button, Col, Icon, Input, Row, Table, Tabs } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
 import Container from "components/Container";
 import React, { Component } from "react";
 import Header from "components/Header";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import ButtonCustom from "components/Button/ButtonCustom";
+import moment from "moment";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -42,12 +43,12 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEdit(record.id, record.nppbkc)}
+                onClick={() => this.handleEdit(record.kppbc, record.nppbkc)}
               />
               <ButtonCustom
                 variant="info"
                 icon="eye"
-                onClick={() => this.handleDetail(record.id, record.nppbkc)}
+                onClick={() => this.handleDetail(record.kppbc, record.nppbkc)}
               />
             </div>
           ),
@@ -56,70 +57,79 @@ export default class CK4 extends Component {
           title: "KPPBC",
           dataIndex: "kppbc",
           key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Tanggal Pemberitahuan",
           dataIndex: "tanggal_pemberitahuan",
           key: "tanggal_pemberitahuan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
         },
         {
           title: "Tanggal Produksi Awal",
           dataIndex: "tanggal_produksi_awal",
           key: "tanggal_produksi_awal",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_produksi_awal"),
         },
         {
           title: "Tanggal Produksi Akhir",
           dataIndex: "tanggal_produksi_akhir",
           key: "tanggal_produksi_akhir",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => 
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>,
           ...this.getColumnSearchProps("tanggal_produksi_akhir"),
         },
         {
           title: "Jumlah Produksi (lt)",
           dataIndex: "jumlah_produksi_lt",
           key: "jumlah_produksi_lt",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_lt"),
         },
         {
           title: "Jumlah Produksi (btg)",
           dataIndex: "jumlah_produksi_btg",
           key: "jumlah_produksi_btg",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_btg"),
         },
         {
           title: "Jumlah Produksi (gram)",
           dataIndex: "jumlah_produksi_gram",
           key: "jumlah_produksi_gram",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_gram"),
         },
         {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("status"),
         },
       ],
@@ -137,112 +147,63 @@ export default class CK4 extends Component {
   }
 
   getCk4 = async () => {
-    // const {
-    //   kppbc,
-    //   nppbkc,
-    //   nama_perusahaan,
-    //   tanggal_pemberitahuan,
-    //   tanggal_produksi_awal,
-    //   tanggal_produksi_akhir,
-    //   jumlah_produksi_lt,
-    //   jumlah_produksi_btg,
-    //   jumlah_produksi_gram,
-    //   status,
-    // } = this.state.table;
+    const {
+      kppbc,
+      nppbkc,
+      nama_perusahaan,
+      tanggal_pemberitahuan,
+      tanggal_produksi_awal,
+      tanggal_produksi_akhir,
+      jumlah_produksi_lt,
+      jumlah_produksi_btg,
+      jumlah_produksi_gram,
+      status,
+    } = this.state.table;
 
-    // const payload = { page: this.state.page };
+    const payload = { page: this.state.page };
+    // const payload = { pageNumber: this.state.page, pageSize: 10 };
 
-    // if (kppbc) payload.kppbc = kppbc;
-    // if (nppbkc) payload.nppbkc = nppbkc;
-    // if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    // if (tanggal_pemberitahuan) payload.tanggalPemberitahuan = tanggal_pemberitahuan;
-    // if (tanggal_produksi_awal) payload.tanggalProduksiAwal = tanggal_produksi_awal;
-    // if (tanggal_produksi_akhir) payload.tanggalProduksiAkhir = tanggal_produksi_akhir;
-    // if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
-    // if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
-    // if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
-    // if (status) payload.status = status;
+    if (kppbc) payload.kppbc = kppbc;
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (tanggal_pemberitahuan)
+      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan).format("YYYY-MM-DD");
+    if (tanggal_produksi_awal)
+      payload.tanggalProduksiAwal = moment(tanggal_produksi_awal).format("YYYY-MM-DD");
+    if (tanggal_produksi_akhir)
+      payload.tanggalProduksiAkhir = moment(tanggal_produksi_akhir).format("YYYY-MM-DD");
+    if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
+    if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
+    if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
+    if (status) payload.status = status;
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/browse",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isCk4Loading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isCk4Loading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item) => ({
-    //     key: item.idReferensiSkep,
-    //     id_ck4: item.idCk4,
-    //     nppbkc: item.nppbkc,
-    //     nama_perusahaan: item.namaPerusahaan,
-    //     tanggal_pemberitahuan: item.tanggalPemberitahuan,
-    //     tanggal_produksi_awal: item.tanggalProduksiAwal,
-    //     tanggal_produksi_akhir: item.tanggalProduksiAkhir,
-    //     jumlah_produksi_lt: item.jumlahProduksiLt,
-    //     jumlah_produksi_btg: item.jumlahProduksiBtg,
-    //     jumlah_produksi_gram: item.jumlahProduksiGram,
-    //     status: item.status,
-    //   }));
-    //   const page = response.data.currentPage;
-    //   const totalData = response.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
-
-    this.setState({ isCk4Loading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        page: 1,
-        totalData: 10,
-        dataSource: [
-          {
-            key: "1",
-            id: 1,
-            kppbc: "KPPBC",
-            nppbkc: "EA",
-            nama_perusahaan: "Nama Perusahaan",
-            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-            tanggal_produksi_awal: "Tanggal Produksi Awal",
-            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-            jumlah_produksi_lt: "Jumlah Produksi Lt",
-            jumlah_produksi_btg: "Jumlah Produksi Batang",
-            jumlah_produksi_gram: "Jumlah Produksi Gram",
-            status: "status",
-          },
-          {
-            key: "2",
-            id: 2,
-            kppbc: "KPPBC",
-            nppbkc: "MMEA",
-            nama_perusahaan: "Nama Perusahaan",
-            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-            tanggal_produksi_awal: "Tanggal Produksi Awal",
-            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-            jumlah_produksi_lt: "Jumlah Produksi Lt",
-            jumlah_produksi_btg: "Jumlah Produksi Batang",
-            jumlah_produksi_gram: "Jumlah Produksi Gram",
-            status: "status",
-          },
-          {
-            key: "3",
-            id: 3,
-            kppbc: "KPPBC",
-            nppbkc: "HT",
-            nama_perusahaan: "Nama Perusahaan",
-            tanggal_pemberitahuan: "Tanggal Pemberitahuan",
-            tanggal_produksi_awal: "Tanggal Produksi Awal",
-            tanggal_produksi_akhir: "Tanggal Produksi Akhir",
-            jumlah_produksi_lt: "Jumlah Produksi Lt",
-            jumlah_produksi_btg: "Jumlah Produksi Batang",
-            jumlah_produksi_gram: "Jumlah Produksi Gram",
-            status: "status",
-          },
-        ],
-      });
-      this.setState({ isCk4Loading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `ck4-${index}`,
+        kppbc: item.kppbc,
+        nppbkc: item.nppbkc,
+        nama_perusahaan: item.namaPerusahaan,
+        tanggal_pemberitahuan: item.tanggalPemberitahuan,
+        tanggal_produksi_awal: item.tanggalProduksiAwal,
+        tanggal_produksi_akhir: item.tanggalProduksiAkhir,
+        jumlah_produksi_lt: item.jumlahProduksiLt,
+        jumlah_produksi_btg: item.jumlahProduksiBtg,
+        jumlah_produksi_gram: item.jumlahProduksiGram,
+        status: item.status,
+      }));
+      // console.log(newData)
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -373,6 +334,7 @@ export default class CK4 extends Component {
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isCk4Loading}
+                onChange={(page) => this.setState({ page: page.current })}
                 pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
               />

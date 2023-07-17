@@ -1,6 +1,7 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+// import { requestApi } from "utils/requestApi";
 
 export default class ModalDaftarPenjabatBc extends Component {
   constructor(props) {
@@ -41,59 +42,65 @@ export default class ModalDaftarPenjabatBc extends Component {
     this.getDaftarPenjabatBc();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getDaftarPenjabatBc();
+    }
+  }
+
   getDaftarPenjabatBc = async () => {
-    // const { penjabat_bc_nip, penjabat_bc_name } = this.state.table;
+    const { penjabat_bc_nip, penjabat_bc_name } = this.state.table;
 
-    // const payload = { page: this.state.page };
+    const payload = { page: this.state.page };
 
-    // if (penjabat_bc_nip) payload.nipPenjabatBc = penjabat_bc_nip;
-    // if (penjabat_bc_name) payload.namaPenjabatBc = penjabat_bc_name;
+    if (penjabat_bc_nip) payload.nipPenjabatBc = penjabat_bc_nip;
+    if (penjabat_bc_name) payload.namaPenjabatBc = penjabat_bc_name;
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/daftar-penjabat-bc",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDaftarPenjabatBcLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/daftar-penjabat-bc-new",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDaftarPenjabatBcLoading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item) => ({
-    //     key: item.nipPenjabatBc,
-    //     penjabat_bc_nip: item.nipPenjabatBc,
-    //     penjabat_bc_name: item.namaPenjabatBc,
-    //   }));
-    //   const page = response.data.currentPage;
-    //   const totalData = response.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
+    if (response) {
+      const newData = response.data.data.listData.map((item) => ({
+        key: item.nipPenjabatBc,
+        penjabat_bc_nip: item.nipPegawai,
+        penjabat_bc_name: item.namaPegawai,
+      }));
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
 
-    this.setState({ isDaftarPenjabatBcLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        page: 1,
-        totalData: 10,
-        dataSource: [
-          {
-            key: "123",
-            penjabat_bc_nip: "123",
-            penjabat_bc_name: "Pegawai A",
-          },
-          {
-            key: "456",
-            penjabat_bc_nip: "456",
-            penjabat_bc_name: "Pegawai B",
-          },
-          {
-            key: "789",
-            penjabat_bc_nip: "789",
-            penjabat_bc_name: "Pegawai C",
-          },
-        ],
-      });
-      this.setState({ isDaftarPenjabatBcLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    // this.setState({ isDaftarPenjabatBcLoading: true });
+    // const timeout = setTimeout(() => {
+    //   this.setState({
+    //     page: 1,
+    //     totalData: 10,
+    //     dataSource: [
+    //       {
+    //         key: "123",
+    //         penjabat_bc_nip: "123",
+    //         penjabat_bc_name: "Pegawai A",
+    //       },
+    //       {
+    //         key: "456",
+    //         penjabat_bc_nip: "456",
+    //         penjabat_bc_name: "Pegawai B",
+    //       },
+    //       {
+    //         key: "789",
+    //         penjabat_bc_nip: "789",
+    //         penjabat_bc_name: "Pegawai C",
+    //       },
+    //     ],
+    //   });
+    //   this.setState({ isDaftarPenjabatBcLoading: false });
+    //   clearTimeout(timeout);
+    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -160,6 +167,7 @@ export default class ModalDaftarPenjabatBc extends Component {
           columns={this.state.columns}
           loading={this.state.isDaftarPenjabatBcLoading}
           pagination={{ current: this.state.page, total: this.state.totalData }}
+          onChange={(page) => this.setState({ page: page.current })}
           onRow={(record, rowIndex) => ({
             onDoubleClick: (event) => onDataDoubleClick(record),
             onMouseEnter: (event) => this.setState({ isMouseEnter: true }),
