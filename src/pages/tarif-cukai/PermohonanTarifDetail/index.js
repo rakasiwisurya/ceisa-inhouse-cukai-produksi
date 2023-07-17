@@ -165,8 +165,8 @@ export default class PermohonanTarifDetail extends Component {
         jenis_pita_name: "jenis_pita_name",
 
         merk_ht: "merk_ht",
-        jenis_produksi_ht_id: 2,
-        jenis_produksi_ht_code: "HTL",
+        jenis_produksi_ht_id: 10,
+        jenis_produksi_ht_code: "APA AJA",
         jenis_produksi_ht_name: "Hasil Tembakau Lainnya",
         jenis_htl_rel_ht_id: 1,
         jenis_htl_rel_ht_name: "Tembakau Molases",

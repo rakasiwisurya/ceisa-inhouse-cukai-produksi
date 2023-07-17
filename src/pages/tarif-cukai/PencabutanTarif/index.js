@@ -3,6 +3,7 @@ import Container from "components/Container";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class PencabutanTarif extends Component {
   constructor(props) {
@@ -52,7 +53,6 @@ export default class PencabutanTarif extends Component {
               {text ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("status"),
         },
         {
           key: "kode_kantor",
@@ -130,26 +130,75 @@ export default class PencabutanTarif extends Component {
   }
 
   getPencabutanTarif = async () => {
-    this.setState({ isPencabutanTarifLoading: true });
-    const timeout = setTimeout(() => {
+    const {
+      kode_kantor,
+      nama_kantor,
+      nppbkc,
+      nama_perusahaan,
+      nomor_kep,
+      tanggal_kep,
+      nama_merk,
+      jenis_produksi,
+      hje,
+      isi,
+      tarif,
+      tujuan,
+      awal_berlaku,
+      akhir_berlaku,
+    } = this.state.table;
+
+    const payload = { page: this.state.page, status: "AKTIF" };
+
+    if (kode_kantor) payload.kodeKantor = kode_kantor;
+    if (nama_kantor) payload.namaKantor = nama_kantor;
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (nomor_kep) payload.nomorSkep = nomor_kep;
+    if (tanggal_kep) payload.tanggalSkep = moment(tanggal_kep).format("YYYY-MM-DD");
+    if (nama_merk) payload.namaMerk = nama_merk;
+    if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
+    if (hje) payload.hjePerKemasan = hje;
+    if (isi) payload.isiPerKemasan = isi;
+    if (tarif) payload.tarifSpesifik = tarif;
+    if (tujuan) payload.tujuanPemasaran = tujuan;
+    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
+    if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/pita-cukai/browse-penetapan-tarif",
+      params: payload,
+      setLoading: (bool) => this.setState({ isPencabutanTarifLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `pencabutan-tarif-${index}`,
+        permohonan_tarif_id: item.idTarifMerkHeader,
+        status: item.status,
+        kode_kantor: item.kodeKantor,
+        nama_kantor: item.namaKantor,
+        nppbkc: item.nppbkc,
+        nama_perusahaan: item.namaPerusahaan,
+        nomor_skep: item.nomorSkep,
+        tanggal_skep: item.tanggalSkep,
+        nama_merk: item.namaMerk,
+        jenis_produksi: item.namaJenisProduksiBkc,
+        hje: item.hjePerKemasan,
+        isi: item.isiPerKemasan,
+        tarif: item.tarifSpesifik,
+        tujuan: item.tujuanPemasaran,
+        awal_berlaku: item.awalBerlaku,
+        akhir_berlaku: item.akhirBerlaku,
+      }));
+
       this.setState({
-        dataSource: [
-          {
-            id: "1",
-            status: "AKTIF",
-            kode_kantor: "kode_kantor",
-            nama_kantor: "nama_kantor",
-            nppbkc: "nppbkc",
-            nomor_skep: "nomor_skep",
-            tanggal_skep: moment(new Date()).format("DD-MM-YYYY"),
-            awal_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-            akhir_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-          },
-        ],
+        dataSource: newData,
+        page: response.data.data.currentPage,
+        totalData: response.data.data.totalData,
       });
-      this.setState({ isPencabutanTarifLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({
