@@ -187,6 +187,7 @@ export default class CK4 extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
+        idCk4: item.idCk4,
         key: `ck4-${index}`,
         kppbc: item.kppbc,
         nppbkc: item.nppbkc,
