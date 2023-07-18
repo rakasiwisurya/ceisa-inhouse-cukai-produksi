@@ -2,12 +2,16 @@ import { Button, Icon, Input, Table } from "antd";
 import Container from "components/Container";
 import Header from "components/Header";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class CK4BelumLapor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Pencarian CK4 Belum Lapor",
+
+      page: 1,
+      totalData: 0,
 
       searchText: "",
       searchedColumn: "",
@@ -149,6 +153,27 @@ export default class CK4BelumLapor extends Component {
         },
       ],
     };
+  }
+
+  componentDidMount() {
+    this.getBelumLaporCk4();
+  }
+
+  getBelumLaporCk4 = async () => {
+    const payload = { idCk4: this.props.match.params.id };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/browse-belum-lapor",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+      console.log(data)
+    }
   }
 
   getColumnSearchProps = (dataIndex) => ({
