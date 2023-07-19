@@ -581,6 +581,8 @@ export default class CK4HT extends Component {
       details,
     };
 
+    console.log(payload)
+
     const response = await requestApi({
       service: "produksi",
       method: "post",

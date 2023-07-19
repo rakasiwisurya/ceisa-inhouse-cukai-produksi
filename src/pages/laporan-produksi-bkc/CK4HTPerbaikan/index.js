@@ -160,7 +160,16 @@ export default class CK4HTPerbaikan extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {/* <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} /> */}
+              {record.merk_ht_id ? (
+                <Button
+                  type="danger"
+                  icon="delete"
+                  onClick={() => this.handleDeleteApi(index, record.merk_ht_id)}
+                />
+              ) : (
+                <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              )}
             </div>
           ),
         },
@@ -358,6 +367,21 @@ export default class CK4HTPerbaikan extends Component {
           jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
         })),
       });
+    }
+  };
+
+  handleDeleteApi = async (index, id) => {
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/delete-detail-ht",
+      body: { idCk4Detail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDelete(index);
     }
   };
 
