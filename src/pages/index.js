@@ -38,6 +38,10 @@ import SPLDetail from "./laporan-produksi-bkc/SPLDetail";
 import SPLPerbaikan from "./laporan-produksi-bkc/SPLPerbaikan";
 import RekamJenisPitaRekam from "./rekam-jenis-pita/RekamJenisPitaRekam";
 import RekamJenisPitaPerbaikan from "./rekam-jenis-pita/RekamJenisPitaPerbaikan";
+import BRCK1Detil from "./buku-rekening-cukai/BRCK1Rekam/Detil";
+import BRCK1Perbaikan from "./buku-rekening-cukai/BRCK1Rekam/Perbaikan";
+import BRCK2Detil from "./buku-rekening-cukai/BRCK2Rekam/Detil";
+import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Rekam/Perbaikan";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -207,6 +211,16 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <BRCK1 {...props} {...propsExtra} />}
         exact={true}
       />
+        <Route
+        path={pathName + "/brck-1-Detail"}
+        render={(props) => <BRCK1Detil {...props} {...propsExtra} />}
+        exact={true}
+      />
+        <Route
+        path={pathName + "/brck-1-Perbaikan"}
+        render={(props) => <BRCK1Perbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
       <Route
         path={pathName + "/brck-1-rekam"}
         render={(props) => <BRCK1Rekam {...props} {...propsExtra} />}
@@ -215,6 +229,16 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/brck-2"}
         render={(props) => <BRCK2 {...props} {...propsExtra} />}
+        exact={true}
+      />
+       <Route
+        path={pathName + "/brck-2-Detail"}
+        render={(props) => <BRCK2Detil {...props} {...propsExtra} />}
+        exact={true}
+      />
+        <Route
+        path={pathName + "/brck-2-Perbaikan"}
+        render={(props) => <BRCK2Perbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

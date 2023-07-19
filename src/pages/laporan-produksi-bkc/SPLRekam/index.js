@@ -7,6 +7,9 @@ import React, { Component } from "react";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import ModalDaftarKota from "../ModalDaftarKota";
 import { pathName } from "configs/constants";
+import { requestApi } from "utils/requestApi";
+import moment from "moment";
+import { idMenu } from "utils/idMenu";
 
 export default class SPLRekam extends Component {
   constructor(props) {
@@ -115,33 +118,59 @@ export default class SPLRekam extends Component {
     return true;
   };
 
-  handleRekam = () => {
-    // const {
-    //   nomor_spl,
-    //   tanggal_spl,
-    //   nama_pengusaha,
-    //   jabatan,
-    //   alamat_pemohon,
+  handleRekam = async() => {
+    const {
+      nomor_spl,
+      tanggal_spl,
+      nama_pengusaha,
+      jabatan,
+      alamat_pemohon,
 
-    //   nppbkc_id,
-    //   nama_nppbkc,
-    //   nppbkc,
-    //   alamat_nppbkc,
+      nppbkc_id,
+      nama_nppbkc,
+      nppbkc,
+      alamat_nppbkc,
 
-    //   tanggal_libur_awal,
-    //   tanggal_libur_akhir,
-    //   pernyataan_tanggal,
-    //   pernyataan_kota_id,
-    //   pernyataan_kota_name,
-    // } = this.state;
+      tanggal_libur_awal,
+      tanggal_libur_akhir,
+      pernyataan_tanggal,
+      pernyataan_kota_id,
+      pernyataan_kota_name,
+    } = this.state;
 
-    this.setState({ isRekamLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
-      this.setState({ isRekamLoading: false });
+    const payload = {
+      nomorSpl: nomor_spl,
+      tanggalSpl: moment(tanggal_spl).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      namaPengusaha: nama_pengusaha,
+      jabatanPengusaha: jabatan,
+      alamatPengusaha: alamat_pemohon,
+      idNppbkc: nppbkc_id,
+      namaPerusahaan: nama_nppbkc,
+      nppbkc: nppbkc,
+      alamatPerusahaan: alamat_nppbkc,
+      awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      // pernyataan_kota_id: pernyataan_kota_id,
+      tempatPernyataan: pernyataan_kota_name,
+      idProses: idMenu("spl")
+    };
+
+    // console.log(payload)
+    
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/spl/rekam",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/spl`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {

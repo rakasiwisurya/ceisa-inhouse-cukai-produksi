@@ -16,7 +16,7 @@ import Header from "components/Header";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { api } from "configs/api";
-export default class BRCK1Rekam extends Component {
+export default class BRCK1Detil extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -364,39 +364,6 @@ export default class BRCK1Rekam extends Component {
     }
   };
 
-  handleRekam = async (event) => {
-    event.preventDefault();
-    try {
-      const payload = {
-        idBrck1: this.state.idBrck1,
-        saldoAwal: this.state.saldo_awal,
-        hasilPencarianBack5: this.state.hasil_pencacahan_back5,
-        nomorBack5: this.state.no_back5,
-        tanggalBack5: this.state.tgl_back5,
-        jenisPenutupan: this.state.jenis_penutupan,
-        catatan: this.state.ketentuan,
-      };
-
-      const response = await api.produksi.formData.post(
-        "/brck/rekam-brck1",
-        JSON.stringify(payload)
-      );
-
-      this.setState({
-        data: response.data,
-        isLoading: true,
-      });
-
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa merekam data");
-      this.setState({ isLoading: true });
-      return;
-    }
-  };
-
-
   totalKeseluruhan = () => {
 		const { dataSource } = this.state;
 
@@ -542,7 +509,7 @@ export default class BRCK1Rekam extends Component {
                 <Input
                   id="nppbkc"
                   onChange={this.handleInputChange}
-                  value={this.state.nppbkc}
+                  value={1234567890}
                   style={{ flex: 3 }}
                   disabled
                 />
@@ -550,9 +517,9 @@ export default class BRCK1Rekam extends Component {
                   Cari
                 </Button>
                 <Input
-                  disabled
-                  value={this.state.namaPerusahaan}
+                  value={"PT Molindo"}
                   style={{ flex: 3 }}
+                  disabled
                 />
               </div>
 
@@ -567,12 +534,12 @@ export default class BRCK1Rekam extends Component {
                 <FormLabel>PERIODE</FormLabel>
                 <DatePicker
                   onChange={this.handlePeriodeAwalChange}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%" }}disabled
                 />
                 <div>s.d</div>
                 <DatePicker
                   onChange={this.handlePeriodeAkhirChange}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%" }} disabled
                 />
               </div>
             </div>
@@ -604,10 +571,11 @@ export default class BRCK1Rekam extends Component {
                       </div>
                       <div>
                         <InputNumber
-                          value={this.state.saldo_awal}
+                          value={5000}
                           onChange={this.handleSaldoAwalChange}
                           min={0}
                           style={{ width: 200 }}
+                          disabled
                         />
                       </div>
                     </div>
@@ -744,15 +712,16 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="hasil_pencacahan_back5"
-                        value={this.state.hasil_pencacahan_back5}
+                        value={5000}
                         onChange={this.handleInputChange}
+                        disabled
                       />
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
                         id="hasil_pencarian_back5_text_area"
-                        disabled
                         onChange={this.handleInputChange}
+                        disabled
                         autoSize
                       />
                     </div>
@@ -763,7 +732,9 @@ export default class BRCK1Rekam extends Component {
                   >
                     <div>No. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} />
+                      <Input id="no_back5" onChange={this.handleInputChange} 
+                      disabled
+                      value={12/12/21}/>
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
@@ -773,7 +744,8 @@ export default class BRCK1Rekam extends Component {
                   >
                     <div>Tgl. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} />
+                      <DatePicker onChange={this.handleTanggalBack5Change} 
+                      disabled/>
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
@@ -785,18 +757,18 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="selisihKurang"
-                        disabled
                         onChange={this.handleInputChange}
                         value={5000}
+                        disabled
                         // value={totalSelisih}
                       />
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
-                        disabled
                         onChange={this.handleInputChange}
                         autoSize
                         value={"12000-7000"}
+                        disabled
                         // saldo buku - hasil pencacahan back 5
                         // value={keteranganSelisih}
                       />
@@ -816,17 +788,17 @@ export default class BRCK1Rekam extends Component {
                         <div style={{ width: 200 }}>
                           <Input
                             id="selisihlebih"
-                            disabled
                             onChange={this.handleInputChange}
                             value = {"1.000"}
+                            disabled
                             // value={totalSelisihLebih}
                           />
                         </div>
                         <div style={{ width: 200 }}>
                           <Input.TextArea
-                            disabled
                             onChange={this.handleInputChange}
                             value = {"13.000 -12.000"}
+                            disabled
                             // value={keteranaganSelisihLebih}
                             // pencacahan back 5 - saldo buku
                             autoSize
@@ -845,16 +817,15 @@ export default class BRCK1Rekam extends Component {
                         <div style={{ width: 200 }}>
                           <Input
                             id="potongan"
-                            disabled
-                            onChange={this.handleInputChange}
+                            onChange={this.handleInputChange}disabled
                             // value={totalBatasLebih}
                           />
                         </div>
                         <div style={{ width: 200 }}>
                           <Input.TextArea
-                            disabled
                             onChange={this.handleInputChange}
                             value={12}
+                            disabled
                             // value={keteranaganBatasLebih}
                             // 0.01 * updateSaldo(saldo buku)
                             autoSize
@@ -871,17 +842,17 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="potongan"
-                        disabled
                         onChange={this.handleInputChange}
                         value={90}
+                        disabled
                         // value={totalPotongan}
                       />
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
-                        disabled
                         onChange={this.handleInputChange}
                         value={"0,5% x (6000 + 12000)"}
+                        disabled
                         // value={keteranganPotongan}
                         // 0.005 * (totalJumlahTransaksiDebit + saldo_awal)
                         autoSize
@@ -896,18 +867,18 @@ export default class BRCK1Rekam extends Component {
                     <div style={{ width: 200 }}>
                       <Input
                         id="Kekuranagan"
-                        disabled
                         onChange={this.handleInputChange}
                         value={4080}
+                        disabled
                         // value={totalKekurangan}
                       />
                     </div>
                     <div style={{ width: 200 }}>
                       <Input.TextArea
                         id="hasil_pencarian_back5_text_area"
-                        disabled
                         onChange={this.handleInputChange}
                         value ={"5000 - 90"}
+                        disabled
                         // value={keteranganKekurangan}
                         // selish kurang - potongan
                         autoSize
@@ -950,6 +921,7 @@ export default class BRCK1Rekam extends Component {
                         // value={ketentuan}
                         value={"Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
                         readOnly
+                        disabled
                         rows={5}
                       />
                     </div>
@@ -981,12 +953,9 @@ export default class BRCK1Rekam extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginTop: 30,
-                    marginRight:20,
+                    marginRight:30,
                   }}
                 >
-                  <Button type="primary" onClick={this.handleRekam}>
-                    Rekam
-                  </Button>
                   <ButtonCustom
                     variant="secondary"
                     width={200}

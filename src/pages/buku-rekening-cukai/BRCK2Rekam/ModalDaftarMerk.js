@@ -1,24 +1,36 @@
-import { Button, Icon, Input, Modal, Table } from "antd";
+import { Button, Icon, Input, Modal, Table, message } from "antd";
 import React, { Component } from "react";
+import { api } from "configs/api";
 
 export default class ModalDaftarMerk extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      limitMerkPage: 100,
+      currentMerkPage: 0,
+      merkMMEA: "",
+      jenisMMEA: "",
+      golongan: "",
+      kadar: "",
+      tarif: "",
+      isi: "",
+      kemasan: "",
+      noSkep: "",
+      tanggalPenutupanBrck2: "",
       columns: [
         {
           title: "Merk MMEA",
-          dataIndex: "merk_mmea",
-          key: "merk_mmea",
+          dataIndex: "merkMMEA",
+          key: "merkMMEA",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("merk_mmea"),
+          ...this.getColumnSearchProps("merkMMEA"),
         },
         {
           title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
+          dataIndex: "jenisMMEA",
+          key: "jenisMMEA",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
+          ...this.getColumnSearchProps("jenisMMEA"),
         },
         {
           title: "Golongan",
@@ -57,50 +69,53 @@ export default class ModalDaftarMerk extends Component {
         },
         {
           title: "No. SKEP",
-          dataIndex: "no_skep",
-          key: "no_skep",
+          dataIndex: "noSkep",
+          key: "noSkep",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("no_skep"),
+          ...this.getColumnSearchProps("noSkep"),
         },
         {
           title: "Tanggal Penutupan BRCK-2",
-          dataIndex: "tanggal_penutupan_brck2",
-          key: "tanggal_penutupan_brck2",
+          dataIndex: "tanggalPenutupanBrck2",
+          key: "tanggalPenutupanBrck2",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggal_penutupan_brck2"),
+          ...this.getColumnSearchProps("tanggalPenutupanBrck2"),
         },
       ],
       dataSource: [
         {
-          key: "1",
-          merk_mmea: "merk_mmea1",
-          jenis_mmea: "jenis_mmea1",
-          golongan: "golongan1",
-          kadar: "kadar1",
-          tarif: "tarif1",
-          isi: "isi1",
-          kemasan: "kemasan1",
-          no_skep: "no_skep1",
-          tanggal_penutupan_brck2: "tanggal_penutupan_brck2_1",
+          merkMMEA: "A",
+          jenisMMEA: "A",
+          golongan: "A",
+          kadar: "10%",
+          tarif: "20",
+          isi: "10",
+          kemasan: "1",
+          noSkep: "1",
+          tanggalPenutupanBrck2: "20-02-2023",
         },
         {
-          key: "2",
-          merk_mmea: "merk_mmea2",
-          jenis_mmea: "jenis_mmea2",
-          golongan: "golongan2",
-          kadar: "kadar2",
-          tarif: "tarif2",
-          isi: "isi2",
-          kemasan: "kemasan2",
-          no_skep: "no_skep2",
-          tanggal_penutupan_brck2: "tanggal_penutupan_brck2_2",
+          merkMMEA: "B",
+          jenisMMEA: "B",
+          golongan: "B",
+          kadar: "30%",
+          tarif: "30",
+          isi: "10",
+          kemasan: "1",
+          noSkep: "1",
+          tanggalPenutupanBrck2: "20-03-2023",
         },
       ],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -108,13 +123,19 @@ export default class ModalDaftarMerk extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -154,6 +175,32 @@ export default class ModalDaftarMerk extends Component {
     this.setState({ searchText: "" });
   };
 
+  handleGetMerk = async () => {
+    this.setState({ isLoading: true });
+    try {
+      const response = await api.produksi.json.get("/brck/daftar-merk", {
+        params: {
+          // pageSize: this.state.limitMerkPage,
+          // pageNumber: this.state.currentMerkPage,
+        },
+      });
+      console.log(response);
+      this.setState({ dataSource: response.data.data.listData });
+      this.setState({ isLoading: false });
+      console.log(this.state.dataSource);
+      return;
+    } catch (error) {
+      this.setState({ error: "An error occurred" });
+      message.error("Tidak bisa memuat data");
+      this.setState({ isLoading: false });
+      return;
+    }
+  };
+
+  componentDidMount() {
+    this.handleGetMerk();
+  }
+
   render() {
     const { isOpen, onCancel, onRow } = this.props;
 
@@ -170,6 +217,11 @@ export default class ModalDaftarMerk extends Component {
           <Table
             dataSource={this.state.dataSource}
             columns={this.state.columns}
+            loading={this.state.isLoading}
+            pagination={{
+              current: this.state.currentMerkPage,
+              total: this.state.limitMerkPageMerkPage,
+            }}
             scroll={{ x: "max-content" }}
             onRow={onRow}
           />

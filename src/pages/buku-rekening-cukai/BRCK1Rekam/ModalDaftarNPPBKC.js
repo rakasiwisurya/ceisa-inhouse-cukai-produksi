@@ -1,10 +1,15 @@
-import { Button, Icon, Input, Modal, Table } from "antd";
+import { Button, Icon, Input, Modal, Table, message } from "antd";
 import React, { Component } from "react";
+import { api } from "configs/api";
 
 export default class ModalDaftarNPPBKC extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      limitBrckPage:100,
+      currentBrckPage:0,
+      idNppbkc:"fe3c9197-df48-05e6-e054-0021f60abd54",
+      page:1,
       columns: [
         {
           title: "NPPBKC",
@@ -15,10 +20,10 @@ export default class ModalDaftarNPPBKC extends Component {
         },
         {
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Alamat",
@@ -36,35 +41,24 @@ export default class ModalDaftarNPPBKC extends Component {
         },
         {
           title: "Tanggal Penutupan BRCK",
-          dataIndex: "tanggal_penutupan_brck",
-          key: "tanggal_penutupan_brck",
+          dataIndex: "tanggalPenutupanBrck",
+          key: "tanggalPenutupanBrck",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggal_penutupan_brck"),
+          ...this.getColumnSearchProps("tanggalPenutupanBrck"),
         },
       ],
       dataSource: [
-        {
-          key: "1",
-          nppbkc: "nppbkc1",
-          nama_perusahaan: "nama_perusahaan1",
-          alamat: "alamat1",
-          npwp: "npwp1",
-          tanggal_penutupan_brck: "tanggal_penutupan_brck1",
-        },
-        {
-          key: "2",
-          nppbkc: "nppbkc2",
-          nama_perusahaan: "nama_perusahaan2",
-          alamat: "alamat2",
-          npwp: "npwp2",
-          tanggal_penutupan_brck: "tanggal_penutupan_brck2",
-        },
       ],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -72,13 +66,19 @@ export default class ModalDaftarNPPBKC extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -118,8 +118,37 @@ export default class ModalDaftarNPPBKC extends Component {
     this.setState({ searchText: "" });
   };
 
+  handleGetNppbkc = async () => {
+    this.setState({ isLoading: true });
+    try {
+      const response = await api.produksi.json.get(
+        "/brck/daftar-nppbkc-brck1",
+        {
+          params: {
+            idNppbkc: this.state.idNppbkc,
+            page: this.state.page,
+          },
+        }
+      );
+      console.log(response);
+      this.setState({dataSource: response.data.data.listData});
+      this.setState({ isLoading: false });
+      console.log(this.state.dataSource);
+      return;
+    } catch (error) {
+      this.setState({ error: "An error occurred" });
+      message.error("Tidak bisa memuat data");
+      this.setState({ isLoading: false });
+      return;
+    }
+  };
+
+  componentDidMount() {
+    this.handleGetNppbkc();
+  }
+
   render() {
-    const { isOpen, onCancel, onRow } = this.props;
+    const { isOpen, onCancel, onRow} = this.props;
 
     return (
       <Modal
@@ -128,12 +157,12 @@ export default class ModalDaftarNPPBKC extends Component {
         visible={isOpen}
         onCancel={onCancel}
         footer={null}
-        centered
-      >
+        centered      >
         <div>
           <Table
             dataSource={this.state.dataSource}
             columns={this.state.columns}
+            loading={this.state.isLoading}
             scroll={{ x: "max-content" }}
             onRow={onRow}
           />
