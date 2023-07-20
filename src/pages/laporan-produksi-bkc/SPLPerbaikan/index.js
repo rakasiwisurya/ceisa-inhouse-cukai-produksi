@@ -76,7 +76,6 @@ export default class SPLPerbaikan extends Component {
         tanggal_libur_awal:moment(data.awalLibur),
         tanggal_libur_akhir:moment(data.akhirLibur),
         pernyataan_tanggal:moment(data.tanggalPernyataan),
-        // pernyataan_kota_id:data.pernyataan_kota_id,
         pernyataan_kota_name:data.tempatPernyataan
       });
     }
@@ -131,7 +130,6 @@ export default class SPLPerbaikan extends Component {
       tanggal_libur_awal,
       tanggal_libur_akhir,
       pernyataan_tanggal,
-      pernyataan_kota_id,
       pernyataan_kota_name,
     } = this.state;
 
@@ -148,7 +146,6 @@ export default class SPLPerbaikan extends Component {
       !tanggal_libur_awal ||
       !tanggal_libur_akhir ||
       !pernyataan_tanggal ||
-      // !pernyataan_kota_id ||
       !pernyataan_kota_name
     ) {
       return false;
@@ -174,7 +171,6 @@ export default class SPLPerbaikan extends Component {
       tanggal_libur_awal,
       tanggal_libur_akhir,
       pernyataan_tanggal,
-      pernyataan_kota_id,
       pernyataan_kota_name,
     } = this.state;
 
@@ -192,7 +188,6 @@ export default class SPLPerbaikan extends Component {
       awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
       akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      // pernyataan_kota_id: pernyataan_kota_id,
       tempatPernyataan: pernyataan_kota_name,
       idProses: idMenu("spl")
     };
