@@ -134,7 +134,6 @@ export default class SPLRekam extends Component {
       tanggal_libur_awal,
       tanggal_libur_akhir,
       pernyataan_tanggal,
-      pernyataan_kota_id,
       pernyataan_kota_name,
     } = this.state;
 
@@ -151,13 +150,9 @@ export default class SPLRekam extends Component {
       awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
       akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      // pernyataan_kota_id: pernyataan_kota_id,
       tempatPernyataan: pernyataan_kota_name,
       idProses: idMenu("spl")
     };
-
-    // console.log(payload)
-    
 
     const response = await requestApi({
       service: "produksi",

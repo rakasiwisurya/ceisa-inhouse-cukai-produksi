@@ -101,17 +101,25 @@ export default class SPL extends Component {
   }
 
   getSpl = async () => {
+
     const {
-      key,
-      id,
-      status,
       nppbkc,
       nama_perusahaan,
       nomor_spl,
-      tanggal_spl
+      tanggal_spl,
+      status,
     } = this.state.table;
 
     const payload = { page: this.state.page };
+
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (nomor_spl) payload.nomorSpl = nomor_spl;
+    if (tanggal_spl)
+      payload.tanggalSpl = moment(tanggal_spl).format("yyyy-MM-DD HH:mm:ss.SSS");
+    if (status) payload.status = status;
+
+    console.log('payload', payload)
 
     const response = await requestApi({
       service: "produksi",
@@ -127,7 +135,6 @@ export default class SPL extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         idSpl: item.idSpl,
         key: `spl-${index}`,
-        // id: 
         status: item.status,
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
