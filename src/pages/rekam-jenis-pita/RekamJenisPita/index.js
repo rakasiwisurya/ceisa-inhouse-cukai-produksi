@@ -153,7 +153,7 @@ export default class RekamJenisPita extends Component {
     if (nama_kantor) payload.namaKantor = nama_kantor;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
+    if (jenis_produksi) payload.jenisProduksi = jenis_produksi;
     if (hje) payload.hje = hje;
     if (isi) payload.isiKemasan = isi;
     if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -177,7 +177,7 @@ export default class RekamJenisPita extends Component {
         nama_kantor: item.namaKantor,
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
-        jenis_produksi: item.namaJenisProduksiBkc,
+        jenis_produksi: item.jenisProduksi,
         hje: item.hje,
         isi: item.isiKemasan,
         awal_berlaku: item.awalBerlaku,

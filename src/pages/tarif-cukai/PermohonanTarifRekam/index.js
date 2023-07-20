@@ -9,6 +9,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import { requestApi } from "utils/requestApi";
 import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 import ModalDaftarNegara from "../ModalDaftarNegara";
+import ModalDaftarKota from "../ModalDaftarKota";
 
 export default class PermohonanTarifRekam extends Component {
   constructor(props) {
@@ -26,61 +27,69 @@ export default class PermohonanTarifRekam extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarJenisPitaVisible: false,
       isModalDaftarHtlRelVisible: false,
+      isModalDaftarKotaVisible: false,
       isModalDaftarNegaraAsalVisible: false,
 
-      jenis_bkc_id: "",
-      jenis_bkc_name: "",
-      nomor_permohonan: "",
+      jenis_bkc_id: null,
+      jenis_bkc_name: null,
+      nomor_permohonan: null,
       tanggal_permohonan: null,
-      lokasi_perekaman: "",
+      lokasi_perekaman_id: null,
+      lokasi_perekaman_name: null,
       tanggal_kep: null,
       awal_berlaku: null,
 
-      nppbkc: "",
-      nama_nppbkc: "",
-      npwp_nppbkc: "",
-      alamat_nppbkc: "",
-      jenis_produksi_mmea_id: "",
-      jenis_produksi_mmea_name: "",
+      nppbkc: null,
+      nama_nppbkc: null,
+      npwp_nppbkc: null,
+      alamat_nppbkc: null,
+      jenis_produksi_mmea_id: null,
+      jenis_produksi_mmea_name: null,
 
-      jenis_pita_id: "",
-      jenis_pita_name: "",
+      jenis_pita_id: null,
 
-      merk_ht: "",
-      jenis_produksi_ht_id: "",
-      jenis_produksi_ht_code: "",
-      jenis_produksi_ht_name: "",
-      jenis_htl_rel_ht_id: "",
-      jenis_htl_rel_ht_name: "",
-      isi_ht: "",
-      berat_ht: "",
-      hje_perkemasan_ht: "",
-      hje_persatuan_ht: "",
-      tarif_ht: "",
-      bahan_kemasan_ht: "",
-      asal_produk_ht: "",
-      tujuan_pemasaran_ht: "",
+      merk_ht: null,
+      jenis_produksi_ht_id: null,
+      jenis_produksi_ht_code: null,
+      jenis_produksi_ht_name: null,
+      golongan_id: null,
+      golongan_name: null,
+      jenis_htl_rel_ht_id: null,
+      jenis_htl_rel_ht_name: null,
+      jenis_htl_rel_ht_satuan: null,
+      isi_ht: null,
+      berat_ht: null,
+      hje_perkemasan_ht: null,
+      hje_persatuan_ht: null,
+      tarif_ht: null,
+      bahan_kemasan_ht: null,
+      asal_produk_ht_id: null,
+      asal_produk_ht_name: null,
+      tujuan_pemasaran_ht: null,
 
-      jenis_mmea_id: "",
-      jenis_mmea_name: "",
-      merk_mmea: "",
-      negara_asal_mmea: "",
-      jenis_kemasan_mmea_id: "",
-      jenis_kemasan_mmea_name: "",
-      isi_mmea: "",
-      kadar_mmea: "",
-      tarif_cukai_per_liter: "",
-      tarif_cukai_per_kemasan: "",
+      jenis_mmea_id: null,
+      jenis_mmea_name: null,
+      merk_mmea: null,
+      negara_asal_mmea_id: null,
+      negara_asal_mmea_name: null,
+      jenis_kemasan_mmea_id: null,
+      jenis_kemasan_mmea_name: null,
+      isi_mmea: null,
+      kadar_mmea: null,
+      tarif_cukai_per_liter: null,
+      tarif_cukai_per_kemasan: null,
+      personal: null,
+      seri_pita: null,
 
-      nomor_surat_lisensi: "",
+      nomor_surat_lisensi: null,
       tanggal_surat_lisensi: null,
 
-      sisi_depan: "",
-      sisi_belakang: "",
-      sisi_kiri: "",
-      sisi_kanan: "",
-      sisi_atas: "",
-      sisi_bawah: "",
+      sisi_depan: null,
+      sisi_belakang: null,
+      sisi_kiri: null,
+      sisi_kanan: null,
+      sisi_atas: null,
+      sisi_bawah: null,
       file_gambar_etiket: null,
       preview_gambar_etiket: null,
 
@@ -101,24 +110,27 @@ export default class PermohonanTarifRekam extends Component {
         {
           bahan_kemasan_id: "KERTAS DAN SEJENISNYA",
           bahan_kemasan_name: "Kertas dan Sejenisnya",
+          seri_pita: "III DP",
         },
         {
           bahan_kemasan_id: "BOTOL DAN SEJENISNYA",
           bahan_kemasan_name: "Botol dan Sejenisnya",
+          seri_pita: "III TP",
         },
         {
           bahan_kemasan_id: "LAINNYA",
           bahan_kemasan_name: "Lainnya",
+          seri_pita: "III DP",
         },
       ],
-      list_asal_produk: [
+      list_asal_produk_ht: [
         {
-          asal_produk_id: "IMPOR",
-          asal_produk_name: "Impor",
+          asal_produk_ht_id: "DN",
+          asal_produk_ht_name: "Impor",
         },
         {
-          asal_produk_id: "NON IMPOR",
-          asal_produk_name: "Non Impor",
+          asal_produk_ht_id: "",
+          asal_produk_ht_name: "Non Impor",
         },
       ],
       list_tujuan_pemasaran: [
@@ -150,7 +162,7 @@ export default class PermohonanTarifRekam extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_produksi_ht_id !== this.state.jenis_produksi_ht_id) {
-      this.setState({ hje_persatuan_ht: this.state.isi_ht / this.state.hje_perkemasan_ht });
+      this.setState({ hje_persatuan_ht: this.state.hje_perkemasan_ht / this.state.isi_ht });
     }
   }
 
@@ -238,6 +250,13 @@ export default class PermohonanTarifRekam extends Component {
     this.setState({ [visibleState]: false });
   };
 
+  handleDataKota = (record) => {
+    this.setState({
+      lokasi_perekaman_id: record.kota_id,
+      lokasi_perekaman_name: record.kota_name,
+    });
+    this.handleModalClose("isModalDaftarKotaVisible");
+  };
   handleDataNppbkc = (record) => {
     this.setState({
       nppbkc_id: record.nppbkc_id,
@@ -251,22 +270,31 @@ export default class PermohonanTarifRekam extends Component {
   handleDataJenisPita = (record) => {
     this.setState({
       jenis_pita_id: record.jenis_pita_id,
-      jenis_pita_name: record.jenis_pita_name,
+      personal: record.personal,
       jenis_produksi_ht_id: record.jenis_produksi_id,
       jenis_produksi_ht_code: record.jenis_produksi_code,
       jenis_produksi_ht_name: record.jenis_produksi_name,
+      golongan_id: record.golongan_id,
+      golongan_name: record.golongan_name,
       isi_ht: record.isi,
       hje_perkemasan_ht: record.hje,
-      tarif_ht: record.tarif_ht,
+      tarif_ht: record.tarif,
     });
     this.handleModalClose("isModalDaftarJenisPitaVisible");
   };
   handleDataHtlRel = (record) => {
-    console.log("record", record);
+    this.setState({
+      jenis_htl_rel_ht_id: record.jenis_htl_rel_id,
+      jenis_htl_rel_ht_name: record.jenis_htl_rel_name,
+      jenis_htl_rel_ht_satuan: record.jenis_htl_rel_satuan,
+    });
     this.handleModalClose("isModalDaftarHtlRelVisible");
   };
   handleDataNegaraAsal = (record) => {
-    console.log("record", record);
+    this.setState({
+      negara_asal_mmea_id: record.negara_id,
+      negara_asal_mmea_name: record.negara_name,
+    });
     this.handleModalClose("isModalDaftarNegaraAsalVisible");
   };
 
@@ -339,11 +367,14 @@ export default class PermohonanTarifRekam extends Component {
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>Lokasi Perekaman</FormLabel>
                 </div>
-                <Input
-                  id="lokasi_perekaman"
-                  onChange={this.handleInputChange}
-                  value={this.state.lokasi_perekaman}
-                />
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="lokasi_perekaman" value={this.state.lokasi_perekaman_name} disabled />
+                  <Button
+                    type="default"
+                    icon="menu"
+                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                  />
+                </div>
               </Col>
 
               <Col span={12}>
@@ -446,20 +477,41 @@ export default class PermohonanTarifRekam extends Component {
             style={{ paddingBottom: 10 }}
           >
             <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jenis Pita</FormLabel>
-                </div>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <Input id="jenis_pita" value={this.state.jenis_pita} disabled />
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
-                  >
-                    Cari
-                  </Button>
-                </div>
-              </Col>
+              {this.state.jenis_bkc_id && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Jenis Pita</FormLabel>
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    {console.log("this.state.personal", this.state.personal)}
+                    <Input
+                      id="jenis_pita"
+                      value={`${
+                        this.state.jenis_bkc_id === 3
+                          ? [
+                              this.state.personal,
+                              this.state.isi_ht,
+                              this.state.hje_perkemasan_ht,
+                              this.state.asal_produk_ht_id,
+                              this.state.seri_pita,
+                              this.state.tarif_ht,
+                            ]
+                              .filter((str) => Boolean(str) === true)
+                              .join(";")
+                          : null
+                      }`}
+                      disabled
+                    />
+                    <Button
+                      type="primary"
+                      onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
+                    >
+                      Cari
+                    </Button>
+                  </div>
+                </Col>
+              )}
+
               {this.state.jenis_bkc_id === 3 && (
                 <>
                   <Col span={12}>
@@ -474,9 +526,22 @@ export default class PermohonanTarifRekam extends Component {
                       <FormLabel>Jenis Produksi</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
+                      {console.log(
+                        "this.state.jenis_produksi_ht_code",
+                        this.state.jenis_produksi_ht_code
+                      )}
+                      {console.log("this.state.golongan_name", this.state.golongan_name)}
+                      {console.log(
+                        "this.state.jenis_produksi_ht_code && this.state.golongan_name",
+                        this.state.jenis_produksi_ht_code && this.state.golongan_name
+                      )}
                       <Input
-                        id="jenis_produksi_ht_code"
-                        value={this.state.jenis_produksi_ht_code}
+                        id="jenis_produksi_ht"
+                        value={
+                          this.state.jenis_produksi_ht_code && this.state.golongan_name
+                            ? `${this.state.jenis_produksi_ht_code} - ${this.state.golongan_name}`
+                            : this.state.jenis_produksi_ht_code
+                        }
                         disabled
                       />
                       {(this.state.jenis_produksi_ht_id === 2 ||
@@ -502,14 +567,21 @@ export default class PermohonanTarifRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Isi / kemasan</FormLabel>
                     </div>
-                    <Input id="isi_ht" value={this.state.isi_ht} disabled />
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <Input id="isi_ht" value={this.state.isi_ht} disabled />
+                      <div>{this.state.jenis_htl_rel_ht_satuan}</div>
+                    </div>
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Berat / Volume (per kemasan)</FormLabel>
                     </div>
-                    <Input id="berat_ht" value={this.state.berat_ht} />
+                    <Input
+                      id="berat_ht"
+                      value={this.state.berat_ht}
+                      disabled={this.state.golongan_id === 5 || this.state.golongan_id === null}
+                    />
                   </Col>
 
                   <Col span={12}>
@@ -539,7 +611,11 @@ export default class PermohonanTarifRekam extends Component {
                     </div>
                     <Select
                       id="bahan_kemasan_ht"
-                      onChange={(value) => this.handleSelectChange("bahan_kemasan_ht", value)}
+                      onChange={(value) => {
+                        const spiltValue = value.split("-");
+                        this.handleSelectChange("bahan_kemasan_ht", spiltValue[0]);
+                        this.handleSelectChange("seri_pita", spiltValue[1]);
+                      }}
                       value={this.state.bahan_kemasan_ht}
                       style={{ width: "100%" }}
                     >
@@ -547,7 +623,7 @@ export default class PermohonanTarifRekam extends Component {
                         this.state.list_bahan_kemasan.map((item, index) => (
                           <Select.Option
                             key={`bahan-kemasan-${index}`}
-                            value={item.bahan_kemasan_id}
+                            value={`${item.bahan_kemasan_id}-${item.seri_pita}`}
                           >
                             {item.bahan_kemasan_name}
                           </Select.Option>
@@ -561,14 +637,19 @@ export default class PermohonanTarifRekam extends Component {
                     </div>
                     <Select
                       id="asal_produk_ht"
-                      onChange={(value) => this.handleSelectChange("asal_produk_ht", value)}
-                      value={this.state.asal_produk_ht}
+                      onChange={(value, option) => {
+                        this.handleSelectCustomChange("asal_produk_ht", value, option);
+                      }}
+                      value={this.state.asal_produk_ht_id}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_asal_produk.length > 0 &&
-                        this.state.list_asal_produk.map((item, index) => (
-                          <Select.Option key={`asal-produk-${index}`} value={item.asal_produk_id}>
-                            {item.asal_produk_name}
+                      {this.state.list_asal_produk_ht.length > 0 &&
+                        this.state.list_asal_produk_ht.map((item, index) => (
+                          <Select.Option
+                            key={`asal-produk-ht-${index}`}
+                            value={item.asal_produk_ht_id}
+                          >
+                            {item.asal_produk_ht_name}
                           </Select.Option>
                         ))}
                     </Select>
@@ -596,7 +677,7 @@ export default class PermohonanTarifRekam extends Component {
                     </Select>
                   </Col>
 
-                  {this.state.asal_produk_ht === "IMPOR" && (
+                  {this.state.asal_produk_ht_id === "DN" && (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
@@ -611,7 +692,7 @@ export default class PermohonanTarifRekam extends Component {
 
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nomor Surat Lisensi Pemegang Merk</FormLabel>
+                          <FormLabel>Tanggal Surat Lisensi</FormLabel>
                         </div>
                         <DatePicker
                           id="tanggal_surat_lisensi"
@@ -668,7 +749,11 @@ export default class PermohonanTarifRekam extends Component {
                       <FormLabel>Negara Asal</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="negara_asal_mmea" value={this.state.negara_asal_mmea} disabled />
+                      <Input
+                        id="negara_asal_mmea_name"
+                        value={this.state.negara_asal_mmea_name}
+                        disabled
+                      />
                       <Button
                         type="default"
                         icon="menu"
@@ -891,6 +976,12 @@ export default class PermohonanTarifRekam extends Component {
           )}
         </Container>
 
+        <ModalDaftarKota
+          isVisible={this.state.isModalDaftarKotaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
+          onDataDoubleClick={this.handleDataKota}
+        />
+
         <ModalDaftarNPPBKC
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
@@ -904,7 +995,7 @@ export default class PermohonanTarifRekam extends Component {
         />
 
         <ModalDaftarHtlRel
-          id={this.state.jenis_htl_rel_ht_id}
+          id={this.state.jenis_produksi_ht_id}
           isVisible={this.state.isModalDaftarHtlRelVisible}
           onCancel={() => this.handleModalClose("isModalDaftarHtlRelVisible")}
           onDataDoubleClick={this.handleDataHtlRel}

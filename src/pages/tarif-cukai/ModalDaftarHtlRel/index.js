@@ -1,6 +1,6 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
 import React, { Component } from "react";
-// import { requestApi } from "utils/requestApi";
+import { requestApi } from "utils/requestApi";
 
 export default class ModalDaftarHtlRel extends Component {
   constructor(props) {
@@ -9,69 +9,66 @@ export default class ModalDaftarHtlRel extends Component {
       isDaftarHtlRelLoading: true,
       isMouseEnter: false,
 
+      searchText: "",
+      searchedColumn: "",
       page: 1,
       totalData: 0,
-
-      table: {
-        jenis_htl_rel: "",
-        keterangan: "",
-        satuan: "",
-      },
 
       dataSource: [],
       columns: [
         {
           title: "Jenis HTL/REL",
-          dataIndex: "jenis_htl_rel",
-          key: "jenis_htl_rel",
+          dataIndex: "jenis_htl_rel_code",
+          key: "jenis_htl_rel_code",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_htl_rel"),
+          ...this.getColumnSearchProps("jenis_htl_rel_code"),
         },
         {
           title: "Keterangan",
-          dataIndex: "keterangan",
-          key: "keterangan",
+          dataIndex: "jenis_htl_rel_name",
+          key: "jenis_htl_rel_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("keterangan"),
+          ...this.getColumnSearchProps("jenis_htl_rel_name"),
         },
         {
           title: "Satuan",
-          dataIndex: "satuan",
-          key: "satuan",
+          dataIndex: "jenis_htl_rel_satuan",
+          key: "jenis_htl_rel_satuan",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("satuan"),
+          ...this.getColumnSearchProps("jenis_htl_rel_satuan"),
         },
       ],
     };
   }
 
-  componentDidMount() {
-    this.getDaftarHtlRel();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
       this.getDaftarHtlRel();
     }
   }
 
   getDaftarHtlRel = async () => {
-    // const { id } = this.props;
-    this.setState({ isDaftarHtlRelLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        dataSource: [
-          {
-            key: "1",
-            jenis_htl_rel: "TMS",
-            keterangan: "Tembakau Molases",
-            satuan: "GR",
-          },
-        ],
-      });
-      this.setState({ isDaftarHtlRelLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    const payload = { idJenisProduksiBkc: this.props.id };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/jenis-htl-rel",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDaftarHtlRelLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.map((item, index) => ({
+        key: `jenis-htl-rel-${index}`,
+        jenis_produksi_id: item.idJenisHtlRel,
+        jenis_produksi_code: item.kodeJenisProduksiBkc,
+        jenis_htl_rel_code: item.kodeHtlRel,
+        jenis_htl_rel_name: item.namaJenisHtlRel,
+        jenis_htl_rel_satuan: item.satuan,
+      }));
+      this.setState({ dataSource: newData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -81,16 +78,14 @@ export default class ModalDaftarHtlRel extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
-          onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-          }
-          onPressEnter={() => this.handleColumnSearch(confirm)}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(confirm)}
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -98,7 +93,7 @@ export default class ModalDaftarHtlRel extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
+          onClick={() => this.handleColumnReset(clearFilters)}
           size="small"
           style={{ width: 90 }}
         >
@@ -109,6 +104,8 @@ export default class ModalDaftarHtlRel extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
@@ -118,14 +115,16 @@ export default class ModalDaftarHtlRel extends Component {
       }
     },
   });
-  handleColumnSearch = (confirm) => {
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.getDaftarHtlRel();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarHtlRel();
+    this.setState({ searchText: "" });
   };
 
   render() {
