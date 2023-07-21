@@ -518,7 +518,11 @@ export default class PermohonanTarifRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Merk</FormLabel>
                     </div>
-                    <Input id="merk_ht" value={this.state.merk_ht} />
+                    <Input
+                      id="merk_ht"
+                      onChange={this.handleInputChange}
+                      value={this.state.merk_ht}
+                    />
                   </Col>
 
                   <Col span={12}>
