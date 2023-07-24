@@ -186,8 +186,8 @@ export default class RekamJenisPitaRekam extends Component {
       !nppbkc_id ||
       !nppbkc ||
       !nama_nppbkc ||
-      // !jenis_bkc_id_nppbkc ||
-      // !personal_nppbkc ||
+      !jenis_bkc_id_nppbkc ||
+      !personal_nppbkc ||
       !jenis_produksi_id ||
       !jenis_produksi_name ||
       !hje ||
