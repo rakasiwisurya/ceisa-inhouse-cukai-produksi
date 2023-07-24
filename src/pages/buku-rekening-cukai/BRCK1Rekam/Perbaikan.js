@@ -371,18 +371,7 @@ export default class BRCK1Perbaikan extends Component {
       tgl_back5,
       hasil_pencacahan_back5,
       jenis_penutupan,
-      dataSource,
     } = this.state;
-
-    const details = dataSource.map((item) => ({
-      catatan: item.ketentuan,
-      hasilPencacahanBack5: item.hasil_pencacahan_back5,
-      idBrck1: item.idBrck1,
-      jenisPenutupan: item.jenis_penutupan,
-      nomorBack5: item.no_back5,
-      saldoAwal: item.saldo_awal,
-      tanggalBack5: item.tgl_back5,
-    }));
 
     const payload = {
       idMenu: idMenu("brck1"),

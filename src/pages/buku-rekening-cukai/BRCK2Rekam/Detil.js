@@ -433,7 +433,7 @@ export default class BRCK2Detil extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dataSource != this.state.dataSource) {
+    if (prevState.dataSource !== this.state.dataSource) {
       this.totalKeseluruhan();
     } 
     // else if (

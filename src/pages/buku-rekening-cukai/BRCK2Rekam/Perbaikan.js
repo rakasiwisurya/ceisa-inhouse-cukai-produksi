@@ -415,20 +415,8 @@ export default class BRCK2Perbaikan extends Component {
       saldo_awal_kemasan,
       saldo_awal_lt,
       tgl_back5,
-      dataSource,
     } = this.state;
-
-    const details = dataSource.map((item) => ({
-      catatan: item.ketentuan,
-      hasilPencacahanBack5Kemasan: item.hasil_pencacahan_back5_1,
-      hasilPencacahanBack5Liter: item.hasil_pencacahan_back5_2,
-      jenisPenutupan: item.jenis_penutupan,
-      nomorBack5: item.no_back5,
-      saldoAwalKemasan: item.saldo_awal_kemasan,
-      saldoAwalLiter: item.saldo_awal_lt,
-      tanggalBack5: item.tgl_back5,
-    }));
-
+    
     const payload = {
       idMenu: idMenu("brck2"),
       catatan: ketentuan,
@@ -495,7 +483,7 @@ export default class BRCK2Perbaikan extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dataSource != this.state.dataSource) {
+    if (prevState.dataSource !== this.state.dataSource) {
       this.totalKeseluruhan();
     } 
     // else if (
