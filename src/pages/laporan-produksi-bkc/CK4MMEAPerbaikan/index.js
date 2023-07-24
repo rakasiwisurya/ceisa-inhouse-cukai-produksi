@@ -167,7 +167,15 @@ export default class CK4MMEAPerbaikan extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {record.idCk4Detail ? (
+                <Button
+                  type="danger"
+                  icon="delete"
+                  onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
+                />
+              ) : (
+                <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              )}
             </div>
           ),
         },
@@ -321,6 +329,7 @@ export default class CK4MMEAPerbaikan extends Component {
         nama_pengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
+          idCk4Detail: detail.idCk4Detail,
           jenis_mmea: detail.jenisMmea,
           merk_mmea_id: detail.idMerkMmea,
           merk_mmea_name: detail.namaMerkMmea,
@@ -338,226 +347,6 @@ export default class CK4MMEAPerbaikan extends Component {
         })),
       });
     }
-
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nama_pemrakarsa: "SENDI BENI SUSANDI",
-        id_process_pemrakarsa: 7784590,
-        jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
-        nip_pemrakarsa: "199210122014021001",
-
-        nppbkc_id: 1,
-        nama_nppbkc: "0706.1.1.1001",
-        nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
-        alamat_nppbkc:
-          "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
-
-        jenis_laporan_id: "HARIAN",
-        nomor_pemberitahuan: "Nomor Pemberitahuan 1",
-        tanggal_pemberitahuan: moment(new Date()),
-
-        tanggal_jam_produksi_awal: moment(new Date()),
-        tanggal_jam_produksi_akhir: moment(new Date()),
-        periode_bulan: "JANUARY",
-        periode_tahun: 2003,
-
-        kota_id: "489",
-        kota_name: "Kabupaten Kaimana",
-        nama_pengusaha: "Nama Pengusaha",
-        dataSource: [
-          {
-            key: 1,
-            jenis_mmea: "jenis_mmea_1",
-            merk_mmea_id: 1,
-            merk_mmea_name: "merk_mmea_name_1",
-            isi_mmea: "isi_mmea_1",
-            tarif_mmea: "tarif_mmea_1",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_1",
-            golongan_mmea: "golongan_mmea_1",
-            kadar_mmea: "kadar_mmea_1",
-
-            nomor_produksi: "Nomor Produksi 1",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 2,
-            jenis_mmea: "jenis_mmea_2",
-            merk_mmea_id: 2,
-            merk_mmea_name: "merk_mmea_name_2",
-            isi_mmea: "isi_mmea_2",
-            tarif_mmea: "tarif_mmea_2",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_2",
-            golongan_mmea: "golongan_mmea_2",
-            kadar_mmea: "kadar_mmea_2",
-
-            nomor_produksi: "Nomor Produksi 2",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 3,
-            jenis_mmea: "jenis_mmea_3",
-            merk_mmea_id: 3,
-            merk_mmea_name: "merk_mmea_name_3",
-            isi_mmea: "isi_mmea_3",
-            tarif_mmea: "tarif_mmea_3",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_3",
-            golongan_mmea: "golongan_mmea_3",
-            kadar_mmea: "kadar_mmea_3",
-
-            nomor_produksi: "Nomor Produksi 3",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 4,
-            jenis_mmea: "jenis_mmea_4",
-            merk_mmea_id: 4,
-            merk_mmea_name: "merk_mmea_name_4",
-            isi_mmea: "isi_mmea_4",
-            tarif_mmea: "tarif_mmea_4",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_4",
-            golongan_mmea: "golongan_mmea_4",
-            kadar_mmea: "kadar_mmea_4",
-
-            nomor_produksi: "Nomor Produksi 4",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 5,
-            jenis_mmea: "jenis_mmea_5",
-            merk_mmea_id: 5,
-            merk_mmea_name: "merk_mmea_name_5",
-            isi_mmea: "isi_mmea_5",
-            tarif_mmea: "tarif_mmea_5",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_5",
-            golongan_mmea: "golongan_mmea_5",
-            kadar_mmea: "kadar_mmea_5",
-
-            nomor_produksi: "Nomor Produksi 5",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 6,
-            jenis_mmea: "jenis_mmea_6",
-            merk_mmea_id: 6,
-            merk_mmea_name: "merk_mmea_name_6",
-            isi_mmea: "isi_mmea_6",
-            tarif_mmea: "tarif_mmea_6",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_6",
-            golongan_mmea: "golongan_mmea_6",
-            kadar_mmea: "kadar_mmea_6",
-
-            nomor_produksi: "Nomor Produksi 6",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 7,
-            jenis_mmea: "jenis_mmea_7",
-            merk_mmea_id: 7,
-            merk_mmea_name: "merk_mmea_name_7",
-            isi_mmea: "isi_mmea_7",
-            tarif_mmea: "tarif_mmea_7",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_7",
-            golongan_mmea: "golongan_mmea_7",
-            kadar_mmea: "kadar_mmea_7",
-
-            nomor_produksi: "Nomor Produksi 7",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 8,
-            jenis_mmea: "jenis_mmea_8",
-            merk_mmea_id: 8,
-            merk_mmea_name: "merk_mmea_name_8",
-            isi_mmea: "isi_mmea_8",
-            tarif_mmea: "tarif_mmea_8",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_8",
-            golongan_mmea: "golongan_mmea_8",
-            kadar_mmea: "kadar_mmea_8",
-
-            nomor_produksi: "Nomor Produksi 8",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 9,
-            jenis_mmea: "jenis_mmea_9",
-            merk_mmea_id: 9,
-            merk_mmea_name: "merk_mmea_name_9",
-            isi_mmea: "isi_mmea_9",
-            tarif_mmea: "tarif_mmea_9",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_9",
-            golongan_mmea: "golongan_mmea_9",
-            kadar_mmea: "kadar_mmea_9",
-
-            nomor_produksi: "Nomor Produksi 9",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 10,
-            jenis_mmea: "jenis_mmea_10",
-            merk_mmea_id: 10,
-            merk_mmea_name: "merk_mmea_name_10",
-            isi_mmea: "isi_mmea_10",
-            tarif_mmea: "tarif_mmea_10",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_10",
-            golongan_mmea: "golongan_mmea_10",
-            kadar_mmea: "kadar_mmea_10",
-
-            nomor_produksi: "Nomor Produksi 10",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 11,
-            jenis_mmea: "jenis_mmea_11",
-            merk_mmea_id: 11,
-            merk_mmea_name: "merk_mmea_name_11",
-            isi_mmea: "isi_mmea_11",
-            tarif_mmea: "tarif_mmea_11",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_11",
-            golongan_mmea: "golongan_mmea_11",
-            kadar_mmea: "kadar_mmea_11",
-
-            nomor_produksi: "Nomor Produksi 11",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-        ],
-      });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -690,6 +479,20 @@ export default class CK4MMEAPerbaikan extends Component {
       penjabat_bc_name: record.penjabat_bc_name,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
+  };
+  handleDeleteApi = async (index, id) => {
+    const response = await requestApi({
+      service: "produksi",
+      method: "delete",
+      endpoint: "/delete-detail-mmea",
+      params: { idCk4Detail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDeleteRincian(index);
+    }
   };
 
   handleSimpanRincian = () => {
@@ -907,7 +710,8 @@ export default class CK4MMEAPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkMmea: item.merk_mmea_id,
+      idMerkMmea: item.merk_mmea_id === "null" ? null : item.idMerkMmea,
+      idCk4Detail: item.idCk4Detail === "null" ? null : item.idCk4Detail,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,
@@ -921,17 +725,17 @@ export default class CK4MMEAPerbaikan extends Component {
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
       tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD"),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD"),
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
 
-      tanggalDiterima: tanggal_diterima,
+      tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
       penyampaianCk4: penyampaian_ck4_id,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       nomorSurat: nomor_surat,
-      tanggalSurat: tanggal_surat,
+      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
       nipPenjabatBc: penjabat_bc_nip,
       asalKesalahan: asal_kesalahan_id,
       keteranganPerbaikan: keterangan_perbaikan,
@@ -1491,76 +1295,8 @@ export default class CK4MMEAPerbaikan extends Component {
                       <FormLabel>Tanggal Diterima</FormLabel>
                     </div>
                     <DatePicker
-                      id="tangal_diterima"
-                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
-                      style={{ width: "100%" }}
-                      value={this.state.tanggal_diterima}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Penyampaian CK-4</FormLabel>
-                    </div>
-                    <Select
-                      id="penyampaian_ck4"
-                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.penyampaian_ck4}
-                    >
-                      {this.state.list_penyampaian_ck4.length > 0 &&
-                        this.state.list_penyampaian_ck4.map((item, index) => (
-                          <Select.Option
-                            key={`penyampaian-ck4-${index}`}
-                            value={item.penyampaian_ck4_code}
-                          >
-                            {item.penyampaian_ck4_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="kota_name" value={this.state.kota_name} disabled />
-                      <Button
-                        type="default"
-                        icon="menu"
-                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama Pengusaha</FormLabel>
-                    </div>
-                    <Input
-                      id="nama_pengusaha"
-                      onChange={this.handleInputChange}
-                      value={this.state.nama_pengusaha}
-                    />
-                  </Col>
-                </Row>
-              </div>
-
-              <Header>{this.state.subtitle4}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Diterima</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tangal_diterima"
-                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                      id="tanggal_diterima"
+                      onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
                     />

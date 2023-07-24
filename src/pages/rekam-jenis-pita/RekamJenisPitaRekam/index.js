@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
+import moment from "moment";
 
 export default class RekamJenisPitaRekam extends Component {
   constructor(props) {
@@ -16,24 +17,49 @@ export default class RekamJenisPitaRekam extends Component {
 
       isRekamLoading: false,
       isJenisProduksiLoading: true,
+      isTarifLoading: false,
+      isWarnaLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      jenis_bkc_id_nppbkc: null,
+      personal_nppbkc: null,
 
-      jenis_produksi: "",
-      hje: "",
-      isi: "",
-      tarif: "",
+      jenis_produksi_id: null,
+      jenis_produksi_name: null,
+      hje: null,
+      isi: null,
+      tarif: null,
       awal_berlaku: null,
-      warna: "",
-      kode_warna: "",
+      warna: null,
+      kode_warna: null,
       tahun_pita: String(new Date().getFullYear()),
 
       list_jenis_produksi: [],
     };
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+  //     this.getJenisProduksi();
+  //   }
+
+  //   if (
+  //     prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
+  //     prevState.hje !== this.state.hje ||
+  //     prevState.isi !== this.state.isi ||
+  //     prevState.tarif !== this.state.tarif ||
+  //     prevState.warna !== this.state.warna
+  //   ) {
+  //     if (this.state.jenis_produksi_id && this.state.hje && this.state.isi) {
+  //       this.getTarifWarna();
+  //     } else {
+  //       this.setState({ tarif: "", warna: "" });
+  //     }
+  //   }
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nppbkc_id !== this.state.nppbkc_id) {
@@ -41,17 +67,11 @@ export default class RekamJenisPitaRekam extends Component {
     }
 
     if (
-      prevState.jenis_produksi !== this.state.jenis_produksi ||
+      prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
       prevState.hje !== this.state.hje ||
-      prevState.isi !== this.state.isi ||
-      prevState.tarif !== this.state.tarif ||
-      prevState.warna !== this.state.warna
+      prevState.isi !== this.state.isi
     ) {
-      if (this.state.jenis_produksi && this.state.hje && this.state.isi) {
-        this.getTarifWarna();
-      } else {
-        this.setState({ tarif: "", warna: "" });
-      }
+      this.setState({ tarif: "", warna: "" });
     }
   }
 
@@ -72,8 +92,8 @@ export default class RekamJenisPitaRekam extends Component {
   };
   getTarif = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.jenis_produksi.split("-")[0],
-      idGolonganBkc: this.state.jenis_produksi.split("-")[1],
+      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
+      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
       hje: this.state.hje,
     };
 
@@ -82,6 +102,7 @@ export default class RekamJenisPitaRekam extends Component {
       method: "get",
       endpoint: "/referensi/browse-tarif",
       params: payload,
+      setLoading: (bool) => this.setState({ isTarifLoading: bool }),
     });
 
     if (response) {
@@ -90,8 +111,8 @@ export default class RekamJenisPitaRekam extends Component {
   };
   getWarna = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.jenis_produksi.split("-")[0],
-      idGolonganBkc: this.state.jenis_produksi.split("-")[1],
+      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
+      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
     };
 
     const response = await requestApi({
@@ -99,6 +120,7 @@ export default class RekamJenisPitaRekam extends Component {
       method: "get",
       endpoint: "/referensi/browse-warna",
       params: payload,
+      setLoading: (bool) => this.setState({ isWarnaLoading: bool }),
     });
 
     if (response) {
@@ -136,22 +158,104 @@ export default class RekamJenisPitaRekam extends Component {
       nppbkc_id: record.nppbkc_id,
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
+      jenis_bkc_id_nppbkc: record.jenis_bkc_id_nppbkc,
+      personal_nppbkc: record.personal_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
   validationForm = () => {
+    const {
+      nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      jenis_bkc_id_nppbkc,
+      personal_nppbkc,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      hje,
+      isi,
+      tarif,
+      awal_berlaku,
+      warna,
+      kode_warna,
+      tahun_pita,
+    } = this.state;
+
+    if (
+      !nppbkc_id ||
+      !nppbkc ||
+      !nama_nppbkc ||
+      !jenis_bkc_id_nppbkc ||
+      !personal_nppbkc ||
+      !jenis_produksi_id ||
+      !jenis_produksi_name ||
+      !hje ||
+      !isi ||
+      !tarif ||
+      !awal_berlaku ||
+      !warna ||
+      !kode_warna ||
+      !tahun_pita
+    ) {
+      return false;
+    }
+
     return true;
   };
 
   handleRekam = async () => {
-    this.setState({ isRekamLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({ isRekamLoading: false });
+    const {
+      nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      jenis_bkc_id_nppbkc,
+      personal_nppbkc,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      hje,
+      isi,
+      tarif,
+      awal_berlaku,
+      warna,
+      kode_warna,
+      tahun_pita,
+    } = this.state;
+
+    const splitIdJenisProduksi = jenis_produksi_id.split("-");
+    const splitNamaJenisProduksi = jenis_produksi_name.split("-").map((item) => item.trim());
+
+    const payload = {
+      idJenisBkc: jenis_bkc_id_nppbkc,
+      idJenisProduksiBkc: splitIdJenisProduksi[0],
+      kodeJenisProduksiBkc: splitNamaJenisProduksi[0],
+      isiKemasan: isi,
+      awalBerlaku: moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tarif: tarif,
+      warna: warna,
+      kodeWarna: kode_warna,
+      tahunPita: tahun_pita,
+      idNppbkc: nppbkc_id,
+      nppbkc: nppbkc,
+      namaPerusahaan: nama_nppbkc,
+      hje: hje,
+      personalisasi: personal_nppbkc,
+      idGolonganBkc: splitIdJenisProduksi[1],
+      namaGolonganBkc: splitNamaJenisProduksi[1],
+    };
+
+    const response = await requestApi({
+      service: "pita_cukai",
+      method: "post",
+      endpoint: "/pita/rekam-jenis",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
       notification.success({ message: "Success", description: "Success" });
       this.props.history.push(`${pathName}/rekam-jenis-pita`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
@@ -187,16 +291,18 @@ export default class RekamJenisPitaRekam extends Component {
                     </div>
                     <Select
                       id="jenis_produksi"
-                      value={this.state.jenis_produksi}
+                      value={this.state.jenis_produksi_id}
                       loading={this.state.isJenisProduksiLoading}
-                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
+                      onChange={(value, option) => {
+                        this.handleSelectCustomChange("jenis_produksi", value, option);
+                      }}
                       style={{ width: "100%" }}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
                         this.state.list_jenis_produksi.map((item, index) => (
                           <Select.Option
                             key={`jenis-produksi-${index}`}
-                            value={`${item.kodeJenisProduksi}-${item.idGolonganBkc}`}
+                            value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}`}
                           >
                             {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
                           </Select.Option>
@@ -224,12 +330,23 @@ export default class RekamJenisPitaRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Isi Per Kemasan</FormLabel>
                     </div>
-                    <InputNumber
-                      id="isi"
-                      onChange={(value) => this.handleInputNumberChange("isi", value)}
-                      value={this.state.isi}
-                      style={{ width: "100%" }}
-                    />
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <InputNumber
+                        id="isi"
+                        onChange={(value) => this.handleInputNumberChange("isi", value)}
+                        value={this.state.isi}
+                        style={{ width: "100%" }}
+                      />
+                      <Button
+                        type="primary"
+                        icon="search"
+                        loading={this.state.isTarifLoading || this.state.isWarnaLoading}
+                        onClick={this.getTarifWarna}
+                        disabled={
+                          !this.state.jenis_produksi_id || !this.state.hje || !this.state.isi
+                        }
+                      />
+                    </div>
                   </div>
                 </Col>
 

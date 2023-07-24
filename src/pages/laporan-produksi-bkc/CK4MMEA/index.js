@@ -310,7 +310,6 @@ export default class CK4MMEA extends Component {
     ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
       if (err) return console.error(err);
       const data = convertArrayExcelToTable(res.rows);
-      console.log(data)
       this.setState({ uraian_rincian_file: [], dataSource: [...this.state.dataSource, ...data] });
     });
   };
@@ -558,7 +557,7 @@ export default class CK4MMEA extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkMmea: item.merk_mmea_id,
+      idMerkMmea: item.merk_mmea_id==="null" ? null : item.merk_mmea_id,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,
@@ -580,8 +579,6 @@ export default class CK4MMEA extends Component {
       namaPengusaha: nama_pengusaha,
       details,
     };
-
-    console.log(payload)
 
     const response = await requestApi({
       service: "produksi",

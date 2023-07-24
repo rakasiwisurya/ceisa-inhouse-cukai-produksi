@@ -136,7 +136,15 @@ export default class CK4EAPerbaikan extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {record.idCk4Detail ? (
+                <Button
+                  type="danger"
+                  icon="delete"
+                  onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
+                />
+              ) : (
+                <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              )}
             </div>
           ),
         },
@@ -196,161 +204,47 @@ export default class CK4EAPerbaikan extends Component {
   }
 
   getDetailCk4Ea = async () => {
-    // const payload = { idCk4: this.props.match.params.id };
+    const payload = { idCk4: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/detail-ea",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/detail-ea",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nama_pemrakarsa: data.namaPemrakarsa,
-    //     id_process_pemrakarsa: data.idProcessPemrakarsa,
-    //     jabatan_pemrakarsa: data.jabatanPemrakarsa,
-    //     nip_pemrakarsa: data.nipPemrakarsa,
-    //     nppbkc_id: data.idNppbkc,
-    //     nppbkc: data.nppbkc,
-    //     nama_nppbkc: data.namaNppbkc,
-    //     alamat_nppbkc: data.alamatNppbkc,
-    //     jenis_laporan_id: data.jenisLaporan,
-    //     nomor_pemberitahuan: data.nomorPemberitahuan,
-    //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan).format("YYYY-MM-DD"),
-    //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal).format("YYYY-MM-DD HH:mm"),
-    //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir).format("YYYY-MM-DD HH:mm"),
-    //     kota_id: data.idKota,
-    //     kota_name: data.namaKota,
-    //     nama_pengusaha: data.namaPengusaha,
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `ck4-${index}`,
-    //       nomor_produksi: detail.nomorProduksi,
-    //       tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
-    //       jumlah_produksi: detail.jumlahProduksi,
-    //       nomor_tangki: detail.nomorTangki,
-    //       keterangan: detail.keterangan,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
       this.setState({
-        nama_pemrakarsa: "SENDI BENI SUSANDI",
-        id_process_pemrakarsa: 7784590,
-        jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
-        nip_pemrakarsa: "199210122014021001",
-        nppbkc_id: 1,
-        nppbkc: "0706.1.1.1001",
-        nama_nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
-        alamat_nppbkc:
-          "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
-        jenis_laporan_id: "HARIAN",
-        nomor_pemberitahuan: "Nomor Pemberitahuan 1",
-        tanggal_pemberitahuan: moment(new Date()),
-        tanggal_jam_produksi_awal: moment(new Date()),
-        tanggal_jam_produksi_akhir: moment(new Date()),
-        kota_id: "489",
-        kota_name: "Kabupaten Kaimana",
-        nama_pengusaha: "Nama Pengusaha",
-        dataSource: [
-          {
-            key: 1,
-            nomor_produksi: "Nomor Produksi 1",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 1",
-            keterangan: "Keterangan 1",
-          },
-          {
-            key: 2,
-            nomor_produksi: "Nomor Produksi 2",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 2",
-            keterangan: "Keterangan 2",
-          },
-          {
-            key: 3,
-            nomor_produksi: "Nomor Produksi 3",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 3",
-            keterangan: "Keterangan 3",
-          },
-          {
-            key: 4,
-            nomor_produksi: "Nomor Produksi 4",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 4",
-            keterangan: "Keterangan 4",
-          },
-          {
-            key: 5,
-            nomor_produksi: "Nomor Produksi 5",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 5",
-            keterangan: "Keterangan 5",
-          },
-          {
-            key: 6,
-            nomor_produksi: "Nomor Produksi 6",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 6",
-            keterangan: "Keterangan 6",
-          },
-          {
-            key: 7,
-            nomor_produksi: "Nomor Produksi 7",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 7",
-            keterangan: "Keterangan 7",
-          },
-          {
-            key: 8,
-            nomor_produksi: "Nomor Produksi 8",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 8",
-            keterangan: "Keterangan 8",
-          },
-          {
-            key: 9,
-            nomor_produksi: "Nomor Produksi 9",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 9",
-            keterangan: "Keterangan 9",
-          },
-          {
-            key: 10,
-            nomor_produksi: "Nomor Produksi 10",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 10",
-            keterangan: "Keterangan 10",
-          },
-          {
-            key: 11,
-            nomor_produksi: "Nomor Produksi 11",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_produksi: 10,
-            nomor_tangki: "Nomor Tangki 11",
-            keterangan: "Keterangan 11",
-          },
-        ],
+        nama_pemrakarsa: data.namaPemrakarsa,
+        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        jabatan_pemrakarsa: data.jabatanPemrakarsa,
+        nip_pemrakarsa: data.nipPemrakarsa,
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaNppbkc,
+        alamat_nppbkc: data.alamatNppbkc,
+        jenis_laporan_id: data.jenisLaporan,
+        nomor_pemberitahuan: data.nomorPemberitahuan,
+        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
+        tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
+        tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
+        kota_id: data.idKota,
+        kota_name: data.namaKota,
+        nama_pengusaha: data.namaPengusaha,
+        dataSource: data.details.map((detail, index) => ({
+          key: `ck4-${index}`,
+          idCk4Detail: detail.idCk4Detail,
+          nomor_produksi: detail.nomorProduksi,
+          tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+          jumlah_produksi: detail.jumlahProduksi,
+          nomor_tangki: detail.nomorTangki,
+          keterangan: detail.keterangan,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -453,6 +347,20 @@ export default class CK4EAPerbaikan extends Component {
       penjabat_bc_name: record.penjabat_bc_name,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
+  };
+  handleDeleteApi = async (index, id) => {
+    const response = await requestApi({
+      service: "produksi",
+      method: "delete",
+      endpoint: "/delete-detail-ea",
+      params: { idCk4Detail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDeleteRincian(index);
+    }
   };
 
   handleSimpanRincian = () => {
@@ -576,7 +484,8 @@ export default class CK4EAPerbaikan extends Component {
 
     const details = dataSource.map((item) => ({
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
+      idCk4Detail: item.idCk4Detail === "null" ? null : item.idCk4Detail,
+      tanggalProduksi: moment(item.tanggal_produksi).format("YYYY-MM-DD"),
       jumlahProduksi: item.jumlah_produksi,
       nomorTangki: item.nomor_tangki,
       keterangan: item.keterangan,
@@ -587,16 +496,16 @@ export default class CK4EAPerbaikan extends Component {
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: tanggal_pemberitahuan,
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
       tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
       tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
 
-      tanggalDiterima: tanggal_diterima,
+      tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
       penyampaianCk4: penyampaian_ck4_id,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       nomorSurat: nomor_surat,
-      tanggalSurat: tanggal_surat,
+      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
       nipPenjabatBc: penjabat_bc_nip,
       asalKesalahan: asal_kesalahan_id,
       keteranganPerbaikan: keterangan_perbaikan,
@@ -947,8 +856,8 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Tanggal Diterima</FormLabel>
                     </div>
                     <DatePicker
-                      id="tangal_diterima"
-                      onChange={(date) => this.handleDatepickerChange("tangal_diterima", date)}
+                      id="tanggal_diterima"
+                      onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
                     />

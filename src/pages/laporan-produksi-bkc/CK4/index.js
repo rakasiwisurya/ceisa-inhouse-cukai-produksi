@@ -43,12 +43,12 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEdit(record.idCk4, record.nppbkc)}
+                onClick={() => this.handleEdit(record.idCk4, record.jenisBkc)}
               />
               <ButtonCustom
                 variant="info"
                 icon="eye"
-                onClick={() => this.handleDetail(record.idCk4, record.nppbkc)}
+                onClick={() => this.handleDetail(record.idCk4, record.jenisBkc)}
               />
             </div>
           ),
@@ -191,6 +191,7 @@ export default class CK4 extends Component {
         key: `ck4-${index}`,
         kppbc: item.kppbc,
         nppbkc: item.nppbkc,
+        jenisBkc: item.jenisBkc,
         nama_perusahaan: item.namaPerusahaan,
         tanggal_pemberitahuan: item.tanggalPemberitahuan,
         tanggal_produksi_awal: item.tanggalProduksiAwal,
@@ -261,12 +262,13 @@ export default class CK4 extends Component {
     this.getCk4();
   };
 
-  handleDetail = (id, nppbkc) => {
+  handleDetail = (id, jenisBkc) => {
+    console.log(jenisBkc)
     switch (true) {
-      case nppbkc === "EA":
+      case jenisBkc === "EA":
         this.props.history.push(`${pathName}/ck4-ea-detail/${id}`);
         break;
-      case nppbkc === "MMEA":
+      case jenisBkc === "MMEA":
         this.props.history.push(`${pathName}/ck4-mmea-detail/${id}`);
         break;
       default:
@@ -274,12 +276,12 @@ export default class CK4 extends Component {
         break;
     }
   };
-  handleEdit = (id, nppbkc) => {
+  handleEdit = (id, jenisBkc) => {
     switch (true) {
-      case nppbkc === "EA":
+      case jenisBkc === "EA":
         this.props.history.push(`${pathName}/ck4-ea-perbaikan/${id}`);
         break;
-      case nppbkc === "MMEA":
+      case jenisBkc === "MMEA":
         this.props.history.push(`${pathName}/ck4-mmea-perbaikan/${id}`);
         break;
       default:
