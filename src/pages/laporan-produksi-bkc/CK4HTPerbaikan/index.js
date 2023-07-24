@@ -160,7 +160,6 @@ export default class CK4HTPerbaikan extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              {/* <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} /> */}
               {record.idCk4Detail ? (
                 <Button
                   type="danger"
@@ -373,7 +372,6 @@ export default class CK4HTPerbaikan extends Component {
 
   handleDeleteApi = async (index, id) => {
     const payload = { idCk4Detail : id }
-    console.log(payload)
     const response = await requestApi({
       service: "produksi",
       method: "delete",
@@ -763,8 +761,6 @@ export default class CK4HTPerbaikan extends Component {
       keteranganPerbaikan: keterangan_perbaikan,
       details,
     };
-
-    console.log(payload)
 
     const response = await requestApi({
       service: "produksi",
