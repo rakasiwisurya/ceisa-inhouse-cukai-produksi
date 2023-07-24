@@ -42,7 +42,7 @@ export default class RekamJenisPita extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handlePerbaikan(record.id)}
+                  onClick={() => this.handlePerbaikan(record.jenis_pita_id)}
                 />
               </>
             </div>
@@ -171,8 +171,8 @@ export default class RekamJenisPita extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
-        key: `rekam-jenis-pita-${index}`,
-        rekam_jenis_pita_id: null,
+        key: `jenis-pita-${index}`,
+        jenis_pita_id: item.idJenisPita,
         kode_kantor: item.kodeKantor,
         nama_kantor: item.namaKantor,
         nppbkc: item.nppbkc,

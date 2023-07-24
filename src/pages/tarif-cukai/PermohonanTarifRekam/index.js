@@ -39,6 +39,7 @@ export default class PermohonanTarifRekam extends Component {
       tanggal_kep: null,
       awal_berlaku: null,
 
+      nppbkc_id: null,
       nppbkc: null,
       nama_nppbkc: null,
       npwp_nppbkc: null,
@@ -51,7 +52,6 @@ export default class PermohonanTarifRekam extends Component {
       merk_ht: null,
       jenis_produksi_ht_id: null,
       jenis_produksi_ht_code: null,
-      jenis_produksi_ht_name: null,
       golongan_id: null,
       golongan_name: null,
       jenis_htl_rel_ht_id: null,
@@ -273,7 +273,6 @@ export default class PermohonanTarifRekam extends Component {
       personal: record.personal,
       jenis_produksi_ht_id: record.jenis_produksi_id,
       jenis_produksi_ht_code: record.jenis_produksi_code,
-      jenis_produksi_ht_name: record.jenis_produksi_name,
       golongan_id: record.golongan_id,
       golongan_name: record.golongan_name,
       isi_ht: record.isi,

@@ -1,6 +1,7 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 // import { requestApi } from "utils/requestApi";
 
 export default class ModalDaftarJenisPita extends Component {
@@ -14,7 +15,7 @@ export default class ModalDaftarJenisPita extends Component {
       totalData: 0,
 
       table: {
-        jenis_produksi_name: "",
+        jenis_produksi_code: "",
         hje: "",
         isi: "",
         awal_berlaku: "",
@@ -27,44 +28,48 @@ export default class ModalDaftarJenisPita extends Component {
       columns: [
         {
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_name",
-          key: "jenis_produksi_name",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_produksi_name"),
+          dataIndex: "jenis_produksi_code",
+          key: "jenis_produksi_code",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("jenis_produksi_code"),
         },
         {
           title: "HJE",
           dataIndex: "hje",
           key: "hje",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("hje"),
         },
         {
           title: "Awal Berlaku",
           dataIndex: "awal_berlaku",
           key: "awal_berlaku",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("awal_berlaku"),
         },
         {
           title: "Tarif",
           dataIndex: "tarif",
           key: "tarif",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("tarif"),
         },
         {
           title: "Warna",
           dataIndex: "warna",
           key: "warna",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("warna"),
         },
         {
           title: "Tahun Pita",
           dataIndex: "tahun_pita",
           key: "tahun_pita",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("tahun_pita"),
         },
       ],
@@ -82,63 +87,50 @@ export default class ModalDaftarJenisPita extends Component {
   }
 
   getDaftarJenisPita = async () => {
-    this.setState({ isDaftarJenisPitaLoading: true });
-    const timeout = setTimeout(() => {
+    const { jenis_produksi_code, hje, isi, awal_berlaku, tarif, warna, tahun_pita } =
+      this.state.table;
+
+    const payload = { page: 1 };
+
+    if (jenis_produksi_code) payload.kodeJenisProduksi = jenis_produksi_code;
+    if (hje) payload.hje = hje;
+    if (isi) payload.isiKemasan = isi;
+    if (awal_berlaku) payload.awalBerlaku = awal_berlaku;
+    if (tarif) payload.tarif = tarif;
+    if (warna) payload.warna = warna;
+    if (tahun_pita) payload.tahunPita = tahun_pita;
+
+    const response = await requestApi({
+      service: "pita_cukai",
+      method: "get",
+      endpoint: "/pita/browse-jenis",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDaftarJenisPitaLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `daftar-jenis-pita-${index}`,
+        jenis_pita_id: item.idJenisPita,
+        jenis_produksi_id: item.jenisProduksi,
+        jenis_produksi_code: item.kodeJenisProduksi,
+        golongan_id: item.idGolongan,
+        golongan_name: item.namaGolongan,
+        hje: item.hje,
+        isi: item.isiKemasan,
+        awal_berlaku: item.awalBerlaku,
+        tarif: item.tarif,
+        warna: item.warna,
+        tahun_pita: item.tahunPita,
+        personal: item.personal,
+      }));
+
       this.setState({
-        dataSource: [
-          {
-            key: "1",
-            jenis_pita_id: "jenis_pita_1",
-            jenis_produksi_id: 2,
-            jenis_produksi_code: "HTL",
-            jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
-            golongan_id: 5,
-            golongan_name: "TANPA GOLONGAN",
-            hje: 100,
-            isi: 2000,
-            awal_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-            tarif: 3000,
-            warna: "Merah",
-            tahun_pita: "2001",
-            personal: "personal1",
-          },
-          {
-            key: "2",
-            jenis_pita_id: "jenis_pita_2",
-            jenis_produksi_id: 5,
-            jenis_produksi_code: "REL",
-            jenis_produksi_name: "ROKOK ELEKTRIK",
-            golongan_id: 4,
-            golongan_name: "IMPORTIR",
-            hje: 3000,
-            isi: 200,
-            awal_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-            tarif: 3000,
-            warna: "Merah",
-            tahun_pita: "2001",
-            personal: "personal2",
-          },
-          {
-            key: "3",
-            jenis_pita_id: "jenis_pita_3",
-            jenis_produksi_id: 1,
-            jenis_produksi_code: "CRT",
-            jenis_produksi_name: "CERUTU",
-            golongan_id: 4,
-            golongan_name: "IMPORTIR",
-            hje: 100,
-            isi: 4000,
-            awal_berlaku: moment(new Date()).format("DD-MM-YYYY"),
-            tarif: 3000,
-            warna: "Merah",
-            tahun_pita: "2001",
-            personal: "personal3",
-          },
-        ],
+        dataSource: newData,
+        page: response.data.data.currentPage,
+        totalData: response.data.data.totalData,
       });
-      this.setState({ isDaftarJenisPitaLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({

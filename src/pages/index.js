@@ -211,12 +211,12 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <BRCK1 {...props} {...propsExtra} />}
         exact={true}
       />
-        <Route
+      <Route
         path={pathName + "/brck-1-Detail"}
         render={(props) => <BRCK1Detil {...props} {...propsExtra} />}
         exact={true}
       />
-        <Route
+      <Route
         path={pathName + "/brck-1-Perbaikan"}
         render={(props) => <BRCK1Perbaikan {...props} {...propsExtra} />}
         exact={true}
@@ -231,12 +231,12 @@ export default function PageContent({ propsExtra }) {
         render={(props) => <BRCK2 {...props} {...propsExtra} />}
         exact={true}
       />
-       <Route
+      <Route
         path={pathName + "/brck-2-Detail"}
         render={(props) => <BRCK2Detil {...props} {...propsExtra} />}
         exact={true}
       />
-        <Route
+      <Route
         path={pathName + "/brck-2-Perbaikan"}
         render={(props) => <BRCK2Perbaikan {...props} {...propsExtra} />}
         exact={true}
