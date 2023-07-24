@@ -8,15 +8,6 @@ export default class ModalDaftarMerk extends Component {
     this.state = {
       page:1,
       totalData:0,
-      merkMMEA: "",
-      jenisMMEA: "",
-      golongan: "",
-      kadar: "",
-      tarif: "",
-      isi: "",
-      kemasan: "",
-      noSkep: "",
-      tanggalPenutupanBrck2: "",
       columns: [
         {
           title: "Merk MMEA",
@@ -83,28 +74,6 @@ export default class ModalDaftarMerk extends Component {
         },
       ],
       dataSource: [
-        {
-          merkMMEA: "A",
-          jenisMMEA: "A",
-          golongan: "A",
-          kadar: "10%",
-          tarif: "20",
-          isi: "10",
-          kemasan: "1",
-          noSkep: "1",
-          tanggalPenutupanBrck2: "20-02-2023",
-        },
-        {
-          merkMMEA: "B",
-          jenisMMEA: "B",
-          golongan: "B",
-          kadar: "30%",
-          tarif: "30",
-          isi: "10",
-          kemasan: "1",
-          noSkep: "1",
-          tanggalPenutupanBrck2: "20-03-2023",
-        },
       ],
     };
   }

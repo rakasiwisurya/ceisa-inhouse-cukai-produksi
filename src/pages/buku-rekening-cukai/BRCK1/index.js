@@ -3,16 +3,12 @@ import { withRouter } from "react-router-dom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import React, { Component } from "react";
-import { requestApi } from "utils/requestApi";
 import { api } from "configs/api";
 class BRCK1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Browse dan Perbaikan BRCK-1",
-      selectedData:null,
-      currentBrckPage: 1,
-      // limitBrckPage: 100,
       kppbc: "",
       perusahaan: "",
       warna: "",

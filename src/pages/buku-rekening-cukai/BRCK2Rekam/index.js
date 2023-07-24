@@ -29,10 +29,6 @@ export default class BRCK2Rekam extends Component {
       isModalMerkOpen: false,
       page:1,
       totalData:0,
-      filterValue: "",
-      filterValueMerk: "",
-      filteredData: [],
-      filteredDataMerk: [],
 
       nppbkc: "",
       namaPerusahaan: "",

@@ -27,8 +27,6 @@ export default class BRCK2 extends Component {
       saldoPenutupanKemasan: "",
       selisihLiter: "",
       selisihKemasan: "",
-      page: 1,
-      totalData:0,
       columns: [
         {
           key: "aksi",

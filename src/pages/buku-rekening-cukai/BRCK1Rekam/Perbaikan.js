@@ -25,8 +25,6 @@ export default class BRCK1Perbaikan extends Component {
     this.state = {
       isModalNPPBKCOpen: false,
       isHidden: false,
-      limitRekamPage: 100,
-      currentRekamPage: 0,
       nppbkc: "",
       namaPerusahaan: "",
       periode_awal: "",
@@ -55,7 +53,6 @@ export default class BRCK1Perbaikan extends Component {
       no_back5: "",
       tgl_back5: "",
       idBrck1: "",
-      ketentuan: "",
       jenis_penutupan: "",
       list_jenis_penutupan: [
         {
@@ -71,8 +68,6 @@ export default class BRCK1Perbaikan extends Component {
           jenis_penutupan_name: "Dugaan Pelanggaran",
         },
       ],
-      limitRekamPage: 100,
-      currentRekamPage: 0,
       selectedDate: "",
       columns: [
         {

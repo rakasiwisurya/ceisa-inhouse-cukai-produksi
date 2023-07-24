@@ -1,15 +1,12 @@
 import {
   Button,
-  Col,
   DatePicker,
   Icon,
   Input,
   InputNumber,
-  Row,
   Select,
   Table,
   message,
-  Modal,
 } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -19,7 +16,6 @@ import ModalDaftarNPPBKCMMEA from "./ModalDaftarNPPBKCMMEA";
 import ModalDaftarMerk from "./ModalDaftarMerk";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { pathName } from "configs/constants";
-import { idMenu } from "utils/idMenu";
 import { api } from "configs/api";
 
 export default class BRCK2Detil extends Component {
@@ -28,12 +24,6 @@ export default class BRCK2Detil extends Component {
     this.state = {
       isModalNPPBKCMMEAOpen: false,
       isModalMerkOpen: false,
-      limitRekamPage: 100,
-      currentRekamPage: 0,
-      filterValue: "",
-      filterValueMerk: "",
-      filteredData: [],
-      filteredDataMerk: [],
 
       nppbkc: "",
       namaPerusahaan: "",
@@ -402,46 +392,6 @@ export default class BRCK2Detil extends Component {
       this.setState({ error: "An error occurred" });
       message.error("Tidak bisa memuat data");
       this.setState({ isLoading: false });
-      return;
-    }
-  };
-
-  handleRekam = async (event) => {
-    event.preventDefault();
-    try {
-      const payload = {
-        jumlahDebitKemasan: this.state.totalDebitKemasan,
-        jumlahDebitLiter: this.state.totalDebitLt,
-        jumlahKreditKemasan: this.state.totalKreditKemasan,
-        jumlahKreditLiter: this.state.totalKreditLt,
-        jumlahSaldoKemasan: this.state.totalSaldoKemasan,
-        jumlahSaldoLiter: this.state.totalSaldoLt,
-        saldoAkhirKemasan: this.state.hasil_pencacahan_back5_1,
-        saldoAkhirLiter: this.state.hasil_pencacahan_back5_2,
-        saldoAwalKemasan: this.state.saldo_awal_kemasan,
-        saldoAwalLiter: this.state.saldo_awal_lt,
-        saldoBukuKemasan: this.state.updateSaldoKemasan,
-        saldoBukuLiter: this.state.updateSaldoLt,
-        selisihKemasan: this.state.totalSelisihKemasan,
-        selisihLiter: this.state.totalSelisihLt,
-        sizeData: this.state.sizeData,
-      };
-
-      const response = await api.produksi.formData.post(
-        "/brck/rekam-brck2",
-        JSON.stringify(payload)
-      );
-
-      this.setState({
-        data: response.data,
-        isLoading: true,
-      });
-
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa merekam data");
-      this.setState({ isLoading: true });
       return;
     }
   };
