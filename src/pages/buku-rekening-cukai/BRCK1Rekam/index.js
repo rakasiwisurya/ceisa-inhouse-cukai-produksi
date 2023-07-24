@@ -7,6 +7,7 @@ import {
   Select,
   Table,
   message,
+  notification
 } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -16,14 +17,14 @@ import Header from "components/Header";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { api } from "configs/api";
+import { requestApi } from "utils/requestApi";
+import { idMenu } from "utils/idMenu";
 export default class BRCK1Rekam extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalNPPBKCOpen: false,
       isHidden: false,
-      limitRekamPage: 100,
-      currentRekamPage: 0,
       nppbkc: "",
       namaPerusahaan: "",
       periode_awal: "",
@@ -47,12 +48,11 @@ export default class BRCK1Rekam extends Component {
 
       idNppbkc:"",
       hasil_pencacahan_back5: "",
-      saldo_awal: 5000,
-      ketentuan: "",
+      saldo_awal:"",
       no_back5: "",
       tgl_back5: "",
       idBrck1: "",
-      catatan: "",
+      ketentuan: "",
       jenis_penutupan: "",
       list_jenis_penutupan: [
         {
@@ -68,8 +68,6 @@ export default class BRCK1Rekam extends Component {
           jenis_penutupan_name: "Dugaan Pelanggaran",
         },
       ],
-      limitRekamPage: 100,
-      currentRekamPage: 0,
       selectedDate: "",
       columns: [
         {
@@ -345,14 +343,14 @@ export default class BRCK1Rekam extends Component {
   handleGetRekam = async () => {
     this.setState({ isLoading: true });
     try {
-      const response = await api.produksi.json.get("/brck/browse-rekam-brck1", {
+      const responseGetRekam = await api.produksi.json.get("/brck/browse-rekam-brck1", {
         params: {
           pageSize: this.state.limitRekamPage,
           pageNumber: this.state.currentRekamPage,
         },
       });
-      console.log(response);
-      this.setState({ dataSource: response.data.data.listData });
+      console.log(responseGetRekam);
+      this.setState({ dataSource: responseGetRekam.data.data.listData });
       this.setState({ isLoading: false });
       console.log(this.state.dataSource);
       return;
@@ -364,35 +362,50 @@ export default class BRCK1Rekam extends Component {
     }
   };
 
-  handleRekam = async (event) => {
-    event.preventDefault();
-    try {
-      const payload = {
-        idBrck1: this.state.idBrck1,
-        saldoAwal: this.state.saldo_awal,
-        hasilPencarianBack5: this.state.hasil_pencacahan_back5,
-        nomorBack5: this.state.no_back5,
-        tanggalBack5: this.state.tgl_back5,
-        jenisPenutupan: this.state.jenis_penutupan,
-        catatan: this.state.ketentuan,
-      };
+  handleRekam = async () => {
+    const {
+      idBrck1,
+      saldo_awal,
+      ketentuan,
+      no_back5,
+      tgl_back5,
+      hasil_pencacahan_back5,
+      jenis_penutupan,
+      dataSource,
+    } = this.state;
 
-      const response = await api.produksi.formData.post(
-        "/brck/rekam-brck1",
-        JSON.stringify(payload)
-      );
+    const details = dataSource.map((item) => ({
+      catatan: item.ketentuan,
+      hasilPencacahanBack5: item.hasil_pencacahan_back5,
+      idBrck1: item.idBrck1,
+      jenisPenutupan: item.jenis_penutupan,
+      nomorBack5: item.no_back5,
+      saldoAwal: item.saldo_awal,
+      tanggalBack5: item.tgl_back5,
+    }));
 
-      this.setState({
-        data: response.data,
-        isLoading: true,
-      });
+    const payload = {
+      idMenu: idMenu("brck1"),
+      catatan: ketentuan,
+      hasilPencacahanBack5: hasil_pencacahan_back5,
+      idBrck1: idBrck1,
+      jenisPenutupan: jenis_penutupan,
+      nomorBack5: no_back5,
+      saldoAwal: saldo_awal,
+      tanggalBack5: tgl_back5,
+    };
 
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa merekam data");
-      this.setState({ isLoading: true });
-      return;
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/brck/rekam-brck1",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/brck-1`);
     }
   };
 
@@ -945,11 +958,11 @@ export default class BRCK1Rekam extends Component {
                   >
                     <div style={{ width: 400 }}>
                       <Input.TextArea
-                        id="catatan"
-                        type="text"
+                        id="ketentuan"
                         // value={ketentuan}
-                        value={"Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
-                        readOnly
+                        onChange={this.handleInputChange}
+                        value={this.state.ketentuan}
+                        // readOnly
                         rows={5}
                       />
                     </div>
@@ -984,7 +997,8 @@ export default class BRCK1Rekam extends Component {
                     marginRight:20,
                   }}
                 >
-                  <Button type="primary" onClick={this.handleRekam}>
+                  <Button type="primary" onClick={this.handleRekam}
+                  style={{marginRight:20}}>
                     Rekam
                   </Button>
                   <ButtonCustom

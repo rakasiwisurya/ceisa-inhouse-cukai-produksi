@@ -9,6 +9,8 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
       limitBrckPage:100,
       currentBrckPage:0,
       page: 1,
+      totalData:0,
+      idNppbkc:"fe3c9198-10b5-05e6-e054-0021f60abd54",
       columns: [
         {
           title: "NPPBKC",
@@ -129,12 +131,16 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
         "/brck/daftar-nppbkc-brck2",
         {
           params: {
+            idNppbkc:this.state.idNppbkc,
             page: this.state.page,
           },
         }
       );
       console.log(response);
       this.setState({ dataSource: response.data.data.listData });
+      const page = response.data.data.currentPage;
+			const totalData = response.data.data.totalData;
+      this.setState({ page, totalData })
       this.setState({ isLoading: false });
       console.log(this.state.dataSource);
       return;
@@ -167,8 +173,7 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
             dataSource={this.state.dataSource}
             columns={this.state.columns}
             loading={this.state.isLoading}
-            pagination={{current:this.state.currentBrckPage,
-              total: this.state.limitBrckPage,}}
+            pagination={{current: this.state.page, total: this.state.totalData }}
             scroll={{ x: "max-content" }}
             onRow={onRow}
           />

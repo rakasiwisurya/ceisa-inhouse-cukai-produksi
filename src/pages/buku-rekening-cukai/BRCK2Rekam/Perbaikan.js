@@ -1,15 +1,13 @@
 import {
   Button,
-  Col,
   DatePicker,
   Icon,
   Input,
   InputNumber,
-  Row,
   Select,
   Table,
   message,
-  Modal,
+  notification,
 } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -21,7 +19,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import { pathName } from "configs/constants";
 import { idMenu } from "utils/idMenu";
 import { api } from "configs/api";
-
+import { requestApi } from "utils/requestApi";
 export default class BRCK2Perbaikan extends Component {
   constructor(props) {
     super(props);
@@ -57,6 +55,7 @@ export default class BRCK2Perbaikan extends Component {
       no_back5: "",
       tgl_back5: "",
       jenis_penutupan: "",
+      ketentuan:"",
 
       list_jenis_penutupan: [
         {
@@ -406,43 +405,56 @@ export default class BRCK2Perbaikan extends Component {
     }
   };
 
-  handleRekam = async (event) => {
-    event.preventDefault();
-    try {
-      const payload = {
-        jumlahDebitKemasan: this.state.totalDebitKemasan,
-        jumlahDebitLiter: this.state.totalDebitLt,
-        jumlahKreditKemasan: this.state.totalKreditKemasan,
-        jumlahKreditLiter: this.state.totalKreditLt,
-        jumlahSaldoKemasan: this.state.totalSaldoKemasan,
-        jumlahSaldoLiter: this.state.totalSaldoLt,
-        saldoAkhirKemasan: this.state.hasil_pencacahan_back5_1,
-        saldoAkhirLiter: this.state.hasil_pencacahan_back5_2,
-        saldoAwalKemasan: this.state.saldo_awal_kemasan,
-        saldoAwalLiter: this.state.saldo_awal_lt,
-        saldoBukuKemasan: this.state.updateSaldoKemasan,
-        saldoBukuLiter: this.state.updateSaldoLt,
-        selisihKemasan: this.state.totalSelisihKemasan,
-        selisihLiter: this.state.totalSelisihLt,
-        sizeData: this.state.sizeData,
-      };
+  handleRekam = async () => {
+    const {
+      ketentuan,
+      hasil_pencacahan_back5_1,
+      hasil_pencacahan_back5_2,
+      jenis_penutupan,
+      no_back5,
+      saldo_awal_kemasan,
+      saldo_awal_lt,
+      tgl_back5,
+      dataSource,
+    } = this.state;
 
-      const response = await api.produksi.formData.post(
-        "/brck/perbaikan_brck2",
-        JSON.stringify(payload)
-      );
+    const details = dataSource.map((item) => ({
+      catatan: item.ketentuan,
+      hasilPencacahanBack5Kemasan: item.hasil_pencacahan_back5_1,
+      hasilPencacahanBack5Liter: item.hasil_pencacahan_back5_2,
+      jenisPenutupan: item.jenis_penutupan,
+      nomorBack5: item.no_back5,
+      saldoAwalKemasan: item.saldo_awal_kemasan,
+      saldoAwalLiter: item.saldo_awal_lt,
+      tanggalBack5: item.tgl_back5,
+    }));
 
-      this.setState({
-        data: response.data,
-        isLoading: true,
+    const payload = {
+      idMenu: idMenu("brck2"),
+      catatan: ketentuan,
+      hasilPencacahanBack5Kemasan: hasil_pencacahan_back5_1,
+      hasilPencacahanBack5Liter: hasil_pencacahan_back5_2,
+      jenisPenutupan: jenis_penutupan,
+      nomorBack5: no_back5,
+      saldoAwalKemasan: saldo_awal_kemasan,
+      saldoAwalLiter: saldo_awal_lt,
+      tanggalBack5: tgl_back5,
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/brck/perbaikan_brck2",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({
+        message: "Success",
+        description: response.data.message,
       });
-
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa merekam data");
-      this.setState({ isLoading: true });
-      return;
+      this.props.history.push(`${pathName}/brck-2`);
     }
   };
 
@@ -1126,7 +1138,21 @@ export default class BRCK2Perbaikan extends Component {
                         id="keteranganBatasKelonggaran"
                         onChange={this.handleInputChange}
                         // value={keteranganBatasKelongaran}
-                        value={"jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div></div>
+                    <div style={{ width: 125 }}>
+                      <Input.TextArea
+                        id="ketentuan"
+                        onChange={this.handleInputChange}
+                        // value={keteranganBatasKelongaran}
+                        value={this.state.ketentuan}
                         autoSize
                       />
                     </div>

@@ -9,8 +9,8 @@ export default class BRCK2 extends Component {
     super(props);
     this.state = {
       subtitle1: "Browse dan Perbaikan BRCK-2",
-      currentBrckPage: 0,
-      limitBrckPage: 100,
+      page:1,
+      totalData:0,
       no: "",
       kppbc: "",
       namaPerusahaan: "",
@@ -27,7 +27,6 @@ export default class BRCK2 extends Component {
       saldoPenutupanKemasan: "",
       selisihLiter: "",
       selisihKemasan: "",
-      page: 1,
       columns: [
         {
           key: "aksi",
@@ -107,7 +106,7 @@ export default class BRCK2 extends Component {
             {
               title: "Tgl Awal",
               dataIndex: "tanggalAwal",
-              key: "tanggalAkhir",
+              key: "tanggalAwal",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text}</div>
               ),
@@ -195,23 +194,6 @@ export default class BRCK2 extends Component {
         },
       ],
       dataSource: [
-        {
-          kppbc:"123",
-          namaPerusahaan:"AAA",
-          merk:"A",
-          jenis:"A",
-          tarif:"20",
-          isi:"0,5",
-          kadar:"30",
-          tanggalAwal:"17-07-2023",
-          tanggalAkhir:"18-07-2023",
-          saldoAwalLiter:"20",
-          saldoAwalKemasan:"20",
-          saldoPenutupanLiter:"2000",
-          saldoPenutupanKemasan:"200",
-          selisihLiter:"30",
-          selisihKemasan:"30",
-        },
       ],
     };
   }
@@ -285,15 +267,17 @@ export default class BRCK2 extends Component {
   handleGetBrck2 = async () => {
     this.setState({ isLoading: true });
     try {
-      const response = await api.produksi.json.get("/brck2/browse-brck2", {
+      const response = await api.produksi.json.get("/brck2/browse", {
         params: {
-          // pageSize: this.state.limitBrckPage,
-          pageNumber: this.state.currentBrckPage,
+          page: this.state.page,
         },
       });
       console.log(response);
       this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
+      const page = response.data.data.currentPage;
+			const totalData = response.data.data.totalData;
+			this.setState({ page, totalData });
       console.log(this.state.dataSource);
       return;
     } catch (error) {
@@ -369,6 +353,7 @@ export default class BRCK2 extends Component {
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isLoading}
+                pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
               />
             </div>
