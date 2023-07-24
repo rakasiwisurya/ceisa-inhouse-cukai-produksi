@@ -6,8 +6,8 @@ export default class ModalDaftarMerk extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      limitMerkPage: 100,
-      currentMerkPage: 0,
+      page:1,
+      totalData:0,
       merkMMEA: "",
       jenisMMEA: "",
       golongan: "",
@@ -178,15 +178,17 @@ export default class ModalDaftarMerk extends Component {
   handleGetMerk = async () => {
     this.setState({ isLoading: true });
     try {
-      const response = await api.produksi.json.get("/brck/daftar-merk", {
+      const response = await api.produksi.json.get("/brck/daftar-merk-brck2", {
         params: {
-          // pageSize: this.state.limitMerkPage,
-          // pageNumber: this.state.currentMerkPage,
+          pageSize: this.state.totalData,
+          pageNumber: this.state.page,
         },
       });
       console.log(response);
       this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
+      const page = response.data.data.currentPage;
+			const totalData = response.data.data.totalData;
       console.log(this.state.dataSource);
       return;
     } catch (error) {
@@ -219,8 +221,7 @@ export default class ModalDaftarMerk extends Component {
             columns={this.state.columns}
             loading={this.state.isLoading}
             pagination={{
-              current: this.state.currentMerkPage,
-              total: this.state.limitMerkPageMerkPage,
+              current: this.state.page, total: this.state.totalData 
             }}
             scroll={{ x: "max-content" }}
             onRow={onRow}

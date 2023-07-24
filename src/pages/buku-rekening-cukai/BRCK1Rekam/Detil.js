@@ -52,7 +52,7 @@ export default class BRCK1Detil extends Component {
       no_back5: "",
       tgl_back5: "",
       idBrck1: "",
-      catatan: "",
+      ketentuan: "",
       jenis_penutupan: "",
       list_jenis_penutupan: [
         {

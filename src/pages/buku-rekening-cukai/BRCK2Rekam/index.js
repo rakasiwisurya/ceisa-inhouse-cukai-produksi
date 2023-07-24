@@ -1,15 +1,13 @@
 import {
   Button,
- 
   DatePicker,
   Icon,
   Input,
   InputNumber,
- 
   Select,
   Table,
   message,
-  Modal,
+  notification,
 } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -20,6 +18,7 @@ import ModalDaftarMerk from "./ModalDaftarMerk";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { pathName } from "configs/constants";
 import { idMenu } from "utils/idMenu";
+import { requestApi } from "utils/requestApi";
 import { api } from "configs/api";
 
 export default class BRCK2Rekam extends Component {
@@ -28,8 +27,8 @@ export default class BRCK2Rekam extends Component {
     this.state = {
       isModalNPPBKCMMEAOpen: false,
       isModalMerkOpen: false,
-      limitRekamPage: 100,
-      currentRekamPage: 0,
+      page:1,
+      totalData:0,
       filterValue: "",
       filterValueMerk: "",
       filteredData: [],
@@ -42,10 +41,10 @@ export default class BRCK2Rekam extends Component {
       golongan: "",
       kadar: "",
       tarif: "",
-      isi:"",
-      kemasan:"",
-      noSkep:"",
-      tanggalPenutupanBrck2:"",
+      isi: "",
+      kemasan: "",
+      noSkep: "",
+      tanggalPenutupanBrck2: "",
       periode_awal: "",
       periode_akhir: "",
       saldo_awal_kemasan: "0",
@@ -57,6 +56,7 @@ export default class BRCK2Rekam extends Component {
       no_back5: "",
       tgl_back5: "",
       jenis_penutupan: "",
+      ketentuan: "",
 
       list_jenis_penutupan: [
         {
@@ -207,7 +207,6 @@ export default class BRCK2Rekam extends Component {
         },
       ],
       dataSource: [],
-
     };
   }
 
@@ -388,8 +387,7 @@ export default class BRCK2Rekam extends Component {
         "/brck/browse-rekam-brck2",
         {
           params: {
-            pageSize: this.state.limitRekamPage,
-            pageNumber: this.state.currentRekamPage,
+            page:this.state.page,
           },
         }
       );
@@ -406,43 +404,56 @@ export default class BRCK2Rekam extends Component {
     }
   };
 
-  handleRekam = async (event) => {
-    event.preventDefault();
-    try {
-      const payload = {
-        jumlahDebitKemasan: this.state.totalDebitKemasan,
-        jumlahDebitLiter: this.state.totalDebitLt,
-        jumlahKreditKemasan: this.state.totalKreditKemasan,
-        jumlahKreditLiter: this.state.totalKreditLt,
-        jumlahSaldoKemasan: this.state.totalSaldoKemasan,
-        jumlahSaldoLiter: this.state.totalSaldoLt,
-        saldoAkhirKemasan: this.state.hasil_pencacahan_back5_1,
-        saldoAkhirLiter: this.state.hasil_pencacahan_back5_2,
-        saldoAwalKemasan: this.state.saldo_awal_kemasan,
-        saldoAwalLiter: this.state.saldo_awal_lt,
-        saldoBukuKemasan: this.state.updateSaldoKemasan,
-        saldoBukuLiter: this.state.updateSaldoLt,
-        selisihKemasan: this.state.totalSelisihKemasan,
-        selisihLiter: this.state.totalSelisihLt,
-        sizeData: this.state.sizeData,
-      };
+  handleRekam = async () => {
+    const {
+      ketentuan,
+      hasil_pencacahan_back5_1,
+      hasil_pencacahan_back5_2,
+      jenis_penutupan,
+      no_back5,
+      saldo_awal_kemasan,
+      saldo_awal_lt,
+      tgl_back5,
+      dataSource,
+    } = this.state;
 
-      const response = await api.produksi.formData.post(
-        "/brck/rekam-brck2",
-        JSON.stringify(payload)
-      );
+    const details = dataSource.map((item) => ({
+      catatan: item.ketentuan,
+      hasilPencacahanBack5Kemasan: item.hasil_pencacahan_back5_1,
+      hasilPencacahanBack5Liter: item.hasil_pencacahan_back5_2,
+      jenisPenutupan: item.jenis_penutupan,
+      nomorBack5: item.no_back5,
+      saldoAwalKemasan: item.saldo_awal_kemasan,
+      saldoAwalLiter: item.saldo_awal_lt,
+      tanggalBack5: item.tgl_back5,
+    }));
 
-      this.setState({
-        data: response.data,
-        isLoading: true,
+    const payload = {
+      idMenu: idMenu("brck2"),
+      catatan: ketentuan,
+      hasilPencacahanBack5Kemasan: hasil_pencacahan_back5_1,
+      hasilPencacahanBack5Liter: hasil_pencacahan_back5_2,
+      jenisPenutupan: jenis_penutupan,
+      nomorBack5: no_back5,
+      saldoAwalKemasan: saldo_awal_kemasan,
+      saldoAwalLiter: saldo_awal_lt,
+      tanggalBack5: tgl_back5,
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/brck/rekam-brck2",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({
+        message: "Success",
+        description: response.data.message,
       });
-
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa merekam data");
-      this.setState({ isLoading: true });
-      return;
+      this.props.history.push(`${pathName}/brck-2`);
     }
   };
 
@@ -485,7 +496,7 @@ export default class BRCK2Rekam extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource != this.state.dataSource) {
       this.totalKeseluruhan();
-    } 
+    }
     // else if (
     //   prevState.hasil_pencacahan_back5_1 !==
     //     this.state.hasil_pencacahan_back5_1 ||
@@ -534,20 +545,20 @@ export default class BRCK2Rekam extends Component {
     //   }
 
     //   const totalBatasKelongaran = 0.01 * updateSaldoLt;
-      // let ketentuan = "";
-      // if (totalKekuranagan > totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-      // } else if (totalKekuranagan < totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-      // } else if (totalSelisih < totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-      // } else if (totalSelisih > totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah kelebihan BKC  lebih besar dari pada Batas Kelonggaran,  dikenakan Sanksi Administrasi Denda";
-      // }
+    // let ketentuan = "";
+    // if (totalKekuranagan > totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
+    // } else if (totalKekuranagan < totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    // } else if (totalSelisih < totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    // } else if (totalSelisih > totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah kelebihan BKC  lebih besar dari pada Batas Kelonggaran,  dikenakan Sanksi Administrasi Denda";
+    // }
 
     //   const keteranganBatasKelongaran = `1% x ${updateSaldoLt}`;
     //   this.setState({
@@ -560,7 +571,7 @@ export default class BRCK2Rekam extends Component {
     //     totalSelisihLebihLt,
     //     totalBatasKelongaran,
     //     keteranganBatasKelongaran,
-        // ketentuan,
+    // ketentuan,
     //   });
     // }
   }
@@ -799,7 +810,7 @@ export default class BRCK2Rekam extends Component {
                         </div>
                         <div>
                           <InputNumber
-                            value={this.state.saldoAwalKemasan}
+                            value={this.state.saldo_awal_kemasan}
                             onChange={this.handleSaldoAwalKemasanChange}
                             min={0}
                             style={{ width: 200 }}
@@ -816,7 +827,7 @@ export default class BRCK2Rekam extends Component {
                         </div>
                         <div>
                           <InputNumber
-                            value={this.state.saldoAwalLiter}
+                            value={this.state.saldo_awal_lt}
                             onChange={this.handleSaldoAwalLtChange}
                             min={0}
                             style={{ width: 200 }}
@@ -1135,13 +1146,28 @@ export default class BRCK2Rekam extends Component {
                         disabled
                       />
                     </div>
+                    <div style={{ width: 125 }}></div>
                     <div style={{ width: 125 }}>
                       <Input.TextArea
                         id="keteranganBatasKelonggaran"
                         disabled
                         onChange={this.handleInputChange}
                         // value={keteranganBatasKelongaran}
-                        value={"jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
+
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div style={{ width: 125 }}>
+                      <Input.TextArea
+                        id="ketentuan"
+                        onChange={this.handleInputChange}
+                        // value={keteranganBatasKelongaran}
+                        value={this.state.ketentuan}
                         autoSize
                       />
                     </div>
@@ -1174,10 +1200,10 @@ export default class BRCK2Rekam extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginTop: 30,
-                    marginRight:20,
+                    marginRight: 20,
                   }}
                 >
-                  <Button type="primary" onClick={this.handleRekam}>
+                  <Button type="primary" onClick={this.handleRekam} style={{marginRight:20}}>
                     Rekam
                   </Button>
                   <ButtonCustom
