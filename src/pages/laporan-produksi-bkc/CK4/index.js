@@ -43,12 +43,12 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEdit(record.kppbc, record.nppbkc)}
+                onClick={() => this.handleEdit(record.idCk4, record.nppbkc)}
               />
               <ButtonCustom
                 variant="info"
                 icon="eye"
-                onClick={() => this.handleDetail(record.kppbc, record.nppbkc)}
+                onClick={() => this.handleDetail(record.idCk4, record.nppbkc)}
               />
             </div>
           ),
@@ -187,6 +187,7 @@ export default class CK4 extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
+        idCk4: item.idCk4,
         key: `ck4-${index}`,
         kppbc: item.kppbc,
         nppbkc: item.nppbkc,

@@ -22,32 +22,32 @@ export default class RekamJenisPitaRekam extends Component {
       nppbkc: "",
       nama_nppbkc: "",
 
-      jenis_produksi_id: "",
-      jenis_produksi_name: "",
+      jenis_produksi: "",
       hje: "",
       isi: "",
       tarif: "",
       awal_berlaku: null,
       warna: "",
+      kode_warna: "",
       tahun_pita: String(new Date().getFullYear()),
 
       list_jenis_produksi: [],
     };
   }
 
-  componentDidMount() {
-    this.getJenisProduksi();
-  }
-
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+      this.getJenisProduksi();
+    }
+
     if (
-      prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
+      prevState.jenis_produksi !== this.state.jenis_produksi ||
       prevState.hje !== this.state.hje ||
       prevState.isi !== this.state.isi ||
       prevState.tarif !== this.state.tarif ||
       prevState.warna !== this.state.warna
     ) {
-      if (this.state.jenis_produksi_id && this.state.hje && this.state.isi) {
+      if (this.state.jenis_produksi && this.state.hje && this.state.isi) {
         this.getTarifWarna();
       } else {
         this.setState({ tarif: "", warna: "" });
@@ -59,21 +59,51 @@ export default class RekamJenisPitaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
-      params: { idJenisBkc: 3 },
+      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      params: { idNppbkc: this.state.nppbkc_id },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
     if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
-  getTarifWarna = async () => {
-    const timeout = setTimeout(() => {
-      this.setState({
-        tarif: 1000,
-        warna: "Hijau",
-      });
-      clearTimeout(timeout);
-    }, 2000);
+  getTarifWarna = () => {
+    this.getTarif();
+    this.getWarna();
+  };
+  getTarif = async () => {
+    const payload = {
+      kodeJenisProduksiBkc: this.state.jenis_produksi.split("-")[0],
+      idGolonganBkc: this.state.jenis_produksi.split("-")[1],
+      hje: this.state.hje,
+    };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-tarif",
+      params: payload,
+    });
+
+    if (response) {
+      this.setState({ tarif: response.data.data?.tarif });
+    }
+  };
+  getWarna = async () => {
+    const payload = {
+      kodeJenisProduksiBkc: this.state.jenis_produksi.split("-")[0],
+      idGolonganBkc: this.state.jenis_produksi.split("-")[1],
+    };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-warna",
+      params: payload,
+    });
+
+    if (response) {
+      this.setState({ warna: response.data.data.warna, kode_warna: response.data.data?.kodeWarna });
+    }
   };
 
   handleInputChange = (e) => {
@@ -147,112 +177,116 @@ export default class RekamJenisPitaRekam extends Component {
                 </div>
               </Col>
             </Row>
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Jenis Produksi</FormLabel>
-                  </div>
-                  <Select
-                    id="jenis_produksi"
-                    value={this.state.jenis_produksi_id}
-                    loading={this.state.isJenisProduksiLoading}
-                    onChange={(value, option) =>
-                      this.handleSelectCustomChange("jenis_produksi", value, option)
-                    }
-                    style={{ width: "100%" }}
-                  >
-                    {this.state.list_jenis_produksi.length > 0 &&
-                      this.state.list_jenis_produksi.map((item, index) => (
-                        <Select.Option key={`jenis-produksi-${index}`} value={item.idJenisProduksi}>
-                          {item.namaJenisProduksi}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                </div>
-              </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>HJE</FormLabel>
+            {this.state.nppbkc_id && (
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Jenis Produksi</FormLabel>
+                    </div>
+                    <Select
+                      id="jenis_produksi"
+                      value={this.state.jenis_produksi}
+                      loading={this.state.isJenisProduksiLoading}
+                      onChange={(value) => this.handleSelectChange("jenis_produksi", value)}
+                      style={{ width: "100%" }}
+                    >
+                      {this.state.list_jenis_produksi.length > 0 &&
+                        this.state.list_jenis_produksi.map((item, index) => (
+                          <Select.Option
+                            key={`jenis-produksi-${index}`}
+                            value={`${item.kodeJenisProduksi}-${item.idGolonganBkc}`}
+                          >
+                            {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
+                          </Select.Option>
+                        ))}
+                    </Select>
                   </div>
-                  <InputNumber
-                    id="hje"
-                    onChange={(value) => this.handleInputNumberChange("hje", value)}
-                    value={this.state.hje}
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Isi Per Kemasan</FormLabel>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>HJE</FormLabel>
+                    </div>
+                    <InputNumber
+                      id="hje"
+                      onChange={(value) => this.handleInputNumberChange("hje", value)}
+                      value={this.state.hje}
+                      style={{ width: "100%" }}
+                    />
                   </div>
-                  <InputNumber
-                    id="isi"
-                    onChange={(value) => this.handleInputNumberChange("isi", value)}
-                    value={this.state.isi}
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Tarif Cukai</FormLabel>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Isi Per Kemasan</FormLabel>
+                    </div>
+                    <InputNumber
+                      id="isi"
+                      onChange={(value) => this.handleInputNumberChange("isi", value)}
+                      value={this.state.isi}
+                      style={{ width: "100%" }}
+                    />
                   </div>
-                  <InputNumber
-                    id="tarif"
-                    value={this.state.tarif}
-                    onChange={(value) => this.handleInputNumberChange("tarif", value)}
-                    style={{ width: "100%" }}
-                    disabled
-                  />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Awal Berlaku</FormLabel>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tarif Cukai</FormLabel>
+                    </div>
+                    <InputNumber
+                      id="tarif"
+                      value={this.state.tarif}
+                      onChange={(value) => this.handleInputNumberChange("tarif", value)}
+                      style={{ width: "100%" }}
+                      disabled
+                    />
                   </div>
-                  <DatePicker
-                    id="warna"
-                    format="DD-MM-YYYY"
-                    value={this.state.awal_berlaku}
-                    onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Warna</FormLabel>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Awal Berlaku</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="warna"
+                      format="DD-MM-YYYY"
+                      value={this.state.awal_berlaku}
+                      onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
+                      style={{ width: "100%" }}
+                    />
                   </div>
-                  <Input id="warna" value={this.state.warna} style={{ width: "100%" }} disabled />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Tahun Pita</FormLabel>
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Warna</FormLabel>
+                    </div>
+                    <Input id="warna" value={this.state.warna} style={{ width: "100%" }} disabled />
                   </div>
-                  <Input
-                    id="tahun_pita"
-                    value={this.state.tahun_pita}
-                    style={{ width: "100%" }}
-                    disabled
-                  />
-                </div>
-              </Col>
-            </Row>
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tahun Pita</FormLabel>
+                    </div>
+                    <Input
+                      id="tahun_pita"
+                      value={this.state.tahun_pita}
+                      style={{ width: "100%" }}
+                      disabled
+                    />
+                  </div>
+                </Col>
+              </Row>
+            )}
 
             <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
               <Col span={4}>

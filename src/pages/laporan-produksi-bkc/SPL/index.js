@@ -4,6 +4,7 @@ import Container from "components/Container";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class SPL extends Component {
   constructor(props) {
@@ -100,24 +101,51 @@ export default class SPL extends Component {
   }
 
   getSpl = async () => {
-    this.setState({ isSplLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        dataSource: [
-          {
-            key: "1",
-            id: "1",
-            status: "AKTIF",
-            nppbkc: "nppbkc",
-            nama_perusahaan: "nama_perusahaan",
-            nomor_spl: "nomor_spl",
-            tanggal_spl: moment(new Date()).format("DD-MM-YYYY"),
-          },
-        ],
-      });
-      this.setState({ isSplLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+
+    const {
+      nppbkc,
+      nama_perusahaan,
+      nomor_spl,
+      tanggal_spl,
+      status,
+    } = this.state.table;
+
+    const payload = { page: this.state.page };
+
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (nomor_spl) payload.nomorSpl = nomor_spl;
+    if (tanggal_spl)
+      payload.tanggalSpl = moment(tanggal_spl).format("yyyy-MM-DD HH:mm:ss.SSS");
+    if (status) payload.status = status;
+
+    console.log('payload', payload)
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/spl/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isSplLoading: bool }),
+    });
+
+    console.log(response)
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        idSpl: item.idSpl,
+        key: `spl-${index}`,
+        status: item.status,
+        nppbkc: item.nppbkc,
+        nama_perusahaan: item.namaPerusahaan,
+        nomor_spl: item.nomorSpl,
+        tanggal_spl: item.tanggalSpl
+      }));
+      // console.log(newData)
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({

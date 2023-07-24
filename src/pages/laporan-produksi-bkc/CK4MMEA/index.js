@@ -572,14 +572,16 @@ export default class CK4MMEA extends Component {
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
       tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD HH:mm"),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD HH:mm"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DDTHH:mm:ss.SSS"),  
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DDTHH:mm:ss.SSS"),
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       details,
     };
+
+    console.log(payload)
 
     const response = await requestApi({
       service: "produksi",

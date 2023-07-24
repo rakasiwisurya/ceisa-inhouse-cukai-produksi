@@ -62,8 +62,6 @@ export default class SPLPerbaikan extends Component {
 
     if (response) {
       const { data } = response.data;
-      console.log(data)
-
       
       this.setState({
         nomor_spl:data.nomorSpl,
@@ -78,7 +76,6 @@ export default class SPLPerbaikan extends Component {
         tanggal_libur_awal:moment(data.awalLibur),
         tanggal_libur_akhir:moment(data.akhirLibur),
         pernyataan_tanggal:moment(data.tanggalPernyataan),
-        // pernyataan_kota_id:data.pernyataan_kota_id,
         pernyataan_kota_name:data.tempatPernyataan
       });
     }
@@ -133,7 +130,6 @@ export default class SPLPerbaikan extends Component {
       tanggal_libur_awal,
       tanggal_libur_akhir,
       pernyataan_tanggal,
-      pernyataan_kota_id,
       pernyataan_kota_name,
     } = this.state;
 
@@ -150,7 +146,6 @@ export default class SPLPerbaikan extends Component {
       !tanggal_libur_awal ||
       !tanggal_libur_akhir ||
       !pernyataan_tanggal ||
-      !pernyataan_kota_id ||
       !pernyataan_kota_name
     ) {
       return false;
@@ -160,6 +155,7 @@ export default class SPLPerbaikan extends Component {
   };
 
   handleUpdate = async () => {
+
     const {
       nomor_spl,
       tanggal_spl,
@@ -175,11 +171,11 @@ export default class SPLPerbaikan extends Component {
       tanggal_libur_awal,
       tanggal_libur_akhir,
       pernyataan_tanggal,
-      pernyataan_kota_id,
       pernyataan_kota_name,
     } = this.state;
 
     const payload = {
+      idSpl: this.props.match.params.id,
       nomorSpl: nomor_spl,
       tanggalSpl: moment(tanggal_spl).format("YYYY-MM-DD HH:mm:ss.SSS"),
       namaPengusaha: nama_pengusaha,
@@ -192,32 +188,22 @@ export default class SPLPerbaikan extends Component {
       awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
       akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      // pernyataan_kota_id: pernyataan_kota_id,
       tempatPernyataan: pernyataan_kota_name,
       idProses: idMenu("spl")
     };
 
-    console.log(payload)
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/spl/perbaikan",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/spl/perbaikan",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    // });
-
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/spl`);
-    // }
-    // this.setState({ isRekamLoading: true });
-    // const timeout = setTimeout(() => {
-    //   notification.success({ message: "Success", description: "Success" });
-    //   this.setState({ isRekamLoading: false });
-    //   this.props.history.push(`${pathName}/spl`);
-    //   clearTimeout(timeout);
-    // }, 2000);
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/spl`);
+    }
   };
 
   render() {
