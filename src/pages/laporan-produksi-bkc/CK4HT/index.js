@@ -560,7 +560,7 @@ export default class CK4HT extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id,
+      idMerkHt: item.merk_ht_id==="null" ? null : item.merk_ht_id,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,

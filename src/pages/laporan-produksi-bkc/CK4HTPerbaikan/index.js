@@ -15,7 +15,6 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
@@ -29,6 +28,7 @@ import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
+import { pathName } from "configs/constants";
 
 export default class CK4HTPerbaikan extends Component {
   constructor(props) {
@@ -161,11 +161,11 @@ export default class CK4HTPerbaikan extends Component {
                 onClick={() => this.handleEditRincian(record, index)}
               />
               {/* <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} /> */}
-              {record.merk_ht_id ? (
+              {record.idCk4Detail ? (
                 <Button
                   type="danger"
                   icon="delete"
-                  onClick={() => this.handleDeleteApi(index, record.merk_ht_id)}
+                  onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
                 />
               ) : (
                 <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
@@ -351,6 +351,7 @@ export default class CK4HTPerbaikan extends Component {
 
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
+          idCk4Detail: detail.idCk4Detail,
           merk_ht_id: detail.idMerkHt,
           merk_ht_name: detail.namaMerkHt,
           jenis_ht: detail.jenisHt,
@@ -371,17 +372,19 @@ export default class CK4HTPerbaikan extends Component {
   };
 
   handleDeleteApi = async (index, id) => {
+    const payload = { idCk4Detail : id }
+    console.log(payload)
     const response = await requestApi({
       service: "produksi",
-      method: "post",
-      endpoint: "/ck4/delete-detail-ht",
-      body: { idCk4Detail: id },
+      method: "delete",
+      endpoint: "/delete-detail-ht",
+      params: payload,
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.handleDelete(index);
+      this.handleDeleteRincian(index);
     }
   };
 
@@ -731,7 +734,8 @@ export default class CK4HTPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id,
+      idMerkHt: item.merk_ht_id === "null" ? null : item.merk_ht_id,
+      idCk4Detail: item.idCk4Detail === undefined ? null : item.idCk4Detail,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,
@@ -762,18 +766,18 @@ export default class CK4HTPerbaikan extends Component {
 
     console.log(payload)
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/ck4/perbaikan-ht",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/perbaikan-ht",
+      body: payload,
+      setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
+    });
 
-    // if (response) {
-    //   notification.success({ message: "Success", description: response.data.message });
-    //   this.props.history.push(`${pathName}/laporan-ck4`);
-    // }
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.props.history.push(`${pathName}/laporan-ck4`);
+    }
   };
 
   render() {
