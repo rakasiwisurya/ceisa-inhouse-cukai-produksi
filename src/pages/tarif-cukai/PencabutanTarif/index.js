@@ -38,7 +38,7 @@ export default class PencabutanTarif extends Component {
                 <Button
                   icon="to-top"
                   type="danger"
-                  onClick={() => this.handlePencabutan(record.id)}
+                  onClick={() => this.handlePencabutan(record.permohonan_tarif_id)}
                 />
               </>
             </div>
