@@ -205,6 +205,8 @@ export default class RekamJenisPitaRekam extends Component {
   };
 
   handleRekam = async () => {
+    if (!this.validationForm()) return;
+
     const {
       nppbkc_id,
       nppbkc,
