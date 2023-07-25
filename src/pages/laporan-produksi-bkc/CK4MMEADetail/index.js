@@ -21,6 +21,7 @@ import { months, years } from "utils/times";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
+import { requestApi } from "utils/requestApi";
 
 export default class CK4MMEADetail extends Component {
   constructor(props) {
@@ -207,281 +208,62 @@ export default class CK4MMEADetail extends Component {
   }
 
   getDetailCk4Mmea = async () => {
-    // const payload = { idCk4: this.props.match.params.id };
+    const payload = { idCk4: this.props.match.params.id };
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/ck4/detail-mmea",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/detail-mmea",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
 
-    // if (response) {
-    //   const { data } = response.data;
+    if (response) {
+      const { data } = response.data;
 
-    //   this.setState({
-    //     nama_pemrakarsa: data.namaPemrakarsa,
-    //     id_process_pemrakarsa: data.idProcessPemrakarsa,
-    //     jabatan_pemrakarsa: data.jabatanPemrakarsa,
-    //     nip_pemrakarsa: data.nipPemrakarsa,
-
-    //     nppbkc_id: data.idNppbkc,
-    //     nama_nppbkc: data.namaNppbkc,
-    //     nppbkc: data.nppbkc,
-    //     alamat_nppbkc: data.alamatNppbkc,
-
-    //     jenis_laporan_id: data.jenisLaporan,
-    //     nomor_pemberitahuan: data.nomorPemberitahuan,
-    //     tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
-
-    //     tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
-    //     tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
-    //     periode_bulan: data.periodeBulan,
-    //     periode_tahun: data.periodeTahun,
-
-    //     kota_id: data.idKota,
-    //     kota_name: data.namaKota,
-    //     nama_pengusaha: data.namaPengusaha,
-    //     dataSource: data.details.map((detail, index) => ({
-    //       key: `ck4-${index}`,
-    //       jenis_mmea: detail.jenisMmea,
-    //       merk_mmea_id: detail.idMerkMmea,
-    //       merk_mmea_name: detail.namaMerkMmea,
-    //       isi_mmea: detail.isiMmea,
-    //       tarif_mmea: detail.tarifMmea,
-    //       jenis_kemasan_mmea: detail.jenisKemasanMmea,
-    //       golongan_mmea: detail.golonganMmea,
-    //       kadar_mmea: detail.kadarMmea,
-
-    //       nomor_produksi: detail.nomorProduksi,
-    //       tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
-    //       jumlah_kemasan: detail.jumlahKemasan,
-    //       jumlah_produksi: detail.jumlahProduksi,
-    //       jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
-    //     })),
-    //   });
-    // }
-
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
       this.setState({
-        nama_pemrakarsa: "SENDI BENI SUSANDI",
-        id_process_pemrakarsa: 7784590,
-        jabatan_pemrakarsa: "PEGAWAI PADA Direktorat Informasi Kepabeanan dan Cukai",
-        nip_pemrakarsa: "199210122014021001",
+        nama_pemrakarsa: data.namaPemrakarsa,
+        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        jabatan_pemrakarsa: data.jabatanPemrakarsa,
+        nip_pemrakarsa: data.nipPemrakarsa,
 
-        nppbkc_id: 1,
-        nama_nppbkc: "0706.1.1.1001",
-        nppbkc: "Test 1 MOLINDO RAYA INDUSTRIAL, PT.",
-        alamat_nppbkc:
-          "Test 1  Jl. SUMBER WARAS NO.255 RT.01 RW.08, KEL. KALIREJO, KEC. LAWANG, KAB. MALAN",
+        nppbkc_id: data.idNppbkc,
+        nama_nppbkc: data.namaNppbkc,
+        nppbkc: data.nppbkc,
+        alamat_nppbkc: data.alamatNppbkc,
 
-        jenis_laporan_id: "HARIAN",
-        nomor_pemberitahuan: "Nomor Pemberitahuan 1",
-        tanggal_pemberitahuan: moment(new Date()),
+        jenis_laporan_id: data.jenisLaporan,
+        nomor_pemberitahuan: data.nomorPemberitahuan,
+        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
 
-        tanggal_jam_produksi_awal: moment(new Date()),
-        tanggal_jam_produksi_akhir: moment(new Date()),
-        periode_bulan: "JANUARY",
-        periode_tahun: 2003,
+        tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
+        tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
+        periode_bulan: data.periodeBulan,
+        periode_tahun: data.periodeTahun,
 
-        kota_id: "489",
-        kota_name: "Kabupaten Kaimana",
-        nama_pengusaha: "Nama Pengusaha",
-        dataSource: [
-          {
-            key: 1,
-            jenis_mmea: "jenis_mmea_1",
-            merk_mmea_id: 1,
-            merk_mmea_name: "merk_mmea_name_1",
-            isi_mmea: "isi_mmea_1",
-            tarif_mmea: "tarif_mmea_1",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_1",
-            golongan_mmea: "golongan_mmea_1",
-            kadar_mmea: "kadar_mmea_1",
+        kota_id: data.idKota,
+        kota_name: data.namaKota,
+        nama_pengusaha: data.namaPengusaha,
+        dataSource: data.details.map((detail, index) => ({
+          key: `ck4-${index}`,
+          idCk4Detail: detail.idCk4Detail,
+          jenis_mmea: detail.jenisMmea,
+          merk_mmea_id: detail.idMerkMmea,
+          merk_mmea_name: detail.namaMerkMmea,
+          isi_mmea: detail.isiMmea,
+          tarif_mmea: detail.tarifMmea,
+          jenis_kemasan_mmea: detail.jenisKemasanMmea,
+          golongan_mmea: detail.golonganMmea,
+          kadar_mmea: detail.kadarMmea,
 
-            nomor_produksi: "Nomor Produksi 1",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 2,
-            jenis_mmea: "jenis_mmea_2",
-            merk_mmea_id: 2,
-            merk_mmea_name: "merk_mmea_name_2",
-            isi_mmea: "isi_mmea_2",
-            tarif_mmea: "tarif_mmea_2",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_2",
-            golongan_mmea: "golongan_mmea_2",
-            kadar_mmea: "kadar_mmea_2",
-
-            nomor_produksi: "Nomor Produksi 2",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 3,
-            jenis_mmea: "jenis_mmea_3",
-            merk_mmea_id: 3,
-            merk_mmea_name: "merk_mmea_name_3",
-            isi_mmea: "isi_mmea_3",
-            tarif_mmea: "tarif_mmea_3",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_3",
-            golongan_mmea: "golongan_mmea_3",
-            kadar_mmea: "kadar_mmea_3",
-
-            nomor_produksi: "Nomor Produksi 3",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 4,
-            jenis_mmea: "jenis_mmea_4",
-            merk_mmea_id: 4,
-            merk_mmea_name: "merk_mmea_name_4",
-            isi_mmea: "isi_mmea_4",
-            tarif_mmea: "tarif_mmea_4",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_4",
-            golongan_mmea: "golongan_mmea_4",
-            kadar_mmea: "kadar_mmea_4",
-
-            nomor_produksi: "Nomor Produksi 4",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 5,
-            jenis_mmea: "jenis_mmea_5",
-            merk_mmea_id: 5,
-            merk_mmea_name: "merk_mmea_name_5",
-            isi_mmea: "isi_mmea_5",
-            tarif_mmea: "tarif_mmea_5",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_5",
-            golongan_mmea: "golongan_mmea_5",
-            kadar_mmea: "kadar_mmea_5",
-
-            nomor_produksi: "Nomor Produksi 5",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 6,
-            jenis_mmea: "jenis_mmea_6",
-            merk_mmea_id: 6,
-            merk_mmea_name: "merk_mmea_name_6",
-            isi_mmea: "isi_mmea_6",
-            tarif_mmea: "tarif_mmea_6",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_6",
-            golongan_mmea: "golongan_mmea_6",
-            kadar_mmea: "kadar_mmea_6",
-
-            nomor_produksi: "Nomor Produksi 6",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 7,
-            jenis_mmea: "jenis_mmea_7",
-            merk_mmea_id: 7,
-            merk_mmea_name: "merk_mmea_name_7",
-            isi_mmea: "isi_mmea_7",
-            tarif_mmea: "tarif_mmea_7",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_7",
-            golongan_mmea: "golongan_mmea_7",
-            kadar_mmea: "kadar_mmea_7",
-
-            nomor_produksi: "Nomor Produksi 7",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 8,
-            jenis_mmea: "jenis_mmea_8",
-            merk_mmea_id: 8,
-            merk_mmea_name: "merk_mmea_name_8",
-            isi_mmea: "isi_mmea_8",
-            tarif_mmea: "tarif_mmea_8",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_8",
-            golongan_mmea: "golongan_mmea_8",
-            kadar_mmea: "kadar_mmea_8",
-
-            nomor_produksi: "Nomor Produksi 8",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 9,
-            jenis_mmea: "jenis_mmea_9",
-            merk_mmea_id: 9,
-            merk_mmea_name: "merk_mmea_name_9",
-            isi_mmea: "isi_mmea_9",
-            tarif_mmea: "tarif_mmea_9",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_9",
-            golongan_mmea: "golongan_mmea_9",
-            kadar_mmea: "kadar_mmea_9",
-
-            nomor_produksi: "Nomor Produksi 9",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 10,
-            jenis_mmea: "jenis_mmea_10",
-            merk_mmea_id: 10,
-            merk_mmea_name: "merk_mmea_name_10",
-            isi_mmea: "isi_mmea_10",
-            tarif_mmea: "tarif_mmea_10",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_10",
-            golongan_mmea: "golongan_mmea_10",
-            kadar_mmea: "kadar_mmea_10",
-
-            nomor_produksi: "Nomor Produksi 10",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-          {
-            key: 11,
-            jenis_mmea: "jenis_mmea_11",
-            merk_mmea_id: 11,
-            merk_mmea_name: "merk_mmea_name_11",
-            isi_mmea: "isi_mmea_11",
-            tarif_mmea: "tarif_mmea_11",
-            jenis_kemasan_mmea: "jenis_kemasan_mmea_11",
-            golongan_mmea: "golongan_mmea_11",
-            kadar_mmea: "kadar_mmea_11",
-
-            nomor_produksi: "Nomor Produksi 11",
-            tanggal_produksi: moment(new Date()).format("YYYY-MM-DD"),
-            jumlah_kemasan: 10,
-            jumlah_produksi: 20,
-            jumlah_kemasan_dilekati_pita: 30,
-          },
-        ],
+          nomor_produksi: detail.nomorProduksi,
+          tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+          jumlah_kemasan: detail.jumlahKemasan,
+          jumlah_produksi: detail.jumlahProduksi,
+          jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({

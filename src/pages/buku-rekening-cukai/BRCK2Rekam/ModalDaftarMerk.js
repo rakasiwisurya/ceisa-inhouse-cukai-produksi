@@ -158,6 +158,7 @@ export default class ModalDaftarMerk extends Component {
       this.setState({ isLoading: false });
       const page = response.data.data.currentPage;
 			const totalData = response.data.data.totalData;
+      this.setState ({page, totalData})
       console.log(this.state.dataSource);
       return;
     } catch (error) {
