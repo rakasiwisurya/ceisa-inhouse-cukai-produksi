@@ -41,26 +41,6 @@ export default class RekamJenisPitaRekam extends Component {
     };
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.nppbkc_id !== this.state.nppbkc_id) {
-  //     this.getJenisProduksi();
-  //   }
-
-  //   if (
-  //     prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
-  //     prevState.hje !== this.state.hje ||
-  //     prevState.isi !== this.state.isi ||
-  //     prevState.tarif !== this.state.tarif ||
-  //     prevState.warna !== this.state.warna
-  //   ) {
-  //     if (this.state.jenis_produksi_id && this.state.hje && this.state.isi) {
-  //       this.getTarifWarna();
-  //     } else {
-  //       this.setState({ tarif: "", warna: "" });
-  //     }
-  //   }
-  // }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nppbkc_id !== this.state.nppbkc_id) {
       this.getJenisProduksi();
@@ -71,7 +51,7 @@ export default class RekamJenisPitaRekam extends Component {
       prevState.hje !== this.state.hje ||
       prevState.isi !== this.state.isi
     ) {
-      this.setState({ tarif: "", warna: "" });
+      this.setState({ tarif: null, warna: null });
     }
   }
 

@@ -6,9 +6,9 @@ import Header from "components/Header";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
+import { pathName } from "configs/constants";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { pathName } from "configs/constants";
 
 export default class RekamJenisPitaPerbaikan extends Component {
   constructor(props) {
@@ -16,22 +16,27 @@ export default class RekamJenisPitaPerbaikan extends Component {
     this.state = {
       subtitle1: "Permohonan",
 
-      isUpdateLoading: false,
       isDetailLoading: true,
+      isUpdateLoading: false,
       isJenisProduksiLoading: true,
+      isTarifLoading: false,
+      isWarnaLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      jenis_bkc_id_nppbkc: null,
+      personal_nppbkc: null,
 
-      jenis_produksi_id: "",
-      jenis_produksi_name: "",
-      hje: "",
-      isi: "",
-      tarif: "",
+      jenis_produksi_id: null,
+      jenis_produksi_name: null,
+      hje: null,
+      isi: null,
+      tarif: null,
       awal_berlaku: null,
-      warna: "",
+      warna: null,
+      kode_warna: null,
       tahun_pita: String(new Date().getFullYear()),
 
       list_jenis_produksi: [],
@@ -39,65 +44,109 @@ export default class RekamJenisPitaPerbaikan extends Component {
   }
 
   componentDidMount() {
-    this.getJenisProduksi();
-    this.getRekamJenisPitaDetail();
+    this.getDetailRekamJenisPita();
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+      this.getJenisProduksi();
+    }
+
     if (
       prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
       prevState.hje !== this.state.hje ||
-      prevState.isi !== this.state.isi ||
-      prevState.tarif !== this.state.tarif ||
-      prevState.warna !== this.state.warna
+      prevState.isi !== this.state.isi
     ) {
-      if (this.state.jenis_produksi_id && this.state.hje && this.state.isi) {
-        this.getTarifWarna();
-      } else {
-        this.setState({ tarif: "", warna: "" });
-      }
+      this.setState({ tarif: null, warna: null });
     }
   }
 
-  getRekamJenisPitaDetail = async () => {
-    this.setState({ isDetailLoading: true });
-    console.log("this.props.match.params.id", this.props.match.params.id);
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "fe3c9198-0d65-05e6-e054-0021f60abd54",
-        nppbkc: "0866114705044000070652",
-        nama_nppbkc: "KOPERASI BERLIAN EMAS SEJAHTERA TERUS",
+  getDetailRekamJenisPita = async () => {
+    const payload = { idJenisPita: this.props.match.params.id };
 
-        jenis_produksi_id: "2",
-        jenis_produksi_name: "HASIL TEMBAKAU LAINNYA",
-        hje: 100,
-        isi: 200,
-        awal_berlaku: moment(new Date()),
-        tahun_pita: "2020",
+    const response = await requestApi({
+      service: "pita_cukai",
+      method: "get",
+      endpoint: "/pita/browse-by-id",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_bkc_id_nppbkc: data.idJenisBkc,
+        personal_nppbkc: data.personalisasi,
+
+        jenis_produksi_id: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}`,
+        jenis_produksi_name: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
+        hje: data.hje,
+        isi: data.isiVolume,
+        tarif: data.tarif,
+        awal_berlaku: moment(data.awalBerlaku),
+        warna: data.warna,
+        kode_warna: data.kodeWarna,
+        tahun_pita: data.tahunPita,
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+
+      this.setState({ tarif: data.tarif, warna: data.warna, kode_warna: data.kodeWarna });
+    }
   };
   getJenisProduksi = async () => {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
-      params: { idJenisBkc: 3 },
+      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      params: { idNppbkc: this.state.nppbkc_id },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
     if (response) this.setState({ list_jenis_produksi: response.data.data });
   };
-  getTarifWarna = async () => {
-    const timeout = setTimeout(() => {
-      this.setState({
-        tarif: 1000,
-        warna: "Hijau",
-      });
-      clearTimeout(timeout);
-    }, 2000);
+  getTarifWarna = () => {
+    this.getTarif();
+    this.getWarna();
+  };
+  getTarif = async () => {
+    const payload = {
+      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
+      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
+      hje: this.state.hje,
+    };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-tarif",
+      params: payload,
+      setLoading: (bool) => this.setState({ isTarifLoading: bool }),
+    });
+
+    if (response) {
+      this.setState({ tarif: response.data.data?.tarif });
+    }
+  };
+  getWarna = async () => {
+    const payload = {
+      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
+      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
+    };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/referensi/browse-warna",
+      params: payload,
+      setLoading: (bool) => this.setState({ isWarnaLoading: bool }),
+    });
+
+    if (response) {
+      this.setState({ warna: response.data.data.warna, kode_warna: response.data.data?.kodeWarna });
+    }
   };
 
   handleInputChange = (e) => {
@@ -130,28 +179,114 @@ export default class RekamJenisPitaPerbaikan extends Component {
       nppbkc_id: record.nppbkc_id,
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
+      jenis_bkc_id_nppbkc: record.jenis_bkc_id_nppbkc,
+      personal_nppbkc: record.personal_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
   validationForm = () => {
+    const {
+      nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      jenis_bkc_id_nppbkc,
+      personal_nppbkc,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      hje,
+      isi,
+      tarif,
+      awal_berlaku,
+      warna,
+      kode_warna,
+      tahun_pita,
+    } = this.state;
+
+    if (
+      !nppbkc_id ||
+      !nppbkc ||
+      !nama_nppbkc ||
+      !jenis_bkc_id_nppbkc ||
+      !personal_nppbkc ||
+      !jenis_produksi_id ||
+      !jenis_produksi_name ||
+      !hje ||
+      !isi ||
+      !tarif ||
+      !awal_berlaku ||
+      !warna ||
+      !kode_warna ||
+      !tahun_pita
+    ) {
+      return false;
+    }
+
     return true;
   };
 
   handleUpdate = async () => {
-    this.setState({ isUpdateLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({ isUpdateLoading: false });
+    if (!this.validationForm()) return;
+
+    const {
+      nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      jenis_bkc_id_nppbkc,
+      personal_nppbkc,
+      jenis_produksi_id,
+      jenis_produksi_name,
+      hje,
+      isi,
+      tarif,
+      awal_berlaku,
+      warna,
+      kode_warna,
+      tahun_pita,
+    } = this.state;
+
+    const splitIdJenisProduksi = jenis_produksi_id.split("-");
+    const splitNamaJenisProduksi = jenis_produksi_name.split("-").map((item) => item.trim());
+
+    const payload = {
+      idJenisPita: this.props.match.params.id,
+      idJenisBkc: jenis_bkc_id_nppbkc,
+      idJenisProduksiBkc: splitIdJenisProduksi[0],
+      kodeJenisProduksiBkc: splitNamaJenisProduksi[0],
+      isiKemasan: isi,
+      awalBerlaku: moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tarif: tarif,
+      warna: warna,
+      kodeWarna: kode_warna,
+      tahunPita: tahun_pita,
+      idNppbkc: nppbkc_id,
+      nppbkc: nppbkc,
+      namaPerusahaan: nama_nppbkc,
+      hje: hje,
+      personalisasi: personal_nppbkc,
+      idGolonganBkc: splitIdJenisProduksi[1],
+      namaGolonganBkc: splitNamaJenisProduksi[1],
+    };
+
+    const response = await requestApi({
+      service: "pita_cukai",
+      method: "post",
+      endpoint: "/pita/perbaikan-jenis",
+      body: payload,
+      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+    });
+
+    if (response) {
       notification.success({ message: "Success", description: "Success" });
       this.props.history.push(`${pathName}/rekam-jenis-pita`);
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
+    console.log("this.state", this.state);
     return (
       <>
-        <Container menuName="Rekam Jenis Pita" contentName="Rekam" hideContentHeader>
+        <Container menuName="Rekam Jenis Pita" contentName="Perbaikan" hideContentHeader>
           {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
@@ -175,120 +310,134 @@ export default class RekamJenisPitaPerbaikan extends Component {
                     </div>
                   </Col>
                 </Row>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Jenis Produksi</FormLabel>
-                      </div>
-                      <Select
-                        id="jenis_produksi"
-                        value={this.state.jenis_produksi_id}
-                        loading={this.state.isJenisProduksiLoading}
-                        onChange={(value, option) =>
-                          this.handleSelectCustomChange("jenis_produksi", value, option)
-                        }
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.list_jenis_produksi.length > 0 &&
-                          this.state.list_jenis_produksi.map((item, index) => (
-                            <Select.Option
-                              key={`jenis-produksi-${index}`}
-                              value={item.idJenisProduksi}
-                            >
-                              {item.namaJenisProduksi}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </div>
-                  </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>HJE</FormLabel>
+                {this.state.nppbkc_id && (
+                  <Row gutter={[16, 16]}>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Jenis Produksi</FormLabel>
+                        </div>
+                        <Select
+                          id="jenis_produksi"
+                          value={this.state.jenis_produksi_id}
+                          loading={this.state.isJenisProduksiLoading}
+                          onChange={(value, option) => {
+                            this.handleSelectCustomChange("jenis_produksi", value, option);
+                          }}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_jenis_produksi.length > 0 &&
+                            this.state.list_jenis_produksi.map((item, index) => (
+                              <Select.Option
+                                key={`jenis-produksi-${index}`}
+                                value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}`}
+                              >
+                                {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
+                              </Select.Option>
+                            ))}
+                        </Select>
                       </div>
-                      <InputNumber
-                        id="hje"
-                        onChange={(value) => this.handleInputNumberChange("hje", value)}
-                        value={this.state.hje}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Isi Per Kemasan</FormLabel>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>HJE</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="hje"
+                          onChange={(value) => this.handleInputNumberChange("hje", value)}
+                          value={this.state.hje}
+                          style={{ width: "100%" }}
+                        />
                       </div>
-                      <InputNumber
-                        id="isi"
-                        onChange={(value) => this.handleInputNumberChange("isi", value)}
-                        value={this.state.isi}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Tarif Cukai</FormLabel>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Isi Per Kemasan</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <InputNumber
+                            id="isi"
+                            onChange={(value) => this.handleInputNumberChange("isi", value)}
+                            value={this.state.isi}
+                            style={{ width: "100%" }}
+                          />
+                          <Button
+                            type="primary"
+                            icon="search"
+                            loading={this.state.isTarifLoading || this.state.isWarnaLoading}
+                            onClick={this.getTarifWarna}
+                            disabled={
+                              !this.state.jenis_produksi_id || !this.state.hje || !this.state.isi
+                            }
+                          />
+                        </div>
                       </div>
-                      <InputNumber
-                        id="tarif"
-                        value={this.state.tarif}
-                        onChange={(value) => this.handleInputNumberChange("tarif", value)}
-                        style={{ width: "100%" }}
-                        disabled
-                      />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Awal Berlaku</FormLabel>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tarif Cukai</FormLabel>
+                        </div>
+                        <InputNumber
+                          id="tarif"
+                          value={this.state.tarif}
+                          onChange={(value) => this.handleInputNumberChange("tarif", value)}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
                       </div>
-                      <DatePicker
-                        id="warna"
-                        format="DD-MM-YYYY"
-                        value={this.state.awal_berlaku}
-                        onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Warna</FormLabel>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Awal Berlaku</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="warna"
+                          format="DD-MM-YYYY"
+                          value={this.state.awal_berlaku}
+                          onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
+                          style={{ width: "100%" }}
+                        />
                       </div>
-                      <Input
-                        id="warna"
-                        value={this.state.warna}
-                        style={{ width: "100%" }}
-                        disabled
-                      />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Tahun Pita</FormLabel>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Warna</FormLabel>
+                        </div>
+                        <Input
+                          id="warna"
+                          value={this.state.warna}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
                       </div>
-                      <Input
-                        id="tahun_pita"
-                        value={this.state.tahun_pita}
-                        style={{ width: "100%" }}
-                        disabled
-                      />
-                    </div>
-                  </Col>
-                </Row>
+                    </Col>
+
+                    <Col span={12}>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tahun Pita</FormLabel>
+                        </div>
+                        <Input
+                          id="tahun_pita"
+                          value={this.state.tahun_pita}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                )}
 
                 <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
                   <Col span={4}>
