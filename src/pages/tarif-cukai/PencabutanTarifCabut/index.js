@@ -187,7 +187,7 @@ export default class PencabutanTarifCabut extends Component {
       nomorPermohonanCabut: nomor_permohonan,
       tanggalPermohonanCabut: tanggal_permohonan,
       kotaPermohonanCabut: kota_name,
-      tanggalSkepPencabutan: tanggal_kep_pencabutan,
+      tanggalSkepCabut: tanggal_kep_pencabutan,
       akhirBerlaku: akhir_berlaku,
       keteranganCabut: keterangan_pencabutan,
     };
