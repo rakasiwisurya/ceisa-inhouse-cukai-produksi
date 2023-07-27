@@ -42,7 +42,7 @@ export default class ModalDaftarHtlRel extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.id !== this.props.id) {
+    if (prevProps.id !== this.props.id && (this.props.id === 2 || this.props.id === 5)) {
       this.getDaftarHtlRel();
     }
   }
@@ -63,6 +63,7 @@ export default class ModalDaftarHtlRel extends Component {
         key: `jenis-htl-rel-${index}`,
         jenis_produksi_id: item.idJenisHtlRel,
         jenis_produksi_code: item.kodeJenisProduksiBkc,
+        jenis_htl_rel_id: item.idJenisHtlRel,
         jenis_htl_rel_code: item.kodeHtlRel,
         jenis_htl_rel_name: item.namaJenisHtlRel,
         jenis_htl_rel_satuan: item.satuan,

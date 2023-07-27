@@ -235,7 +235,7 @@ export default class RekamJenisPitaRekam extends Component {
     });
 
     if (response) {
-      notification.success({ message: "Success", description: "Success" });
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/rekam-jenis-pita`);
     }
   };

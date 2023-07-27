@@ -90,7 +90,7 @@ export default class ModalDaftarJenisPita extends Component {
     const { jenis_produksi_code, hje, isi, awal_berlaku, tarif, warna, tahun_pita } =
       this.state.table;
 
-    const payload = { page: 1 };
+    const payload = { page: this.state.page };
 
     if (jenis_produksi_code) payload.kodeJenisProduksi = jenis_produksi_code;
     if (hje) payload.hje = hje;
@@ -112,7 +112,7 @@ export default class ModalDaftarJenisPita extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `daftar-jenis-pita-${index}`,
         jenis_pita_id: item.idJenisPita,
-        jenis_produksi_id: item.jenisProduksi,
+        jenis_produksi_id: item.idJenisProduksi,
         jenis_produksi_code: item.kodeJenisProduksi,
         golongan_id: item.idGolongan,
         golongan_name: item.namaGolongan,
