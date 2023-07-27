@@ -527,7 +527,6 @@ export default class PenetapanKembali extends Component {
     const timeout = setTimeout(() => {
       this.setState({ isPenetapanLoading: false });
       notification.success({ message: "Success", description: "Success" });
-      this.props.history.push(`${pathName}/rekam-jenis-pita`);
       clearTimeout(timeout);
     }, 2000);
   };
