@@ -77,14 +77,13 @@ export default class PencabutanTarifCabut extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-tarif-cukai-detail",
+      endpoint: "/pita-cukai/browse-detail-pencabutan",
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
 
     if (response) {
-      // const { data } = response.data;
-      const data = response.data.data[0];
+      const { data } = response.data;
 
       this.setState({
         nppbkc_id: data.idNppbkc,
