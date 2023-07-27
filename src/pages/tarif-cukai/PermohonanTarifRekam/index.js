@@ -60,7 +60,6 @@ export default class PermohonanTarifRekam extends Component {
       jenis_htl_rel_ht_id: null,
       jenis_htl_rel_ht_name: null,
       jenis_htl_rel_ht_satuan: null,
-      rel_ht_detail: null,
       isi_ht: null,
       berat_ht: null,
       hje_perkemasan_ht: null,
@@ -99,7 +98,6 @@ export default class PermohonanTarifRekam extends Component {
       preview_gambar_etiket: null,
 
       list_jenis_bkc: [],
-      list_rel_detail: [],
       list_jenis_produksi_mmea: [
         {
           jenis_produksi_mmea_id: "DALAM NEGERI",
@@ -169,53 +167,6 @@ export default class PermohonanTarifRekam extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_produksi_ht_id !== this.state.jenis_produksi_ht_id) {
       this.setState({ hje_persatuan_ht: this.state.hje_perkemasan_ht / this.state.isi_ht });
-    }
-
-    if (prevState.jenis_htl_rel_ht_id !== this.state.jenis_htl_rel_ht_id) {
-      if (this.state.jenis_htl_rel_ht_id === 4) {
-        this.setState({
-          isi_ht: null,
-          rel_ht_detail: null,
-          list_rel_detail: [
-            {
-              rel_detail_code: "CPS",
-              rel_detail_name: "CPS -  CAPSUL",
-            },
-            {
-              rel_detail_code: "BTG",
-              rel_detail_name: "BTG -  BATANG",
-            },
-          ],
-        });
-      }
-
-      if (this.state.jenis_htl_rel_ht_id === 6) {
-        this.setState({
-          isi_ht: null,
-          rel_ht_detail: null,
-          list_rel_detail: [
-            {
-              rel_detail_code: "CTG",
-              rel_detail_name: "CTG -  CARTRIDGE",
-            },
-          ],
-        });
-      }
-    }
-
-    if (
-      prevState.jenis_htl_rel_ht_id !== this.state.jenis_htl_rel_ht_id ||
-      prevState.rel_ht_detail !== this.state.rel_ht_detail
-    ) {
-      if (this.state.jenis_htl_rel_ht_id === 4) {
-        if (this.state.rel_ht_detail === "CPS") {
-          this.setState({ isi_ht: 5 });
-        }
-
-        if (this.state.rel_ht_detail === "BTG") {
-          this.setState({ isi_ht: 20 });
-        }
-      }
     }
   }
 
@@ -329,13 +280,11 @@ export default class PermohonanTarifRekam extends Component {
         jenis_produksi_ht_code: record.jenis_produksi_code,
         golongan_id: record.golongan_id,
         golongan_name: record.golongan_name,
+        isi_ht: record.isi,
+        berat_ht: record.isi_ht,
         hje_perkemasan_ht: record.hje,
         tarif_ht: record.tarif,
       });
-
-      if (record.jenis_produksi_id !== 5) {
-        this.setState({ isi_ht: record.isi });
-      }
     } else {
       this.setState({
         isi_mmea: record.isi,
@@ -836,33 +785,13 @@ export default class PermohonanTarifRekam extends Component {
                       <FormLabel>Isi / kemasan</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
+                      <InputNumber
                         id="isi_ht"
                         value={this.state.isi_ht}
-                        disabled={this.state.rel_ht_detail !== "CTG"}
+                        style={{ width: "100%" }}
+                        disabled
                       />
-                      {this.state.jenis_htl_rel_ht_satuan && (
-                        <div>{this.state.jenis_htl_rel_ht_satuan}</div>
-                      )}
-                      {(this.state.jenis_htl_rel_ht_id === 4 ||
-                        this.state.jenis_htl_rel_ht_id === 6) && (
-                        <Select
-                          id="rel_ht_detail"
-                          value={this.state.rel_ht_detail}
-                          onChange={(value) => this.handleSelectChange("rel_ht_detail", value)}
-                          style={{ width: "100%" }}
-                        >
-                          {this.state.list_rel_detail.length > 0 &&
-                            this.state.list_rel_detail.map((item, index) => (
-                              <Select.Option
-                                key={`rel-detail-${index}`}
-                                value={item.rel_detail_code}
-                              >
-                                {item.rel_detail_name}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      )}
+                      <div>{this.state.jenis_htl_rel_ht_satuan}</div>
                     </div>
                   </Col>
 
@@ -873,15 +802,8 @@ export default class PermohonanTarifRekam extends Component {
                     <InputNumber
                       id="berat_ht"
                       value={this.state.berat_ht}
-                      onChange={(value) => this.handleInputNumberChange("berat_ht", value)}
-                      min={0}
                       style={{ width: "100%" }}
-                      disabled={
-                        (this.state.jenis_produksi_ht_id === 5 &&
-                          this.state.jenis_htl_rel_ht_id === 5) ||
-                        !this.state.jenis_produksi_ht_id ||
-                        !this.state.jenis_htl_rel_ht_id
-                      }
+                      disabled
                     />
                   </Col>
 
@@ -889,21 +811,36 @@ export default class PermohonanTarifRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>HJE per kemasan</FormLabel>
                     </div>
-                    <Input id="hje_perkemasan_ht" value={this.state.hje_perkemasan_ht} disabled />
+                    <InputNumber
+                      id="hje_perkemasan_ht"
+                      value={this.state.hje_perkemasan_ht}
+                      style={{ width: "100%" }}
+                      disabled
+                    />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>HJE / satuan</FormLabel>
                     </div>
-                    <Input id="hje_persatuan_ht" value={this.state.hje_persatuan_ht} disabled />
+                    <InputNumber
+                      id="hje_persatuan_ht"
+                      value={this.state.hje_persatuan_ht}
+                      style={{ width: "100%" }}
+                      disabled
+                    />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tarif Spesifik</FormLabel>
                     </div>
-                    <Input id="tarif_ht" value={this.state.tarif_ht} disabled />
+                    <InputNumber
+                      id="tarif_ht"
+                      value={this.state.tarif_ht}
+                      style={{ width: "100%" }}
+                      disabled
+                    />
                   </Col>
 
                   <Col span={12}>
