@@ -80,7 +80,7 @@ export default class CK4 extends Component {
           key: "tanggal_pemberitahuan",
           render: (text) => 
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
             </div>,
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
         },
@@ -90,7 +90,7 @@ export default class CK4 extends Component {
           key: "tanggal_produksi_awal",
           render: (text) => 
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
             </div>,
           ...this.getColumnSearchProps("tanggal_produksi_awal"),
         },
@@ -100,7 +100,7 @@ export default class CK4 extends Component {
           key: "tanggal_produksi_akhir",
           render: (text) => 
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
             </div>,
           ...this.getColumnSearchProps("tanggal_produksi_akhir"),
         },
