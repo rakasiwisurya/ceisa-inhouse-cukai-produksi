@@ -414,9 +414,9 @@ export default class BACKEA extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table67[dataIndex]}
+          value={this.state.table89[dataIndex]}
           onChange={(e) =>
-            this.setState({ table67: { ...this.state.table67, [dataIndex]: e.target.value } })
+            this.setState({ table89: { ...this.state.table89, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch89(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -453,12 +453,12 @@ export default class BACKEA extends Component {
   });
   handleColumnSearch89 = (confirm) => {
     confirm();
-    this.getBackEa67();
+    this.getBackEa89();
   };
   handleColumnReset89 = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table67: { ...this.state.table67, [dataIndex]: "" } });
-    this.getBackEa67();
+    await this.setState({ table89: { ...this.state.table89, [dataIndex]: "" } });
+    this.getBackEa89();
   };
 
   handleEdit89 = (id) => {

@@ -357,7 +357,7 @@ export default class PermohonanTarifRekam extends Component {
       kadar_mmea,
       tarif_cukai_per_liter,
       tarif_cukai_per_kemasan,
-      personal,
+      // personal,
       seri_pita,
 
       nomor_surat_lisensi,
@@ -451,7 +451,7 @@ export default class PermohonanTarifRekam extends Component {
     );
     formData.set("kotaPermohonan", lokasi_perekaman_name);
     formData.set("tanggalSkep", moment(tanggal_kep, "DD-MM-YYYY").format("YYYY-MM-DD"));
-    formData.set("awalBerlaku", moment(awal_berlaku).format("YYYY-MM-DD"));
+    formData.set("awalBerlaku", moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD"));
 
     formData.set("idNppbkc", nppbkc_id);
     formData.set("nppbkc", nppbkc);
@@ -460,12 +460,12 @@ export default class PermohonanTarifRekam extends Component {
     formData.set("alamatPerusahaan", alamat_nppbkc);
 
     if (jenis_bkc_id === 3) {
-      formData.set(
-        "idJenisPitaCukai",
-        `${[personal, isi_ht, hje_perkemasan_ht, asal_produk_ht_id, seri_pita, tarif_ht]
-          .filter((str) => Boolean(str) === true)
-          .join(";")}`
-      );
+      // formData.set(
+      //   "idJenisPitaCukai",
+      //   `${[personal, isi_ht, hje_perkemasan_ht, asal_produk_ht_id, seri_pita, tarif_ht]
+      //     .filter((str) => Boolean(str) === true)
+      //     .join(";")}`
+      // );
 
       formData.set("seriPita", seri_pita);
       formData.set("idMerk", merk_ht_id);
