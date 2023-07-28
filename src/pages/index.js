@@ -53,6 +53,7 @@ import BACKEADetail89 from "./buku-rekening-cukai/BACKEADetail89";
 import BACKMMEARekam89 from "./buku-rekening-cukai/BACKMMEARekam89";
 import BACKMMEAPerbaikan89 from "./buku-rekening-cukai/BACKMMEAPerbaikan89";
 import BACKMMEADetail89 from "./buku-rekening-cukai/BACKMMEADetail89";
+import PenelitianCK4 from "./laporan-produksi-bkc/PenelitianCK4";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -310,6 +311,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/back-mmea/detail-8-9/:id"}
         render={(props) => <BACKMMEADetail89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/penelitian-ck4"}
+        render={(props) => <PenelitianCK4 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route component={NotFound} />
