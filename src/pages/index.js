@@ -44,6 +44,7 @@ import BRCK2Detil from "./buku-rekening-cukai/BRCK2Rekam/Detil";
 import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Rekam/Perbaikan";
 import BACKEA from "./buku-rekening-cukai/BACKEA";
 import BACKMMEA from "./buku-rekening-cukai/BACKMMEA";
+import PenelitianCK4 from "./laporan-produksi-bkc/PenelitianCK4";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -256,6 +257,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/back-mmea"}
         render={(props) => <BACKMMEA {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/penelitian-ck4"}
+        render={(props) => <PenelitianCK4 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route component={NotFound} />
