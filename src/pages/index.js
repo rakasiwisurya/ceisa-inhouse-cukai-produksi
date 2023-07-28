@@ -8,7 +8,7 @@ import PencabutanTarif from "./tarif-cukai/PencabutanTarif";
 import PenetapanKembali from "./tarif-cukai/PenetapanKembali";
 import RekamJenisPita from "./rekam-jenis-pita/RekamJenisPita";
 import CK4 from "./laporan-produksi-bkc/CK4";
-import CK4BelumLapor from "./laporan-produksi-bkc/CKBelumLapor";
+import CK4BelumLapor from "./laporan-produksi-bkc/CK4BelumLapor";
 import SPL from "./laporan-produksi-bkc/SPL";
 import BRCK1 from "./buku-rekening-cukai/BRCK1";
 import BRCK2 from "./buku-rekening-cukai/BRCK2";
@@ -44,6 +44,15 @@ import BRCK2Detil from "./buku-rekening-cukai/BRCK2Rekam/Detil";
 import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Rekam/Perbaikan";
 import BACKEA from "./buku-rekening-cukai/BACKEA";
 import BACKMMEA from "./buku-rekening-cukai/BACKMMEA";
+import BACKEARekam67 from "./buku-rekening-cukai/BACKEARekam67";
+import BACKEARekam89 from "./buku-rekening-cukai/BACKEARekam89";
+import BACKEAPerbaikan67 from "./buku-rekening-cukai/BACKEAPerbaikan67";
+import BACKEAPerbaikan89 from "./buku-rekening-cukai/BACKEAPerbaikan89";
+import BACKEADetail67 from "./buku-rekening-cukai/BACKEADetail67";
+import BACKEADetail89 from "./buku-rekening-cukai/BACKEADetail89";
+import BACKMMEARekam89 from "./buku-rekening-cukai/BACKMMEARekam89";
+import BACKMMEAPerbaikan89 from "./buku-rekening-cukai/BACKMMEAPerbaikan89";
+import BACKMMEADetail89 from "./buku-rekening-cukai/BACKMMEADetail89";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -254,8 +263,53 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/back-ea/rekam-6-7"}
+        render={(props) => <BACKEARekam67 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-ea/perbaikan-6-7/:id"}
+        render={(props) => <BACKEAPerbaikan67 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-ea/detail-6-7/:id"}
+        render={(props) => <BACKEADetail67 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-ea/rekam-8-9"}
+        render={(props) => <BACKEARekam89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-ea/perbaikan-8-9/:id"}
+        render={(props) => <BACKEAPerbaikan89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-ea/detail-8-9/:id"}
+        render={(props) => <BACKEADetail89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/back-mmea"}
         render={(props) => <BACKMMEA {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-mmea/rekam-8-9"}
+        render={(props) => <BACKMMEARekam89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-mmea/perbaikan-8-9/:id"}
+        render={(props) => <BACKMMEAPerbaikan89 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/back-mmea/detail-8-9/:id"}
+        render={(props) => <BACKMMEADetail89 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route component={NotFound} />
