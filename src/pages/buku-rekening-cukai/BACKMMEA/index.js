@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
-// import { requestApi } from "utils/requestApi";
+import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
@@ -127,39 +127,56 @@ export default class BACKMMEA extends Component {
   }
 
   getBackMmea = async () => {
-    this.setState({ isBackMmeaLoading: true });
-    const timeout = setTimeout(() => {
+    const {
+      kppbc,
+      nama_perusahaan,
+      jenis_back,
+      nomor_back,
+      tanggal_back,
+      jenis_ea,
+      jumlah,
+      keterangan,
+    } = this.state.table;
+    const payload = { page: this.state.page };
+
+    if (kppbc) payload.namaKantor = kppbc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (jenis_back) payload.jenisBackMmea = jenis_back;
+    if (nomor_back) payload.nomorBackMmea = nomor_back;
+    if (tanggal_back)
+      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jenis_ea) payload.jenisBkc = jenis_ea;
+    if (jumlah) payload.jumlahSetelah = jumlah;
+    if (keterangan) payload.keterangan = keterangan;
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-mmea/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isBackMmeaLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `back-mmea-${index}`,
+        back_mmea_id: item.idBackMmeaHeader,
+        kppbc: item.namaKantor,
+        nama_perusahaan: item.namaPerusahaan,
+        jenis_back: item.jenisBackMmea,
+        nomor_back: item.nomorBackMmea,
+        tanggal_back: item.tanggalBackMmea,
+        jenis_ea: item.jenisBkc,
+        jumlah: item.jumlahSetelah,
+        keterangan: item.keterangan,
+      }));
+
       this.setState({
-        dataSource: [
-          {
-            key: "1",
-            back_mmea_id: "1",
-            kppbc: "kppbc1",
-            nama_perusahaan: "nama_perusahaan1",
-            jenis_back: "jenis_back1",
-            nomor_back: "nomor_back1",
-            tanggal_back: new Date(),
-            jenis_ea: "jenis_ea1",
-            jumlah: "jumlah1",
-            keterangan: "keterangan1",
-          },
-          {
-            key: "2",
-            back_mmea_id: "2",
-            kppbc: "kppbc2",
-            nama_perusahaan: "nama_perusahaan2",
-            jenis_back: "jenis_back2",
-            nomor_back: "nomor_back2",
-            tanggal_back: new Date(),
-            jenis_ea: "jenis_ea2",
-            jumlah: "jumlah2",
-            keterangan: "keterangan2",
-          },
-        ],
+        dataSource: newData,
+        page: response.data.data.currentPage,
+        totalData: response.data.data.totalData,
       });
-      this.setState({ isBackMmeaLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({

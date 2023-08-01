@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
-// import { requestApi } from "utils/requestApi";
+import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
-import { requestApi } from "utils/requestApi";
 
 export default class BACKEA extends Component {
   constructor(props) {
