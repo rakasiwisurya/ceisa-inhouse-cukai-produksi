@@ -1,25 +1,33 @@
-import { Button, Icon, Input, Table, message } from "antd";
+import { Button, Icon, Input, Table } from "antd";
 import { withRouter } from "react-router-dom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import React, { Component } from "react";
-import { api } from "configs/api";
+import { requestApi } from "utils/requestApi";
 class BRCK1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Browse dan Perbaikan BRCK-1",
-      kppbc: "",
-      perusahaan: "",
-      warna: "",
-      tanggal_awal: "",
-      tanggal_akhir: "",
-      saldo_awal: "",
-      saldo_buku: "",
-      saldo_penutupan_brck: "",
-      selisih: "",
-      potongan: "",
-      kekurangan: "",
+
+      isLoadingBrck1: true,
+
+      page: 1,
+      totalData: 0,
+
+      table: {
+        kppbc: "",
+        nama_perusahaan: "",
+        warna: "",
+        tanggal_awal: "",
+        tanggal_akhir: "",
+        saldo_awal: "",
+        saldo_buku: "",
+        saldo_penutupan_brck: "",
+        selisih: "",
+        potongan: "",
+        kekurangan: "",
+      },
       columns: [
         {
           key: "aksi",
@@ -30,7 +38,7 @@ class BRCK1 extends Component {
               <Button
                 type="primary"
                 icon="eye"
-                onClick={() => this.handleDetail()}
+                onClick={() => this.handleDetail(record.kppbc)}
                 // onClick={() => this.handleEditRincian(record, index)}
               />
               <Button
@@ -40,7 +48,7 @@ class BRCK1 extends Component {
                   borderColor: "#F79327",
                 }}
                 icon="edit"
-                onClick={() => this.handleEdit()}
+                onClick={() => this.handleEdit(record.kppbc)}
               />
             </div>
           ),
@@ -54,10 +62,10 @@ class BRCK1 extends Component {
         },
         {
           title: "Perusahaan",
-          dataIndex: "namaPerusahaan",
-          key: "namaPerusahaan",
+          dataIndex: "nama_perusahaan",
+          key: "nama_perusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("namaPerusahaan"),
+          ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Warna",
@@ -68,38 +76,38 @@ class BRCK1 extends Component {
         },
         {
           title: "Tanggal Awal",
-          dataIndex: "tanggalAwal",
-          key: "tanggalAwal",
+          dataIndex: "tanggal_awal",
+          key: "tanggal_awal",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggalAwal"),
+          ...this.getColumnSearchProps("tanggal_awal"),
         },
         {
           title: "Tanggal Akhir",
-          dataIndex: "tanggalAkhir",
-          key: "tanggalAkhir",
+          dataIndex: "tanggal_akhir",
+          key: "tanggal_akhir",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggalAkhir"),
+          ...this.getColumnSearchProps("tanggal_akhir"),
         },
         {
           title: "Saldo Awal",
-          dataIndex: "saldoAwal",
-          key: "saldoAwal",
+          dataIndex: "saldo_awal",
+          key: "saldo_awal",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldoAwal"),
+          ...this.getColumnSearchProps("saldo_awal"),
         },
         {
           title: "Saldo Buku",
-          dataIndex: "saldoBuku",
-          key: "saldoBuku",
+          dataIndex: "saldo_buku",
+          key: "saldo_buku",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldoBuku"),
+          ...this.getColumnSearchProps("saldo_buku"),
         },
         {
           title: "Saldo Penutupan BRCK",
-          dataIndex: "saldoPenutupanBrck",
-          key: "saldoPenutupanBrck",
+          dataIndex: "saldo_penutupan_brck",
+          key: "saldo_penutupan_brck",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("saldoPenutupanBrck"),
+          ...this.getColumnSearchProps("saldo_penutupan_brck"),
         },
         {
           title: "Selisih",
@@ -195,24 +203,37 @@ class BRCK1 extends Component {
   };
 
   handleGetBrck1 = async () => {
-    this.setState({ isLoading: true });
-    try {
-      const response = await api.produksi.json.get("/brck/browse-brck1", {
-        params: {
-          // pageSize: this.state.limitBrckPage,
-          pageNumber: this.state.currentBrckPage,
-        },
-      });
-      console.log(response);
-      this.setState({ dataSource: response.data.data.listData });
-      this.setState({ isLoading: false });
-      console.log(this.state.dataSource);
-      return;
-    } catch (error) {
-      this.setState({ error: "An error occurred" });
-      message.error("Tidak bisa memuat data");
-      this.setState({ isLoading: false });
-      return;
+
+    const payload = { pageNumber: this.state.page };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/brck/browse-brck1",
+      params: payload,
+      setLoading: (bool) => this.setState({ isLoadingBrck1: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        // idCk4: item.idCk4,
+        key: `brck1-${index}`,
+        kppbc: item.kppbc,
+        nama_perusahaan: item.namaPerusahaan,
+        warna: item.warna,
+        tanggal_awal: item.tanggalAwal,
+        tanggal_akhir: item.tanggalAkhir,
+        saldo_awal: item.saldoAwal,
+        saldo_buku: item.saldoBuku,
+        saldo_penutupan_brck: item.saldoPenutupanBrck,
+        selisih: item.selisih,
+        potongan: item.potongan,
+        kekurangan: item.kekurangan,
+      }));
+
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
     }
   };
 
@@ -220,19 +241,23 @@ class BRCK1 extends Component {
     this.handleGetBrck1();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.handleGetBrck1();
+    }
+  }
+
   handleSelectData = (dataSource, selectedData) => {
     this.setState({ selectedData: dataSource});
     console.log("selected",selectedData)
   };
 
-  handleDetail = () => {
-    const { selectedData } = this.state;
-    this.props.history.push(`${pathName}/brck-1-Detail`, {selectedData});
+  handleDetail = (id) => {
+    this.props.history.push(`${pathName}/brck-1-Detail/${id}`);
   };
 
-  handleEdit = () => {
-    const { selectedData } = this.state;
-    this.props.history.push(`${pathName}/brck-1-Perbaikan`, { selectedData });
+  handleEdit = (id) => {
+    this.props.history.push(`${pathName}/brck-1-Perbaikan/${id}`);
   };
 
   render() {
@@ -278,11 +303,13 @@ class BRCK1 extends Component {
             id="kt_content"
           >
             <div style={{ marginTop: 50, marginBottom: 50 }}>
-              <Table
+            <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
+                loading={this.state.isPenelitianCk4Loading}
+                onChange={(page) => this.setState({ page: page.current })}
+                pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
-                loading={this.state.isLoading}
               />
             </div>
           </div>
