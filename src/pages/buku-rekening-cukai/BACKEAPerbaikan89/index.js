@@ -480,15 +480,36 @@ export default class BACKEAPerbaikan89 extends Component {
                     onChange={(page) => this.setState({ page: page.current })}
                     pagination={{ current: this.state.page }}
                     footer={() => (
-                      <div style={{ width: "100%", display: "flex" }}>
-                        <div style={{ flex: 1 }}>Total</div>
-                        <div style={{ width: 100, textAlign: "center" }}>
-                          {sumArrayOfObject(
-                            this.state.dataSource,
-                            "jumlah_barang_kena_cukai_rusak"
-                          )}
-                        </div>
-                      </div>
+                      <Table
+                        style={{ margin: -16 }}
+                        showHeader={false}
+                        pagination={false}
+                        columns={[
+                          {
+                            key: "title",
+                            title: "Title",
+                            dataIndex: "title",
+                          },
+                          {
+                            key: "total_barang_kena_cukai_rusak",
+                            title: "Total Barang Kena Cukai Rusak",
+                            dataIndex: "total_barang_kena_cukai_rusak",
+                            width: 120,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                        ]}
+                        dataSource={[
+                          {
+                            key: "1",
+                            title: "Total",
+                            total_barang_kena_cukai_rusak: sumArrayOfObject(
+                              this.state.dataSource,
+                              "jumlah_barang_kena_cukai_rusak"
+                            ),
+                          },
+                        ]}
+                      />
                     )}
                   />
                 </div>
