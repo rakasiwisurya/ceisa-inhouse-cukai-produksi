@@ -730,7 +730,8 @@ export default class BRCK1Rekam extends Component {
                   />
                 </div>
 
-                <div
+                { this.state.saldo_awal &&
+                  <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -976,7 +977,7 @@ export default class BRCK1Rekam extends Component {
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
-                </div>
+                </div>}
 
                 <div
                   style={{
