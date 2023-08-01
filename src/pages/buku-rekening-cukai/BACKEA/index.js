@@ -6,6 +6,7 @@ import { pathName } from "configs/constants";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
+import { requestApi } from "utils/requestApi";
 
 export default class BACKEA extends Component {
   constructor(props) {
@@ -269,81 +270,120 @@ export default class BACKEA extends Component {
   }
 
   getBackEa67 = async () => {
-    this.setState({ isBackEa67Loading: true });
-    const timeout = setTimeout(() => {
+    const {
+      kppbc,
+      nama_perusahaan,
+      jenis_back,
+      nomor_back,
+      tanggal_back,
+      jumlah_ea_sebelum_dicampur,
+      jumlah_bahan_pencampur,
+      satuan_bahan_pencampur,
+      jenis_bahan_pencampur,
+      jumlah_hasil_akhir_pencampuran,
+      jenis_hasil_akhir_pencampuran,
+    } = this.state.table67;
+
+    const payload = { page: this.state.page67 };
+
+    if (kppbc) payload.namaKantor = kppbc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (jenis_back) payload.jenisBackEa = jenis_back;
+    if (nomor_back) payload.nomorBackEa = nomor_back;
+    if (tanggal_back)
+      payload.tanggalBackEa = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jumlah_ea_sebelum_dicampur) payload.jumlah = jumlah_ea_sebelum_dicampur;
+    if (jumlah_bahan_pencampur) payload.jumlahPencampur = jumlah_bahan_pencampur;
+    if (satuan_bahan_pencampur) payload.kodeSatuanPencampur = satuan_bahan_pencampur;
+    if (jenis_bahan_pencampur) payload.jenisBahanPencampur = jenis_bahan_pencampur;
+    if (jumlah_hasil_akhir_pencampuran) payload.jumlahSetelah = jumlah_hasil_akhir_pencampuran;
+    if (jenis_hasil_akhir_pencampuran) payload.hasilAkhir = jenis_hasil_akhir_pencampuran;
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-6-7/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isBackEa67Loading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `back-6-7-${index}`,
+        back_ea_67_id: item.idBackEaHeader,
+        kppbc: item.namaKantor,
+        nama_perusahaan: item.namaPerusahaan,
+        jenis_back: item.jenisBackEa,
+        nomor_back: item.nomorBackEa,
+        tanggal_back: item.tanggalBackEa,
+        jumlah_ea_sebelum_dicampur: item.jumlah,
+        jumlah_bahan_pencampur: item.jumlahPencampur,
+        satuan_bahan_pencampur: item.kodeSatuanPencampur,
+        jenis_bahan_pencampur: item.jenisBahanPencampur,
+        jumlah_hasil_akhir_pencampuran: item.jumlahSetelah,
+        jenis_hasil_akhir_pencampuran: item.hasilAkhir,
+      }));
+
       this.setState({
-        dataSource67: [
-          {
-            key: "1",
-            back_ea_id: "1",
-            kppbc: "kppbc1",
-            nama_perusahaan: "nama_perusahaan1",
-            jenis_back: "jenis_back1",
-            nomor_back: "nomor_back1",
-            tanggal_back: new Date(),
-            jumlah_ea_sebelum_dicampur: "jumlah_ea_sebelum_dicampur1",
-            jumlah_bahan_pencampur: "jumlah_bahan_pencampur1",
-            satuan_bahan_pencampur: "satuan_bahan_pencampur1",
-            jenis_bahan_pencampur: "jenis_bahan_pencampur1",
-            jumlah_hasil_akhir_pencampuran: "jumlah_hasil_akhir_pencampuran1",
-            jenis_hasil_akhir_pencampuran: "jenis_hasil_akhir_pencampuran1",
-          },
-          {
-            key: "2",
-            back_ea_id: "2",
-            kppbc: "kppbc2",
-            nama_perusahaan: "nama_perusahaan2",
-            jenis_back: "jenis_back2",
-            nomor_back: "nomor_back2",
-            tanggal_back: new Date(),
-            jumlah_ea_sebelum_dicampur: "jumlah_ea_sebelum_dicampur2",
-            jumlah_bahan_pencampur: "jumlah_bahan_pencampur2",
-            satuan_bahan_pencampur: "satuan_bahan_pencampur2",
-            jenis_bahan_pencampur: "jenis_bahan_pencampur2",
-            jumlah_hasil_akhir_pencampuran: "jumlah_hasil_akhir_pencampuran2",
-            jenis_hasil_akhir_pencampuran: "jenis_hasil_akhir_pencampuran2",
-          },
-        ],
+        dataSource67: newData,
+        page67: response.data.data.currentPage,
+        totalData67: response.data.data.totalData,
       });
-      this.setState({ isBackEa67Loading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getBackEa89 = async () => {
-    this.setState({ isBackEa89Loading: true });
-    const timeout = setTimeout(() => {
+    const {
+      kppbc,
+      nama_perusahaan,
+      jenis_back,
+      nomor_back,
+      tanggal_back,
+      jenis_ea,
+      jumlah,
+      keterangan,
+    } = this.state.table89;
+
+    const payload = { page: this.state.page89 };
+
+    if (kppbc) payload.namaKantor = kppbc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (jenis_back) payload.jenisBackMmea = jenis_back;
+    if (nomor_back) payload.nomorBackMmea = nomor_back;
+    if (tanggal_back)
+      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jenis_ea) payload.jenisBkc = jenis_ea;
+    if (jumlah) payload.jumlahSetelah = jumlah;
+    if (keterangan) payload.keterangan = keterangan;
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-8-9/browse",
+      params: payload,
+      setLoading: (bool) => this.setState({ isBackEa89Loading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `back-8-9-${index}`,
+        back_ea_89_id: item.idBackEaHeader,
+        kppbc: item.namaKantor,
+        nama_perusahaan: item.namaPerusahaan,
+        jenis_back: item.jenisBackMmea,
+        nomor_back: item.nomorBackMmea,
+        tanggal_back: item.tanggalBackMmea,
+        jenis_ea: item.jenisBkc,
+        jumlah: item.jumlahSetelah,
+        keterangan: item.keterangan,
+      }));
+
       this.setState({
-        dataSource89: [
-          {
-            key: "1",
-            back_ea_id: "1",
-            kppbc: "kppbc1",
-            nama_perusahaan: "nama_perusahaan1",
-            jenis_back: "jenis_back1",
-            nomor_back: "nomor_back1",
-            tanggal_back: new Date(),
-            jenis_ea: "jenis_ea1",
-            jumlah: "jumlah1",
-            keterangan: "keterangan1",
-          },
-          {
-            key: "2",
-            back_ea_id: "2",
-            kppbc: "kppbc2",
-            nama_perusahaan: "nama_perusahaan2",
-            jenis_back: "jenis_back2",
-            nomor_back: "nomor_back2",
-            tanggal_back: new Date(),
-            jenis_ea: "jenis_ea2",
-            jumlah: "jumlah2",
-            keterangan: "keterangan2",
-          },
-        ],
+        dataSource89: newData,
+        page89: response.data.data.currentPage,
+        totalData89: response.data.data.totalData,
       });
-      this.setState({ isBackEa89Loading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps67 = (dataIndex, inputType) => ({
