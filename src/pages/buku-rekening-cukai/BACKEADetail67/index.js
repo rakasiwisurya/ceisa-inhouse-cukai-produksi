@@ -11,7 +11,7 @@ export default class BACKEADetail67 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Perekaman Berita Acara Cukai (BACK)",
+      subtitle1: "Detail Berita Acara Cukai (BACK)",
       subtitle2: "Rincian",
 
       isDetailLoading: true,
@@ -237,7 +237,7 @@ export default class BACKEADetail67 extends Component {
       <>
         <Container
           menuName="Buku Rekening Cukai"
-          contentName="BACK EA 6 & 7 Rekam"
+          contentName="BACK EA 6 & 7 Detail"
           hideContentHeader
         >
           {this.state.isDetailLoading ? (

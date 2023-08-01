@@ -593,16 +593,16 @@ export default class BACKEAPerbaikan67 extends Component {
             </Row>
 
             <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={16}>
+              <Col span={8} offset={8}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     {this.state.isEditRincian ? (
                       <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
-                        Ubah Rincian
+                        Ubah
                       </ButtonCustom>
                     ) : (
                       <Button type="primary" block onClick={this.handleSimpanRincian}>
-                        Simpan Rincian
+                        Simpan
                       </Button>
                     )}
                   </Col>
