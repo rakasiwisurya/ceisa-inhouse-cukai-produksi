@@ -283,7 +283,6 @@ export default class RekamJenisPitaPerbaikan extends Component {
   };
 
   render() {
-    console.log("this.state", this.state);
     return (
       <>
         <Container menuName="Rekam Jenis Pita" contentName="Perbaikan" hideContentHeader>
@@ -303,6 +302,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       <Button
                         type="primary"
                         onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                        disabled
                       >
                         Cari
                       </Button>

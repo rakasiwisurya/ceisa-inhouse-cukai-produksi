@@ -21,26 +21,26 @@ export default class PenetapanKembali extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarNppbkcVisible: false,
 
-      kota_id: "",
-      kota_name: "",
+      kota_id: null,
+      kota_name: null,
       tanggal_skep: null,
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
 
-      jenis_produksi_id: "",
-      jenis_produksi_name: "",
+      jenis_produksi_id: null,
+      jenis_produksi_name: null,
       jenis_penetapan: "PENETAPAN KEMBALI",
 
       list_kota: [],
       list_jenis_produksi: [],
 
-      searchTextTop: "",
-      searchedColumnTop: "",
+      searchTextTop: null,
+      searchedColumnTop: null,
       pageTop: 1,
 
-      searchTextBottom: "",
-      searchedColumnBottom: "",
+      searchTextBottom: null,
+      searchedColumnBottom: null,
       pageBottom: 1,
 
       dataSourceTop: [],
@@ -636,7 +636,7 @@ export default class PenetapanKembali extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     <ButtonCustom
-                      variant="success"
+                      variant="danger"
                       onClick={this.handleToTableTop}
                       icon="arrow-up"
                       block
@@ -648,7 +648,7 @@ export default class PenetapanKembali extends Component {
                   </Col>
                   <Col span={12}>
                     <ButtonCustom
-                      variant="danger"
+                      variant="success"
                       onClick={this.handleToTableBottom}
                       icon="arrow-down"
                       block
