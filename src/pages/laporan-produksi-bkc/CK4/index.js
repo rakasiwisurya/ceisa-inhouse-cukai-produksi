@@ -78,30 +78,33 @@ export default class CK4 extends Component {
           title: "Tanggal Pemberitahuan",
           dataIndex: "tanggal_pemberitahuan",
           key: "tanggal_pemberitahuan",
-          render: (text) => 
+          render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
-            </div>,
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
         },
         {
           title: "Tanggal Produksi Awal",
           dataIndex: "tanggal_produksi_awal",
           key: "tanggal_produksi_awal",
-          render: (text) => 
+          render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
-            </div>,
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tanggal_produksi_awal"),
         },
         {
           title: "Tanggal Produksi Akhir",
           dataIndex: "tanggal_produksi_akhir",
           key: "tanggal_produksi_akhir",
-          render: (text) => 
+          render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text === "null" ? "-" : moment(text).format("DD-MM-YYYY")}
-            </div>,
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tanggal_produksi_akhir"),
         },
         {
@@ -161,17 +164,22 @@ export default class CK4 extends Component {
     } = this.state.table;
 
     const payload = { page: this.state.page };
-    // const payload = { pageNumber: this.state.page, pageSize: 10 };
 
     if (kppbc) payload.kppbc = kppbc;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (tanggal_pemberitahuan)
-      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan).format("YYYY-MM-DD");
+      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (tanggal_produksi_awal)
-      payload.tanggalProduksiAwal = moment(tanggal_produksi_awal).format("YYYY-MM-DD");
+      payload.tanggalProduksiAwal = moment(tanggal_produksi_awal, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (tanggal_produksi_akhir)
-      payload.tanggalProduksiAkhir = moment(tanggal_produksi_akhir).format("YYYY-MM-DD");
+      payload.tanggalProduksiAkhir = moment(tanggal_produksi_akhir, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
     if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
     if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
@@ -187,8 +195,8 @@ export default class CK4 extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
-        idCk4: item.idCk4,
         key: `ck4-${index}`,
+        idCk4: item.idCk4,
         kppbc: item.kppbc,
         nppbkc: item.nppbkc,
         jenisBkc: item.jenisBkc,
@@ -201,7 +209,7 @@ export default class CK4 extends Component {
         jumlah_produksi_gram: item.jumlahProduksiGram,
         status: item.status,
       }));
-      // console.log(newData)
+
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
       this.setState({ dataSource: newData, page, totalData });
@@ -263,7 +271,7 @@ export default class CK4 extends Component {
   };
 
   handleDetail = (id, jenisBkc) => {
-    console.log(jenisBkc)
+    console.log(jenisBkc);
     switch (true) {
       case jenisBkc === "EA":
         this.props.history.push(`${pathName}/ck4-ea-detail/${id}`);
