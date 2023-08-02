@@ -17,6 +17,8 @@ import Header from "components/Header";
 import { pathName } from "configs/constants";
 import React, { Component } from "react";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { requestApi } from "utils/requestApi";
+import moment from "moment";
 
 export default class BACKEARekam67 extends Component {
   constructor(props) {
@@ -370,13 +372,38 @@ export default class BACKEARekam67 extends Component {
     });
   };
   handleRekam = async () => {
-    this.setState({ isRekamLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+      this.state;
+
+    const payload = {
+      idNppbkc: nppbkc_id,
+      jenisBackEa: jenis_back,
+      namaPerusahaan: nama_nppbkc,
+      nomorBackEa: nomor_back,
+      nppbkc: nppbkc,
+      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details: dataSource.map((item) => ({
+        hasilAkhir: item.hasil_akhir,
+        jenisBahanPencampur: item.jenis_bahan,
+        jumlah: item.jumlah_ea_yang_akan_dicampur,
+        jumlahPencampur: item.jumlah_bahan_pencampur,
+        jumlahSetelah: item.jumlah_setelah_dicampur,
+        kodeSatuanPencampur: item.satuan,
+      })),
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-ea-6-7/rekam",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/back-ea`);
-      this.setState({ isRekamLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
