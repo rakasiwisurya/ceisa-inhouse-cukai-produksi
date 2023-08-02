@@ -1,13 +1,4 @@
-import {
-  Button,
-  DatePicker,
-  Icon,
-  Input,
-  InputNumber,
-  Select,
-  Table,
-  message,
-} from "antd";
+import { Button, DatePicker, Icon, Input, InputNumber, Select, Table, message } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import React, { Component } from "react";
@@ -26,7 +17,7 @@ export default class BRCK1Detil extends Component {
       namaPerusahaan: "",
       periode_awal: "",
       periode_akhir: "",
-     
+
       totalJumlahSaldo: "",
       totalJumlahTransaksiDebit: "",
       totalSelisih: "",
@@ -43,7 +34,7 @@ export default class BRCK1Detil extends Component {
       keteranaganSelisihLebih: "",
       keteranaganBatasLebih: "",
 
-      idNppbkc:"",
+      idNppbkc: "",
       hasil_pencacahan_back5: "",
       saldo_awal: 5000,
       no_back5: "",
@@ -74,27 +65,21 @@ export default class BRCK1Detil extends Component {
               key: "jenisDokumen",
               title: "JENIS",
               dataIndex: "jenisDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("jenisDokumen"),
             },
             {
               key: "nomorDokumen",
               title: "NOMOR",
               dataIndex: "nomorDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("nomorDokumen"),
             },
             {
               key: "tanggalDokumen",
               title: "TANGGAL",
               dataIndex: "tanggalDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("tanggalDokumen"),
             },
           ],
@@ -137,9 +122,7 @@ export default class BRCK1Detil extends Component {
               dataIndex: "debitTransaksi",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
               key: "kreditTransaksi",
@@ -147,9 +130,7 @@ export default class BRCK1Detil extends Component {
               dataIndex: "kreditTransaksi",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
           ],
         },
@@ -175,12 +156,7 @@ export default class BRCK1Detil extends Component {
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -188,19 +164,13 @@ export default class BRCK1Detil extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -360,101 +330,106 @@ export default class BRCK1Detil extends Component {
   };
 
   totalKeseluruhan = () => {
-		const { dataSource } = this.state;
+    const { dataSource } = this.state;
 
-		const totalJumlahTransaksiDebit = dataSource.reduce((acc, item) => acc + parseInt(item.debitTransaksi, 10), 0);
-		const totalJumlahTransaksiKredit = dataSource.reduce((acc, item) => acc + parseInt(item.kreditTransaksi, 10), 0);
+    const totalJumlahTransaksiDebit = dataSource.reduce(
+      (acc, item) => acc + parseInt(item.debitTransaksi, 10),
+      0
+    );
+    const totalJumlahTransaksiKredit = dataSource.reduce(
+      (acc, item) => acc + parseInt(item.kreditTransaksi, 10),
+      0
+    );
     const totalJumlahSaldo = dataSource.reduce((acc, item) => acc + parseInt(item.saldo, 10), 0);
 
-		this.setState({
-			totalJumlahTransaksiDebit,
+    this.setState({
+      totalJumlahTransaksiDebit,
       totalJumlahTransaksiKredit,
       totalJumlahSaldo,
-		});
-	};
+    });
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource !== this.state.dataSource) {
       this.totalKeseluruhan();
     }
-  //  else if (
-  //   prevState.dataSource !== this.state.dataSource || prevState.hasil_pencacahan_back5 !== this.state.hasil_pencacahan_back5 ||
-  //     prevState.totalJumlahSaldo !== this.state.totalJumlahSaldo ||
-  //     prevState.saldo_awal !== this.state.saldo_awal ||
-  //     prevState.totalJumlahTransaksiDebit !== this.state.totalJumlahTransaksiDebit
-  //   ) {
-  //     const hasil_pencacahan_back5 = parseInt(this.state.hasil_pencacahan_back5);
-  //     const totalJumlahSaldo = parseInt(this.state.totalJumlahSaldo);
-  //     const saldo_awal = parseInt(this.state.saldo_awal);
-  //     const totalJumlahTransaksiDebit = parseInt(
-  //       this.state.totalJumlahTransaksiDebit
-  //     );
-  
-  //     let updateSaldo = totalJumlahSaldo;
-  //     if (
-  //       !isNaN(totalJumlahSaldo) &&
-  //       !isNaN(saldo_awal) &&
-  //       !isNaN(totalJumlahTransaksiDebit)
-  //     ) {
-  //       updateSaldo += saldo_awal;
-  //     }
-  
-  //     let totalSelisih = 0;
-  //     let totalSelisihLebih = 0;
-  
-  //     if (!isNaN(hasil_pencacahan_back5) && !isNaN(updateSaldo)) {
-  //       totalSelisih = updateSaldo - hasil_pencacahan_back5;
-  //       totalSelisihLebih = hasil_pencacahan_back5 - updateSaldo;
-  //     }
-  
-  //     const totalPotongan = 0.005 * (totalJumlahTransaksiDebit + saldo_awal);
-  //     const totalBatasLebih = 0.01 * updateSaldo;
-  //     const totalKekurangan = totalSelisih - totalPotongan;
-  //     const totalBatasKelonggaran = 3 * totalPotongan;
-  
-  //     let ketentuan = "";
-  //     if (totalKekurangan > totalBatasKelonggaran) {
-  //       ketentuan =
-  //         "Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-  //     } else if (totalKekurangan < totalBatasKelonggaran) {
-  //       ketentuan =
-  //         "Jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-  //     } else if (totalSelisih < totalBatasKelonggaran) {
-  //       ketentuan =
-  //         "Jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-  //     } else if (totalSelisih > totalBatasKelonggaran) {
-  //       ketentuan =
-  //         "Jumlah kelebihan BKC lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-  //     }
-  
-  //     const keteranganSelisih = `${updateSaldo}-${hasil_pencacahan_back5}`;
-  //     const keteranganPotongan = `0.5% X (${totalJumlahTransaksiDebit}+${saldo_awal})`;
-  //     const keteranganKekurangan = `${totalSelisih}-${totalPotongan}`;
-  //     const keteranganBatasKelongaran = `3 x ${totalPotongan}`;
-  //     const keteranaganSelisihLebih = `${hasil_pencacahan_back5}-${updateSaldo}`;
-  //     const keteranaganBatasLebih = `0.1% X ${updateSaldo}`;
-  
-  //     this.setState({
-  //       totalJumlahTransaksiDebit,
-  //       totalJumlahSaldo,
-  //       totalSelisih,
-  //       updateSaldo,
-  //       totalPotongan,
-  //       totalKekurangan,
-  //       totalBatasKelonggaran,
-  //       totalSelisihLebih,
-  //       totalBatasLebih,
-  //       keteranganSelisih,
-  //       keteranganPotongan,
-  //       keteranganKekurangan,
-  //       keteranganBatasKelongaran,
-  //       keteranaganSelisihLebih,
-  //       keteranaganBatasLebih,
-  //       ketentuan,
-  //     });
-  //   } 
+    //  else if (
+    //   prevState.dataSource !== this.state.dataSource || prevState.hasil_pencacahan_back5 !== this.state.hasil_pencacahan_back5 ||
+    //     prevState.totalJumlahSaldo !== this.state.totalJumlahSaldo ||
+    //     prevState.saldo_awal !== this.state.saldo_awal ||
+    //     prevState.totalJumlahTransaksiDebit !== this.state.totalJumlahTransaksiDebit
+    //   ) {
+    //     const hasil_pencacahan_back5 = parseInt(this.state.hasil_pencacahan_back5);
+    //     const totalJumlahSaldo = parseInt(this.state.totalJumlahSaldo);
+    //     const saldo_awal = parseInt(this.state.saldo_awal);
+    //     const totalJumlahTransaksiDebit = parseInt(
+    //       this.state.totalJumlahTransaksiDebit
+    //     );
+
+    //     let updateSaldo = totalJumlahSaldo;
+    //     if (
+    //       !isNaN(totalJumlahSaldo) &&
+    //       !isNaN(saldo_awal) &&
+    //       !isNaN(totalJumlahTransaksiDebit)
+    //     ) {
+    //       updateSaldo += saldo_awal;
+    //     }
+
+    //     let totalSelisih = 0;
+    //     let totalSelisihLebih = 0;
+
+    //     if (!isNaN(hasil_pencacahan_back5) && !isNaN(updateSaldo)) {
+    //       totalSelisih = updateSaldo - hasil_pencacahan_back5;
+    //       totalSelisihLebih = hasil_pencacahan_back5 - updateSaldo;
+    //     }
+
+    //     const totalPotongan = 0.005 * (totalJumlahTransaksiDebit + saldo_awal);
+    //     const totalBatasLebih = 0.01 * updateSaldo;
+    //     const totalKekurangan = totalSelisih - totalPotongan;
+    //     const totalBatasKelonggaran = 3 * totalPotongan;
+
+    //     let ketentuan = "";
+    //     if (totalKekurangan > totalBatasKelonggaran) {
+    //       ketentuan =
+    //         "Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
+    //     } else if (totalKekurangan < totalBatasKelonggaran) {
+    //       ketentuan =
+    //         "Jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    //     } else if (totalSelisih < totalBatasKelonggaran) {
+    //       ketentuan =
+    //         "Jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    //     } else if (totalSelisih > totalBatasKelonggaran) {
+    //       ketentuan =
+    //         "Jumlah kelebihan BKC lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
+    //     }
+
+    //     const keteranganSelisih = `${updateSaldo}-${hasil_pencacahan_back5}`;
+    //     const keteranganPotongan = `0.5% X (${totalJumlahTransaksiDebit}+${saldo_awal})`;
+    //     const keteranganKekurangan = `${totalSelisih}-${totalPotongan}`;
+    //     const keteranganBatasKelongaran = `3 x ${totalPotongan}`;
+    //     const keteranaganSelisihLebih = `${hasil_pencacahan_back5}-${updateSaldo}`;
+    //     const keteranaganBatasLebih = `0.1% X ${updateSaldo}`;
+
+    //     this.setState({
+    //       totalJumlahTransaksiDebit,
+    //       totalJumlahSaldo,
+    //       totalSelisih,
+    //       updateSaldo,
+    //       totalPotongan,
+    //       totalKekurangan,
+    //       totalBatasKelonggaran,
+    //       totalSelisihLebih,
+    //       totalBatasLebih,
+    //       keteranganSelisih,
+    //       keteranganPotongan,
+    //       keteranganKekurangan,
+    //       keteranganBatasKelongaran,
+    //       keteranaganSelisihLebih,
+    //       keteranaganBatasLebih,
+    //       ketentuan,
+    //     });
+    //   }
   }
-  
 
   render() {
     const {
@@ -480,16 +455,9 @@ export default class BRCK1Detil extends Component {
     } = this.state;
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BRCK-1"
-          hideContentHeader
-        >
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1" hideContentHeader>
           <Header>Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-          >
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div style={{ marginBottom: 20 }}>
               <div
                 style={{
@@ -511,11 +479,7 @@ export default class BRCK1Detil extends Component {
                 <Button type="primary" onClick={() => this.handleCari()}>
                   Cari
                 </Button>
-                <Input
-                  value={"PT Molindo"}
-                  style={{ flex: 3 }}
-                  disabled
-                />
+                <Input value={"PT Molindo"} style={{ flex: 3 }} disabled />
               </div>
 
               <div
@@ -529,12 +493,14 @@ export default class BRCK1Detil extends Component {
                 <FormLabel>PERIODE</FormLabel>
                 <DatePicker
                   onChange={this.handlePeriodeAwalChange}
-                  style={{ width: "100%" }}disabled
+                  style={{ width: "100%" }}
+                  disabled
                 />
                 <div>s.d</div>
                 <DatePicker
                   onChange={this.handlePeriodeAkhirChange}
-                  style={{ width: "100%" }} disabled
+                  style={{ width: "100%" }}
+                  disabled
                 />
               </div>
             </div>
@@ -560,9 +526,7 @@ export default class BRCK1Detil extends Component {
                   >
                     <div>
                       <div style={{ marginBottom: 10 }}>
-                        <FormLabel>
-                          SALDO AWAL (Hasil penutupan periode sebelumnya)
-                        </FormLabel>
+                        <FormLabel>SALDO AWAL (Hasil penutupan periode sebelumnya)</FormLabel>
                       </div>
                       <div>
                         <InputNumber
@@ -596,9 +560,7 @@ export default class BRCK1Detil extends Component {
                               title: "Title",
                               dataIndex: "title",
                               render: (text, record, index) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
+                                <div style={{ textAlign: "center" }}>{text}</div>
                               ),
                             },
                             {
@@ -607,11 +569,7 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "debitTransaksi",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "kreditTransaksi",
@@ -619,11 +577,7 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "kreditTransaksi",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
 
                             {
@@ -632,11 +586,7 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "saldo",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "keterangan",
@@ -644,18 +594,14 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "keterangan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                           ]}
                           dataSource={[
                             {
                               key: "1",
                               title: "Jumlah",
-                              debitTransaksi:totalJumlahTransaksiDebit,
+                              debitTransaksi: totalJumlahTransaksiDebit,
                               kreditTransaksi: totalJumlahTransaksiKredit,
                               saldo: totalJumlahSaldo,
                               keterangan: "Size Data: 31",
@@ -665,7 +611,7 @@ export default class BRCK1Detil extends Component {
                               title: "Saldo Buku",
                               debitTransaksi: "",
                               kreditTransaksi: "",
-                              saldo:totalJumlahSaldo,
+                              saldo: totalJumlahSaldo,
                               keterangan: "",
                             },
                             {
@@ -679,8 +625,8 @@ export default class BRCK1Detil extends Component {
                             {
                               key: "4",
                               title: "Saldo Akhir",
-                             debitTransaksi: "",
-                             kreditTransaksi: "",
+                              debitTransaksi: "",
+                              kreditTransaksi: "",
                               saldo: hasil_pencacahan_back5,
                               keterangan: "",
                             },
@@ -700,9 +646,7 @@ export default class BRCK1Detil extends Component {
                     gap: 10,
                   }}
                 >
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Hasil Pencacahan (BACK-5)</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -722,32 +666,23 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>No. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} 
-                      disabled
-                      value={12/12/21}/>
+                      <Input id="no_back5" onChange={this.handleInputChange} disabled />
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Tgl. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} 
-                      disabled/>
+                      <DatePicker onChange={this.handleTanggalBack5Change} disabled />
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Selisih Kurang</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -784,7 +719,7 @@ export default class BRCK1Detil extends Component {
                           <Input
                             id="selisihlebih"
                             onChange={this.handleInputChange}
-                            value = {"1.000"}
+                            value={"1.000"}
                             disabled
                             // value={totalSelisihLebih}
                           />
@@ -792,7 +727,7 @@ export default class BRCK1Detil extends Component {
                         <div style={{ width: 200 }}>
                           <Input.TextArea
                             onChange={this.handleInputChange}
-                            value = {"13.000 -12.000"}
+                            value={"13.000 -12.000"}
                             disabled
                             // value={keteranaganSelisihLebih}
                             // pencacahan back 5 - saldo buku
@@ -812,7 +747,8 @@ export default class BRCK1Detil extends Component {
                         <div style={{ width: 200 }}>
                           <Input
                             id="potongan"
-                            onChange={this.handleInputChange}disabled
+                            onChange={this.handleInputChange}
+                            disabled
                             // value={totalBatasLebih}
                           />
                         </div>
@@ -830,9 +766,7 @@ export default class BRCK1Detil extends Component {
                     </>
                   )}
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Potongan</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -855,9 +789,7 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Kekuranagan</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -872,7 +804,7 @@ export default class BRCK1Detil extends Component {
                       <Input.TextArea
                         id="hasil_pencarian_back5_text_area"
                         onChange={this.handleInputChange}
-                        value ={"5000 - 90"}
+                        value={"5000 - 90"}
                         disabled
                         // value={keteranganKekurangan}
                         // selish kurang - potongan
@@ -881,16 +813,14 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Batas Kelongaran</div>
                     <div style={{ width: 200 }}>
                       <Input
                         id="batasKelongaran"
                         disabled
                         onChange={this.handleInputChange}
-                        value = {270}
+                        value={270}
                         // value={totalBatasKelonggaran}
                       />
                     </div>
@@ -898,7 +828,7 @@ export default class BRCK1Detil extends Component {
                       <Input.TextArea
                         disabled
                         onChange={this.handleInputChange}
-                        value = {"3 x 90"}
+                        value={"3 x 90"}
                         // value={keteranganBatasKelongaran}
                         // 3 x totalPotongan
                         autoSize
@@ -906,15 +836,15 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{ width: 400 }}>
                       <Input.TextArea
                         id="catatan"
                         type="text"
                         // value={ketentuan}
-                        value={"Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
+                        value={
+                          "Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"
+                        }
                         readOnly
                         disabled
                         rows={5}
@@ -922,15 +852,10 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Jenis Penutupan</div>
                     <div style={{ width: 200 }}>
-                      <Select
-                        onChange={this.handleJenisPenutupanChange}
-                        style={{ width: "100%" }}
-                      >
+                      <Select onChange={this.handleJenisPenutupanChange} style={{ width: "100%" }}>
                         {this.state.list_jenis_penutupan.length > 0 &&
                           this.state.list_jenis_penutupan.map((item) => (
                             <Select.Option value={item.jenis_penutupan_code}>
@@ -948,15 +873,13 @@ export default class BRCK1Detil extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginTop: 30,
-                    marginRight:30,
+                    marginRight: 30,
                   }}
                 >
                   <ButtonCustom
                     variant="secondary"
                     width={200}
-                    onClick={() =>
-                      this.props.history.push(`${pathName}/brck-1`)
-                    }
+                    onClick={() => this.props.history.push(`${pathName}/brck-1`)}
                   >
                     Kembali
                   </ButtonCustom>

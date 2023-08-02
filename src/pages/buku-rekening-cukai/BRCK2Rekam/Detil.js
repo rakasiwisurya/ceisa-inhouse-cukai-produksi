@@ -1,13 +1,4 @@
-import {
-  Button,
-  DatePicker,
-  Icon,
-  Input,
-  InputNumber,
-  Select,
-  Table,
-  message,
-} from "antd";
+import { Button, DatePicker, Icon, Input, InputNumber, Select, Table, message } from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
@@ -32,10 +23,10 @@ export default class BRCK2Detil extends Component {
       golongan: "",
       kadar: "",
       tarif: "",
-      isi:"",
-      kemasan:"",
-      noSkep:"",
-      tanggalPenutupanBrck2:"",
+      isi: "",
+      kemasan: "",
+      noSkep: "",
+      tanggalPenutupanBrck2: "",
       periode_awal: "",
       periode_akhir: "",
       saldo_awal_kemasan: "0",
@@ -70,27 +61,21 @@ export default class BRCK2Detil extends Component {
               key: "jenisDokumen",
               title: "JENIS",
               dataIndex: "jenisDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("jenisDokumen"),
             },
             {
               key: "nomorDokumen",
               title: "NOMOR",
               dataIndex: "nomorDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("nomorDokumen"),
             },
             {
               key: "tanggalDokumen",
               title: "TANGGAL",
               dataIndex: "tanggalDokumen",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("tanggalDokumen"),
             },
           ],
@@ -119,9 +104,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "debetKemasan",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
               key: "debetLiter",
@@ -129,9 +112,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "debetLiter",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
           ],
         },
@@ -145,9 +126,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "kreditKemasan",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
               key: "kreditLiter",
@@ -155,9 +134,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "kreditLiter",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
           ],
         },
@@ -171,9 +148,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "saldoKemasan",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
               key: "saldoLiter",
@@ -181,9 +156,7 @@ export default class BRCK2Detil extends Component {
               dataIndex: "saldoLiter",
               width: 80,
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
           ],
         },
@@ -197,17 +170,11 @@ export default class BRCK2Detil extends Component {
         },
       ],
       dataSource: [],
-
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -215,19 +182,13 @@ export default class BRCK2Detil extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -374,15 +335,12 @@ export default class BRCK2Detil extends Component {
   handleGetRekam = async () => {
     this.setState({ isLoading: true });
     try {
-      const responseGetRekam = await api.produksi.json.get(
-        "/brck/browse-rekam-brck2",
-        {
-          params: {
-            pageSize: this.state.limitRekamPage,
-            pageNumber: this.state.currentRekamPage,
-          },
-        }
-      );
+      const responseGetRekam = await api.produksi.json.get("/brck/browse-rekam-brck2", {
+        params: {
+          pageSize: this.state.limitRekamPage,
+          pageNumber: this.state.currentRekamPage,
+        },
+      });
       console.log(responseGetRekam);
       this.setState({ dataSource: responseGetRekam.data.data.listData });
       this.setState({ isLoading: false });
@@ -402,26 +360,17 @@ export default class BRCK2Detil extends Component {
       (acc, item) => acc + parseInt(item.debetKemasan, 10),
       0
     );
-    const totalDebitLt = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.debetLiter, 10),
-      0
-    );
+    const totalDebitLt = dataSource.reduce((acc, item) => acc + parseInt(item.debetLiter, 10), 0);
     const totalKreditKemasan = dataSource.reduce(
       (acc, item) => acc + parseInt(item.kreditKemasan, 10),
       0
     );
-    const totalKreditLt = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.kreditLiter, 10),
-      0
-    );
+    const totalKreditLt = dataSource.reduce((acc, item) => acc + parseInt(item.kreditLiter, 10), 0);
     const totalSaldoKemasan = dataSource.reduce(
       (acc, item) => acc + parseInt(item.saldoKemasan, 10),
       0
     );
-    const totalSaldoLt = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.saldoLiter, 10),
-      0
-    );
+    const totalSaldoLt = dataSource.reduce((acc, item) => acc + parseInt(item.saldoLiter, 10), 0);
     this.setState({
       totalDebitKemasan,
       totalDebitLt,
@@ -435,7 +384,7 @@ export default class BRCK2Detil extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource !== this.state.dataSource) {
       this.totalKeseluruhan();
-    } 
+    }
     // else if (
     //   prevState.hasil_pencacahan_back5_1 !==
     //     this.state.hasil_pencacahan_back5_1 ||
@@ -484,20 +433,20 @@ export default class BRCK2Detil extends Component {
     //   }
 
     //   const totalBatasKelongaran = 0.01 * updateSaldoLt;
-      // let ketentuan = "";
-      // if (totalKekuranagan > totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-      // } else if (totalKekuranagan < totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-      // } else if (totalSelisih < totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-      // } else if (totalSelisih > totalBatasKelongaran) {
-      //   ketentuan =
-      //     "jumlah kelebihan BKC  lebih besar dari pada Batas Kelonggaran,  dikenakan Sanksi Administrasi Denda";
-      // }
+    // let ketentuan = "";
+    // if (totalKekuranagan > totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
+    // } else if (totalKekuranagan < totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    // } else if (totalSelisih < totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
+    // } else if (totalSelisih > totalBatasKelongaran) {
+    //   ketentuan =
+    //     "jumlah kelebihan BKC  lebih besar dari pada Batas Kelonggaran,  dikenakan Sanksi Administrasi Denda";
+    // }
 
     //   const keteranganBatasKelongaran = `1% x ${updateSaldoLt}`;
     //   this.setState({
@@ -510,7 +459,7 @@ export default class BRCK2Detil extends Component {
     //     totalSelisihLebihLt,
     //     totalBatasKelongaran,
     //     keteranganBatasKelongaran,
-        // ketentuan,
+    // ketentuan,
     //   });
     // }
   }
@@ -538,16 +487,9 @@ export default class BRCK2Detil extends Component {
     } = this.state;
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BRCK-2"
-          hideContentHeader
-        >
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2" hideContentHeader>
           <Header>Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-2)</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-          >
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div style={{ marginBottom: 20 }}>
               <div
                 style={{
@@ -571,11 +513,7 @@ export default class BRCK2Detil extends Component {
                 <Button type="primary" onClick={this.handleCariNPPBKC}>
                   Cari
                 </Button>
-                <Input
-                  disabled
-                  value={this.state.namaPerusahaan}
-                  style={{ width: "75%" }}
-                />
+                <Input disabled value={this.state.namaPerusahaan} style={{ width: "75%" }} />
               </div>
 
               <div
@@ -745,8 +683,7 @@ export default class BRCK2Detil extends Component {
                       <div>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>
-                            SALDO AWAL KEMASAN <br /> (Hasil penutupan periode
-                            sebelumnya)
+                            SALDO AWAL KEMASAN <br /> (Hasil penutupan periode sebelumnya)
                           </FormLabel>
                         </div>
                         <div>
@@ -755,7 +692,7 @@ export default class BRCK2Detil extends Component {
                             onChange={this.handleSaldoAwalKemasanChange}
                             min={0}
                             style={{ width: 200 }}
-                              disabled
+                            disabled
                           />
                         </div>
                       </div>
@@ -763,8 +700,7 @@ export default class BRCK2Detil extends Component {
                       <div>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>
-                            SALDO AWAL (lt) <br /> (Hasil penutupan periode
-                            sebelumnya)
+                            SALDO AWAL (lt) <br /> (Hasil penutupan periode sebelumnya)
                           </FormLabel>
                         </div>
                         <div>
@@ -800,9 +736,7 @@ export default class BRCK2Detil extends Component {
                               title: "Title",
                               dataIndex: "title",
                               render: (text, record, index) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
+                                <div style={{ textAlign: "center" }}>{text}</div>
                               ),
                             },
                             {
@@ -811,11 +745,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "debitKemasan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "debitLiter",
@@ -823,11 +753,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "debitLiter",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "kreditKemasan",
@@ -835,11 +761,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "kreditKemasan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "kreditLiter",
@@ -847,11 +769,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "kreditLiter",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "saldoKemasan",
@@ -859,11 +777,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "saldoKemasan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "saldoLiter",
@@ -871,11 +785,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "saldoLiter",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "keterangan",
@@ -883,11 +793,7 @@ export default class BRCK2Detil extends Component {
                               dataIndex: "keterangan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                           ]}
                           dataSource={[
@@ -957,9 +863,7 @@ export default class BRCK2Detil extends Component {
                     gap: 10,
                   }}
                 >
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Hasil Pencacahan (BACK-5)</div>
                     <div style={{ width: 125 }}>
                       <Input
@@ -990,32 +894,25 @@ export default class BRCK2Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>No. BACK-5</div>
                     <div style={{ width: 125 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} 
-                      disabled/>
+                      <Input id="no_back5" onChange={this.handleInputChange} disabled />
                     </div>
                     <div style={{ width: 125 }}></div>
                     <div style={{ width: 125 }}></div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Tgl. BACK-5</div>
                     <div style={{ width: 125 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} disabled/>
+                      <DatePicker onChange={this.handleTanggalBack5Change} disabled />
                     </div>
                     <div style={{ width: 125 }}></div>
                     <div style={{ width: 125 }}></div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Selisih Kurang</div>
                     <div style={{ width: 125 }}>
                       <Input
@@ -1046,9 +943,7 @@ export default class BRCK2Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Selisih Lebih</div>
                     <div style={{ width: 125 }}>
                       <Input
@@ -1079,9 +974,7 @@ export default class BRCK2Detil extends Component {
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Batas Kelonggaran</div>
                     <div style={{ width: 125 }}>
                       <Input
@@ -1098,21 +991,18 @@ export default class BRCK2Detil extends Component {
                         disabled
                         onChange={this.handleInputChange}
                         // value={keteranganBatasKelongaran}
-                        value={"jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"}
+                        value={
+                          "jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda"
+                        }
                         autoSize
                       />
                     </div>
                   </div>
 
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div>Jenis Penutupan</div>
                     <div style={{ width: 125 }}>
-                      <Select
-                        onChange={this.handleJenisPenutupanChange}
-                        style={{ width: "100%" }}
-                      >
+                      <Select onChange={this.handleJenisPenutupanChange} style={{ width: "100%" }}>
                         {this.state.list_jenis_penutupan.length > 0 &&
                           this.state.list_jenis_penutupan.map((item) => (
                             <Select.Option value={item.jenis_penutupan_code}>
@@ -1131,14 +1021,13 @@ export default class BRCK2Detil extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginTop: 30,
-                    marginRight:20,
-                  }}>
+                    marginRight: 20,
+                  }}
+                >
                   <ButtonCustom
                     variant="secondary"
                     width={200}
-                    onClick={() =>
-                      this.props.history.push(`${pathName}/brck-2`)
-                    }
+                    onClick={() => this.props.history.push(`${pathName}/brck-2`)}
                   >
                     Kembali
                   </ButtonCustom>
