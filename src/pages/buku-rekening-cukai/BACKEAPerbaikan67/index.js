@@ -19,6 +19,7 @@ import React, { Component } from "react";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { requestApi } from "utils/requestApi";
 
 export default class BACKEAPerbaikan67 extends Component {
   constructor(props) {
@@ -64,33 +65,33 @@ export default class BACKEAPerbaikan67 extends Component {
       ],
       list_satuan: [
         {
-          satuan_id: "LT",
+          satuan_id: "lt",
           satuan_name: "lt",
         },
         {
-          satuan_id: "GR",
+          satuan_id: "gr",
           satuan_name: "gr",
         },
         {
-          satuan_id: "CC",
+          satuan_id: "cc",
           satuan_name: "cc",
         },
       ],
       list_jenis_bahan: [
         {
-          jenis_bahan_id: "BIRTEX-SDA BIT 6",
+          jenis_bahan_id: "BIT-SDA BIT 6",
           jenis_bahan_name: "Birtex",
         },
         {
-          jenis_bahan_id: "ISOPROPIL ALCOHOL-SDA IPA 5",
+          jenis_bahan_id: "IPA-SDA IPA 5",
           jenis_bahan_name: "Isopropil Alcohol",
         },
         {
-          jenis_bahan_id: "ETIL ACETAT-SDA EAC 2",
+          jenis_bahan_id: "EAC-SDA EAC 2",
           jenis_bahan_name: "Etil Acetat",
         },
         {
-          jenis_bahan_id: "BAHAN PERUSAK EA-SPIRTUS BAKAR",
+          jenis_bahan_id: "BPE-SPIRTUS BAKAR",
           jenis_bahan_name: "Bahan Perusak EA",
         },
       ],
@@ -109,7 +110,19 @@ export default class BACKEAPerbaikan67 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {record.back_ea_id ? (
+                <Button
+                  type="danger"
+                  icon="delete"
+                  onClick={() => this.handleDeleteRincianApi(index, record.back_ea_id)}
+                />
+              ) : (
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.handleDeleteRincian(index)}
+                />
+              )}
             </div>
           ),
         },
@@ -174,39 +187,39 @@ export default class BACKEAPerbaikan67 extends Component {
   }
 
   getBackEaDetail = async () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
+    const payload = { idBackEaheader: this.props.match.params.id };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-6-7/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
       this.setState({
-        nppbkc_id: "nppbkc_id",
-        nppbkc: "nppbkc",
-        nama_nppbkc: "nama_nppbkc",
-        jenis_back: "BACK-6",
-        nomor_back: "nomor_back",
-        tanggal_back: moment(new Date()),
-        dataSource: [
-          {
-            key: "1",
-            jumlah_ea_yang_akan_dicampur: "jumlah_ea_yang_akan_dicampur1",
-            jumlah_bahan_pencampur: "jumlah_bahan_pencampur1",
-            satuan: "satuan1",
-            jenis_bahan: "jenis_bahan1",
-            jumlah_setelah_dicampur: "jumlah_setelah_dicampur1",
-            hasil_akhir: "hasil_akhir1",
-          },
-          {
-            key: "2",
-            jumlah_ea_yang_akan_dicampur: "jumlah_ea_yang_akan_dicampur2",
-            jumlah_bahan_pencampur: "jumlah_bahan_pencampur2",
-            satuan: "satuan2",
-            jenis_bahan: "jenis_bahan2",
-            jumlah_setelah_dicampur: "jumlah_setelah_dicampur2",
-            hasil_akhir: "hasil_akhir2",
-          },
-        ],
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackEa,
+        nomor_back: data.nomorBackEa,
+        tanggal_back: moment(data.tanggalBackEa),
+
+        dataSource: data.details.map((detail, index) => ({
+          key: `back-ea-${index}`,
+          back_ea_id: detail.idBackEaDetail,
+          jumlah_ea_yang_akan_dicampur: detail.jumlah,
+          jumlah_bahan_pencampur: detail.jumlahPencampur,
+          satuan: detail.kodeSatuanPencampur,
+          jenis_bahan: detail.jenisBahanPencampur,
+          jumlah_setelah_dicampur: detail.jumlahSetelah,
+          hasil_akhir: detail.hasilAkhir,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -380,6 +393,20 @@ export default class BACKEAPerbaikan67 extends Component {
     newDataSource.splice(index, 1);
     this.setState({ dataSource: newDataSource });
   };
+  handleDeleteApiRincian = async (index, id) => {
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-ea-6-7/delete",
+      body: { idBackEaDetail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDeleteRincian(index);
+    }
+  };
   handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,
@@ -412,14 +439,41 @@ export default class BACKEAPerbaikan67 extends Component {
       dataSource: [],
     });
   };
-  handleRekam = async () => {
-    this.setState({ isUpdateLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+  handleUpdate = async () => {
+    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+      this.state;
+
+    const payload = {
+      idBackEaHeader: this.props.match.params.id,
+      idNppbkc: nppbkc_id,
+      jenisBackEa: jenis_back,
+      namaPerusahaan: nama_nppbkc,
+      nomorBackEa: nomor_back,
+      nppbkc: nppbkc,
+      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details: dataSource.map((item) => ({
+        idBackEaDetail: item.back_ea_id,
+        hasilAkhir: item.hasil_akhir,
+        jenisBahanPencampur: item.jenis_bahan,
+        jumlah: item.jumlah_ea_yang_akan_dicampur,
+        jumlahPencampur: item.jumlah_bahan_pencampur,
+        jumlahSetelah: item.jumlah_setelah_dicampur,
+        kodeSatuanPencampur: item.satuan,
+      })),
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-ea-6-7/update",
+      body: payload,
+      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/back-ea`);
-      this.setState({ isUpdateLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
@@ -553,7 +607,11 @@ export default class BACKEAPerbaikan67 extends Component {
                     </div>
                     <Select
                       id="jenis_bahan"
-                      value={this.state.jenis_bahan}
+                      value={
+                        this.state.jenis_bahan && this.state.hasil_akhir
+                          ? `${this.state.jenis_bahan}-${this.state.hasil_akhir}`
+                          : null
+                      }
                       onChange={(value) => {
                         const splitValue = value.split("-");
                         this.handleSelectChange("jenis_bahan", splitValue[0]);
@@ -652,7 +710,7 @@ export default class BACKEAPerbaikan67 extends Component {
                     <Button
                       type="primary"
                       loading={this.state.isUpdateLoading}
-                      onClick={this.handleRekam}
+                      onClick={this.handleUpdate}
                       block
                     >
                       Update

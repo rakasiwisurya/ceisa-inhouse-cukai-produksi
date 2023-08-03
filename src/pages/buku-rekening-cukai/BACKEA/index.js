@@ -61,12 +61,12 @@ export default class BACKEA extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit67(record.back_ea_id)}
+                  onClick={() => this.handleEdit67(record.back_ea_67_id)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail67(record.back_ea_id)}
+                  onClick={() => this.handleDetail67(record.back_ea_67_id)}
                 />
               </>
             </div>
@@ -178,12 +178,12 @@ export default class BACKEA extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit89(record.back_ea_id)}
+                  onClick={() => this.handleEdit89(record.back_ea_89_id)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail89(record.back_ea_id)}
+                  onClick={() => this.handleDetail89(record.back_ea_89_id)}
                 />
               </>
             </div>

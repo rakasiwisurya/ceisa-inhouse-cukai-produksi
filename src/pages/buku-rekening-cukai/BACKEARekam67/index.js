@@ -63,33 +63,33 @@ export default class BACKEARekam67 extends Component {
       ],
       list_satuan: [
         {
-          satuan_id: "LT",
+          satuan_id: "lt",
           satuan_name: "lt",
         },
         {
-          satuan_id: "GR",
+          satuan_id: "gr",
           satuan_name: "gr",
         },
         {
-          satuan_id: "CC",
+          satuan_id: "cc",
           satuan_name: "cc",
         },
       ],
       list_jenis_bahan: [
         {
-          jenis_bahan_id: "BIRTEX-SDA BIT 6",
+          jenis_bahan_id: "BIT-SDA BIT 6",
           jenis_bahan_name: "Birtex",
         },
         {
-          jenis_bahan_id: "ISOPROPIL ALCOHOL-SDA IPA 5",
+          jenis_bahan_id: "IPA-SDA IPA 5",
           jenis_bahan_name: "Isopropil Alcohol",
         },
         {
-          jenis_bahan_id: "ETIL ACETAT-SDA EAC 2",
+          jenis_bahan_id: "EAC-SDA EAC 2",
           jenis_bahan_name: "Etil Acetat",
         },
         {
-          jenis_bahan_id: "BAHAN PERUSAK EA-SPIRTUS BAKAR",
+          jenis_bahan_id: "BPE-SPIRTUS BAKAR",
           jenis_bahan_name: "Bahan Perusak EA",
         },
       ],
@@ -533,7 +533,11 @@ export default class BACKEARekam67 extends Component {
                 </div>
                 <Select
                   id="jenis_bahan"
-                  value={this.state.jenis_bahan}
+                  value={
+                    this.state.jenis_bahan && this.state.hasil_akhir
+                      ? `${this.state.jenis_bahan}-${this.state.hasil_akhir}`
+                      : null
+                  }
                   onChange={(value) => {
                     const splitValue = value.split("-");
                     this.handleSelectChange("jenis_bahan", splitValue[0]);

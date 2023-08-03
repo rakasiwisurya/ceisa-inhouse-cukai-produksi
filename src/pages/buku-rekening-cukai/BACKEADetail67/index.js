@@ -6,6 +6,7 @@ import Header from "components/Header";
 import React, { Component } from "react";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { requestApi } from "utils/requestApi";
 
 export default class BACKEADetail67 extends Component {
   constructor(props) {
@@ -46,33 +47,33 @@ export default class BACKEADetail67 extends Component {
       ],
       list_satuan: [
         {
-          satuan_id: "LT",
+          satuan_id: "lt",
           satuan_name: "lt",
         },
         {
-          satuan_id: "GR",
+          satuan_id: "gr",
           satuan_name: "gr",
         },
         {
-          satuan_id: "CC",
+          satuan_id: "cc",
           satuan_name: "cc",
         },
       ],
       list_jenis_bahan: [
         {
-          jenis_bahan_id: "BIRTEX-SDA BIT 6",
+          jenis_bahan_id: "BIT-SDA BIT 6",
           jenis_bahan_name: "Birtex",
         },
         {
-          jenis_bahan_id: "ISOPROPIL ALCOHOL-SDA IPA 5",
+          jenis_bahan_id: "IPA-SDA IPA 5",
           jenis_bahan_name: "Isopropil Alcohol",
         },
         {
-          jenis_bahan_id: "ETIL ACETAT-SDA EAC 2",
+          jenis_bahan_id: "EAC-SDA EAC 2",
           jenis_bahan_name: "Etil Acetat",
         },
         {
-          jenis_bahan_id: "BAHAN PERUSAK EA-SPIRTUS BAKAR",
+          jenis_bahan_id: "BPE-SPIRTUS BAKAR",
           jenis_bahan_name: "Bahan Perusak EA",
         },
       ],
@@ -140,40 +141,39 @@ export default class BACKEADetail67 extends Component {
   }
 
   getDetailBackEa67 = async () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "fe3c9197-e7e0-05e6-e054-0021f60abd54",
-        nppbkc: "0000000000000000070713",
-        nama_nppbkc: "CAHAYA BARU",
-        jenis_back: "BACK-6",
-        nomor_back: "1234567",
-        tanggal_back: moment(new Date()),
+    const payload = { idBackEaheader: this.props.match.params.id };
 
-        dataSource: [
-          {
-            key: "1",
-            jumlah_ea_yang_akan_dicampur: 100,
-            jumlah_bahan_pencampur: 200,
-            satuan: "LT",
-            jenis_bahan: "BIRTEX-SDA BIT 6",
-            jumlah_setelah_dicampur: 300,
-            hasil_akhir: "SDA BIT 6",
-          },
-          {
-            key: "2",
-            jumlah_ea_yang_akan_dicampur: 100,
-            jumlah_bahan_pencampur: 200,
-            satuan: "LT",
-            jenis_bahan: "BIRTEX-SDA BIT 6",
-            jumlah_setelah_dicampur: 300,
-            hasil_akhir: "SDA BIT 6",
-          },
-        ],
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-6-7/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackEa,
+        nomor_back: data.nomorBackEa,
+        tanggal_back: moment(data.tanggalBackEa),
+
+        dataSource: data.details.map((detail, index) => ({
+          key: `back-ea-${index}`,
+          back_ea_id: detail.idBackEaDetail,
+          jumlah_ea_yang_akan_dicampur: detail.jumlah,
+          jumlah_bahan_pencampur: detail.jumlahPencampur,
+          satuan: detail.kodeSatuanPencampur,
+          jenis_bahan: detail.jenisBahanPencampur,
+          jumlah_setelah_dicampur: detail.jumlahSetelah,
+          hasil_akhir: detail.hasilAkhir,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -323,7 +323,11 @@ export default class BACKEADetail67 extends Component {
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
                         id="jumlah_bahan_pencampur"
-                        value={this.state.jumlah_bahan_pencampur}
+                        value={
+                          this.state.jenis_bahan && this.state.hasil_akhir
+                            ? `${this.state.jenis_bahan}-${this.state.hasil_akhir}`
+                            : null
+                        }
                         style={{ width: "100%" }}
                         disabled
                       />
