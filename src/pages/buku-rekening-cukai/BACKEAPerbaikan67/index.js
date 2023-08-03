@@ -115,7 +115,7 @@ export default class BACKEAPerbaikan67 extends Component {
                 <Button
                   type="danger"
                   icon="delete"
-                  onClick={() => this.handleDeleteRincianApi(index, record.back_ea_detail_id)}
+                  onClick={() => this.handleDeleteApiRincian(index, record.back_ea_detail_id)}
                 />
               ) : (
                 <Button
