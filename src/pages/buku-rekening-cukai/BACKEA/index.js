@@ -352,7 +352,7 @@ export default class BACKEA extends Component {
     if (tanggal_back)
       payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (jenis_ea) payload.jenisBkc = jenis_ea;
-    if (jumlah) payload.jumlahSetelah = jumlah;
+    if (jumlah) payload.jumlah = jumlah;
     if (keterangan) payload.keterangan = keterangan;
 
     const response = await requestApi({
@@ -373,7 +373,7 @@ export default class BACKEA extends Component {
         nomor_back: item.nomorBackMmea,
         tanggal_back: item.tanggalBackMmea,
         jenis_ea: item.jenisBkc,
-        jumlah: item.jumlahSetelah,
+        jumlah: item.jumlah,
         keterangan: item.keterangan,
       }));
 
