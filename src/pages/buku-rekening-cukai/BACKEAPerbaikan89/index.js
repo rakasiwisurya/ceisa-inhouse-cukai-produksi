@@ -306,7 +306,7 @@ export default class BACKEAPerbaikan89 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/back-ea-6-7/delete",
+      endpoint: "/back-ea-8-9/delete",
       body: { idBackEaDetail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
