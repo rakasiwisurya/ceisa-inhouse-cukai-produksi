@@ -20,6 +20,7 @@ import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
+import { requestApi } from "utils/requestApi";
 
 export default class BACKEAPerbaikan89 extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class BACKEAPerbaikan89 extends Component {
 
       isDetailLoading: true,
       isUpdateLoading: false,
+      isTableLoading: false,
       isModalDaftarNppbkcVisible: false,
 
       nppbkc_id: null,
@@ -75,7 +77,19 @@ export default class BACKEAPerbaikan89 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {record.back_ea_detail_id ? (
+                <Button
+                  type="danger"
+                  icon="delete"
+                  onClick={() => this.handleDeleteRincianApi(index, record.back_ea_detail_id)}
+                />
+              ) : (
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.handleDeleteRincian(index)}
+                />
+              )}
             </div>
           ),
         },
@@ -113,35 +127,37 @@ export default class BACKEAPerbaikan89 extends Component {
     this.getDetailBack89();
   }
 
-  getDetailBack89 = () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "nppbkc_id",
-        nppbkc: "nppbkc",
-        nama_nppbkc: "nama_nppbkc",
-        jenis_back: "BACK-8",
-        nomor_back: "nomor_back",
-        tanggal_back: moment(new Date()),
+  getDetailBack89 = async () => {
+    const payload = { idBackEaheader: this.props.match.params.id };
 
-        dataSource: [
-          {
-            key: "1",
-            jenis_barang_kena_cukai_rusak: "EA 1",
-            jumlah_barang_kena_cukai_rusak: 230,
-            catatan: "Catatan 1",
-          },
-          {
-            key: "2",
-            jenis_barang_kena_cukai_rusak: "EA 2",
-            jumlah_barang_kena_cukai_rusak: 110,
-            catatan: "Catatan 2",
-          },
-        ],
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-8-9/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackEa,
+        nomor_back: data.nomorBackEa,
+        tanggal_back: moment(data.tanggalBackEa),
+
+        dataSource: data.details.map((detail, index) => ({
+          key: `back-ea-${index}`,
+          back_ea_detail_id: detail.idBackEaDetail,
+          jenis_barang_kena_cukai_rusak: detail.jenisBkc,
+          jumlah_barang_kena_cukai_rusak: detail.jumlah,
+          catatan: detail.keterangan,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -286,6 +302,20 @@ export default class BACKEAPerbaikan89 extends Component {
     newDataSource.splice(index, 1);
     this.setState({ dataSource: newDataSource });
   };
+  handleDeleteApiRincian = async (index, id) => {
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-ea-6-7/delete",
+      body: { idBackEaDetail: id },
+      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.handleDeleteRincian(index);
+    }
+  };
   handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,
@@ -313,13 +343,37 @@ export default class BACKEAPerbaikan89 extends Component {
     });
   };
   handleUpdate = async () => {
-    this.setState({ isUpdateLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+      this.state;
+
+    const payload = {
+      idBackEaHeader: this.props.match.params.id,
+      idNppbkc: nppbkc_id,
+      jenisBackEa: jenis_back,
+      namaPerusahaan: nama_nppbkc,
+      nomorBackEa: nomor_back,
+      nppbkc: nppbkc,
+      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details: dataSource.map((item) => ({
+        idBackEaDetail: item.back_ea_detail_id,
+        jenisBkc: item.jenis_barang_kena_cukai_rusak,
+        jumlah: item.jumlah_barang_kena_cukai_rusak,
+        keterangan: item.catatan,
+      })),
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-ea-8-9/update",
+      body: payload,
+      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/back-ea`);
-      this.setState({ isUpdateLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
@@ -474,6 +528,7 @@ export default class BACKEAPerbaikan89 extends Component {
 
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
+                    loading={this.state.isTableLoading}
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
                     scroll={{ x: "max-content" }}

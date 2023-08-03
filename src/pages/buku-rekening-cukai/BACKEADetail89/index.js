@@ -6,6 +6,7 @@ import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
 export default class BACKEADetail89 extends Component {
@@ -95,35 +96,37 @@ export default class BACKEADetail89 extends Component {
     this.getDetailBack89();
   }
 
-  getDetailBack89 = () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "nppbkc_id",
-        nppbkc: "nppbkc",
-        nama_nppbkc: "nama_nppbkc",
-        jenis_back: "BACK-8",
-        nomor_back: "nomor_back",
-        tanggal_back: moment(new Date()),
+  getDetailBack89 = async () => {
+    const payload = { idBackEaheader: this.props.match.params.id };
 
-        dataSource: [
-          {
-            key: "1",
-            jenis_barang_kena_cukai_rusak: "EA 1",
-            jumlah_barang_kena_cukai_rusak: 230,
-            catatan: "Catatan 1",
-          },
-          {
-            key: "2",
-            jenis_barang_kena_cukai_rusak: "EA 2",
-            jumlah_barang_kena_cukai_rusak: 110,
-            catatan: "Catatan 2",
-          },
-        ],
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-ea-8-9/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackEa,
+        nomor_back: data.nomorBackEa,
+        tanggal_back: moment(data.tanggalBackEa),
+
+        dataSource: data.details.map((detail, index) => ({
+          key: `back-ea-${index}`,
+          back_ea_detail_id: detail.idBackEaDetail,
+          jenis_barang_kena_cukai_rusak: detail.jenisBkc,
+          jumlah_barang_kena_cukai_rusak: detail.jumlah,
+          catatan: detail.keterangan,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({

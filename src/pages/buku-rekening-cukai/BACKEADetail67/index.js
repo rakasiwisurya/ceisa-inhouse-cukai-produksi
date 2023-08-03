@@ -164,7 +164,7 @@ export default class BACKEADetail67 extends Component {
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-${index}`,
-          back_ea_id: detail.idBackEaDetail,
+          back_ea_detail_id: detail.idBackEaDetail,
           jumlah_ea_yang_akan_dicampur: detail.jumlah,
           jumlah_bahan_pencampur: detail.jumlahPencampur,
           satuan: detail.kodeSatuanPencampur,

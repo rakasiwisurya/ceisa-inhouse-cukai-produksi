@@ -33,6 +33,7 @@ export default class BACKEAPerbaikan67 extends Component {
 
       isUpdateLoading: false,
       isDetailLoading: true,
+      isTableLoading: false,
       isModalDaftarNppbkcVisible: false,
 
       nppbkc_id: null,
@@ -110,11 +111,11 @@ export default class BACKEAPerbaikan67 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              {record.back_ea_id ? (
+              {record.back_ea_detail_id ? (
                 <Button
                   type="danger"
                   icon="delete"
-                  onClick={() => this.handleDeleteRincianApi(index, record.back_ea_id)}
+                  onClick={() => this.handleDeleteRincianApi(index, record.back_ea_detail_id)}
                 />
               ) : (
                 <Button
@@ -210,7 +211,7 @@ export default class BACKEAPerbaikan67 extends Component {
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-${index}`,
-          back_ea_id: detail.idBackEaDetail,
+          back_ea_detail_id: detail.idBackEaDetail,
           jumlah_ea_yang_akan_dicampur: detail.jumlah,
           jumlah_bahan_pencampur: detail.jumlahPencampur,
           satuan: detail.kodeSatuanPencampur,
@@ -452,7 +453,7 @@ export default class BACKEAPerbaikan67 extends Component {
       nppbkc: nppbkc,
       tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        idBackEaDetail: item.back_ea_id,
+        idBackEaDetail: item.back_ea_detail_id,
         hasilAkhir: item.hasil_akhir,
         jenisBahanPencampur: item.jenis_bahan,
         jumlah: item.jumlah_ea_yang_akan_dicampur,
@@ -687,6 +688,7 @@ export default class BACKEAPerbaikan67 extends Component {
 
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
+                    loading={this.state.isTableLoading}
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
                     scroll={{ x: "max-content" }}
