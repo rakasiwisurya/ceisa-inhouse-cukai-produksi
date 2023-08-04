@@ -601,6 +601,13 @@ export default class ReferensiTarifRekam extends Component {
   handleReset = () => {
     this.setState({
       isEdit: false,
+
+      nomor_surat: null,
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
+      nomor_peraturan: null,
+      tanggal_peraturan: null,
+
       jenis_bkc_id: null,
       jenis_bkc_name: null,
       golongan_id: null,
@@ -626,6 +633,7 @@ export default class ReferensiTarifRekam extends Component {
       kadar_bawah: null,
       tarif_cukai_dalam_negeri: null,
       tarif_cukai_impor: null,
+
       dataSource: [],
     });
   };

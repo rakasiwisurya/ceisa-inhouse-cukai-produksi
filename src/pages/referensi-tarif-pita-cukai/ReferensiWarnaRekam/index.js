@@ -393,6 +393,11 @@ export default class ReferensiWarnaRekam extends Component {
   handleReset = () => {
     this.setState({
       isEdit: false,
+
+      nomor_surat: null,
+      tanggal_surat: null,
+      tanggal_awal_berlaku: null,
+
       jenis_bkc_id: null,
       jenis_bkc_name: null,
       kode_warna: null,
@@ -403,6 +408,7 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_produksi_name: null,
       jenis_usaha_id: null,
       jenis_usaha_name: null,
+
       dataSource: [],
     });
   };
