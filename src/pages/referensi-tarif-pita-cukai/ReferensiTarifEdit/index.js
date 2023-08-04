@@ -100,11 +100,13 @@ export default class ReferensiTarifEdit extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.jenis_produksi_id !== this.state.jenis_produksi_id) {
-      if (
-        +this.state.jenis_produksi_id.split(" ")[0] === 2 ||
-        +this.state.jenis_produksi_id.split(" ")[0] === 5
-      ) {
-        this.getJenisHtlRel();
+      if (this.state.jenis_produksi_id) {
+        if (
+          +this.state.jenis_produksi_id.split(" ")[0] === 2 ||
+          +this.state.jenis_produksi_id.split(" ")[0] === 5
+        ) {
+          this.getJenisHtlRel();
+        }
       }
     }
 
