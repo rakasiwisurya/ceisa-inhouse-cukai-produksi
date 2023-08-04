@@ -402,20 +402,6 @@ export default class BACKEAPerbaikan67 extends Component {
     newDataSource.splice(index, 1);
     this.setState({ dataSource: newDataSource });
   };
-  handleDeleteApiRincian = async (index, id) => {
-    const response = await requestApi({
-      service: "produksi",
-      method: "post",
-      endpoint: "/back-ea-6-7/delete",
-      body: { idBackEaDetail: id },
-      setLoading: (bool) => this.setState({ isTableLoading: bool }),
-    });
-
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
-      this.handleDeleteRincian(index);
-    }
-  };
   handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,

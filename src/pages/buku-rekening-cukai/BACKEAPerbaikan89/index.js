@@ -44,9 +44,12 @@ export default class BACKEAPerbaikan89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_ea_detail_id: null,
+
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
+      alasan: null,
 
       searchText: null,
       searchedColumn: null,
@@ -77,13 +80,7 @@ export default class BACKEAPerbaikan89 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              {record.back_ea_detail_id ? (
-                <Button
-                  type="danger"
-                  icon="delete"
-                  onClick={() => this.handleDeleteApiRincian(index, record.back_ea_detail_id)}
-                />
-              ) : (
+              {!record.back_ea_detail_id && (
                 <Button
                   type="danger"
                   icon="close"
@@ -245,7 +242,8 @@ export default class BACKEAPerbaikan89 extends Component {
   };
 
   handleSimpanRincian = () => {
-    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan } = this.state;
+    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan, alasan } =
+      this.state;
 
     this.setState({
       dataSource: [
@@ -255,6 +253,7 @@ export default class BACKEAPerbaikan89 extends Component {
           jenis_barang_kena_cukai_rusak,
           jumlah_barang_kena_cukai_rusak,
           catatan,
+          alasan,
         },
       ],
     });
@@ -263,6 +262,7 @@ export default class BACKEAPerbaikan89 extends Component {
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
+      alasan: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -270,29 +270,41 @@ export default class BACKEAPerbaikan89 extends Component {
       isEditRincian: true,
       editIndexRincian: index,
 
+      back_ea_detail_id: record.back_ea_detail_id,
       jenis_barang_kena_cukai_rusak: record.jenis_barang_kena_cukai_rusak,
       jumlah_barang_kena_cukai_rusak: record.jumlah_barang_kena_cukai_rusak,
       catatan: record.catatan,
+      alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
-    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan } = this.state;
+    const {
+      back_ea_detail_id,
+      jenis_barang_kena_cukai_rusak,
+      jumlah_barang_kena_cukai_rusak,
+      catatan,
+      alasan,
+    } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
+      back_ea_detail_id,
       jenis_barang_kena_cukai_rusak,
       jumlah_barang_kena_cukai_rusak,
       catatan,
+      alasan,
     });
 
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_ea_detail_id: null,
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
+      alasan: null,
 
       dataSource: newDataSource,
     });
@@ -302,28 +314,16 @@ export default class BACKEAPerbaikan89 extends Component {
     newDataSource.splice(index, 1);
     this.setState({ dataSource: newDataSource });
   };
-  handleDeleteApiRincian = async (index, id) => {
-    const response = await requestApi({
-      service: "produksi",
-      method: "post",
-      endpoint: "/back-ea-8-9/delete",
-      body: { idBackEaDetail: id },
-      setLoading: (bool) => this.setState({ isTableLoading: bool }),
-    });
-
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
-      this.handleDeleteRincian(index);
-    }
-  };
   handleBatalEditRincian = () => {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_ea_detail_id: null,
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
+      alasan: null,
     });
   };
   handleReset = () => {
@@ -335,9 +335,11 @@ export default class BACKEAPerbaikan89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_ea_detail_id: null,
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
+      alasan: null,
 
       dataSource: [],
     });
@@ -359,6 +361,7 @@ export default class BACKEAPerbaikan89 extends Component {
         jenisBkc: item.jenis_barang_kena_cukai_rusak,
         jumlah: item.jumlah_barang_kena_cukai_rusak,
         keterangan: item.catatan,
+        alasan: item.alasan,
       })),
     };
 
@@ -491,6 +494,17 @@ export default class BACKEAPerbaikan89 extends Component {
                     <Input.TextArea
                       id="catatan"
                       value={this.state.catatan}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alasan</FormLabel>
+                    </div>
+                    <Input
+                      id="alasan"
+                      value={this.state.alasan}
                       onChange={this.handleInputChange}
                     />
                   </Col>

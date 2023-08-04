@@ -42,6 +42,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_mmea_detail_id: null,
+
       merk: null,
       jenis_mmea: null,
       tarif: null,
@@ -49,6 +51,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
+      alasan: null,
 
       searchText: null,
       searchedColumn: null,
@@ -79,7 +82,13 @@ export default class BACKMMEAPerbaikan89 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              {!record.back_mmea_detail_id && (
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.handleDeleteRincian(index)}
+                />
+              )}
             </div>
           ),
         },
@@ -158,6 +167,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
         dataSource: [
           {
             key: "1",
+            back_mmea_detail_id: "1",
             merk: "merk1",
             jenis_mmea: "jenis_mmea1",
             tarif: 100,
@@ -168,6 +178,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
           },
           {
             key: "2",
+            back_mmea_detail_id: "2",
             merk: "merk2",
             jenis_mmea: "jenis_mmea2",
             tarif: 500,
@@ -268,7 +279,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
   };
 
   handleSimpanRincian = () => {
-    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
+    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt, alasan } = this.state;
 
     this.setState({
       dataSource: [
@@ -282,6 +293,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
           kadar,
           jumlah_kemasan,
           jumlah_lt,
+          alasan,
         },
       ],
     });
@@ -294,6 +306,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
+      alasan: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -301,6 +314,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isEditRincian: true,
       editIndexRincian: index,
 
+      back_mmea_detail_id: record.back_mmea_detail_id,
       merk: record.merk,
       jenis_mmea: record.jenis_mmea,
       tarif: record.tarif,
@@ -308,14 +322,12 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: record.kadar,
       jumlah_kemasan: record.jumlah_kemasan,
       jumlah_lt: record.jumlah_lt,
+      alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
-    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
-
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndexRincian, 1, {
-      key: new Date().getTime(),
+    const {
+      back_mmea_detail_id,
       merk,
       jenis_mmea,
       tarif,
@@ -323,12 +335,28 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar,
       jumlah_kemasan,
       jumlah_lt,
+      alasan,
+    } = this.state;
+
+    const newDataSource = this.state.dataSource.map((item) => item);
+    newDataSource.splice(this.state.editIndexRincian, 1, {
+      key: new Date().getTime(),
+      back_mmea_detail_id,
+      merk,
+      jenis_mmea,
+      tarif,
+      isi,
+      kadar,
+      jumlah_kemasan,
+      jumlah_lt,
+      alasan,
     });
 
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_mmea_detail_id: null,
       merk: null,
       jenis_mmea: null,
       tarif: null,
@@ -336,6 +364,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
+      alasan: null,
 
       dataSource: newDataSource,
     });
@@ -350,6 +379,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_mmea_detail_id: null,
       merk: null,
       jenis_mmea: null,
       tarif: null,
@@ -357,6 +387,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
+      alasan: null,
     });
   };
   handleReset = () => {
@@ -368,6 +399,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_mmea_detail_id: null,
       merk: null,
       jenis_mmea: null,
       tarif: null,
@@ -375,6 +407,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
+      alasan: null,
 
       dataSource: [],
     });
@@ -550,6 +583,17 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       value={this.state.jumlah_lt}
                       onChange={(value) => this.handleInputNumberChange("jumlah_lt", value)}
                       style={{ width: "100%" }}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alasan</FormLabel>
+                    </div>
+                    <Input
+                      id="alasan"
+                      value={this.state.alasan}
+                      onChange={this.handleInputChange}
                     />
                   </Col>
                 </Row>
