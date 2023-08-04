@@ -596,12 +596,12 @@ export default class ReferensiWarnaRekam extends Component {
                   id="jenis_bkc"
                   onChange={(value, option) => {
                     this.setState({
-                      golongan_id: "",
-                      golongan_name: "",
-                      jenis_produksi_id: "",
-                      jenis_produksi_name: "",
-                      jenis_usaha_id: "",
-                      jenis_usaha_name: "",
+                      golongan_id: null,
+                      golongan_name: null,
+                      jenis_produksi_id: null,
+                      jenis_produksi_name: null,
+                      jenis_usaha_id: null,
+                      jenis_usaha_name: null,
                       list_golongan: [],
                       list_jenis_produksi: [],
                     });

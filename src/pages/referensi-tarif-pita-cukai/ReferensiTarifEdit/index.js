@@ -109,7 +109,7 @@ export default class ReferensiTarifEdit extends Component {
     }
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      if (this.state.jenis_bkc_id !== "") {
+      if (this.state.jenis_bkc_id) {
         this.getListGolongan();
         this.getListJenisProduksi();
       }
@@ -1030,12 +1030,12 @@ export default class ReferensiTarifEdit extends Component {
                       id="jenis_bkc"
                       onChange={(value, option) => {
                         this.setState({
-                          golongan_id: "",
-                          golongan_name: "",
-                          jenis_produksi_id: "",
-                          jenis_produksi_name: "",
-                          jenis_htl_rel_id: "",
-                          jenis_htl_rel_name: "",
+                          golongan_id: null,
+                          golongan_name: null,
+                          jenis_produksi_id: null,
+                          jenis_produksi_name: null,
+                          jenis_htl_rel_id: null,
+                          jenis_htl_rel_name: null,
                           list_jenis_produksi: [],
                           list_golongan: [],
                         });
@@ -1111,18 +1111,18 @@ export default class ReferensiTarifEdit extends Component {
                           onChange={(value, option) => {
                             const splitValues = value.split(" ");
                             this.setState({
-                              jenis_htl_rel_id: "",
-                              jenis_htl_rel_name: "",
+                              jenis_htl_rel_id: null,
+                              jenis_htl_rel_name: null,
                               list_jenis_htl_rel: [],
                               jenis_produksi_code: option.props.children
                                 .split("-")[0]
-                                .replace(/[()\s]/g, ""),
+                                .replace(/[()\s]/g, null),
                               jenis_produksi_bkc_satuan:
                                 splitValues[1] !== "null" ? splitValues[1] : null,
                             });
                             this.handleSelectCustomChange("jenis_produksi", value, option);
                           }}
-                          value={`${this.state.jenis_produksi_id}`}
+                          value={this.state.jenis_produksi_id}
                           loading={this.state.isJenisProduksiLoading}
                           style={{ width: "100%" }}
                           disabled={
