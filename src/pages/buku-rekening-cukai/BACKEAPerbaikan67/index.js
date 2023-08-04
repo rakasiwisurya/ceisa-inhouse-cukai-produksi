@@ -43,12 +43,15 @@ export default class BACKEAPerbaikan67 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_ea_detail_id: null,
+
       jumlah_ea_yang_akan_dicampur: null,
       jumlah_bahan_pencampur: null,
       satuan: null,
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
+      alasan: null,
 
       searchText: null,
       searchedColumn: null,
@@ -111,13 +114,7 @@ export default class BACKEAPerbaikan67 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record, index)}
               />
-              {record.back_ea_detail_id ? (
-                <Button
-                  type="danger"
-                  icon="delete"
-                  onClick={() => this.handleDeleteApiRincian(index, record.back_ea_detail_id)}
-                />
-              ) : (
+              {!record.back_ea_detail_id && (
                 <Button
                   type="danger"
                   icon="close"
@@ -315,6 +312,7 @@ export default class BACKEAPerbaikan67 extends Component {
       jenis_bahan,
       jumlah_setelah_dicampur,
       hasil_akhir,
+      alasan,
     } = this.state;
 
     this.setState({
@@ -328,6 +326,7 @@ export default class BACKEAPerbaikan67 extends Component {
           jenis_bahan,
           jumlah_setelah_dicampur,
           hasil_akhir,
+          alasan,
         },
       ],
     });
@@ -339,6 +338,7 @@ export default class BACKEAPerbaikan67 extends Component {
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
+      alasan: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -346,45 +346,53 @@ export default class BACKEAPerbaikan67 extends Component {
       isEditRincian: true,
       editIndexRincian: index,
 
+      back_ea_detail_id: record.back_ea_detail_id,
       jumlah_ea_yang_akan_dicampur: record.jumlah_ea_yang_akan_dicampur,
       jumlah_bahan_pencampur: record.jumlah_bahan_pencampur,
       satuan: record.satuan,
       jenis_bahan: record.jenis_bahan,
       jumlah_setelah_dicampur: record.jumlah_setelah_dicampur,
       hasil_akhir: record.hasil_akhir,
+      alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
     const {
+      back_ea_detail_id,
       jumlah_ea_yang_akan_dicampur,
       jumlah_bahan_pencampur,
       satuan,
       jenis_bahan,
       jumlah_setelah_dicampur,
       hasil_akhir,
+      alasan,
     } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
+      back_ea_detail_id,
       jumlah_ea_yang_akan_dicampur,
       jumlah_bahan_pencampur,
       satuan,
       jenis_bahan,
       jumlah_setelah_dicampur,
       hasil_akhir,
+      alasan,
     });
 
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_ea_detail_id: null,
       jumlah_ea_yang_akan_dicampur: null,
       jumlah_bahan_pencampur: null,
       satuan: null,
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
+      alasan: null,
 
       dataSource: newDataSource,
     });
@@ -413,12 +421,14 @@ export default class BACKEAPerbaikan67 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
+      back_ea_detail_id: null,
       jumlah_ea_yang_akan_dicampur: null,
       jumlah_bahan_pencampur: null,
       satuan: null,
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
+      alasan: null,
     });
   };
   handleReset = () => {
@@ -430,12 +440,14 @@ export default class BACKEAPerbaikan67 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
+      back_ea_detail_id: null,
       jumlah_ea_yang_akan_dicampur: null,
       jumlah_bahan_pencampur: null,
       satuan: null,
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
+      alasan: null,
 
       dataSource: [],
     });
@@ -460,6 +472,7 @@ export default class BACKEAPerbaikan67 extends Component {
         jumlahPencampur: item.jumlah_bahan_pencampur,
         jumlahSetelah: item.jumlah_setelah_dicampur,
         kodeSatuanPencampur: item.satuan,
+        alasan: item.alasan,
       })),
     };
 
@@ -647,11 +660,17 @@ export default class BACKEAPerbaikan67 extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Hasil Akhir</FormLabel>
                     </div>
+                    <Input id="hasil_akhir" value={this.state.hasil_akhir} disabled />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alasan</FormLabel>
+                    </div>
                     <Input
-                      id="hasil_akhir"
-                      value={this.state.hasil_akhir}
-                      style={{ width: "100%" }}
-                      disabled
+                      id="alasan"
+                      value={this.state.alasan}
+                      onChange={this.handleInputChange}
                     />
                   </Col>
                 </Row>
