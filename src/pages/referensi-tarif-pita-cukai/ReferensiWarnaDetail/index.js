@@ -361,10 +361,12 @@ export default class ReferensiWarnaDetail extends Component {
                         disabled
                       >
                         <Select.Option value={this.state.jenis_produksi_id}>
-                          {`${
-                            this.state.jenis_produksi_code &&
-                            `(${this.state.jenis_produksi_code}) - `
-                          }${this.state.jenis_produksi_name}`}
+                          {this.state.jenis_produksi_code || this.state.jenis_produksi_name
+                            ? `${
+                                this.state.jenis_produksi_code &&
+                                `(${this.state.jenis_produksi_code}) - `
+                              }${this.state.jenis_produksi_name}`
+                            : null}
                         </Select.Option>
                       </Select>
                     </Col>
