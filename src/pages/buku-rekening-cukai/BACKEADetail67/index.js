@@ -141,7 +141,7 @@ export default class BACKEADetail67 extends Component {
   }
 
   getDetailBackEa67 = async () => {
-    const payload = { idBackEaheader: this.props.match.params.id };
+    const payload = { idBackEaHeader: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
