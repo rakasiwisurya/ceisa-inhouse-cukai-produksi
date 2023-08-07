@@ -18,8 +18,6 @@ export default class ModalDaftarMerkMMEA extends Component {
         kadar: "",
         tarif: "",
         isi: "",
-        kemasan: "",
-        negara_asal: "",
       },
 
       dataSource: [],
@@ -42,7 +40,7 @@ export default class ModalDaftarMerkMMEA extends Component {
           title: "Kadar",
           dataIndex: "kadar",
           key: "kadar",
-          render: (text) => <div>{text} %</div>,
+          render: (text) => <div>{text ? `${text} %` : text}</div>,
           ...this.getColumnSearchProps("kadar"),
         },
         {
@@ -56,22 +54,8 @@ export default class ModalDaftarMerkMMEA extends Component {
           title: "Isi",
           dataIndex: "isi",
           key: "isi",
-          render: (text) => <div>{text} ml</div>,
+          render: (text) => <div>{text ? `${text} ml` : text}</div>,
           ...this.getColumnSearchProps("isi"),
-        },
-        {
-          title: "Kemasan",
-          dataIndex: "kemasan",
-          key: "kemasan",
-          render: (text) => <div>{text}</div>,
-          ...this.getColumnSearchProps("kemasan"),
-        },
-        {
-          title: "Negara Asal",
-          dataIndex: "negara_asal",
-          key: "negara_asal",
-          render: (text) => <div>{text}</div>,
-          ...this.getColumnSearchProps("negara_asal"),
         },
       ],
     };
@@ -88,63 +72,38 @@ export default class ModalDaftarMerkMMEA extends Component {
   }
 
   getDaftarMerkMmea = async () => {
-    // const { merk_name, golongan, kadar, tarif, isi, kemasan, negara_asal } = this.state.table;
+    const { merk_name, golongan, kadar, tarif, isi } = this.state.table;
 
-    // const payload = { page: this.state.page };
+    const payload = { page: this.state.page };
 
-    // if (merk_name) payload.namaMerk = merk_name;
-    // if (golongan) payload.namaGolongan = golongan;
-    // if (kadar) payload.kadar = kadar;
-    // if (tarif) payload.tarifSpesifik = tarif;
-    // if (isi) payload.isiKemasan = isi;
-    // if (kemasan) payload.kemasan = kemasan;
-    // if (negara_asal) payload.negaraAsal = negara_asal;
+    if (merk_name) payload.namaMerk = merk_name;
+    if (golongan) payload.namaGolongan = golongan;
+    if (kadar) payload.kadarEa = kadar;
+    if (tarif) payload.tarifSpesifik = tarif;
+    if (isi) payload.isiPerKemasan = isi;
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "get",
-    //   endpoint: "/back/daftar-merk-mmea",
-    //   params: payload,
-    //   setLoading: (bool) => this.setState({ isDaftarMerkMmeaLoading: bool }),
-    // });
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back/daftar-merk-mmea",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDaftarMerkMmeaLoading: bool }),
+    });
 
-    // if (response) {
-    //   const newData = response.data.data.listData.map((item, index) => ({
-    //     key: `daftar-merk-mmea-${index}`,
-    //     merk_id: item.idMerk,
-    //     merk_name: item.namaMerk,
-    //     golongan: item.namaGolongan,
-    //     kadar: item.kadar,
-    //     tarif: item.tarifSpesifik,
-    //     isi: item.isiKemasan,
-    //     kemasan: item.kemasan,
-    //     negara_asal: item.negaraAsal,
-    //   }));
-    //   const page = response.data.data.currentPage;
-    //   const totalData = response.data.data.totalData;
-    //   this.setState({ dataSource: newData, page, totalData });
-    // }
-
-    this.setState({ isDaftarMerkMmeaLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        dataSource: [
-          {
-            key: "1",
-            merk_id: "merk_id1",
-            merk_name: "merk_name1",
-            golongan: "golongan1",
-            kadar: 300,
-            tarif: 200,
-            isi: 100,
-            kemasan: "kemasan1",
-            negara_asal: "negara_asal1",
-          },
-        ],
-      });
-      this.setState({ isDaftarMerkMmeaLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    if (response) {
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `daftar-merk-mmea-${index}`,
+        merk_id: item.idMerk,
+        merk_name: item.namaMerk,
+        golongan: item.namaGolongan,
+        kadar: item.kadarEa,
+        tarif: item.tarifSpesifik,
+        isi: item.isiPerKemasan,
+      }));
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({

@@ -59,15 +59,18 @@ export default class ModalDaftarNPPBKC extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (prevState.page !== this.state.page || prevProps.idJenisBkc !== this.props.idJenisBkc) {
       this.getDaftarNppbkc();
     }
   }
 
   getDaftarNppbkc = async () => {
+    const { idJenisBkc } = this.props;
     const { nppbkc_id, nama_nppbkc, nppbkc, npwp_nppbkc, alamat_nppbkc } = this.state.table;
 
     const payload = { page: this.state.page };
+
+    if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
 
     if (nppbkc_id) payload.idNppbkc = nppbkc_id;
     if (nama_nppbkc) payload.namaNppbkc = nama_nppbkc;

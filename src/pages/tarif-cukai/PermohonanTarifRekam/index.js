@@ -281,7 +281,7 @@ export default class PermohonanTarifRekam extends Component {
         golongan_id: record.golongan_id,
         golongan_name: record.golongan_name,
         isi_ht: record.isi,
-        berat_ht: record.isi_ht,
+        berat_ht: record.isi,
         hje_perkemasan_ht: record.hje,
         tarif_ht: record.tarif,
       });
@@ -331,7 +331,7 @@ export default class PermohonanTarifRekam extends Component {
       alamat_nppbkc,
       jenis_produksi_mmea_id,
 
-      // jenis_pita_id,
+      jenis_pita_id,
 
       merk_ht_id,
       merk_ht,
@@ -357,7 +357,7 @@ export default class PermohonanTarifRekam extends Component {
       kadar_mmea,
       tarif_cukai_per_liter,
       tarif_cukai_per_kemasan,
-      // personal,
+      personal,
       seri_pita,
 
       nomor_surat_lisensi,
@@ -460,15 +460,19 @@ export default class PermohonanTarifRekam extends Component {
     formData.set("alamatPerusahaan", alamat_nppbkc);
 
     if (jenis_bkc_id === 3) {
-      // formData.set(
-      //   "idJenisPitaCukai",
-      //   `${[personal, isi_ht, hje_perkemasan_ht, asal_produk_ht_id, seri_pita, tarif_ht]
-      //     .filter((str) => Boolean(str) === true)
-      //     .join(";")}`
-      // );
+      if (jenis_produksi_ht_id === 2 || jenis_produksi_ht_id === 5) {
+        formData.set(
+          "idMerk",
+          `${[personal, isi_ht, hje_perkemasan_ht, asal_produk_ht_id, seri_pita, tarif_ht]
+            .filter((str) => Boolean(str) === true)
+            .join(";")}`
+        );
+      } else {
+        formData.set("idMerk", merk_ht_id);
+      }
 
+      formData.set("idJenisPitaCukai", jenis_pita_id);
       formData.set("seriPita", seri_pita);
-      formData.set("idMerk", merk_ht_id);
       formData.set("namaMerk", merk_ht);
       formData.set("idJenisProduksiBkc", jenis_produksi_ht_id);
       formData.set("idGolongan", golongan_id);
@@ -644,6 +648,7 @@ export default class PermohonanTarifRekam extends Component {
                   <Button
                     type="primary"
                     onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                    disabled={!this.state.jenis_bkc_id}
                   >
                     Cari
                   </Button>
@@ -703,27 +708,34 @@ export default class PermohonanTarifRekam extends Component {
               {this.state.jenis_bkc_id && (
                 <Col span={12}>
                   <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Jenis Pita</FormLabel>
+                    <FormLabel>Merk</FormLabel>
                   </div>
                   <div style={{ display: "flex", gap: 10 }}>
-                    <Input
-                      id="jenis_pita"
-                      value={
-                        this.state.jenis_bkc_id === 3
-                          ? `${[
-                              this.state.personal,
-                              this.state.isi_ht,
-                              this.state.hje_perkemasan_ht,
-                              this.state.asal_produk_ht_id,
-                              this.state.seri_pita,
-                              this.state.tarif_ht,
-                            ]
-                              .filter((str) => Boolean(str) === true)
-                              .join(";")}`
-                          : null
-                      }
-                      disabled
-                    />
+                    {this.state.jenis_bkc_id === 3 &&
+                    (this.state.jenis_produksi_ht_id === 2 ||
+                      this.state.jenis_produksi_ht_id === 5) ? (
+                      <Input
+                        id="merk_ht"
+                        value={`${[
+                          this.state.personal,
+                          this.state.isi_ht,
+                          this.state.hje_perkemasan_ht,
+                          this.state.asal_produk_ht_id,
+                          this.state.seri_pita,
+                          this.state.tarif_ht,
+                        ]
+                          .filter((str) => Boolean(str) === true)
+                          .join(";")}`}
+                        disabled
+                      />
+                    ) : (
+                      <Input
+                        id="merk_ht"
+                        onChange={this.handleInputChange}
+                        value={this.state.merk_ht}
+                      />
+                    )}
+
                     <Button
                       type="primary"
                       onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
@@ -736,17 +748,6 @@ export default class PermohonanTarifRekam extends Component {
 
               {this.state.jenis_bkc_id === 3 && (
                 <>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Merk</FormLabel>
-                    </div>
-                    <Input
-                      id="merk_ht"
-                      onChange={this.handleInputChange}
-                      value={this.state.merk_ht}
-                    />
-                  </Col>
-
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Produksi</FormLabel>
@@ -1244,6 +1245,7 @@ export default class PermohonanTarifRekam extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
 
         <ModalDaftarJenisPita
