@@ -6,6 +6,7 @@ import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
 export default class BACKMMEADetail89 extends Component {
@@ -24,8 +25,8 @@ export default class BACKMMEADetail89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -50,34 +51,11 @@ export default class BACKMMEADetail89 extends Component {
       dataSource: [],
       columns: [
         {
-          title: "Aksi",
-          dataIndex: "aksi",
-          key: "aksi",
-          fixed: "left",
-          render: (text, record, index) => (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <ButtonCustom
-                variant="warning"
-                icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
-              />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
-            </div>
-          ),
-        },
-        {
           title: "Merk",
-          dataIndex: "merk",
-          key: "merk",
+          dataIndex: "merk_name",
+          key: "merk_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk"),
-        },
-        {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
+          ...this.getColumnSearchProps("merk_name"),
         },
         {
           title: "Kadar",
@@ -127,42 +105,39 @@ export default class BACKMMEADetail89 extends Component {
   }
 
   getDetailBackMmea = async () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "nppbkc_id",
-        nppbkc: "nppbkc",
-        nama_nppbkc: "nama_nppbkc",
-        jenis_back: "BACK-8",
-        nomor_back: "nomor_back",
-        tanggal_back: moment(new Date()),
+    const payload = { idBackMmeaHeader: this.props.match.params.id };
 
-        dataSource: [
-          {
-            key: "1",
-            merk: "merk1",
-            jenis_mmea: "jenis_mmea1",
-            tarif: 100,
-            isi: 200,
-            kadar: 300,
-            jumlah_kemasan: 400,
-            jumlah_lt: 500,
-          },
-          {
-            key: "2",
-            merk: "merk2",
-            jenis_mmea: "jenis_mmea2",
-            tarif: 500,
-            isi: 400,
-            kadar: 300,
-            jumlah_kemasan: 200,
-            jumlah_lt: 100,
-          },
-        ],
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-mmea/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackMmea,
+        nomor_back: data.nomorBackMmea,
+        tanggal_back: moment(data.tanggalBackMmea),
+        dataSource: data.details.map((item, index) => ({
+          key: `back-mmea-${index}`,
+          back_mmea_detail_id: item.idBackMmeaDetail,
+          merk_id: item.idMerk,
+          merk_name: item.namaMerk,
+          tarif: item.tarifSpesifik,
+          isi: item.isiPerKemasan,
+          kadar: item.kadarEa,
+          jumlah_kemasan: item.jumlahKemasan,
+          jumlah_lt: item.jumlah,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -299,15 +274,8 @@ export default class BACKMMEADetail89 extends Component {
                       <FormLabel>Merk</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="merk" value={this.state.merk} disabled />
+                      <Input id="merk_name" value={this.state.merk_name} disabled />
                     </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis</FormLabel>
-                    </div>
-                    <Input id="jenis_mmea" value={this.state.jenis_mmea} disabled />
                   </Col>
 
                   <Col span={12}>

@@ -20,6 +20,8 @@ import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
+import { requestApi } from "utils/requestApi";
 
 export default class BACKMMEAPerbaikan89 extends Component {
   constructor(props) {
@@ -34,6 +36,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isDetailLoading: true,
       isUpdateLoading: false,
       isModalDaftarNppbkcVisible: false,
+      isModalDaftarMerkMmeaVisible: false,
 
       nppbkc_id: null,
       nppbkc: null,
@@ -44,8 +47,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
 
       back_mmea_detail_id: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -94,17 +97,10 @@ export default class BACKMMEAPerbaikan89 extends Component {
         },
         {
           title: "Merk",
-          dataIndex: "merk",
-          key: "merk",
+          dataIndex: "merk_name",
+          key: "merk_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk"),
-        },
-        {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
+          ...this.getColumnSearchProps("merk_name"),
         },
         {
           title: "Kadar",
@@ -154,44 +150,39 @@ export default class BACKMMEAPerbaikan89 extends Component {
   }
 
   getDetailBackMmea = async () => {
-    this.setState({ isDetailLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({
-        nppbkc_id: "nppbkc_id",
-        nppbkc: "nppbkc",
-        nama_nppbkc: "nama_nppbkc",
-        jenis_back: "BACK-8",
-        nomor_back: "nomor_back",
-        tanggal_back: moment(new Date()),
+    const payload = { idBackMmeaHeader: this.props.match.params.id };
 
-        dataSource: [
-          {
-            key: "1",
-            back_mmea_detail_id: "1",
-            merk: "merk1",
-            jenis_mmea: "jenis_mmea1",
-            tarif: 100,
-            isi: 200,
-            kadar: 300,
-            jumlah_kemasan: 400,
-            jumlah_lt: 500,
-          },
-          {
-            key: "2",
-            back_mmea_detail_id: "2",
-            merk: "merk2",
-            jenis_mmea: "jenis_mmea2",
-            tarif: 500,
-            isi: 400,
-            kadar: 300,
-            jumlah_kemasan: 200,
-            jumlah_lt: 100,
-          },
-        ],
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/back-mmea/detail",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    });
+
+    if (response) {
+      const { data } = response.data;
+
+      this.setState({
+        nppbkc_id: data.idNppbkc,
+        nppbkc: data.nppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        jenis_back: data.jenisBackMmea,
+        nomor_back: data.nomorBackMmea,
+        tanggal_back: moment(data.tanggalBackMmea),
+        dataSource: data.details.map((item, index) => ({
+          key: `back-mmea-${index}`,
+          back_mmea_detail_id: item.idBackMmeaDetail,
+          merk_id: item.idMerk,
+          merk_name: item.namaMerk,
+          tarif: item.tarifSpesifik,
+          isi: item.isiPerKemasan,
+          kadar: item.kadarEa,
+          jumlah_kemasan: item.jumlahKemasan,
+          jumlah_lt: item.jumlah,
+        })),
       });
-      this.setState({ isDetailLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -277,17 +268,27 @@ export default class BACKMMEAPerbaikan89 extends Component {
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
+  handleDataMerkMmea = (record) => {
+    this.setState({
+      merk_id: record.merk_id,
+      merk_name: record.merk_name,
+      kadar: record.kadar,
+      tarif: record.tarif,
+      isi: record.isi,
+    });
+    this.handleModalClose("isModalDaftarMerkMmeaVisible");
+  };
 
   handleSimpanRincian = () => {
-    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt, alasan } = this.state;
+    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt, alasan } = this.state;
 
     this.setState({
       dataSource: [
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          merk,
-          jenis_mmea,
+          merk_id,
+          merk_name,
           tarif,
           isi,
           kadar,
@@ -299,8 +300,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
     });
 
     this.setState({
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -315,8 +316,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
       editIndexRincian: index,
 
       back_mmea_detail_id: record.back_mmea_detail_id,
-      merk: record.merk,
-      jenis_mmea: record.jenis_mmea,
+      merk_id: record.merk_id,
+      merk_name: record.merk_name,
       tarif: record.tarif,
       isi: record.isi,
       kadar: record.kadar,
@@ -328,8 +329,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
   handleUbahRincian = () => {
     const {
       back_mmea_detail_id,
-      merk,
-      jenis_mmea,
+      merk_id,
+      merk_name,
       tarif,
       isi,
       kadar,
@@ -342,8 +343,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
       back_mmea_detail_id,
-      merk,
-      jenis_mmea,
+      merk_id,
+      merk_name,
       tarif,
       isi,
       kadar,
@@ -357,8 +358,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
       editIndexRincian: null,
 
       back_mmea_detail_id: null,
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -380,46 +381,53 @@ export default class BACKMMEAPerbaikan89 extends Component {
       editIndexRincian: null,
 
       back_mmea_detail_id: null,
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
       alasan: null,
-    });
-  };
-  handleReset = () => {
-    this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
-
-      back_mmea_detail_id: null,
-      merk: null,
-      jenis_mmea: null,
-      tarif: null,
-      isi: null,
-      kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
-      alasan: null,
-
-      dataSource: [],
     });
   };
   handleUpdate = async () => {
-    this.setState({ isUpdateLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+      this.state;
+
+    const payload = {
+      idBackMmeaHeader: this.props.match.params.id,
+      idNppbkc: nppbkc_id,
+      jenisBackMmea: jenis_back,
+      namaPerusahaan: nama_nppbkc,
+      nomorBackMmea: nomor_back,
+      nppbkc: nppbkc,
+      tanggalBackMmea: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details: dataSource.map((item) => ({
+        idBackMmeaDetail: item.back_mmea_detail_id,
+        idMerk: item.merk_id,
+        isiPerKemasan: item.isi,
+        jumlah: item.jumlah_lt,
+        jumlahKemasan: item.jumlah_kemasan,
+        kadarEa: item.kadar,
+        namaMerk: item.merk_name,
+        tarifSpesifik: item.tarif,
+        alasan: item.alasan,
+      })),
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-mmea/update",
+      body: payload,
+      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/back-mmea`);
-      this.setState({ isUpdateLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
@@ -510,20 +518,19 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Merk</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="merk" value={this.state.merk} onChange={this.handleInputChange} />
-                      <Button type="primary">Cari</Button>
+                      <Input
+                        id="merk_name"
+                        value={this.state.merk_name}
+                        onChange={this.handleInputChange}
+                        disabled
+                      />
+                      <Button
+                        type="primary"
+                        onClick={() => this.handleModalShow("isModalDaftarMerkMmeaVisible")}
+                      >
+                        Cari
+                      </Button>
                     </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis</FormLabel>
-                    </div>
-                    <Input
-                      id="jenis_mmea"
-                      value={this.state.jenis_mmea}
-                      onChange={this.handleInputChange}
-                    />
                   </Col>
 
                   <Col span={12}>
@@ -535,6 +542,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       value={this.state.tarif}
                       onChange={(value) => this.handleInputNumberChange("tarif", value)}
                       style={{ width: "100%" }}
+                      disabled
                     />
                   </Col>
 
@@ -547,6 +555,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       value={this.state.isi}
                       onChange={(value) => this.handleInputNumberChange("isi", value)}
                       style={{ width: "100%" }}
+                      disabled
                     />
                   </Col>
 
@@ -559,6 +568,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       value={this.state.kadar}
                       onChange={(value) => this.handleInputNumberChange("kadar", value)}
                       style={{ width: "100%" }}
+                      disabled
                     />
                   </Col>
 
@@ -614,13 +624,9 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {this.state.isEditRincian ? (
+                        {this.state.isEditRincian && (
                           <Button type="danger" block onClick={this.handleBatalEditRincian}>
                             Batal
-                          </Button>
-                        ) : (
-                          <Button type="danger" block onClick={this.handleReset}>
-                            Reset
                           </Button>
                         )}
                       </Col>
@@ -710,6 +716,12 @@ export default class BACKMMEAPerbaikan89 extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarMerkMMEA
+          isVisible={this.state.isModalDaftarMerkMmeaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarMerkMmeaVisible")}
+          onDataDoubleClick={this.handleDataMerkMmea}
         />
       </>
     );

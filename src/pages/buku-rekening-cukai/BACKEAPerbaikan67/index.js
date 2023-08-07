@@ -417,27 +417,6 @@ export default class BACKEAPerbaikan67 extends Component {
       alasan: null,
     });
   };
-  handleReset = () => {
-    this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
-
-      back_ea_detail_id: null,
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
-      satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
-      alasan: null,
-
-      dataSource: [],
-    });
-  };
   handleUpdate = async () => {
     const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
       this.state;
@@ -677,13 +656,9 @@ export default class BACKEAPerbaikan67 extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {this.state.isEditRincian ? (
+                        {this.state.isEditRincian && (
                           <Button type="danger" block onClick={this.handleBatalEditRincian}>
                             Batal
-                          </Button>
-                        ) : (
-                          <Button type="danger" block onClick={this.handleReset}>
-                            Reset
                           </Button>
                         )}
                       </Col>

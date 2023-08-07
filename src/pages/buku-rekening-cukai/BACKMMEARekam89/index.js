@@ -18,6 +18,9 @@ import { pathName } from "configs/constants";
 import React, { Component } from "react";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import { requestApi } from "utils/requestApi";
+import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
+import moment from "moment";
 
 export default class BACKMMEARekam89 extends Component {
   constructor(props) {
@@ -31,6 +34,7 @@ export default class BACKMMEARekam89 extends Component {
 
       isRekamLoading: false,
       isModalDaftarNppbkcVisible: false,
+      isModalDaftarMerkMmeaVisible: false,
 
       nppbkc_id: null,
       nppbkc: null,
@@ -39,8 +43,8 @@ export default class BACKMMEARekam89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -82,17 +86,10 @@ export default class BACKMMEARekam89 extends Component {
         },
         {
           title: "Merk",
-          dataIndex: "merk",
-          key: "merk",
+          dataIndex: "merk_name",
+          key: "merk_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk"),
-        },
-        {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
+          ...this.getColumnSearchProps("merk_name"),
         },
         {
           title: "Kadar",
@@ -220,17 +217,27 @@ export default class BACKMMEARekam89 extends Component {
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
+  handleDataMerkMmea = (record) => {
+    this.setState({
+      merk_id: record.merk_id,
+      merk_name: record.merk_name,
+      kadar: record.kadar,
+      tarif: record.tarif,
+      isi: record.isi,
+    });
+    this.handleModalClose("isModalDaftarMerkMmeaVisible");
+  };
 
   handleSimpanRincian = () => {
-    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
+    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
 
     this.setState({
       dataSource: [
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          merk,
-          jenis_mmea,
+          merk_id,
+          merk_name,
           tarif,
           isi,
           kadar,
@@ -241,8 +248,8 @@ export default class BACKMMEARekam89 extends Component {
     });
 
     this.setState({
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -255,8 +262,8 @@ export default class BACKMMEARekam89 extends Component {
       isEditRincian: true,
       editIndexRincian: index,
 
-      merk: record.merk,
-      jenis_mmea: record.jenis_mmea,
+      merk_id: record.merk_id,
+      merk_name: record.merk_name,
       tarif: record.tarif,
       isi: record.isi,
       kadar: record.kadar,
@@ -265,13 +272,13 @@ export default class BACKMMEARekam89 extends Component {
     });
   };
   handleUbahRincian = () => {
-    const { merk, jenis_mmea, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
+    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
-      merk,
-      jenis_mmea,
+      merk_id,
+      merk_name,
       tarif,
       isi,
       kadar,
@@ -283,8 +290,8 @@ export default class BACKMMEARekam89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -304,8 +311,8 @@ export default class BACKMMEARekam89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -322,8 +329,8 @@ export default class BACKMMEARekam89 extends Component {
       nomor_back: null,
       tanggal_back: null,
 
-      merk: null,
-      jenis_mmea: null,
+      merk_id: null,
+      merk_name: null,
       tarif: null,
       isi: null,
       kadar: null,
@@ -334,13 +341,39 @@ export default class BACKMMEARekam89 extends Component {
     });
   };
   handleRekam = async () => {
-    this.setState({ isRekamLoading: true });
-    const timeout = setTimeout(() => {
-      notification.success({ message: "Success", description: "Success" });
+    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+      this.state;
+
+    const payload = {
+      idNppbkc: nppbkc_id,
+      jenisBackMmea: jenis_back,
+      namaPerusahaan: nama_nppbkc,
+      nomorBackMmea: nomor_back,
+      nppbkc: nppbkc,
+      tanggalBackMmea: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details: dataSource.map((item) => ({
+        idMerk: item.merk_id,
+        isiPerKemasan: item.isi,
+        jumlah: item.jumlah_lt,
+        jumlahKemasan: item.jumlah_kemasan,
+        kadarEa: item.kadar,
+        namaMerk: item.merk_name,
+        tarifSpesifik: item.tarif,
+      })),
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/back-mmea/rekam",
+      body: payload,
+      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/back-mmea`);
-      this.setState({ isRekamLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
   };
 
   render() {
@@ -427,20 +460,19 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Merk</FormLabel>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <Input id="merk" value={this.state.merk} onChange={this.handleInputChange} />
-                  <Button type="primary">Cari</Button>
+                  <Input
+                    id="merk_name"
+                    value={this.state.merk_name}
+                    onChange={this.handleInputChange}
+                    disabled
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => this.handleModalShow("isModalDaftarMerkMmeaVisible")}
+                  >
+                    Cari
+                  </Button>
                 </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jenis</FormLabel>
-                </div>
-                <Input
-                  id="jenis_mmea"
-                  value={this.state.jenis_mmea}
-                  onChange={this.handleInputChange}
-                />
               </Col>
 
               <Col span={12}>
@@ -452,6 +484,7 @@ export default class BACKMMEARekam89 extends Component {
                   value={this.state.tarif}
                   onChange={(value) => this.handleInputNumberChange("tarif", value)}
                   style={{ width: "100%" }}
+                  disabled
                 />
               </Col>
 
@@ -464,6 +497,7 @@ export default class BACKMMEARekam89 extends Component {
                   value={this.state.isi}
                   onChange={(value) => this.handleInputNumberChange("isi", value)}
                   style={{ width: "100%" }}
+                  disabled
                 />
               </Col>
 
@@ -476,6 +510,7 @@ export default class BACKMMEARekam89 extends Component {
                   value={this.state.kadar}
                   onChange={(value) => this.handleInputNumberChange("kadar", value)}
                   style={{ width: "100%" }}
+                  disabled
                 />
               </Col>
 
@@ -607,6 +642,12 @@ export default class BACKMMEARekam89 extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarMerkMMEA
+          isVisible={this.state.isModalDaftarMerkMmeaVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarMerkMmeaVisible")}
+          onDataDoubleClick={this.handleDataMerkMmea}
         />
       </>
     );
