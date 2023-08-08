@@ -78,19 +78,19 @@ export default class BACKEARekam67 extends Component {
       list_jenis_bahan: [
         {
           jenis_bahan_id: "BIT-SDA BIT 6",
-          jenis_bahan_name: "Birtex",
+          jenis_bahan_name: "BIRTEX",
         },
         {
           jenis_bahan_id: "IPA-SDA IPA 5",
-          jenis_bahan_name: "Isopropil Alcohol",
+          jenis_bahan_name: "ISOPROPIL ALCOHOL",
         },
         {
           jenis_bahan_id: "EAC-SDA EAC 2",
-          jenis_bahan_name: "Etil Acetat",
+          jenis_bahan_name: "ETIL ACETAT",
         },
         {
           jenis_bahan_id: "BPE-SPIRTUS BAKAR",
-          jenis_bahan_name: "Bahan Perusak EA",
+          jenis_bahan_name: "BAHAN PERUSAK EA",
         },
       ],
 
