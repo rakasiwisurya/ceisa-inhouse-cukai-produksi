@@ -302,7 +302,7 @@ export default class ReferensiWarnaRekam extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleDatepickerChange = (field, value) => {
     this.setState({ [field]: value });
@@ -391,15 +391,9 @@ export default class ReferensiWarnaRekam extends Component {
     });
   };
   handleReset = () => {
-    this.setState({
+    const resetData = {
       isEdit: false,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      tanggal_awal_berlaku: null,
-
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
       kode_warna: null,
       warna: null,
       golongan_id: null,
@@ -408,9 +402,14 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_produksi_name: null,
       jenis_usaha_id: null,
       jenis_usaha_name: null,
+    };
 
-      dataSource: [],
-    });
+    if (this.state.dataSource.length === 0) {
+      resetData.jenis_bkc_id = null;
+      resetData.jenis_bkc_name = null;
+    }
+
+    this.setState(resetData);
   };
   handleUbah = () => {
     const {

@@ -76,11 +76,11 @@ export default class ReferensiTarifRekam extends Component {
       list_personal: [
         {
           personal_id: "Y",
-          personal_name: "Ya",
+          personal_name: "YA",
         },
         {
           personal_id: "T",
-          personal_name: "Tidak",
+          personal_name: "TIDAK",
         },
       ],
       list_jenis_produksi: [],
@@ -396,7 +396,7 @@ export default class ReferensiTarifRekam extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
@@ -578,6 +578,9 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: null,
       personal_id: null,
       personal_name: null,
+      jenis_produksi_id: null,
+      jenis_produksi_code: null,
+      jenis_produksi_name: null,
       jenis_htl_rel_id: null,
       jenis_htl_rel_name: null,
 
@@ -605,17 +608,9 @@ export default class ReferensiTarifRekam extends Component {
     }
   };
   handleReset = () => {
-    this.setState({
+    const resetData = {
       isEdit: false,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      tanggal_awal_berlaku: null,
-      nomor_peraturan: null,
-      tanggal_peraturan: null,
-
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
       golongan_id: null,
       golongan_name: null,
       personal_id: null,
@@ -639,9 +634,14 @@ export default class ReferensiTarifRekam extends Component {
       kadar_bawah: null,
       tarif_cukai_dalam_negeri: null,
       tarif_cukai_impor: null,
+    };
 
-      dataSource: [],
-    });
+    if (this.state.dataSource.length === 0) {
+      resetData.jenis_bkc_id = null;
+      resetData.jenis_bkc_name = null;
+    }
+
+    this.setState(resetData);
   };
   handleUbah = () => {
     const {
@@ -708,6 +708,9 @@ export default class ReferensiTarifRekam extends Component {
       golongan_name: null,
       personal_id: null,
       personal_name: null,
+      jenis_produksi_id: null,
+      jenis_produksi_code: null,
+      jenis_produksi_name: null,
       jenis_htl_rel_id: null,
       jenis_htl_rel_name: null,
 
@@ -808,6 +811,7 @@ export default class ReferensiTarifRekam extends Component {
       const data = {
         idGolonganBkc: item.golongan_id,
         flagPersonal: item.personal_id,
+        idJenisProduksiBkc: +item.jenis_produksi_id.split(" ")[0],
       };
 
       if (this.state.jenis_bkc_id === 3) {
@@ -842,10 +846,6 @@ export default class ReferensiTarifRekam extends Component {
       nomorPeraturan: this.state.nomor_peraturan,
       tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
       idJenisBkc: this.state.jenis_bkc_id,
-      idJenisProduksiBkc:
-        this.state.jenis_bkc_id === 3
-          ? +this.state.jenis_produksi_id.split(" ")[0]
-          : +this.state.dataSource[0].jenis_produksi_id.split(" ")[0],
       details,
     };
 
@@ -1036,7 +1036,7 @@ export default class ReferensiTarifRekam extends Component {
                           list_jenis_htl_rel: [],
                           jenis_produksi_code: option.props.children
                             .split("-")[0]
-                            .replace(/[()\s]/g, null),
+                            .replace(/[()\s]/g, ""),
                           jenis_produksi_bkc_satuan:
                             splitValues[1] !== "null" ? splitValues[1] : null,
                         });
@@ -1045,7 +1045,6 @@ export default class ReferensiTarifRekam extends Component {
                       value={this.state.jenis_produksi_id}
                       loading={this.state.isJenisProduksiLoading}
                       style={{ width: "100%" }}
-                      disabled={this.state.jenis_bkc_id === 3 && this.state.dataSource.length > 0}
                     >
                       {this.state.list_jenis_produksi.length > 0 &&
                         this.state.list_jenis_produksi.map((item, index) => (

@@ -363,7 +363,7 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleDatepickerChange = (field, value) => {
     this.setState({ [field]: value });
@@ -449,23 +449,6 @@ export default class ReferensiWarnaEdit extends Component {
       jenis_produksi_name: null,
       jenis_usaha_id: null,
       jenis_usaha_name: null,
-    });
-  };
-  handleReset = () => {
-    this.setState({
-      isEdit: false,
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
-      warna_detail_id: null,
-      kode_warna: null,
-      warna: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
-      jenis_usaha_id: null,
-      jenis_usaha_name: null,
-      dataSource: [],
     });
   };
   handleUbah = () => {

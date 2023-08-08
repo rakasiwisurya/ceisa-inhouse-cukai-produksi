@@ -78,11 +78,11 @@ export default class ReferensiTarifEdit extends Component {
       list_personal: [
         {
           personal_id: "Y",
-          personal_name: "Ya",
+          personal_name: "YA",
         },
         {
           personal_id: "T",
-          personal_name: "Tidak",
+          personal_name: "TIDAK",
         },
       ],
       list_jenis_produksi: [],
@@ -473,7 +473,7 @@ export default class ReferensiTarifEdit extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
@@ -676,37 +676,6 @@ export default class ReferensiTarifEdit extends Component {
       tarif_cukai_impor: null,
     });
   };
-  handleReset = () => {
-    this.setState({
-      isEdit: false,
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
-      golongan_id: null,
-      golongan_name: null,
-      personal_id: null,
-      personal_name: null,
-
-      jenis_produksi_id: null,
-      jenis_produksi_code: null,
-      jenis_produksi_name: null,
-      jenis_htl_rel_id: null,
-      jenis_htl_rel_name: null,
-      tarif: null,
-      batas_produksi1: null,
-      batas_produksi2: null,
-      hje1: null,
-      hje2: null,
-      layer: null,
-      jenis_produksi_bkc_satuan: null,
-      jenis_htl_rel_satuan: null,
-
-      kadar_atas: null,
-      kadar_bawah: null,
-      tarif_cukai_dalam_negeri: null,
-      tarif_cukai_impor: null,
-      dataSource: [],
-    });
-  };
   handleUbah = () => {
     const {
       jenis_bkc_id,
@@ -882,6 +851,7 @@ export default class ReferensiTarifEdit extends Component {
       const data = {
         idGolonganBkc: item.golongan_id,
         flagPersonal: item.personal_id,
+        idJenisProduksiBkc: +item.jenis_produksi_id.split(" ")[0],
       };
 
       if (item.tarif_detail_id) data.idTarifBkcDetail = item.tarif_detail_id;
@@ -918,10 +888,6 @@ export default class ReferensiTarifEdit extends Component {
       nomorPeraturan: this.state.nomor_peraturan,
       tanggalPeraturan: moment(this.state.tanggal_peraturan).format("YYYY-MM-DD"),
       idJenisBkc: this.state.jenis_bkc_id,
-      idJenisProduksiBkc:
-        this.state.jenis_bkc_id === 3
-          ? +this.state.jenis_produksi_id.split(" ")[0]
-          : +this.state.dataSource[0].jenis_produksi_id.split(" ")[0],
       details,
     };
 
@@ -1118,7 +1084,7 @@ export default class ReferensiTarifEdit extends Component {
                               list_jenis_htl_rel: [],
                               jenis_produksi_code: option.props.children
                                 .split("-")[0]
-                                .replace(/[()\s]/g, null),
+                                .replace(/[()\s]/g, ""),
                               jenis_produksi_bkc_satuan:
                                 splitValues[1] !== "null" ? splitValues[1] : null,
                             });
@@ -1127,9 +1093,6 @@ export default class ReferensiTarifEdit extends Component {
                           value={this.state.jenis_produksi_id}
                           loading={this.state.isJenisProduksiLoading}
                           style={{ width: "100%" }}
-                          disabled={
-                            this.state.jenis_bkc_id === 3 && this.state.dataSource.length > 0
-                          }
                         >
                           {this.state.list_jenis_produksi.length > 0 &&
                             this.state.list_jenis_produksi.map((item, index) => (
