@@ -191,7 +191,7 @@ export default class BACKMMEARekam89 extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
