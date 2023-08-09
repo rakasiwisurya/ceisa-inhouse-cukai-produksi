@@ -226,7 +226,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
   };
 
   handleUpdate = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const {
       nppbkc_id,
@@ -455,7 +455,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       type="primary"
                       loading={this.state.isUpdateLoading}
                       onClick={this.handleUpdate}
-                      disabled={!this.validationForm()}
+                      // disabled={!this.validationForm()}
                       block
                     >
                       Update

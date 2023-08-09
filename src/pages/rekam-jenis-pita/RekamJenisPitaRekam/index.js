@@ -185,7 +185,7 @@ export default class RekamJenisPitaRekam extends Component {
   };
 
   handleRekam = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const {
       nppbkc_id,
@@ -399,7 +399,7 @@ export default class RekamJenisPitaRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam
