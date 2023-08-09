@@ -794,7 +794,7 @@ export default class ReferensiWarnaEdit extends Component {
                             type="primary"
                             block
                             onClick={this.handleSimpan}
-                            disabled={!this.validationInsert()}
+                            // disabled={!this.validationInsert()}
                           >
                             SIMPAN
                           </Button>

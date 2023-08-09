@@ -1344,7 +1344,7 @@ export default class ReferensiTarifEdit extends Component {
                             type="primary"
                             block
                             onClick={this.handleSimpan}
-                            disabled={!this.validationInsert()}
+                            // disabled={!this.validationInsert()}
                           >
                             SIMPAN
                           </Button>
