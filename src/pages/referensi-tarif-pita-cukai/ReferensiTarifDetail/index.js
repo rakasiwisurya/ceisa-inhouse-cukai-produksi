@@ -224,9 +224,6 @@ export default class ReferensiTarifDetail extends Component {
         tanggal_peraturan: moment(data.tanggalPeraturan),
         jenis_bkc_id: data.idJenisBkc,
         jenis_bkc_name: data.namaJenisBkc,
-        jenis_produksi_id: `${data.idJenisProduksiBkc} ${data.satuanJenisProduksiBkc}`,
-        jenis_produksi_code: data.kodeJenisProduksiBkc,
-        jenis_produksi_name: data.namaJenisProduksiBkc,
         dataSource: data.details.map((detail, index) => ({
           key: `referensi-${index}`,
           tarif_detail_id: detail.idTarifBkcDetail,

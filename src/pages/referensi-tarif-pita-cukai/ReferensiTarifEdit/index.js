@@ -324,9 +324,6 @@ export default class ReferensiTarifEdit extends Component {
         tanggal_peraturan: moment(data.tanggalPeraturan),
         jenis_bkc_id: data.idJenisBkc,
         jenis_bkc_name: data.namaJenisBkc,
-        jenis_produksi_id: `${data.idJenisProduksiBkc} ${data.satuanJenisProduksiBkc}`,
-        jenis_produksi_code: data.kodeJenisProduksiBkc,
-        jenis_produksi_name: data.namaJenisProduksiBkc,
         dataSource: data.details.map((detail, index) => ({
           key: `referensi-${index}`,
           tarif_detail_id: detail.idTarifBkcDetail,
@@ -1098,7 +1095,7 @@ export default class ReferensiTarifEdit extends Component {
                             this.state.list_jenis_produksi.map((item, index) => (
                               <Select.Option
                                 key={`jenis-produksi-${index}`}
-                                value={`${item.idJenisProduksi} ${item.satuanJenisProduksi}`}
+                                value={`${item.idJenisProduksi} ${item.satuan}`}
                               >
                                 {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
                               </Select.Option>
