@@ -858,7 +858,7 @@ export default class ReferensiTarifEdit extends Component {
   };
 
   handleSimpanPerubahan = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const details = this.state.dataSource.map((item) => {
       const data = {
@@ -1388,7 +1388,7 @@ export default class ReferensiTarifEdit extends Component {
                       type="primary"
                       loading={this.state.isSimpanPerubahanLoading}
                       onClick={this.handleSimpanPerubahan}
-                      disabled={!this.validationForm()}
+                      // disabled={!this.validationForm()}
                       block
                     >
                       Update

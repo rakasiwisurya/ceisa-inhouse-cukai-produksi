@@ -490,7 +490,7 @@ export default class ReferensiWarnaRekam extends Component {
   };
 
   handleRekam = async () => {
-    if (!this.validationForm()) return;
+    // if (!this.validationForm()) return;
 
     const details = this.state.dataSource.map((item) => {
       const data = {
@@ -772,7 +772,7 @@ export default class ReferensiWarnaRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam
