@@ -241,7 +241,7 @@ export default class ReferensiTarifDetail extends Component {
           jenis_htl_rel_id: `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`,
           jenis_htl_rel_code: detail.kodeJenisHtlRel,
           jenis_htl_rel_name: `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`,
-          tarif: detail.tarif,
+          tarif: detail.idJenisBkc === 3 ? detail.tarif : null,
           batas_produksi1: detail.batasProduksi1,
           batas_produksi2: detail.batasProduksi2,
           hje1: detail.hje1,
@@ -250,8 +250,10 @@ export default class ReferensiTarifDetail extends Component {
 
           kadar_atas: detail.kadarAtas,
           kadar_bawah: detail.kadarBawah,
-          tarif_cukai_dalam_negeri: detail.tarifCukaiDalamNegeri,
-          tarif_cukai_impor: detail.tarifCukaiImpor,
+          tarif_cukai_dalam_negeri:
+            detail.idJenisBkc === 2 && detail.idGolonganBkc === 5 ? detail.tarif : null,
+          tarif_cukai_impor:
+            detail.idJenisBkc === 2 && detail.idGolonganBkc === 4 ? detail.tarif : null,
         })),
       });
     }

@@ -64,6 +64,8 @@ export default class ReferensiTarifEdit extends Component {
       hje2: null,
       layer: null,
 
+      tarif_detail_id: null,
+
       kadar_atas: null,
       kadar_bawah: null,
       tarif_cukai_dalam_negeri: null,
@@ -341,7 +343,7 @@ export default class ReferensiTarifEdit extends Component {
           jenis_htl_rel_id: `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`,
           jenis_htl_rel_code: detail.kodeJenisHtlRel,
           jenis_htl_rel_name: `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`,
-          tarif: detail.tarif,
+          tarif: detail.idJenisBkc === 3 ? detail.tarif : null,
           batas_produksi1: detail.batasProduksi1,
           batas_produksi2: detail.batasProduksi2,
           hje1: detail.hje1,
@@ -350,8 +352,10 @@ export default class ReferensiTarifEdit extends Component {
 
           kadar_atas: detail.kadarAtas,
           kadar_bawah: detail.kadarBawah,
-          tarif_cukai_dalam_negeri: detail.tarifCukaiDalamNegeri,
-          tarif_cukai_impor: detail.tarifCukaiImpor,
+          tarif_cukai_dalam_negeri:
+            detail.idJenisBkc === 2 && detail.idGolonganBkc === 5 ? detail.tarif : null,
+          tarif_cukai_impor:
+            detail.idJenisBkc === 2 && detail.idGolonganBkc === 4 ? detail.tarif : null,
         })),
       });
     }
@@ -700,11 +704,15 @@ export default class ReferensiTarifEdit extends Component {
       kadar_bawah,
       tarif_cukai_dalam_negeri,
       tarif_cukai_impor,
+
+      tarif_detail_id,
     } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndex, 1, {
       key: new Date().getTime(),
+      tarif_detail_id,
+
       jenis_bkc_id,
       jenis_bkc_name,
       golongan_id,
@@ -757,6 +765,9 @@ export default class ReferensiTarifEdit extends Component {
       kadar_bawah: null,
       tarif_cukai_dalam_negeri: null,
       tarif_cukai_impor: null,
+
+      tarif_detail_id: null,
+
       dataSource: newDataSource,
     });
   };
@@ -786,6 +797,8 @@ export default class ReferensiTarifEdit extends Component {
       kadar_bawah: null,
       tarif_cukai_dalam_negeri: null,
       tarif_cukai_impor: null,
+
+      tarif_detail_id: null,
     });
   };
 
@@ -793,6 +806,7 @@ export default class ReferensiTarifEdit extends Component {
     this.setState({
       isEdit: true,
       editIndex: index,
+
       jenis_bkc_id: record.jenis_bkc_id,
       jenis_bkc_name: record.jenis_bkc_name,
       golongan_id: record.golongan_id,
@@ -818,6 +832,8 @@ export default class ReferensiTarifEdit extends Component {
       kadar_bawah: record.kadar_bawah,
       tarif_cukai_dalam_negeri: record.tarif_cukai_dalam_negeri,
       tarif_cukai_impor: record.tarif_cukai_impor,
+
+      tarif_detail_id: record.tarif_detail_id,
     });
   };
   handleDelete = (index) => {
@@ -907,7 +923,7 @@ export default class ReferensiTarifEdit extends Component {
       <>
         <Container
           menuName="Referensi Tarif dan Pita Cukai"
-          contentName="Referensi Tarif Detail"
+          contentName="Referensi Tarif Perbaikan"
           hideContentHeader
         >
           {this.state.isDetailTarifLoading ? (
