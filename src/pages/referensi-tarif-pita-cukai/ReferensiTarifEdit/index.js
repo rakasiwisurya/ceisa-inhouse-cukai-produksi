@@ -1148,7 +1148,7 @@ export default class ReferensiTarifEdit extends Component {
                             this.state.list_jenis_htl_rel.map((item, index) => (
                               <Select.Option
                                 key={`jenis_htl_rel-${index}`}
-                                value={`${item.idJenisHtlRel} ${item.satuanJenisHtlRel}`}
+                                value={`${item.idJenisHtlRel} ${item.satuan}`}
                               >
                                 {`(${item.kodeHtlRel}) - ${item.namaJenisHtlRel}`}
                               </Select.Option>
