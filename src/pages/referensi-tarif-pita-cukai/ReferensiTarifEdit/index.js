@@ -334,15 +334,27 @@ export default class ReferensiTarifEdit extends Component {
           golongan_id: detail.idGolonganBkc,
           golongan_name: detail.namaGolonganBkc,
           personal_id: detail.flagPersonal,
-          jenis_produksi_id: `${detail.idJenisProduksiBkc} ${detail.satuanJenisProduksiBkc}`,
+          jenis_produksi_id:
+            detail.idJenisProduksiBkc && detail.satuanJenisProduksiBkc
+              ? `${detail.idJenisProduksiBkc} ${detail.satuanJenisProduksiBkc}`
+              : null,
           jenis_produksi_code: detail.kodeJenisProduksiBkc,
-          jenis_produksi_name: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
+          jenis_produksi_name:
+            detail.kodeJenisProduksiBkc && detail.namaJenisProduksiBkc
+              ? `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`
+              : null,
           jenis_produksi_bkc_satuan: detail.satuanJenisProduksiBkc,
           jenis_htl_rel_satuan: detail.satuanJenisHtlRel,
 
-          jenis_htl_rel_id: `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`,
+          jenis_htl_rel_id:
+            detail.idJenisHtlRel && detail.satuanJenisHtlRel
+              ? `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`
+              : null,
           jenis_htl_rel_code: detail.kodeJenisHtlRel,
-          jenis_htl_rel_name: `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`,
+          jenis_htl_rel_name:
+            detail.kodeJenisHtlRel && detail.namaJenisHtlRel
+              ? `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`
+              : null,
           tarif: detail.idJenisBkc === 3 ? detail.tarif : null,
           batas_produksi1: detail.batasProduksi1,
           batas_produksi2: detail.batasProduksi2,
@@ -864,13 +876,15 @@ export default class ReferensiTarifEdit extends Component {
       const data = {
         idGolonganBkc: item.golongan_id,
         flagPersonal: item.personal_id,
-        idJenisProduksiBkc: +item.jenis_produksi_id.split(" ")[0],
       };
+
+      if (item.jenis_produksi_id) data.idJenisProduksiBkc = +item.jenis_produksi_id.split(" ")[0];
 
       if (item.tarif_detail_id) data.idTarifBkcDetail = item.tarif_detail_id;
 
       if (this.state.jenis_bkc_id === 3) {
-        data.idJenisHtlRel = +item.jenis_htl_rel_id.split(" ")[0];
+        if (item.jenis_htl_rel_id) data.idJenisHtlRel = +item.jenis_htl_rel_id.split(" ")[0];
+
         data.tarif = item.tarif;
         data.batasProduksi1 = item.batas_produksi1;
         data.batasProduksi2 = item.batas_produksi2;

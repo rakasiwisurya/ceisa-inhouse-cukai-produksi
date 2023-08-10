@@ -811,11 +811,13 @@ export default class ReferensiTarifRekam extends Component {
       const data = {
         idGolonganBkc: item.golongan_id,
         flagPersonal: item.personal_id,
-        idJenisProduksiBkc: +item.jenis_produksi_id.split(" ")[0],
       };
 
+      if (item.jenis_produksi_id) data.idJenisProduksiBkc = +item.jenis_produksi_id.split(" ")[0];
+
       if (this.state.jenis_bkc_id === 3) {
-        data.idJenisHtlRel = +item.jenis_htl_rel_id.split(" ")[0];
+        if (item.jenis_htl_rel_id) data.idJenisHtlRel = +item.jenis_htl_rel_id.split(" ")[0];
+
         data.tarif = item.tarif;
         data.batasProduksi1 = item.batas_produksi1;
         data.batasProduksi2 = item.batas_produksi2;
