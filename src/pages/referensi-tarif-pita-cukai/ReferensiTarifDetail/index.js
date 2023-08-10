@@ -233,24 +233,24 @@ export default class ReferensiTarifDetail extends Component {
           golongan_name: detail.namaGolonganBkc,
           personal_id: detail.flagPersonal,
           jenis_produksi_id:
-            detail.idJenisProduksiBkc && detail.satuanJenisProduksiBkc
+            detail.idJenisProduksiBkc || detail.satuanJenisProduksiBkc
               ? `${detail.idJenisProduksiBkc} ${detail.satuanJenisProduksiBkc}`
               : null,
           jenis_produksi_code: detail.kodeJenisProduksiBkc,
           jenis_produksi_name:
-            detail.kodeJenisProduksiBkc && detail.namaJenisProduksiBkc
+            detail.kodeJenisProduksiBkc || detail.namaJenisProduksiBkc
               ? `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`
               : null,
           jenis_produksi_bkc_satuan: detail.satuanJenisProduksiBkc,
           jenis_htl_rel_satuan: detail.satuanJenisHtlRel,
 
           jenis_htl_rel_id:
-            detail.idJenisHtlRel && detail.satuanJenisHtlRel
+            detail.idJenisHtlRel || detail.satuanJenisHtlRel
               ? `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`
               : null,
           jenis_htl_rel_code: detail.kodeJenisHtlRel,
           jenis_htl_rel_name:
-            detail.kodeJenisHtlRel && detail.namaJenisHtlRel
+            detail.kodeJenisHtlRel || detail.namaJenisHtlRel
               ? `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`
               : null,
           tarif: detail.idJenisBkc === 3 ? detail.tarif : null,
