@@ -5,6 +5,7 @@ import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import moment from "moment";
 import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 
@@ -16,7 +17,7 @@ export default class PenetapanKembali extends Component {
       subtitle2: "Detail Merk",
 
       isPenetapanLoading: false,
-      isJenisProduksiLoading: true,
+      isJenisProduksiLoading: false,
       isDetailMerkLoading: true,
       isModalDaftarKotaVisible: false,
       isModalDaftarNppbkcVisible: false,
@@ -30,7 +31,6 @@ export default class PenetapanKembali extends Component {
 
       jenis_produksi_id: null,
       jenis_produksi_name: null,
-      jenis_penetapan: "PENETAPAN KEMBALI",
 
       list_kota: [],
       list_jenis_produksi: [],
@@ -280,6 +280,23 @@ export default class PenetapanKembali extends Component {
     this.getDetailMerk();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+      this.getJenisProduksi();
+    }
+  }
+
+  getJenisProduksi = async () => {
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      params: { idNppbkc: this.state.nppbkc_id },
+      setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
+    });
+
+    if (response) this.setState({ list_jenis_produksi: response.data.data });
+  };
   getDetailMerk = async () => {
     this.setState({ isDetailMerkLoading: true });
     const timeout = setTimeout(() => {
@@ -600,15 +617,19 @@ export default class PenetapanKembali extends Component {
                     id="jenis_produksi"
                     value={this.state.jenis_produksi_id}
                     loading={this.state.isJenisProduksiLoading}
-                    onChange={(value, option) =>
-                      this.handleSelectCustomChange("jenis_produksi", value, option)
-                    }
+                    onChange={(value, option) => {
+                      this.handleSelectCustomChange("jenis_produksi", value, option);
+                    }}
                     style={{ width: "100%" }}
+                    disabled={!this.state.nppbkc_id}
                   >
                     {this.state.list_jenis_produksi.length > 0 &&
                       this.state.list_jenis_produksi.map((item, index) => (
-                        <Select.Option key={`jenis-produksi-${index}`} value={item.idJenisProduksi}>
-                          {item.namaJenisProduksi}
+                        <Select.Option
+                          key={`jenis-produksi-${index}`}
+                          value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}`}
+                        >
+                          {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
                         </Select.Option>
                       ))}
                   </Select>
@@ -616,66 +637,70 @@ export default class PenetapanKembali extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSourceTop}
-                columns={this.state.columnTop}
-                scroll={{ x: "max-content" }}
-                loading={this.state.isDetailMerkLoading}
-                onChange={(page) => this.setState({ pageTop: page.current })}
-                pagination={{ current: this.state.pageTop }}
-                rowSelection={{
-                  selectedRowKeys: this.state.selectedRowKeysTop,
-                  onChange: this.handleSelectRowTopChange,
-                }}
-              />
-            </div>
+            {this.state.nppbkc_id && this.state.jenis_produksi_id && (
+              <>
+                <div style={{ marginTop: 30, marginBottom: 20 }}>
+                  <Table
+                    dataSource={this.state.dataSourceTop}
+                    columns={this.state.columnTop}
+                    scroll={{ x: "max-content" }}
+                    loading={this.state.isDetailMerkLoading}
+                    onChange={(page) => this.setState({ pageTop: page.current })}
+                    pagination={{ current: this.state.pageTop }}
+                    rowSelection={{
+                      selectedRowKeys: this.state.selectedRowKeysTop,
+                      onChange: this.handleSelectRowTopChange,
+                    }}
+                  />
+                </div>
 
-            <Row gutter={[16, 16]}>
-              <Col span={4} offset={10}>
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <ButtonCustom
-                      variant="danger"
-                      onClick={this.handleToTableTop}
-                      icon="arrow-up"
-                      block
-                      disabled={
-                        !this.state.dataSourceBottom.length > 0 ||
-                        !this.state.selectedRowKeysBottom.length > 0
-                      }
-                    />
-                  </Col>
-                  <Col span={12}>
-                    <ButtonCustom
-                      variant="success"
-                      onClick={this.handleToTableBottom}
-                      icon="arrow-down"
-                      block
-                      disabled={
-                        !this.state.dataSourceTop.length > 0 ||
-                        !this.state.selectedRowKeysTop.length > 0
-                      }
-                    />
+                  <Col span={4} offset={10}>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <ButtonCustom
+                          variant="danger"
+                          onClick={this.handleToTableTop}
+                          icon="arrow-up"
+                          block
+                          disabled={
+                            !this.state.dataSourceBottom.length > 0 ||
+                            !this.state.selectedRowKeysBottom.length > 0
+                          }
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <ButtonCustom
+                          variant="success"
+                          onClick={this.handleToTableBottom}
+                          icon="arrow-down"
+                          block
+                          disabled={
+                            !this.state.dataSourceTop.length > 0 ||
+                            !this.state.selectedRowKeysTop.length > 0
+                          }
+                        />
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSourceBottom}
-                columns={this.state.columnBottom}
-                loading={this.state.isDetailMerkLoading}
-                scroll={{ x: "max-content" }}
-                onChange={(page) => this.setState({ pageBottom: page.current })}
-                pagination={{ current: this.state.pageBottom }}
-                rowSelection={{
-                  selectedRowKeys: this.state.selectedRowKeysBottom,
-                  onChange: this.handleSelectRowBottomChange,
-                }}
-              />
-            </div>
+                <div style={{ marginTop: 30, marginBottom: 20 }}>
+                  <Table
+                    dataSource={this.state.dataSourceBottom}
+                    columns={this.state.columnBottom}
+                    loading={this.state.isDetailMerkLoading}
+                    scroll={{ x: "max-content" }}
+                    onChange={(page) => this.setState({ pageBottom: page.current })}
+                    pagination={{ current: this.state.pageBottom }}
+                    rowSelection={{
+                      selectedRowKeys: this.state.selectedRowKeysBottom,
+                      onChange: this.handleSelectRowBottomChange,
+                    }}
+                  />
+                </div>
+              </>
+            )}
 
             <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
               <Col span={4}>
