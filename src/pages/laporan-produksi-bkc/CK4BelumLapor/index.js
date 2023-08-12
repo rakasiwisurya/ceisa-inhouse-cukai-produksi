@@ -1,8 +1,11 @@
-import { Button, Icon, Input, Table } from "antd";
+import { Button, Col, Icon, Input, Row, Select, Table } from "antd";
 import Container from "components/Container";
 import Header from "components/Header";
+import e from "cors";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+
+const date = new Date();
 
 export default class CK4BelumLapor extends Component {
   constructor(props) {
@@ -10,171 +13,242 @@ export default class CK4BelumLapor extends Component {
     this.state = {
       subtitle1: "Pencarian CK4 Belum Lapor",
 
+      isCk4BelumLaporLoading: true,
+
+      jenis_laporan: "BULANAN",
+      list_jenis_laporan: [
+        {
+          jenis_laporan_id: "BULANAN",
+          jenis_laporan_name: "BULANAN",
+        },
+        {
+          jenis_laporan_id: "HARIAN",
+          jenis_laporan_name: "HARIAN",
+        },
+      ],
+
       page: 1,
       totalData: 0,
 
-      searchText: "",
-      searchedColumn: "",
+      table: {
+        nomor_pemberitahuan: null,
+        nppbkc: null,
+        nama_perusahaan: null,
+        tanggal: date.getDate(),
+        bulan: date.getMonth() + 1,
+        tahun: date.getFullYear(),
+      },
 
+      columns: [],
+      dataSource: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getBelumLaporCk4();
+
+    this.setState({
       columns: [
+        {
+          title: "Nomor Pemberitahuan",
+          dataIndex: "nomor_pemberitahuan",
+          key: "nomor_pemberitahuan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          ...this.getColumnSearchProps("nomor_pemberitahuan"),
+        },
         {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
-        },
-        {
-          title: "Periode",
-          dataIndex: "periode",
-          key: "periode",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("periode"),
         },
         {
           title: "Bulan",
           dataIndex: "bulan",
           key: "bulan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("bulan"),
         },
         {
           title: "Tahun",
           dataIndex: "tahun",
           key: "tahun",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("tahun"),
         },
-        {
-          title: "Status",
-          dataIndex: "status",
-          key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("status"),
-        },
       ],
-      dataSource: [
-        {
-          key: "1",
-          nppbkc: "nppbkc1",
-          nama_perusahaan: "nama_perusahaan1",
-          periode: "periode1",
-          bulan: "bulan1",
-          tahun: "tahun1",
-          status: "status1",
-        },
-        {
-          key: "2",
-          nppbkc: "nppbkc2",
-          nama_perusahaan: "nama_perusahaan2",
-          periode: "periode2",
-          bulan: "bulan2",
-          tahun: "tahun2",
-          status: "status2",
-        },
-        {
-          key: "3",
-          nppbkc: "nppbkc3",
-          nama_perusahaan: "nama_perusahaan3",
-          periode: "periode3",
-          bulan: "bulan3",
-          tahun: "tahun3",
-          status: "status3",
-        },
-        {
-          key: "4",
-          nppbkc: "nppbkc4",
-          nama_perusahaan: "nama_perusahaan4",
-          periode: "periode4",
-          bulan: "bulan4",
-          tahun: "tahun4",
-          status: "status4",
-        },
-        {
-          key: "5",
-          nppbkc: "nppbkc5",
-          nama_perusahaan: "nama_perusahaan5",
-          periode: "periode5",
-          bulan: "bulan5",
-          tahun: "tahun5",
-          status: "status5",
-        },
-        {
-          key: "6",
-          nppbkc: "nppbkc6",
-          nama_perusahaan: "nama_perusahaan6",
-          periode: "periode6",
-          bulan: "bulan6",
-          tahun: "tahun6",
-          status: "status6",
-        },
-        {
-          key: "7",
-          nppbkc: "nppbkc7",
-          nama_perusahaan: "nama_perusahaan7",
-          periode: "periode7",
-          bulan: "bulan7",
-          tahun: "tahun7",
-          status: "status7",
-        },
-        {
-          key: "8",
-          nppbkc: "nppbkc8",
-          nama_perusahaan: "nama_perusahaan8",
-          periode: "periode8",
-          bulan: "bulan8",
-          tahun: "tahun8",
-          status: "status8",
-        },
-        {
-          key: "9",
-          nppbkc: "nppbkc9",
-          nama_perusahaan: "nama_perusahaan9",
-          periode: "periode9",
-          bulan: "bulan9",
-          tahun: "tahun9",
-          status: "status9",
-        },
-        {
-          key: "10",
-          nppbkc: "nppbkc10",
-          nama_perusahaan: "nama_perusahaan10",
-          periode: "periode10",
-          bulan: "bulan10",
-          tahun: "tahun10",
-          status: "status10",
-        },
-      ],
-    };
+    });
   }
 
-  componentDidMount() {
-    this.getBelumLaporCk4();
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.jenis_laporan !== this.state.jenis_laporan
+    ) {
+      this.getBelumLaporCk4();
+    }
+
+    if (prevState.jenis_laporan !== this.state.jenis_laporan) {
+      if (this.state.jenis_laporan === "BULANAN") {
+        this.setState({
+          columns: [
+            {
+              title: "Nomor Pemberitahuan",
+              dataIndex: "nomor_pemberitahuan",
+              key: "nomor_pemberitahuan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nomor_pemberitahuan"),
+            },
+            {
+              title: "NPPBKC",
+              dataIndex: "nppbkc",
+              key: "nppbkc",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nppbkc"),
+            },
+            {
+              title: "Nama Perusahaan",
+              dataIndex: "nama_perusahaan",
+              key: "nama_perusahaan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nama_perusahaan"),
+            },
+            {
+              title: "Bulan",
+              dataIndex: "bulan",
+              key: "bulan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("bulan"),
+            },
+            {
+              title: "Tahun",
+              dataIndex: "tahun",
+              key: "tahun",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("tahun"),
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          columns: [
+            {
+              title: "Nomor Pemberitahuan",
+              dataIndex: "nomor_pemberitahuan",
+              key: "nomor_pemberitahuan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nomor_pemberitahuan"),
+            },
+            {
+              title: "NPPBKC",
+              dataIndex: "nppbkc",
+              key: "nppbkc",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nppbkc"),
+            },
+            {
+              title: "Nama Perusahaan",
+              dataIndex: "nama_perusahaan",
+              key: "nama_perusahaan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("nama_perusahaan"),
+            },
+            {
+              title: "Tanggal",
+              dataIndex: "tanggal",
+              key: "tanggal",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("tanggal"),
+            },
+            {
+              title: "Bulan",
+              dataIndex: "bulan",
+              key: "bulan",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("bulan"),
+            },
+            {
+              title: "Tahun",
+              dataIndex: "tahun",
+              key: "tahun",
+              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              ...this.getColumnSearchProps("tahun"),
+            },
+          ],
+        });
+      }
+    }
   }
 
   getBelumLaporCk4 = async () => {
-    const payload = { idCk4: this.props.match.params.id };
+    const { tanggal, bulan, tahun } = this.state.table;
+
+    const payload = { page: this.state.page, bulan, tahun };
+
+    if (this.state.nomor_pemberitahuan) payload.nomorPemberitahuan = this.state.nomor_pemberitahuan;
+    if (this.state.nppbkc) payload.nppbkc = this.state.nppbkc;
+    if (this.state.nama_perusahaan) payload.namaPerusahaan = this.state.nama_perusahaan;
+
+    if (this.state.jenis_laporan === "BULANAN") {
+      const response = await requestApi({
+        service: "produksi",
+        method: "get",
+        endpoint: "/ck4/browse-belum-lapor",
+        params: payload,
+        setLoading: (bool) => this.setState({ isCk4BelumLaporLoading: bool }),
+      });
+
+      if (response) {
+        const newData = response.data.data.listData.map((item, index) => ({
+          key: `ck4-belum-lapor-${index}`,
+          nppbkc_id: item.idNppbkc,
+          nomor_pemberitahuan: item.nomorPemberitahuan,
+          nppbkc: item.nppbkc,
+          nama_perusahaan: item.namaPerusahaan,
+          bulan: item.bulan,
+          tahun: item.tahun,
+        }));
+        const page = response.data.data.currentPage;
+        const totalData = response.data.data.totalData;
+        this.setState({ dataSource: newData, page, totalData });
+      }
+      return;
+    }
+
+    payload.tanggal = tanggal;
 
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse-belum-lapor",
+      endpoint: "/ck4/browse-belum-lapor-harian",
       params: payload,
-      setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+      setLoading: (bool) => this.setState({ isCk4BelumLaporLoading: bool }),
     });
 
     if (response) {
-      const { data } = response.data;
-      console.log(data)
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `ck4-belum-lapor-${index}`,
+        nppbkc_id: item.idNppbkc,
+        nomor_pemberitahuan: item.nomorPemberitahuan,
+        nppbkc: item.nppbkc,
+        nama_perusahaan: item.namaPerusahaan,
+        tanggal: item.tanggal,
+        bulan: item.bulan,
+        tahun: item.tahun,
+      }));
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
+      this.setState({ dataSource: newData, page, totalData });
     }
-  }
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -183,15 +257,16 @@ export default class CK4BelumLapor extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearch(confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -199,7 +274,7 @@ export default class CK4BelumLapor extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -219,16 +294,30 @@ export default class CK4BelumLapor extends Component {
     },
   });
 
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.getBelumLaporCk4();
   };
-  handleColumnReset = (clearFilters) => {
+  handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: "" });
+
+    if (dataIndex === "tanggal") {
+      await this.setState({ table: { ...this.state.table, tanggal: date.getDate() } });
+      return this.getBelumLaporCk4();
+    }
+
+    if (dataIndex === "bulan") {
+      await this.setState({ table: { ...this.state.table, tanggal: date.getMonth() + 1 } });
+      return this.getBelumLaporCk4();
+    }
+
+    if (dataIndex === "tahun") {
+      await this.setState({ table: { ...this.state.table, tanggal: date.getFullYear() } });
+      return this.getBelumLaporCk4();
+    }
+
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
+    this.getBelumLaporCk4();
   };
 
   render() {
@@ -236,10 +325,31 @@ export default class CK4BelumLapor extends Component {
       <Container menuName="Laporan Produksi BKC" contentName="CK4 Belum Lapor" hideContentHeader>
         <Header>{this.state.subtitle1}</Header>
         <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-          <div>
+          <Row gutter={[16, 16]}>
+            <Col span={6}>
+              <Select
+                id="jenis_laporan"
+                value={this.state.jenis_laporan}
+                onChange={(value) => this.setState({ jenis_laporan: value })}
+                style={{ width: "100%" }}
+              >
+                {this.state.list_jenis_laporan.length > 0 &&
+                  this.state.list_jenis_laporan.map((item, index) => (
+                    <Select.Option key={`jenis-laporan-${index}`} value={item.jenis_laporan_id}>
+                      {item.jenis_laporan_name}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Col>
+          </Row>
+
+          <div style={{ marginTop: 30, marginBottom: 20 }}>
             <Table
               dataSource={this.state.dataSource}
               columns={this.state.columns}
+              loading={this.state.isCk4BelumLaporLoading}
+              onChange={(page) => this.setState({ page: page.current })}
+              pagination={{ current: this.state.page, total: this.state.totalData }}
               scroll={{ x: "max-content" }}
             />
           </div>

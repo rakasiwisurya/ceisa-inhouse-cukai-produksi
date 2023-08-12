@@ -271,7 +271,6 @@ export default class CK4 extends Component {
   };
 
   handleDetail = (id, jenisBkc) => {
-    console.log(jenisBkc);
     switch (true) {
       case jenisBkc === "EA":
         this.props.history.push(`${pathName}/ck4-ea-detail/${id}`);
@@ -340,7 +339,7 @@ export default class CK4 extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 10 }}>
+            <div style={{ marginTop: 30, marginBottom: 20 }}>
               <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
