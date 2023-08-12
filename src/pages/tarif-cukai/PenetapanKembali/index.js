@@ -455,7 +455,7 @@ export default class PenetapanKembali extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });

@@ -81,16 +81,19 @@ export default class ModalDaftarJenisPita extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (prevState.page !== this.state.page || prevProps.idJenisBkc !== this.props.idJenisBkc) {
       this.getDaftarJenisPita();
     }
   }
 
   getDaftarJenisPita = async () => {
+    const { idJenisBkc } = this.props;
     const { jenis_produksi_code, hje, isi, awal_berlaku, tarif, warna, tahun_pita } =
       this.state.table;
 
     const payload = { page: this.state.page };
+
+    if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
 
     if (jenis_produksi_code) payload.kodeJenisProduksi = jenis_produksi_code;
     if (hje) payload.hje = hje;
