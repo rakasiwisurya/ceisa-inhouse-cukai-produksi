@@ -24,7 +24,6 @@ export default class PermohonanTarifRekam extends Component {
 
       isRekamLoading: false,
       isJenisBkcLoading: true,
-      isJenisMmeaLoading: true,
       isJenisKemasanMmeaLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarJenisPitaVisible: false,

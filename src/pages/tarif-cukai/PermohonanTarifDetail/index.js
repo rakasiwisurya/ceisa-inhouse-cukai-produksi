@@ -17,15 +17,7 @@ export default class PermohonanTarifDetail extends Component {
       subtitle3: "Rincian",
       subtitle4: "Tampilan Kemasan",
 
-      isRekamLoading: false,
-      isJenisBkcLoading: true,
-      isJenisMmeaLoading: true,
-      isJenisKemasanMmeaLoading: true,
-      isModalDaftarNppbkcVisible: false,
-      isModalDaftarJenisPitaVisible: false,
-      isModalDaftarHtlRelVisible: false,
-      isModalDaftarKotaVisible: false,
-      isModalDaftarNegaraAsalVisible: false,
+      isDetailLoading: true,
 
       jenis_bkc_id: null,
       jenis_bkc_name: null,

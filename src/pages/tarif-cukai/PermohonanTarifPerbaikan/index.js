@@ -26,7 +26,6 @@ export default class PermohonanTarifPerbaikan extends Component {
       isDetailLoading: true,
       isUpdateLoading: false,
       isJenisBkcLoading: true,
-      isJenisMmeaLoading: true,
       isJenisKemasanMmeaLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarJenisPitaVisible: false,
