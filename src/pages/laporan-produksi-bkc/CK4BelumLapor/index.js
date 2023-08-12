@@ -1,7 +1,6 @@
 import { Button, Col, Icon, Input, Row, Select, Table } from "antd";
 import Container from "components/Container";
 import Header from "components/Header";
-import e from "cors";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
