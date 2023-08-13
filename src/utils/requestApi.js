@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import { api } from "configs/api";
 import { queryParams } from "./queryParams";
+import { clearCookies } from "./clearCookies";
 
 export const requestApi = async ({
   service,
@@ -25,6 +26,11 @@ export const requestApi = async ({
     });
     return false;
   } catch (error) {
+    if (error?.response?.status !== 401) {
+      clearCookies();
+      window.location.reload();
+      localStorage.clear();
+    }
     if (setLoading) setLoading(false);
     notification["error"]({
       message: "Failed",

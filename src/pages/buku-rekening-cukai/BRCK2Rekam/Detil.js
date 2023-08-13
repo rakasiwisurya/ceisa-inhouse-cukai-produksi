@@ -266,7 +266,6 @@ export default class BRCK2Detil extends Component {
   });
   handleModalMerkRow = (record, rowIndex) => ({
     onDoubleClick: (event) => {
-      console.log(record);
       this.setState({
         ...this.state,
         isModalMerkOpen: false,
@@ -341,10 +340,8 @@ export default class BRCK2Detil extends Component {
           pageNumber: this.state.currentRekamPage,
         },
       });
-      console.log(responseGetRekam);
       this.setState({ dataSource: responseGetRekam.data.data.listData });
       this.setState({ isLoading: false });
-      console.log(this.state.dataSource);
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });

@@ -6,6 +6,7 @@ import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
+import ModalBACKMMEADetail89 from "../ModalBACKMMEADetail89";
 export default class BACKMMEA extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +14,9 @@ export default class BACKMMEA extends Component {
       subtitle: "BACK MMEA 8 & 9",
 
       isBackMmeaLoading: true,
+      isModalBackMmea89DetailVisible: false,
+
+      detail89Id: null,
 
       page: 1,
       totalData: 0,
@@ -292,7 +296,7 @@ export default class BACKMMEA extends Component {
     this.props.history.push(`${pathName}/back-mmea/perbaikan-8-9/${id}`);
   };
   handleDetail = (id) => {
-    this.props.history.push(`${pathName}/back-mmea/detail-8-9/${id}`);
+    this.setState({ detail89Id: id, isModalBackMmea89DetailVisible: true });
   };
 
   render() {
@@ -325,6 +329,14 @@ export default class BACKMMEA extends Component {
             </div>
           </div>
         </Container>
+
+        <ModalBACKMMEADetail89
+          id={this.state.detail89Id}
+          isVisible={this.state.isModalBackMmea89DetailVisible}
+          onCancel={() =>
+            this.setState({ detail89Id: null, isModalBackMmea89DetailVisible: false })
+          }
+        />
       </>
     );
   }

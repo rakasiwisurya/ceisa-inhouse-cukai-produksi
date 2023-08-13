@@ -17,8 +17,6 @@ window.unmounthttpsmicrofecukaiproduksidevcustomsgoid = (containerId) => {
   return ReactDOM.unmountComponentAtNode(document.getElementById(containerId));
 };
 
-console.log(`${process.env.REACT_APP_NAME} ${process.env.REACT_APP_VERSION}`);
-
 function ItsWork() {
   return <div>Its work! {process.env.REACT_APP_VERSION}</div>;
 }

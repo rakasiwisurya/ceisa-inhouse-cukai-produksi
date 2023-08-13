@@ -6,8 +6,8 @@ export default class ModalDaftarMerk extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page:1,
-      totalData:0,
+      page: 1,
+      totalData: 0,
       columns: [
         {
           title: "Merk MMEA",
@@ -73,18 +73,12 @@ export default class ModalDaftarMerk extends Component {
           ...this.getColumnSearchProps("tanggalPenutupanBrck2"),
         },
       ],
-      dataSource: [
-      ],
+      dataSource: [],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -92,19 +86,13 @@ export default class ModalDaftarMerk extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -153,13 +141,11 @@ export default class ModalDaftarMerk extends Component {
           pageNumber: this.state.page,
         },
       });
-      console.log(response);
       this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
       const page = response.data.data.currentPage;
-			const totalData = response.data.data.totalData;
-      this.setState ({page, totalData})
-      console.log(this.state.dataSource);
+      const totalData = response.data.data.totalData;
+      this.setState({ page, totalData });
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });
@@ -191,7 +177,8 @@ export default class ModalDaftarMerk extends Component {
             columns={this.state.columns}
             loading={this.state.isLoading}
             pagination={{
-              current: this.state.page, total: this.state.totalData 
+              current: this.state.page,
+              total: this.state.totalData,
             }}
             scroll={{ x: "max-content" }}
             onRow={onRow}

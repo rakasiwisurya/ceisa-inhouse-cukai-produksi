@@ -46,7 +46,6 @@ export default class SPLDetail extends Component {
   }
 
   getSplDetail = async () => {
-
     const payload = { idSpl: this.props.match.params.id };
 
     const response = await requestApi({
@@ -59,47 +58,23 @@ export default class SPLDetail extends Component {
 
     if (response) {
       const { data } = response.data;
-      console.log(data)
 
-      
       this.setState({
-        nomor_spl:data.nomorSpl,
-        tanggal_spl:moment(data.tanggalSpl),
-        nama_pengusaha:data.namaPengusaha,
-        jabatan:data.jabatanPengusaha,
-        alamat_pemohon:data.alamatPengusaha,
-        nppbkc_id:data.idNppbkc,
-        nama_nppbkc:data.namaPerusahaan,
-        nppbkc:data.nppbkc,
-        alamat_nppbkc:data.alamatPerusahaan,
-        tanggal_libur_awal:moment(data.awalLibur),
-        tanggal_libur_akhir:moment(data.akhirLibur),
-        pernyataan_tanggal:moment(data.tanggalPernyataan),
-        // pernyataan_kota_id:data.pernyataan_kota_id,
-        pernyataan_kota_name:data.tempatPernyataan
+        nomor_spl: data.nomorSpl,
+        tanggal_spl: moment(data.tanggalSpl),
+        nama_pengusaha: data.namaPengusaha,
+        jabatan: data.jabatanPengusaha,
+        alamat_pemohon: data.alamatPengusaha,
+        nppbkc_id: data.idNppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        nppbkc: data.nppbkc,
+        alamat_nppbkc: data.alamatPerusahaan,
+        tanggal_libur_awal: moment(data.awalLibur),
+        tanggal_libur_akhir: moment(data.akhirLibur),
+        pernyataan_tanggal: moment(data.tanggalPernyataan),
+        pernyataan_kota_name: data.tempatPernyataan,
       });
     }
-    // this.setState({ isDetailLoading: true });
-    // const timeout = setTimeout(() => {
-    //   this.setState({
-    //     nomor_spl: "nomor_spl",
-    //     tanggal_spl: moment(new Date()),
-    //     nama_pengusaha: "nama_pengusaha",
-    //     jabatan: "jabatan",
-    //     alamat_pemohon: "alamat_pemohon",
-    //     nppbkc_id: "fe3c9198-0d65-05e6-e054-0021f60abd54",
-    //     nama_nppbkc: "KOPERASI BERLIAN EMAS SEJAHTERA TERUS",
-    //     nppbkc: "0866114705044000070652",
-    //     alamat_nppbkc:"Pergudangan TANRISE K-Walk B-9 Dusun Karanglo Desa Banjar Arum Kecamatan Singosari Kabupaten Malang",
-    //     tanggal_libur_awal: moment(new Date()),
-    //     tanggal_libur_akhir: moment(new Date()),
-    //     pernyataan_tanggal: moment(new Date()),
-    //     pernyataan_kota_id: "285",
-    //     pernyataan_kota_name: "SUMBAWA BARAT",
-    //   });
-    //   this.setState({ isDetailLoading: false });
-    //   clearTimeout(timeout);
-    // }, 2000);
   };
 
   render() {

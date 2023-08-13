@@ -131,18 +131,12 @@ class BRCK1 extends Component {
           ...this.getColumnSearchProps("kekurangan"),
         },
       ],
-      dataSource: [
-      ],
+      dataSource: [],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -150,19 +144,13 @@ class BRCK1 extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -203,7 +191,6 @@ class BRCK1 extends Component {
   };
 
   handleGetBrck1 = async () => {
-
     const payload = { pageNumber: this.state.page };
 
     const response = await requestApi({
@@ -248,8 +235,7 @@ class BRCK1 extends Component {
   }
 
   handleSelectData = (dataSource, selectedData) => {
-    this.setState({ selectedData: dataSource});
-    console.log("selected",selectedData)
+    this.setState({ selectedData: dataSource });
   };
 
   handleDetail = (id) => {
@@ -263,11 +249,7 @@ class BRCK1 extends Component {
   render() {
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BRCK-1"
-          hideContentHeader
-        >
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1" hideContentHeader>
           <div className="kt-portlet__head kt-portlet__head--lg">
             <div
               style={{
@@ -281,29 +263,22 @@ class BRCK1 extends Component {
                 <span className="kt-portlet__head-icon">
                   <i className="kt-font-brand flaticon2-folder"></i>
                 </span>
-                <h3 className="kt-portlet__head-title kt-font-bolder">
-                  {this.state.subtitle1}
-                </h3>
+                <h3 className="kt-portlet__head-title kt-font-bolder">{this.state.subtitle1}</h3>
               </div>
 
               <div>
                 <Button
                   type="primary"
-                  onClick={() =>
-                    this.props.history.push(`${pathName}/brck-1-rekam`)
-                  }
+                  onClick={() => this.props.history.push(`${pathName}/brck-1-rekam`)}
                 >
                   Rekam BRCK-1
                 </Button>
               </div>
             </div>
           </div>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-          >
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div style={{ marginTop: 50, marginBottom: 50 }}>
-            <Table
+              <Table
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isPenelitianCk4Loading}

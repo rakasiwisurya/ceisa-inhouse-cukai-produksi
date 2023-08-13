@@ -6,6 +6,8 @@ import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
+import ModalBACKEADetail67 from "../ModalBACKEADetail67";
+import ModalBACKEADetail89 from "../ModalBACKEADetail89";
 
 export default class BACKEA extends Component {
   constructor(props) {
@@ -16,6 +18,11 @@ export default class BACKEA extends Component {
 
       isBackEa67Loading: true,
       isBackEa89Loading: true,
+      isModalBackEa67DetailVisible: false,
+      isModalBackEa89DetailVisible: false,
+
+      detail67Id: null,
+      detail89Id: null,
 
       page67: 1,
       totalData67: 0,
@@ -443,7 +450,7 @@ export default class BACKEA extends Component {
     this.props.history.push(`${pathName}/back-ea/perbaikan-6-7/${id}`);
   };
   handleDetail67 = (id) => {
-    this.props.history.push(`${pathName}/back-ea/detail-6-7/${id}`);
+    this.setState({ detail67Id: id, isModalBackEa67DetailVisible: true });
   };
 
   getColumnSearchProps89 = (dataIndex, inputType) => ({
@@ -504,7 +511,14 @@ export default class BACKEA extends Component {
     this.props.history.push(`${pathName}/back-ea/perbaikan-8-9/${id}`);
   };
   handleDetail89 = (id) => {
-    this.props.history.push(`${pathName}/back-ea/detail-8-9/${id}`);
+    this.setState({ detail89Id: id, isModalBackEa89DetailVisible: true });
+  };
+
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
+  };
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
   };
 
   render() {
@@ -567,6 +581,18 @@ export default class BACKEA extends Component {
             </div>
           </div>
         </Container>
+
+        <ModalBACKEADetail67
+          id={this.state.detail67Id}
+          isVisible={this.state.isModalBackEa67DetailVisible}
+          onCancel={() => this.setState({ detail67Id: null, isModalBackEa67DetailVisible: false })}
+        />
+
+        <ModalBACKEADetail89
+          id={this.state.detail89Id}
+          isVisible={this.state.isModalBackEa89DetailVisible}
+          onCancel={() => this.setState({ detail89Id: null, isModalBackEa89DetailVisible: false })}
+        />
       </>
     );
   }

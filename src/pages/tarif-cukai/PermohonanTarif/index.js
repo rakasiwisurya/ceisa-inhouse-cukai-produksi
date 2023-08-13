@@ -5,12 +5,16 @@ import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import ModalPermohonanTarifDetail from "../ModalPermohonanTarifDetail";
 
 export default class PermohonanTarif extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isPermohonanTarifLoading: true,
+      isModalPermohonanTarifDetailVisible: false,
+
+      detailId: null,
 
       page: 1,
       totalData: 0,
@@ -314,7 +318,7 @@ export default class PermohonanTarif extends Component {
   };
 
   handleDetail = (id) => {
-    this.props.history.push(`${pathName}/permohonan-tarif/detail/${id}`);
+    this.setState({ isModalPermohonanTarifDetailVisible: true, detailId: id });
   };
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/permohonan-tarif/perbaikan/${id}`);
@@ -347,6 +351,14 @@ export default class PermohonanTarif extends Component {
             />
           </div>
         </Container>
+
+        <ModalPermohonanTarifDetail
+          id={this.state.detailId}
+          isVisible={this.state.isModalPermohonanTarifDetailVisible}
+          onCancel={() =>
+            this.setState({ detailId: null, isModalPermohonanTarifDetailVisible: false })
+          }
+        />
       </>
     );
   }

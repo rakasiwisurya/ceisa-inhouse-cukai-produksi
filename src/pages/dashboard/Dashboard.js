@@ -1,7 +1,5 @@
 import React, { Fragment, Component } from "react";
-import {
-  Table,
-} from "antd";
+import { Table } from "antd";
 import axios from "axios";
 import Container from "components/Container";
 import { IconBars } from "components/IconSVG";
@@ -12,34 +10,34 @@ class Dashboard extends Component {
     this.state = {
       headers: [
         {
-          title: 'Number',
-          dataIndex: 'number',
-          key: 'number',
-          render: text => <a>{text}</a>,
+          title: "Number",
+          dataIndex: "number",
+          key: "number",
+          render: (text) => <a>{text}</a>,
         },
         {
-          title: 'Name',
-          dataIndex: 'englishName',
-          key: 'englishName',
-          render: text => <a>{text}</a>,
+          title: "Name",
+          dataIndex: "englishName",
+          key: "englishName",
+          render: (text) => <a>{text}</a>,
         },
         {
-          title: 'Translation',
-          dataIndex: 'englishNameTranslation',
-          key: 'englishNameTranslation',
-          render: text => <a>{text}</a>,
+          title: "Translation",
+          dataIndex: "englishNameTranslation",
+          key: "englishNameTranslation",
+          render: (text) => <a>{text}</a>,
         },
         {
-          title: 'Text',
-          dataIndex: 'name',
-          key: 'name',
-          render: text => <a>{text}</a>,
+          title: "Text",
+          dataIndex: "name",
+          key: "name",
+          render: (text) => <a>{text}</a>,
         },
         {
-          title: 'Type',
-          dataIndex: 'revelationType',
-          key: 'revelationType',
-          render: text => <a>{text}</a>,
+          title: "Type",
+          dataIndex: "revelationType",
+          key: "revelationType",
+          render: (text) => <a>{text}</a>,
         },
       ],
       data: [],
@@ -52,33 +50,31 @@ class Dashboard extends Component {
 
   getData = async () => {
     try {
-        var config = {
-            method: 'get',
-            url: 'http://api.alquran.cloud/v1/quran/quran-uthmani',
-        };
-        
-        const response = await axios(config, null, {
-          headers: {
-            "accept": "application/json",
-            "Access-Control-Allow-Origin":  "**",
-            'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'X-Requested-With, Content-Length, Content-Type, Authorization, Accept',
-            'Access-Control-Allow-Credentials': 'true',
-          },
-        })
+      var config = {
+        method: "get",
+        url: "http://api.alquran.cloud/v1/quran/quran-uthmani",
+      };
 
-        console.log("pipi : ", response.data)
+      const response = await axios(config, null, {
+        headers: {
+          accept: "application/json",
+          "Access-Control-Allow-Origin": "**",
+          "Access-Control-Allow-Methods": "PUT, GET, POST, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers":
+            "X-Requested-With, Content-Length, Content-Type, Authorization, Accept",
+          "Access-Control-Allow-Credentials": "true",
+        },
+      });
 
-        if(response.data.code == 200) {
-          // console.log("popo : ", response.data.data.surahs)
-          this.setState({
-            data: response.data.data.surahs
-          })
-        }
+      if (response.data.code == 200) {
+        this.setState({
+          data: response.data.data.surahs,
+        });
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  }
+  };
 
   render() {
     return (
@@ -90,10 +86,7 @@ class Dashboard extends Component {
         >
           <h1>Hello World</h1>
 
-          <Table 
-            dataSource={this.state.data} 
-            columns={this.state.headers} 
-          />
+          <Table dataSource={this.state.data} columns={this.state.headers} />
         </Container>
       </Fragment>
     );

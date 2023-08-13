@@ -6,10 +6,10 @@ export default class ModalDaftarNPPBKC extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      limitBrckPage:100,
-      currentBrckPage:0,
-      idNppbkc:"fe3c9197-df48-05e6-e054-0021f60abd54",
-      page:1,
+      limitBrckPage: 100,
+      currentBrckPage: 0,
+      idNppbkc: "fe3c9197-df48-05e6-e054-0021f60abd54",
+      page: 1,
       columns: [
         {
           title: "NPPBKC",
@@ -47,18 +47,12 @@ export default class ModalDaftarNPPBKC extends Component {
           ...this.getColumnSearchProps("tanggalPenutupanBrck"),
         },
       ],
-      dataSource: [
-      ],
+      dataSource: [],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -66,19 +60,13 @@ export default class ModalDaftarNPPBKC extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -121,19 +109,14 @@ export default class ModalDaftarNPPBKC extends Component {
   handleGetNppbkc = async () => {
     this.setState({ isLoading: true });
     try {
-      const response = await api.produksi.json.get(
-        "/brck/daftar-nppbkc-brck1",
-        {
-          params: {
-            idNppbkc: this.state.idNppbkc,
-            page: this.state.page,
-          },
-        }
-      );
-      console.log(response);
-      this.setState({dataSource: response.data.data.listData});
+      const response = await api.produksi.json.get("/brck/daftar-nppbkc-brck1", {
+        params: {
+          idNppbkc: this.state.idNppbkc,
+          page: this.state.page,
+        },
+      });
+      this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
-      console.log(this.state.dataSource);
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });
@@ -148,7 +131,7 @@ export default class ModalDaftarNPPBKC extends Component {
   }
 
   render() {
-    const { isOpen, onCancel, onRow} = this.props;
+    const { isOpen, onCancel, onRow } = this.props;
 
     return (
       <Modal
@@ -157,7 +140,8 @@ export default class ModalDaftarNPPBKC extends Component {
         visible={isOpen}
         onCancel={onCancel}
         footer={null}
-        centered      >
+        centered
+      >
         <div>
           <Table
             dataSource={this.state.dataSource}

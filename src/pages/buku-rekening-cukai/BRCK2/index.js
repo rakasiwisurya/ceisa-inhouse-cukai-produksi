@@ -9,8 +9,8 @@ export default class BRCK2 extends Component {
     super(props);
     this.state = {
       subtitle1: "Browse dan Perbaikan BRCK-2",
-      page:1,
-      totalData:0,
+      page: 1,
+      totalData: 0,
       no: "",
       kppbc: "",
       namaPerusahaan: "",
@@ -34,11 +34,7 @@ export default class BRCK2 extends Component {
           fixed: "left",
           render: (_, record) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                type="primary"
-                icon="eye"
-                onClick={() => this.handleDetail()}
-              />
+              <Button type="primary" icon="eye" onClick={() => this.handleDetail()} />
               <Button
                 style={{
                   backgroundColor: "#F79327",
@@ -107,18 +103,14 @@ export default class BRCK2 extends Component {
               title: "Tgl Awal",
               dataIndex: "tanggalAwal",
               key: "tanggalAwal",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("tanggalAwal"),
             },
             {
               title: "Tgl Akhir",
               dataIndex: "tanggalAkhir",
               key: "tanggalAkhir",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("tanggalAkhir"),
             },
           ],
@@ -130,18 +122,14 @@ export default class BRCK2 extends Component {
               title: "Liter",
               dataIndex: "saldoAwalLiter",
               key: "saldoAwalLiter",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("saldoAwalLiter"),
             },
             {
               title: "Kemasan",
               dataIndex: "saldoAwalKemasan",
               key: "saldoAwalKemasan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("saldoAwalKemasan"),
             },
           ],
@@ -153,18 +141,14 @@ export default class BRCK2 extends Component {
               title: "Liter",
               dataIndex: "saldoPenutupanLiter",
               key: "saldoPenutupanLiter",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("saldo_penutupan_liter"),
             },
             {
               title: "Kemasan",
               dataIndex: "saldoPenutupanKemasan",
               key: "saldoPenutupanKemasan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("saldoPenutupanKemasan"),
             },
           ],
@@ -176,35 +160,25 @@ export default class BRCK2 extends Component {
               title: "Liter",
               dataIndex: "selisihLiter",
               key: "selisihLiter",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("selisihLiter"),
             },
             {
               title: "Kemasan",
               dataIndex: "selisihKemasan",
               key: "selisihKemasan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
               ...this.getColumnSearchProps("selisihKemasan"),
             },
           ],
         },
       ],
-      dataSource: [
-      ],
+      dataSource: [],
     };
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -212,19 +186,13 @@ export default class BRCK2 extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -272,13 +240,11 @@ export default class BRCK2 extends Component {
           page: this.state.page,
         },
       });
-      console.log(response);
       this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
       const page = response.data.data.currentPage;
-			const totalData = response.data.data.totalData;
-			this.setState({ page, totalData });
-      console.log(this.state.dataSource);
+      const totalData = response.data.data.totalData;
+      this.setState({ page, totalData });
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });
@@ -309,11 +275,7 @@ export default class BRCK2 extends Component {
   render() {
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BRCK-2"
-          hideContentHeader
-        >
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2" hideContentHeader>
           <div className="kt-portlet__head kt-portlet__head--lg">
             <div
               style={{
@@ -327,27 +289,20 @@ export default class BRCK2 extends Component {
                 <span className="kt-portlet__head-icon">
                   <i className="kt-font-brand flaticon2-folder"></i>
                 </span>
-                <h3 className="kt-portlet__head-title kt-font-bolder">
-                  {this.state.subtitle1}
-                </h3>
+                <h3 className="kt-portlet__head-title kt-font-bolder">{this.state.subtitle1}</h3>
               </div>
 
               <div>
                 <Button
                   type="primary"
-                  onClick={() =>
-                    this.props.history.push(`${pathName}/brck-2-rekam`)
-                  }
+                  onClick={() => this.props.history.push(`${pathName}/brck-2-rekam`)}
                 >
                   Rekam BRCK-2
                 </Button>
               </div>
             </div>
           </div>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-          >
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div style={{ marginTop: 50, marginBottom: 50 }}>
               <Table
                 dataSource={this.state.dataSource}

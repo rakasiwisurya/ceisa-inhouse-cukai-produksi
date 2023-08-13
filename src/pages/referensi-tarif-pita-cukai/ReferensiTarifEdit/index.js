@@ -1097,17 +1097,6 @@ export default class ReferensiTarifEdit extends Component {
                         </Select>
                       </Col>
 
-                      {console.log("this.state.jenis_produksi_id", this.state.jenis_produksi_id)}
-                      {console.log(
-                        "this.state.jenis_produksi_code",
-                        this.state.jenis_produksi_code
-                      )}
-                      {console.log(
-                        "this.state.jenis_produksi_name",
-                        this.state.jenis_produksi_name
-                      )}
-                      {console.log("this.state.dataSource", this.state.dataSource)}
-
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis Produksi</FormLabel>

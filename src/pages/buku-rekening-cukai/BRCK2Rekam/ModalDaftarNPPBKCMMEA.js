@@ -6,11 +6,11 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      limitBrckPage:100,
-      currentBrckPage:0,
+      limitBrckPage: 100,
+      currentBrckPage: 0,
       page: 1,
-      totalData:0,
-      idNppbkc:"fe3c9198-10b5-05e6-e054-0021f60abd54",
+      totalData: 0,
+      idNppbkc: "fe3c9198-10b5-05e6-e054-0021f60abd54",
       columns: [
         {
           title: "NPPBKC",
@@ -127,22 +127,17 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
   handleGetNppbkc = async () => {
     this.setState({ isLoading: true });
     try {
-      const response = await api.produksi.json.get(
-        "/brck/daftar-nppbkc-brck2",
-        {
-          params: {
-            idNppbkc:this.state.idNppbkc,
-            page: this.state.page,
-          },
-        }
-      );
-      console.log(response);
+      const response = await api.produksi.json.get("/brck/daftar-nppbkc-brck2", {
+        params: {
+          idNppbkc: this.state.idNppbkc,
+          page: this.state.page,
+        },
+      });
       this.setState({ dataSource: response.data.data.listData });
       const page = response.data.data.currentPage;
-			const totalData = response.data.data.totalData;
-      this.setState({ page, totalData })
+      const totalData = response.data.data.totalData;
+      this.setState({ page, totalData });
       this.setState({ isLoading: false });
-      console.log(this.state.dataSource);
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });
@@ -151,10 +146,10 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
       return;
     }
   };
-  
-  componentDidMount(){
+
+  componentDidMount() {
     this.handleGetNppbkc();
-  };
+  }
 
   render() {
     const { isOpen, onCancel, onRow } = this.props;
@@ -173,7 +168,7 @@ export default class ModalDaftarNPPBKCMMEA extends Component {
             dataSource={this.state.dataSource}
             columns={this.state.columns}
             loading={this.state.isLoading}
-            pagination={{current: this.state.page, total: this.state.totalData }}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
             scroll={{ x: "max-content" }}
             onRow={onRow}
           />

@@ -223,7 +223,6 @@ function TableCustom({
             title={e.title}
             key={`cl${i}`}
             render={(q) => renderRow(q)}
-            // onCell={(record, rowIndex) => console.log("onCell", {record, rowIndex})}
             editable={e.edit}
             children={
               filter

@@ -15,14 +15,10 @@ const TableCustom = ({
   scroll = { x: true },
   pagination = "bottom",
   search = false,
-  onRow = (record) => {
-    return {
-      onDoubleClick: (e) => console.log,
-    };
-  },
+  onRow = () => {},
   handleSearch = () => {},
-  header = (<></>),
-  footer = (<></>),
+  header = <></>,
+  footer = <></>,
 }) => {
   const handleChange = (params) => {
     const { key, value } = params;
@@ -41,26 +37,26 @@ const TableCustom = ({
               {col.type === "date" && (
                 <DatePicker
                   style={{
-                    minWidth: '120px',
-                    marginTop: '2px',
+                    minWidth: "120px",
+                    marginTop: "2px",
                   }}
-                  onChange={(value) => handleChange({...col,value})}
+                  onChange={(value) => handleChange({ ...col, value })}
                 />
               )}
               {col.type !== "date" && (
-                <Search 
+                <Search
                   style={{
-                    minWidth: '120px',
-                    marginTop: '2px',
+                    minWidth: "120px",
+                    marginTop: "2px",
                   }}
-                  onSearch={(value) => handleChange({...col,value})}
+                  onSearch={(value) => handleChange({ ...col, value })}
                 />
               )}
             </div>
           </>
-        )
-      }
-    })
+        ),
+      };
+    });
   }
   return (
     <div className="wrapper-rounded">
@@ -74,10 +70,9 @@ const TableCustom = ({
         onRow={onRow}
         scroll={scroll}
         pagination={pagination}
-        className={`${!pagination && 'table-no-footer'} ${rowStriped && 'table-row-striped'}`}
+        className={`${!pagination && "table-no-footer"} ${rowStriped && "table-row-striped"}`}
         // style={{borderTop: '0px', borderLeft: '0px', borderRight: '0px'}}
-      >
-      </Table>
+      ></Table>
       {footer}
     </div>
   );

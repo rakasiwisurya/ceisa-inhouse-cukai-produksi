@@ -316,10 +316,8 @@ export default class BRCK1Detil extends Component {
           pageNumber: this.state.currentRekamPage,
         },
       });
-      console.log(response);
       this.setState({ dataSource: response.data.data.listData });
       this.setState({ isLoading: false });
-      console.log(this.state.dataSource);
       return;
     } catch (error) {
       this.setState({ error: "An error occurred" });

@@ -5,12 +5,16 @@ import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import ModalSPLDetail from "../ModalSPLDetail";
 
 export default class SPL extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isSplLoading: true,
+      isModalSplDetailVisible: false,
+
+      detailId: null,
 
       page: 1,
       totalData: 0,
@@ -101,25 +105,15 @@ export default class SPL extends Component {
   }
 
   getSpl = async () => {
-
-    const {
-      nppbkc,
-      nama_perusahaan,
-      nomor_spl,
-      tanggal_spl,
-      status,
-    } = this.state.table;
+    const { nppbkc, nama_perusahaan, nomor_spl, tanggal_spl, status } = this.state.table;
 
     const payload = { page: this.state.page };
 
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (nomor_spl) payload.nomorSpl = nomor_spl;
-    if (tanggal_spl)
-      payload.tanggalSpl = moment(tanggal_spl).format("yyyy-MM-DD HH:mm:ss.SSS");
+    if (tanggal_spl) payload.tanggalSpl = moment(tanggal_spl).format("yyyy-MM-DD HH:mm:ss.SSS");
     if (status) payload.status = status;
-
-    console.log('payload', payload)
 
     const response = await requestApi({
       service: "produksi",
@@ -129,8 +123,6 @@ export default class SPL extends Component {
       setLoading: (bool) => this.setState({ isSplLoading: bool }),
     });
 
-    console.log(response)
-
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         idSpl: item.idSpl,
@@ -139,9 +131,9 @@ export default class SPL extends Component {
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
         nomor_spl: item.nomorSpl,
-        tanggal_spl: item.tanggalSpl
+        tanggal_spl: item.tanggalSpl,
       }));
-      // console.log(newData)
+
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
       this.setState({ dataSource: newData, page, totalData });
@@ -203,7 +195,7 @@ export default class SPL extends Component {
   };
 
   handleDetail = (id) => {
-    this.props.history.push(`${pathName}/spl/detail/${id}`);
+    this.setState({ isModalSplDetailVisible: true, detailId: id });
   };
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/spl/perbaikan/${id}`);
@@ -236,6 +228,12 @@ export default class SPL extends Component {
             />
           </div>
         </Container>
+
+        <ModalSPLDetail
+          id={this.state.detailId}
+          isVisible={this.state.isModalSplDetailVisible}
+          onCancel={() => this.setState({ detailId: null, isModalSplDetailVisible: false })}
+        />
       </>
     );
   }

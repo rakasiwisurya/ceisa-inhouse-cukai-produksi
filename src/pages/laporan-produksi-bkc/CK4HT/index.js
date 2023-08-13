@@ -316,7 +316,6 @@ export default class CK4HT extends Component {
     ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
       if (err) return console.error(err);
       const data = convertArrayExcelToTable(res.rows);
-      console.log(data)
       this.setState({ uraian_rincian_file: [], dataSource: [...this.state.dataSource, ...data] });
     });
   };
@@ -560,7 +559,7 @@ export default class CK4HT extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id==="null" ? null : item.merk_ht_id,
+      idMerkHt: item.merk_ht_id === "null" ? null : item.merk_ht_id,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,
@@ -580,8 +579,6 @@ export default class CK4HT extends Component {
       namaPengusaha: nama_pengusaha,
       details,
     };
-
-    console.log(payload)
 
     const response = await requestApi({
       service: "produksi",
