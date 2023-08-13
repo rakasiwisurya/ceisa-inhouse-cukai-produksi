@@ -54,6 +54,10 @@ import BACKMMEARekam89 from "./buku-rekening-cukai/BACKMMEARekam89";
 import BACKMMEAPerbaikan89 from "./buku-rekening-cukai/BACKMMEAPerbaikan89";
 import BACKMMEADetail89 from "./buku-rekening-cukai/BACKMMEADetail89";
 import PenelitianCK4 from "./laporan-produksi-bkc/PenelitianCK4";
+import PermohonanTarifTaskToDo from "./tarif-cukai/PermohonanTarifTaskToDo";
+import CK4EATaskToDo from "./laporan-produksi-bkc/CK4EATaskToDo";
+import CK4MMEATaskTodo from "./laporan-produksi-bkc/CK4MMEATaskTodo";
+import CK4HTTaskToDo from "./laporan-produksi-bkc/CK4HTTaskToDo";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -96,6 +100,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/permohonan-tarif"}
         render={(props) => <PermohonanTarif {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/tasktodo/:id"}
+        render={(props) => <PermohonanTarifTaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -164,6 +173,11 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4-ea/tasktodo/:id"}
+        render={(props) => <CK4EATaskToDo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/ck4-mmea-rekam"}
         render={(props) => <CK4MMEA {...props} {...propsExtra} />}
         exact={true}
@@ -179,6 +193,11 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4-mmea/tasktodo/:id"}
+        render={(props) => <CK4MMEATaskTodo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/ck4-ht-rekam"}
         render={(props) => <CK4HT {...props} {...propsExtra} />}
         exact={true}
@@ -191,6 +210,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/ck4-ht-perbaikan/:id"}
         render={(props) => <CK4HTPerbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/laporan-ck4/ck4-ht/tasktodo/:id"}
+        render={(props) => <CK4HTTaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

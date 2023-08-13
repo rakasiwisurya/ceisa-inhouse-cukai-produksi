@@ -62,21 +62,21 @@ export default class SPLPerbaikan extends Component {
 
     if (response) {
       const { data } = response.data;
-      
+
       this.setState({
-        nomor_spl:data.nomorSpl,
-        tanggal_spl:moment(data.tanggalSpl),
-        nama_pengusaha:data.namaPengusaha,
-        jabatan:data.jabatanPengusaha,
-        alamat_pemohon:data.alamatPengusaha,
-        nppbkc_id:data.idNppbkc,
-        nama_nppbkc:data.namaPerusahaan,
-        nppbkc:data.nppbkc,
-        alamat_nppbkc:data.alamatPerusahaan,
-        tanggal_libur_awal:moment(data.awalLibur),
-        tanggal_libur_akhir:moment(data.akhirLibur),
-        pernyataan_tanggal:moment(data.tanggalPernyataan),
-        pernyataan_kota_name:data.tempatPernyataan
+        nomor_spl: data.nomorSpl,
+        tanggal_spl: moment(data.tanggalSpl),
+        nama_pengusaha: data.namaPengusaha,
+        jabatan: data.jabatanPengusaha,
+        alamat_pemohon: data.alamatPengusaha,
+        nppbkc_id: data.idNppbkc,
+        nama_nppbkc: data.namaPerusahaan,
+        nppbkc: data.nppbkc,
+        alamat_nppbkc: data.alamatPerusahaan,
+        tanggal_libur_awal: moment(data.awalLibur),
+        tanggal_libur_akhir: moment(data.akhirLibur),
+        pernyataan_tanggal: moment(data.tanggalPernyataan),
+        pernyataan_kota_name: data.tempatPernyataan,
       });
     }
   };
@@ -155,7 +155,6 @@ export default class SPLPerbaikan extends Component {
   };
 
   handleUpdate = async () => {
-
     const {
       nomor_spl,
       tanggal_spl,
@@ -189,7 +188,7 @@ export default class SPLPerbaikan extends Component {
       akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tempatPernyataan: pernyataan_kota_name,
-      idProses: idMenu("spl")
+      idProses: idMenu("spl"),
     };
 
     const response = await requestApi({
@@ -393,7 +392,7 @@ export default class SPLPerbaikan extends Component {
                       type="primary"
                       loading={this.state.isUpdateLoading}
                       onClick={this.handleUpdate}
-                      disabled={!this.validationForm()}
+                      // disabled={!this.validationForm()}
                       block
                     >
                       Update

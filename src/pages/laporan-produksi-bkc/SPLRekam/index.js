@@ -118,7 +118,7 @@ export default class SPLRekam extends Component {
     return true;
   };
 
-  handleRekam = async() => {
+  handleRekam = async () => {
     const {
       nomor_spl,
       tanggal_spl,
@@ -151,7 +151,7 @@ export default class SPLRekam extends Component {
       akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
       tempatPernyataan: pernyataan_kota_name,
-      idProses: idMenu("spl")
+      idProses: idMenu("spl"),
     };
 
     const response = await requestApi({
@@ -339,7 +339,7 @@ export default class SPLRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  disabled={!this.validationForm()}
+                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam

@@ -26,7 +26,7 @@ export const requestApi = async ({
     });
     return false;
   } catch (error) {
-    if (error?.response?.status !== 401) {
+    if (error?.response?.status === 401) {
       clearCookies();
       window.location.reload();
       localStorage.clear();
