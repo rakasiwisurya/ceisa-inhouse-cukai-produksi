@@ -35,6 +35,7 @@ export const api = {
   referensi: apiContentType(process.env.REACT_APP_API_REFERENSI),
   produksi: apiContentType(process.env.REACT_APP_API_PRODUKSI),
   pita_cukai: apiContentType(process.env.REACT_APP_API_PITA_CUKAI),
+  perbendaharaan: apiContentType(process.env.REACT_APP_API_PERBENDAHARAAN),
   referensi_beacukai: apiContentType(
     process.env.REACT_APP_REFERENSI_BC,
     process.env.REACT_APP_API_REFERENSI_BC_KEY

@@ -8,6 +8,8 @@ import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
+import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
+import ModalStck from "components/ModalStck";
 
 export default class CK4EATaskToDo extends Component {
   constructor(props) {
@@ -16,45 +18,109 @@ export default class CK4EATaskToDo extends Component {
       subtitle1: "Pemrakarsa",
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
-      subtitle4: "Pemberitahu",
+      subtitle4: "Permohonan Perbaikan",
+      subtitle5: "Keputusan Perbaikan",
+      subtitle6: "STCK",
 
+      isEditRincian: false,
+      editIndexRincian: null,
+
+      isSimpanTasktodoLoading: false,
       isDetailLoading: true,
+      isModalDaftarStckVisible: false,
+      isModalDaftarPenjabatBcVisible: false,
 
-      nama_pemrakarsa: "",
-      id_process_pemrakarsa: "",
-      jabatan_pemrakarsa: "",
-      nip_pemrakarsa: "",
+      nama_pemrakarsa: null,
+      id_process_pemrakarsa: null,
+      jabatan_pemrakarsa: null,
+      nip_pemrakarsa: null,
 
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "Harian",
-      nomor_pemberitahuan: "",
+      jenis_laporan_name: "HARIAN",
+      nomor_pemberitahuan: null,
       tanggal_pemberitahuan: null,
-      jenis_barang_kena_cukai: "Etil Alkohol (EA)",
+      jenis_barang_kena_cukai: "ETIL ALKOHOL (EA)",
 
       tanggal_jam_produksi_awal: null,
       tanggal_jam_produksi_akhir: null,
       total_jumlah_produksi: 0,
 
-      nomor_produksi: "",
+      nomor_produksi: null,
       tanggal_produksi: null,
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
 
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      status: "SETUJU",
+      nomor_surat_permohonan_perbaikan: null,
+      tanggal_surat_permohonan_perbaikan: null,
+      alasan: null,
+      previewFile:
+        "https://raw.githubusercontent.com/rakasiwisurya/pdf-test/aa52b04cae0e0f857a2d0e21c3a837f3cfb7f5ff/NS_CG_K2R.pdf",
 
-      uraian_rincian_file: [],
+      nomor_stck: null,
+      tanggal_stck: null,
 
-      searchText: "",
-      searchedColumn: "",
+      nomor_surat: null,
+      tanggal_surat: null,
+      penjabat_bc_nip: null,
+      penjabat_bc_name: null,
+      asal_kesalahan_id: null,
+      asal_kesalahan_name: null,
+      keterangan_perbaikan: null,
+
+      searchText: null,
+      searchedColumn: null,
       page: 1,
+
+      list_penyampaian_ck4: [
+        {
+          penyampaian_ck4_id: "TEPAT WAKTU",
+          penyampaian_ck4_name: "TEPAT WAKTU",
+        },
+        {
+          penyampaian_ck4_id: "TERLAMBAT",
+          penyampaian_ck4_name: "TERLAMBAT",
+        },
+      ],
+      list_asal_kesalahan: [
+        {
+          asal_kesalahan_id: "PENGGUNA JASA",
+          asal_kesalahan_name: "PENGGUNA JASA",
+        },
+        {
+          asal_kesalahan_id: "PENGAWAS/PETUGAS",
+          asal_kesalahan_name: "PENGAWAS/PETUGAS",
+        },
+        {
+          asal_kesalahan_id: "APLIKASI SAC-2",
+          asal_kesalahan_name: "APLIKASI SAC-2",
+        },
+        {
+          asal_kesalahan_id: "JARINGAN",
+          asal_kesalahan_name: "JARINGAN",
+        },
+        {
+          asal_kesalahan_id: "LAINNYA",
+          asal_kesalahan_name: "LAINNYA",
+        },
+      ],
+      list_status: [
+        {
+          status_id: "SETUJU",
+          status_name: "SETUJU",
+        },
+        {
+          status_id: "TOLAK",
+          status_name: "TOLAK",
+        },
+      ],
 
       dataSource: [],
       columns: [
@@ -136,6 +202,7 @@ export default class CK4EATaskToDo extends Component {
         nppbkc: data.nppbkc,
         nama_nppbkc: data.namaNppbkc,
         alamat_nppbkc: data.alamatNppbkc,
+        npwp_nppbkc: data.npwp,
         jenis_laporan_id: data.jenisLaporan,
         nomor_pemberitahuan: data.nomorPemberitahuan,
         tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
@@ -209,16 +276,54 @@ export default class CK4EATaskToDo extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
   handleTableChange = (page) => {
     this.setState({ page: page.current });
   };
 
+  handleInputChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
+  };
+  handleInputNumberChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleDatepickerChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleSelectChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
+  };
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
+  };
+
+  handleDataPenjabatBc = (record) => {
+    this.setState({
+      penjabat_bc_nip: record.penjabat_bc_nip,
+      penjabat_bc_name: record.penjabat_bc_name,
+    });
+    this.handleModalClose("isModalDaftarPenjabatBcVisible");
+  };
+  handleDataStck = (record) => {
+    this.setState({
+      nomor_stck: record.nomor_stck,
+      tanggal_stck: record.tanggal_stck,
+    });
+    this.handleModalClose("isModalDaftarStckVisible");
+  };
+
+  handleSimpanTasktodo = async () => {
+    console.log("simpan task to do ...");
+  };
+
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="EA Detail" hideContentHeader>
+        <Container menuName="Task To Do" contentName="CK4 EA" hideContentHeader>
           {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
@@ -487,170 +592,276 @@ export default class CK4EATaskToDo extends Component {
                 style={{ paddingBottom: 10 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Diterima</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggal_diterima"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
-                      style={{ width: "100%" }}
-                      value={this.state.tanggal_diterima}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Penyampaian CK-4</FormLabel>
-                    </div>
-                    <Select
-                      id="penyampaian_ck4"
-                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.penyampaian_ck4}
-                    >
-                      {this.state.list_penyampaian_ck4.length > 0 &&
-                        this.state.list_penyampaian_ck4.map((item, index) => (
-                          <Select.Option
-                            key={`penyampaian-ck4-${index}`}
-                            value={item.penyampaian_ck4_id}
-                          >
-                            {item.penyampaian_ck4_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="kota_name" value={this.state.kota_name} disabled />
-                      <Button
-                        type="default"
-                        icon="menu"
-                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                  <>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Nomor Surat</FormLabel>
+                      </div>
+                      <Input
+                        id="nomor_surat_permohonan_perbaikan"
+                        onChange={this.handleInputChange}
+                        value={this.state.nomor_surat_permohonan_perbaikan}
                       />
-                    </div>
-                  </Col>
+                    </Col>
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama Pengusaha</FormLabel>
-                    </div>
-                    <Input
-                      id="nama_pengusaha"
-                      onChange={this.handleInputChange}
-                      value={this.state.nama_pengusaha}
-                    />
-                  </Col>
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Tanggal Surat</FormLabel>
+                      </div>
+                      <DatePicker
+                        id="tanggal_surat_permohonan_perbaikan"
+                        onChange={(date) =>
+                          this.handleDatepickerChange("tanggal_surat_permohonan_perbaikan", date)
+                        }
+                        style={{ width: "100%" }}
+                        value={this.state.tanggal_surat_permohonan_perbaikan}
+                      />
+                    </Col>
+
+                    {this.state.previewFile && (
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Preview PDF</FormLabel>
+                        </div>
+                        <iframe
+                          src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                            this.state.previewFile
+                          )}&embedded=true`}
+                          title="Preview PDF"
+                          width={"100%"}
+                          height={400}
+                          frameborder="0"
+                        />
+                        <div style={{ marginTop: 10 }}>
+                          <Button
+                            type="primary"
+                            onClick={() =>
+                              window.open(
+                                `https://docs.google.com/viewerng/viewer?url=${this.state.previewFile}`,
+                                "_blank"
+                              )
+                            }
+                            block
+                          >
+                            Open
+                          </Button>
+                        </div>
+                      </Col>
+                    )}
+                  </>
                 </Row>
               </div>
 
               <Header>{this.state.subtitle5}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+              <div
+                className="kt-content  kt-grid__item kt-grid__item--fluid"
+                id="kt_content"
+                style={{ paddingBottom: 10 }}
+              >
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor Surat</FormLabel>
-                    </div>
-                    <Input
-                      id="nomor_surat"
-                      onChange={this.handleInputChange}
-                      value={this.state.nomor_surat}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Surat</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggal_surat"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
-                      style={{ width: "100%" }}
-                      value={this.state.tanggal_surat}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Penjabat BC</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input
-                        id="penjabat_bc_nip"
-                        onChange={this.handleInputChange}
-                        value={this.state.penjabat_bc_nip}
-                        style={{ flex: 1 }}
-                        disabled
-                      />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarPenjabatBcVisible")}
-                      >
-                        Cari
-                      </Button>
-                      <Input
-                        id="penjabat_bc_name"
-                        onChange={this.handleInputChange}
-                        value={this.state.penjabat_bc_name}
-                        style={{ flex: 2 }}
-                        disabled
-                      />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Asal Kesalahan</FormLabel>
+                      <FormLabel>Persetujuan</FormLabel>
                     </div>
                     <Select
-                      id="asal_kesalahan"
-                      onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
+                      id="status"
+                      value={this.state.status}
+                      onChange={(value) => this.handleSelectChange("status", value)}
                       style={{ width: "100%" }}
-                      value={this.state.asal_kesalahan_id}
                     >
-                      {this.state.list_asal_kesalahan.length > 0 &&
-                        this.state.list_asal_kesalahan.map((item, index) => (
-                          <Select.Option
-                            key={`asal_kesalahan-${index}`}
-                            value={item.asal_kesalahan_id}
-                          >
-                            {item.asal_kesalahan_name}
+                      {this.state.list_status.length > 0 &&
+                        this.state.list_status.map((item, index) => (
+                          <Select.Option key={`status-${index}`} value={item.status_id}>
+                            {item.status_name}
                           </Select.Option>
                         ))}
                     </Select>
                   </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Keterangan</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="keterangan_perbaikan"
-                      onChange={this.handleInputChange}
-                      value={this.state.keterangan_perbaikan}
-                    />
-                  </Col>
                 </Row>
 
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
+                <Row gutter={[16, 16]}>
+                  {this.state.status === "SETUJU" ? (
+                    <>
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Nomor Surat</FormLabel>
+                        </div>
+                        <Input
+                          id="nomor_surat"
+                          onChange={this.handleInputChange}
+                          value={this.state.nomor_surat}
+                        />
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tanggal Surat</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="tanggal_surat"
+                          format="DD-MM-YYYY"
+                          onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                          style={{ width: "100%" }}
+                          value={this.state.tanggal_surat}
+                        />
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Penjabat BC</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input
+                            id="penjabat_bc_nip"
+                            onChange={this.handleInputChange}
+                            value={this.state.penjabat_bc_nip}
+                            style={{ flex: 1 }}
+                            disabled
+                          />
+                          <Button
+                            type="primary"
+                            onClick={() => this.handleModalShow("isModalDaftarPenjabatBcVisible")}
+                          >
+                            Cari
+                          </Button>
+                          <Input
+                            id="penjabat_bc_name"
+                            onChange={this.handleInputChange}
+                            value={this.state.penjabat_bc_name}
+                            style={{ flex: 2 }}
+                            disabled
+                          />
+                        </div>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Asal Kesalahan</FormLabel>
+                        </div>
+                        <Select
+                          id="asal_kesalahan"
+                          onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
+                          style={{ width: "100%" }}
+                          value={this.state.asal_kesalahan_id}
+                        >
+                          {this.state.list_asal_kesalahan.length > 0 &&
+                            this.state.list_asal_kesalahan.map((item, index) => (
+                              <Select.Option
+                                key={`asal_kesalahan-${index}`}
+                                value={item.asal_kesalahan_id}
+                              >
+                                {item.asal_kesalahan_name}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Keterangan</FormLabel>
+                        </div>
+                        <Input.TextArea
+                          id="keterangan_perbaikan"
+                          onChange={this.handleInputChange}
+                          value={this.state.keterangan_perbaikan}
+                        />
+                      </Col>
+                    </>
+                  ) : (
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Alasan</FormLabel>
+                      </div>
+                      <Input.TextArea
+                        id="alasan"
+                        onChange={this.handleInputChange}
+                        value={this.state.alasan}
+                      />
+                    </Col>
+                  )}
                 </Row>
               </div>
+
+              {this.state.status === "SETUJU" && (
+                <>
+                  <Header>{this.state.subtitle6}</Header>
+                  <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Nomor STCK</FormLabel>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <Input
+                            id="nomor_stck"
+                            onChange={this.handleInputChange}
+                            value={this.state.nomor_stck}
+                            disabled
+                          />
+                          <Button
+                            type="default"
+                            icon="menu"
+                            onClick={() => this.handleModalShow("isModalDaftarStckVisible")}
+                          />
+                        </div>
+                      </Col>
+
+                      <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Tanggal STCK</FormLabel>
+                        </div>
+                        <DatePicker
+                          id="tanggal_stck"
+                          format="DD-MM-YYYY"
+                          onChange={(date) => this.handleDatepickerChange("tanggal_stck", date)}
+                          value={this.state.tanggal_stck}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                </>
+              )}
+
+              <Row gutter={[16, 16]} style={{ padding: window.innerWidth <= 1024 ? 15 : 25 }}>
+                <Col span={4}>
+                  <ButtonCustom
+                    variant="secondary"
+                    onClick={() => this.props.history.goBack()}
+                    block
+                  >
+                    Kembali
+                  </ButtonCustom>
+                </Col>
+
+                <Col span={4}>
+                  <Button
+                    type="primary"
+                    loading={this.state.isSimpanTasktodoLoading}
+                    onClick={this.handleSimpanTasktodo}
+                    block
+                  >
+                    Simpan
+                  </Button>
+                </Col>
+              </Row>
             </>
           )}
         </Container>
+
+        <ModalStck
+          isVisible={this.state.isModalDaftarStckVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarStckVisible")}
+          onDataDoubleClick={this.handleDataStck}
+          npwp={this.state.npwp_nppbkc}
+        />
+
+        <ModalDaftarPenjabatBc
+          isVisible={this.state.isModalDaftarPenjabatBcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarPenjabatBcVisible")}
+          onDataDoubleClick={this.handleDataPenjabatBc}
+        />
       </>
     );
   }

@@ -17,11 +17,10 @@ import Header from "components/Header";
 import moment from "moment";
 import React, { Component } from "react";
 import { months, years } from "utils/times";
-// import { requestApi } from "utils/requestApi";
+import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
-import { requestApi } from "utils/requestApi";
 
 export default class CK4MMEADetail extends Component {
   constructor(props) {
@@ -34,53 +33,53 @@ export default class CK4MMEADetail extends Component {
 
       isDetailLoading: true,
 
-      nama_pemrakarsa: "",
-      id_process_pemrakarsa: "",
-      jabatan_pemrakarsa: "",
-      nip_pemrakarsa: "",
+      nama_pemrakarsa: null,
+      id_process_pemrakarsa: null,
+      jabatan_pemrakarsa: null,
+      nip_pemrakarsa: null,
 
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nama_nppbkc: null,
+      nppbkc: null,
+      alamat_nppbkc: null,
 
-      jenis_laporan_id: "",
-      jenis_laporan_name: "",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      jenis_laporan_id: null,
+      jenis_laporan_name: null,
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Minuman Mengandung Etil Alkohol (MMEA)",
 
-      tanggal_jam_produksi_awal: "",
-      tanggal_jam_produksi_akhir: "",
-      periode_bulan: "",
-      periode_tahun: "",
+      tanggal_jam_produksi_awal: null,
+      tanggal_jam_produksi_akhir: null,
+      periode_bulan: null,
+      periode_tahun: null,
       total_jumlah_kemasan: 0,
       total_jumlah_kemasan_dilekati_pita: 0,
       total_jumlah_produksi: 0,
 
-      jenis_mmea: "",
-      merk_mmea_id: "",
-      merk_mmea_name: "",
-      isi_mmea: "",
-      tarif_mmea: "",
-      jenis_kemasan_mmea: "",
-      golongan_mmea: "",
-      kadar_mmea: "",
+      jenis_mmea: null,
+      merk_mmea_id: null,
+      merk_mmea_name: null,
+      isi_mmea: null,
+      tarif_mmea: null,
+      jenis_kemasan_mmea: null,
+      golongan_mmea: null,
+      kadar_mmea: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
 
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      kota_id: null,
+      kota_name: null,
+      nama_pengusaha: null,
 
       uraian_rincian_file: [],
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
       list_jenis_laporan: [
