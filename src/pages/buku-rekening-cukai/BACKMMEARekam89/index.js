@@ -231,6 +231,13 @@ export default class BACKMMEARekam89 extends Component {
   handleSimpanRincian = () => {
     const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
 
+    if (!merk_id || !merk_name || !tarif || !isi || !kadar || !jumlah_kemasan || !jumlah_lt) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
+
     this.setState({
       dataSource: [
         ...this.state.dataSource,

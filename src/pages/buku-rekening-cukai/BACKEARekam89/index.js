@@ -194,6 +194,12 @@ export default class BACKEARekam89 extends Component {
 
   handleSimpanRincian = () => {
     const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan } = this.state;
+    if (!jenis_barang_kena_cukai_rusak || !jumlah_barang_kena_cukai_rusak || !catatan) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
 
     this.setState({
       dataSource: [

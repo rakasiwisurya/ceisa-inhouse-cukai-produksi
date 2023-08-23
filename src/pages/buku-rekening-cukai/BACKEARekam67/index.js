@@ -262,6 +262,20 @@ export default class BACKEARekam67 extends Component {
       hasil_akhir,
     } = this.state;
 
+    if (
+      !jumlah_ea_yang_akan_dicampur ||
+      !jumlah_bahan_pencampur ||
+      !satuan ||
+      !jenis_bahan ||
+      !jumlah_setelah_dicampur ||
+      !hasil_akhir
+    ) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
+
     this.setState({
       dataSource: [
         ...this.state.dataSource,

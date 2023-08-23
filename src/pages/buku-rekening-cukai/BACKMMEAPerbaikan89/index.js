@@ -282,6 +282,22 @@ export default class BACKMMEAPerbaikan89 extends Component {
   handleSimpanRincian = () => {
     const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt, alasan } = this.state;
 
+    if (
+      !merk_id ||
+      !merk_name ||
+      !tarif ||
+      !isi ||
+      !kadar ||
+      !jumlah_kemasan ||
+      !jumlah_lt ||
+      !alasan
+    ) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
+
     this.setState({
       dataSource: [
         ...this.state.dataSource,

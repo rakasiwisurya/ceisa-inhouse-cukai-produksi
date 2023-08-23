@@ -315,6 +315,21 @@ export default class BACKEAPerbaikan67 extends Component {
       alasan,
     } = this.state;
 
+    if (
+      !jumlah_ea_yang_akan_dicampur ||
+      !jumlah_bahan_pencampur ||
+      !satuan ||
+      !jenis_bahan ||
+      !jumlah_setelah_dicampur ||
+      !hasil_akhir ||
+      !alasan
+    ) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
+
     this.setState({
       dataSource: [
         ...this.state.dataSource,

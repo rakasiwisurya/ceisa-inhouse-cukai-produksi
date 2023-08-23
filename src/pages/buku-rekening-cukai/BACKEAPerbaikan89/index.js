@@ -245,6 +245,13 @@ export default class BACKEAPerbaikan89 extends Component {
     const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan, alasan } =
       this.state;
 
+    if (!jenis_barang_kena_cukai_rusak || !jumlah_barang_kena_cukai_rusak || !catatan || !alasan) {
+      return notification.info({
+        message: "Info",
+        description: "Data rincian tidak boleh kosong",
+      });
+    }
+
     this.setState({
       dataSource: [
         ...this.state.dataSource,
