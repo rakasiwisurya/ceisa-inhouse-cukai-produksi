@@ -143,33 +143,31 @@ export default class PencabutanTarifCabut extends Component {
   };
 
   validationForm = () => {
-    const {
-      nomor_permohonan,
-      tanggal_permohonan,
-      kota_id,
-      kota_name,
-      tanggal_kep_pencabutan,
-      akhir_berlaku,
-      keterangan_pencabutan,
-      asal_merk_id,
-      asal_merk_name,
-    } = this.state;
-
-    if (
-      !nomor_permohonan ||
-      !tanggal_permohonan ||
-      !kota_id ||
-      !kota_name ||
-      !tanggal_kep_pencabutan ||
-      !akhir_berlaku ||
-      !keterangan_pencabutan ||
-      !asal_merk_id ||
-      !asal_merk_name
-    ) {
-      return false;
-    }
-
-    return true;
+    // const {
+    //   nomor_permohonan,
+    //   tanggal_permohonan,
+    //   kota_id,
+    //   kota_name,
+    //   tanggal_kep_pencabutan,
+    //   akhir_berlaku,
+    //   keterangan_pencabutan,
+    //   asal_merk_id,
+    //   asal_merk_name,
+    // } = this.state;
+    // if (
+    //   !nomor_permohonan ||
+    //   !tanggal_permohonan ||
+    //   !kota_id ||
+    //   !kota_name ||
+    //   !tanggal_kep_pencabutan ||
+    //   !akhir_berlaku ||
+    //   !keterangan_pencabutan ||
+    //   !asal_merk_id ||
+    //   !asal_merk_name
+    // ) {
+    //   return false;
+    // }
+    // return true;
   };
 
   handleCabut = async () => {
