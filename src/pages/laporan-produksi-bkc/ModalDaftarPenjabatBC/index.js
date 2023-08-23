@@ -65,8 +65,8 @@ export default class ModalDaftarPenjabatBc extends Component {
     });
 
     if (response) {
-      const newData = response.data.data.listData.map((item) => ({
-        key: item.nipPenjabatBc,
+      const newData = response.data.data.listData.map((item, index) => ({
+        key: `penjabat-bc-${index}`,
         penjabat_bc_nip: item.nipPegawai,
         penjabat_bc_name: item.namaPegawai,
       }));

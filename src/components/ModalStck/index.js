@@ -3,6 +3,8 @@ import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
+const limit = 10;
+
 export default class ModalStck extends Component {
   constructor(props) {
     super(props);
@@ -10,9 +12,8 @@ export default class ModalStck extends Component {
       isDaftarStckLoading: true,
       isMouseEnter: false,
 
-      searchText: "",
-      searchedColumn: "",
       page: 1,
+      totalData: 0,
 
       table: {
         nomor_stck: "",
@@ -50,39 +51,44 @@ export default class ModalStck extends Component {
   }
 
   getDaftarStck = async () => {
+    const payload = { page: this.state.page * limit - limit, limit, npwp: this.props.npwp };
+
     const response = await requestApi({
       service: "perbendaharaan",
       method: "get",
       endpoint: "/perben/piutang/get-piutang-cukai",
+      params: payload,
       setLoading: (bool) => this.setState({ isDaftarStckLoading: bool }),
     });
 
     if (response) {
-      const newData = response.data.data.map((item, index) => ({
+      const newData = response.data.data.data.map((item, index) => ({
         key: `stck-${index}`,
         nomor_stck: item.nomorDokumen,
-        tanggal_stck: item.tanggalDokumen,
+        tanggal_stck: moment(item.tanggalDokumen).format("DD-MM-YYYY"),
       }));
 
-      this.setState({ dataSource: newData });
+      this.setState({ dataSource: newData, totalData: response.data.data.totalData });
     }
   };
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, inputType) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearch(confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -90,7 +96,7 @@ export default class ModalStck extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -101,8 +107,6 @@ export default class ModalStck extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
@@ -112,16 +116,14 @@ export default class ModalStck extends Component {
       }
     },
   });
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.getDaftarStck();
   };
-  handleColumnReset = async (clearFilters) => {
+  handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    this.getDaftarStck();
   };
 
   render() {

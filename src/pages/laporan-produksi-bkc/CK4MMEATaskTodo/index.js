@@ -10,21 +10,23 @@ import {
   Select,
   Table,
   Upload,
+  notification,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalStck from "components/ModalStck";
+import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
-import { requestApi } from "utils/requestApi";
-import ButtonCustom from "components/Button/ButtonCustom";
-import ModalStck from "components/ModalStck";
 
 export default class CK4MMEATaskTodo extends Component {
   constructor(props) {
@@ -440,13 +442,42 @@ export default class CK4MMEATaskTodo extends Component {
   handleDataStck = (record) => {
     this.setState({
       nomor_stck: record.nomor_stck,
-      tanggal_stck: record.tanggal_stck,
+      tanggal_stck: moment(record.tanggal_stck),
     });
     this.handleModalClose("isModalDaftarStckVisible");
   };
 
   handleSimpanTasktodo = async () => {
-    console.log("ck4 mmea task to do...");
+    const { status, nomor_stck, tanggal_stck, alasan } = this.state;
+
+    const payload = {
+      idCk4Header: this.props.match.params.id,
+      status,
+      flagApprove: status === "SETUJU" ? "Y" : "N",
+    };
+
+    if (status === "SETUJU") {
+      payload.nomorStck = nomor_stck;
+      payload.tanggalStck = moment(tanggal_stck, "DD-MM-YYYY").format("YYYY-MM-DD");
+    } else {
+      payload.alasan = alasan;
+    }
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/task-todo-perbaikan",
+      body: payload,
+      setLoading: (bool) => this.setState({ isSimpanTasktodoLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      const timeout = setTimeout(() => {
+        window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
+        clearTimeout(timeout);
+      }, 1000);
+    }
   };
 
   render() {
@@ -964,7 +995,6 @@ export default class CK4MMEATaskTodo extends Component {
                           title="Preview PDF"
                           width={"100%"}
                           height={400}
-                          frameborder="0"
                         />
                         <div style={{ marginTop: 10 }}>
                           <Button
