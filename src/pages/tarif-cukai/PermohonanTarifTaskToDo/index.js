@@ -285,7 +285,10 @@ export default class PermohonanTarifTaskToDo extends Component {
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
+      const timeout = setTimeout(() => {
+        window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
+        clearTimeout(timeout);
+      }, 1000);
     }
   };
 
