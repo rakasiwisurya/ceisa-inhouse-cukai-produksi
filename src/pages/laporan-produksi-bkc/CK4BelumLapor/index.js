@@ -30,7 +30,6 @@ export default class CK4BelumLapor extends Component {
       totalData: 0,
 
       table: {
-        nomor_pemberitahuan: null,
         nppbkc: null,
         nama_perusahaan: null,
         tanggal: date.getDate(),
@@ -48,13 +47,6 @@ export default class CK4BelumLapor extends Component {
 
     this.setState({
       columns: [
-        {
-          title: "Nomor Pemberitahuan",
-          dataIndex: "nomor_pemberitahuan",
-          key: "nomor_pemberitahuan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_pemberitahuan"),
-        },
         {
           title: "NPPBKC",
           dataIndex: "nppbkc",
@@ -100,13 +92,6 @@ export default class CK4BelumLapor extends Component {
         this.setState({
           columns: [
             {
-              title: "Nomor Pemberitahuan",
-              dataIndex: "nomor_pemberitahuan",
-              key: "nomor_pemberitahuan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("nomor_pemberitahuan"),
-            },
-            {
               title: "NPPBKC",
               dataIndex: "nppbkc",
               key: "nppbkc",
@@ -139,13 +124,6 @@ export default class CK4BelumLapor extends Component {
       } else {
         this.setState({
           columns: [
-            {
-              title: "Nomor Pemberitahuan",
-              dataIndex: "nomor_pemberitahuan",
-              key: "nomor_pemberitahuan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("nomor_pemberitahuan"),
-            },
             {
               title: "NPPBKC",
               dataIndex: "nppbkc",
@@ -188,13 +166,12 @@ export default class CK4BelumLapor extends Component {
   }
 
   getBelumLaporCk4 = async () => {
-    const { tanggal, bulan, tahun } = this.state.table;
+    const { nppbkc, nama_perusahaan, tanggal, bulan, tahun } = this.state.table;
 
     const payload = { page: this.state.page, bulan, tahun };
 
-    if (this.state.nomor_pemberitahuan) payload.nomorPemberitahuan = this.state.nomor_pemberitahuan;
-    if (this.state.nppbkc) payload.nppbkc = this.state.nppbkc;
-    if (this.state.nama_perusahaan) payload.namaPerusahaan = this.state.nama_perusahaan;
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
 
     if (this.state.jenis_laporan === "BULANAN") {
       const response = await requestApi({
@@ -209,7 +186,6 @@ export default class CK4BelumLapor extends Component {
         const newData = response.data.data.listData.map((item, index) => ({
           key: `ck4-belum-lapor-${index}`,
           nppbkc_id: item.idNppbkc,
-          nomor_pemberitahuan: item.nomorPemberitahuan,
           nppbkc: item.nppbkc,
           nama_perusahaan: item.namaPerusahaan,
           bulan: item.bulan,
@@ -236,7 +212,6 @@ export default class CK4BelumLapor extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `ck4-belum-lapor-${index}`,
         nppbkc_id: item.idNppbkc,
-        nomor_pemberitahuan: item.nomorPemberitahuan,
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
         tanggal: item.tanggal,
