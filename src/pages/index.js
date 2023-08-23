@@ -158,37 +158,37 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ea-rekam"}
+        path={pathName + "/laporan-ck4/ck4-ea-rekam"}
         render={(props) => <CK4EA {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ea-detail/:id"}
+        path={pathName + "/laporan-ck4/ck4-ea-detail/:id"}
         render={(props) => <CK4EADetail {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ea-perbaikan/:id"}
+        path={pathName + "/laporan-ck4/ck4-ea-perbaikan/:id"}
         render={(props) => <CK4EAPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/laporan-ck4/ck4-ea/tasktodo/:id"}
+        path={pathName + "/laporan-ck4/laporan-ck4/ck4-ea/tasktodo/:id"}
         render={(props) => <CK4EATaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-mmea-rekam"}
+        path={pathName + "/laporan-ck4/ck4-mmea-rekam"}
         render={(props) => <CK4MMEA {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-mmea-detail/:id"}
+        path={pathName + "/laporan-ck4/ck4-mmea-detail/:id"}
         render={(props) => <CK4MMEADetail {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-mmea-perbaikan/:id"}
+        path={pathName + "/laporan-ck4/ck4-mmea-perbaikan/:id"}
         render={(props) => <CK4MMEAPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
@@ -198,17 +198,17 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ht-rekam"}
+        path={pathName + "/laporan-ck4/ck4-ht-rekam"}
         render={(props) => <CK4HT {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ht-detail/:id"}
+        path={pathName + "/laporan-ck4/ck4-ht-detail/:id"}
         render={(props) => <CK4HTDetail {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/ck4-ht-perbaikan/:id"}
+        path={pathName + "/laporan-ck4/ck4-ht-perbaikan/:id"}
         render={(props) => <CK4HTPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />

@@ -273,26 +273,26 @@ export default class CK4 extends Component {
   handleDetail = (id, jenisBkc) => {
     switch (true) {
       case jenisBkc === "EA":
-        this.props.history.push(`${pathName}/ck4-ea-detail/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-detail/${id}`);
         break;
       case jenisBkc === "MMEA":
-        this.props.history.push(`${pathName}/ck4-mmea-detail/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-detail/${id}`);
         break;
       default:
-        this.props.history.push(`${pathName}/ck4-ht-detail/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-detail/${id}`);
         break;
     }
   };
   handleEdit = (id, jenisBkc) => {
     switch (true) {
       case jenisBkc === "EA":
-        this.props.history.push(`${pathName}/ck4-ea-perbaikan/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-perbaikan/${id}`);
         break;
       case jenisBkc === "MMEA":
-        this.props.history.push(`${pathName}/ck4-mmea-perbaikan/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-perbaikan/${id}`);
         break;
       default:
-        this.props.history.push(`${pathName}/ck4-ht-perbaikan/${id}`);
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`);
         break;
     }
   };
@@ -309,7 +309,9 @@ export default class CK4 extends Component {
                   <Col span={8}>
                     <ButtonCustom
                       variant="info"
-                      onClick={() => this.props.history.push(`${pathName}/ck4-ea-rekam`)}
+                      onClick={() =>
+                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-rekam`)
+                      }
                       block
                     >
                       CK4A Rekam
@@ -319,7 +321,9 @@ export default class CK4 extends Component {
                   <Col span={8}>
                     <ButtonCustom
                       variant="warning"
-                      onClick={() => this.props.history.push(`${pathName}/ck4-mmea-rekam`)}
+                      onClick={() =>
+                        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-rekam`)
+                      }
                       block
                     >
                       CK4B Rekam
@@ -329,7 +333,9 @@ export default class CK4 extends Component {
                   <Col span={8}>
                     <ButtonCustom
                       variant="danger"
-                      onClick={() => this.props.history.push(`${pathName}/ck4-ht-rekam`)}
+                      onClick={() =>
+                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-rekam`)
+                      }
                       block
                     >
                       CK4C Rekam
