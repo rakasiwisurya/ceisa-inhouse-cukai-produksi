@@ -19,7 +19,6 @@ export default class ModalDaftarHT extends Component {
         tarif_ht: "",
         bahan_ht: "",
         jenis_produksi_ht: "",
-        jenis_usaha_ht: "",
       },
 
       dataSource: [],
@@ -59,13 +58,6 @@ export default class ModalDaftarHT extends Component {
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
           ...this.getColumnSearchProps("jenis_produksi_ht"),
         },
-        {
-          title: "Jenis Usaha",
-          dataIndex: "jenis_usaha_ht",
-          key: "jenis_usaha_ht",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_usaha_ht"),
-        },
       ],
     };
   }
@@ -75,18 +67,15 @@ export default class ModalDaftarHT extends Component {
   }
 
   getDaftarMerkHt = async () => {
-    const { merk_ht_name, isi_ht, hje_ht, tarif_ht, jenis_produksi_ht, jenis_usaha_ht } =
-      this.state.table;
+    const { merk_ht_name, isi_ht, hje_ht, tarif_ht, jenis_produksi_ht } = this.state.table;
 
-    // const payload = { page: this.state.page };
-    const payload = { pageNumber: this.state.page, pageSize: 10 };
+    const payload = { page: this.state.page };
 
     if (merk_ht_name) payload.namaMerkht = merk_ht_name;
     if (isi_ht) payload.isiHt = isi_ht;
     if (hje_ht) payload.hjeHt = hje_ht;
     if (tarif_ht) payload.tarifHt = tarif_ht;
     if (jenis_produksi_ht) payload.jenisProduksiHt = jenis_produksi_ht;
-    if (jenis_usaha_ht) payload.jenisUsahaHt = jenis_usaha_ht;
 
     const response = await requestApi({
       service: "produksi",
@@ -108,63 +97,11 @@ export default class ModalDaftarHT extends Component {
         satuan_ht: item.satuanHt,
         bahan_ht: item.bahanHt,
         jenis_produksi_ht: item.jenisProduksiHt,
-        jenis_usaha_ht: item.jenisUsahaHt,
       }));
       const page = response.data.currentPage;
       const totalData = response.data.totalData;
       this.setState({ dataSource: newData, page, totalData });
     }
-
-    // this.setState({ isDaftarMerkHtLoading: true });
-    // const timeout = setTimeout(() => {
-    //   this.setState({
-    //     page: 1,
-    //     totalData: 10,
-    //     dataSource: [
-    //       {
-    //         key: 1,
-    //         merk_ht_id: 1,
-    //         merk_ht_name: "merk_ht_name_1",
-    //         jenis_ht: "jenis_ht_1",
-    //         isi_ht: "isi_ht_1",
-    //         hje_ht: "hje_ht_1",
-    //         tarif_ht: "tarif_ht_1",
-    //         satuan_ht: "BTG",
-    //         bahan_ht: "bahan_ht_1",
-    //         jenis_produksi_ht: "jenis_produksi_ht_1",
-    //         jenis_usaha_ht: "jenis_usaha_ht_1",
-    //       },
-    //       {
-    //         key: 2,
-    //         merk_ht_id: 2,
-    //         merk_ht_name: "merk_ht_name_2",
-    //         jenis_ht: "jenis_ht_2",
-    //         isi_ht: "isi_ht_2",
-    //         hje_ht: "hje_ht_2",
-    //         tarif_ht: "tarif_ht_2",
-    //         satuan_ht: "GR",
-    //         bahan_ht: "bahan_ht_2",
-    //         jenis_produksi_ht: "jenis_produksi_ht_2",
-    //         jenis_usaha_ht: "jenis_usaha_ht_2",
-    //       },
-    //       {
-    //         key: 3,
-    //         merk_ht_id: 3,
-    //         merk_ht_name: "merk_ht_name_3",
-    //         jenis_ht: "jenis_ht_3",
-    //         isi_ht: "isi_ht_3",
-    //         hje_ht: "hje_ht_3",
-    //         tarif_ht: "tarif_ht_3",
-    //         satuan_ht: "ML",
-    //         bahan_ht: "bahan_ht_3",
-    //         jenis_produksi_ht: "jenis_produksi_ht_3",
-    //         jenis_usaha_ht: "jenis_usaha_ht_3",
-    //       },
-    //     ],
-    //   });
-    //   this.setState({ isDaftarMerkHtLoading: false });
-    //   clearTimeout(timeout);
-    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({
