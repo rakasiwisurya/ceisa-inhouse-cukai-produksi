@@ -20,19 +20,19 @@ export default class CK4EADetail extends Component {
 
       isDetailLoading: true,
 
-      nama_pemrakarsa: "",
-      id_process_pemrakarsa: "",
-      jabatan_pemrakarsa: "",
-      nip_pemrakarsa: "",
+      nama_pemrakarsa: null,
+      id_process_pemrakarsa: null,
+      jabatan_pemrakarsa: null,
+      nip_pemrakarsa: null,
 
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      alamat_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
       jenis_laporan_name: "Harian",
-      nomor_pemberitahuan: "",
+      nomor_pemberitahuan: null,
       tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
 
@@ -40,20 +40,20 @@ export default class CK4EADetail extends Component {
       tanggal_jam_produksi_akhir: null,
       total_jumlah_produksi: 0,
 
-      nomor_produksi: "",
+      nomor_produksi: null,
       tanggal_produksi: null,
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
 
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      kota_id: null,
+      kota_name: null,
+      nama_pengusaha: null,
 
       uraian_rincian_file: [],
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
       dataSource: [],
@@ -209,7 +209,7 @@ export default class CK4EADetail extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
   handleTableChange = (page) => {
     this.setState({ page: page.current });

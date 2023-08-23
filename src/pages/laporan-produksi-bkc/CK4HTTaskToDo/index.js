@@ -14,6 +14,7 @@ import {
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import ModalStck from "components/ModalStck";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
@@ -24,7 +25,6 @@ import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
-import ModalStck from "components/ModalStck";
 
 export default class CK4HTTaskToDo extends Component {
   constructor(props) {

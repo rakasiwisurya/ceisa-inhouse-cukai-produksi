@@ -12,23 +12,23 @@ import {
   Upload,
   notification,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
 import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarHT from "../ModalDaftarMerkHT";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import { requestApi } from "utils/requestApi";
-import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import ButtonCustom from "components/Button/ButtonCustom";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
-import { pathName } from "configs/constants";
 
 export default class CK4HTPerbaikan extends Component {
   constructor(props) {
@@ -47,61 +47,61 @@ export default class CK4HTPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nama_nppbkc: null,
+      nppbkc: null,
+      alamat_nppbkc: null,
 
       jenis_laporan_id: "BULANAN",
       jenis_laporan_name: "Bulanan",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
 
-      periode_bulan: "",
-      periode_tahun: "",
-      tanggal_produksi_awal: "",
-      tanggal_produksi_akhir: "",
+      periode_bulan: null,
+      periode_tahun: null,
+      tanggal_produksi_awal: null,
+      tanggal_produksi_akhir: null,
       total_jumlah_kemasan: 0,
       total_jumlah_kemasan_dilekati_pita: 0,
       total_jumlah_produksi_ht_btg: 0,
       total_jumlah_produksi_ht_gr: 0,
       total_jumlah_produksi_ht_ml: 0,
 
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
 
-      tanggal_diterima: "",
-      penyampaian_ck4_id: "",
-      penyampaian_ck4_name: "",
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      tanggal_diterima: null,
+      penyampaian_ck4_id: null,
+      penyampaian_ck4_name: null,
+      kota_id: null,
+      kota_name: null,
+      nama_pengusaha: null,
 
-      nomor_surat: "",
-      tanggal_surat: "",
-      penjabat_bc_nip: "",
-      penjabat_bc_name: "",
-      asal_kesalahan_id: "",
-      asal_kesalahan_name: "",
-      keterangan_perbaikan: "",
+      nomor_surat: null,
+      tanggal_surat: null,
+      penjabat_bc_nip: null,
+      penjabat_bc_name: null,
+      asal_kesalahan_id: null,
+      asal_kesalahan_name: null,
+      keterangan_perbaikan: null,
 
       uraian_rincian_file: [],
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
       list_jenis_laporan: [
@@ -167,7 +167,11 @@ export default class CK4HTPerbaikan extends Component {
                   onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
                 />
               ) : (
-                <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.handleDeleteRincian(index)}
+                />
               )}
             </div>
           ),
@@ -186,10 +190,11 @@ export default class CK4HTPerbaikan extends Component {
               title: "Tanggal",
               dataIndex: "tanggal_produksi",
               key: "tanggal_produksi",
-              render: (text) => 
+              render: (text) => (
                 <div style={{ textAlign: "center" }}>
                   {text ? moment(text).format("DD-MM-YYYY") : "-"}
-                </div>,
+                </div>
+              ),
               ...this.getColumnSearchProps("tanggal_produksi"),
             },
           ],
@@ -323,7 +328,7 @@ export default class CK4HTPerbaikan extends Component {
 
     if (response) {
       const { data } = response.data;
-      
+
       this.setState({
         nama_pemrakarsa: data.namaPemrakarsa,
         id_process_pemrakarsa: data.idProcessPemrakarsa,
@@ -371,7 +376,7 @@ export default class CK4HTPerbaikan extends Component {
   };
 
   handleDeleteApi = async (index, id) => {
-    const payload = { idCk4Detail : id }
+    const payload = { idCk4Detail: id };
     const response = await requestApi({
       service: "produksi",
       method: "delete",
@@ -439,7 +444,7 @@ export default class CK4HTPerbaikan extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
   handleTableChange = (page) => {
     this.setState({ page: page.current });
@@ -563,20 +568,20 @@ export default class CK4HTPerbaikan extends Component {
     });
 
     this.setState({
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -638,20 +643,20 @@ export default class CK4HTPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
       dataSource: newDataSource,
     });
   };
@@ -664,48 +669,48 @@ export default class CK4HTPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
     });
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nama_nppbkc: null,
+      nppbkc: null,
+      alamat_nppbkc: null,
 
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
-      periode_bulan: "",
-      periode_tahun: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
+      periode_bulan: null,
+      periode_tahun: null,
 
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
       uraian_rincian_file: [],
       dataSource: [],
     });

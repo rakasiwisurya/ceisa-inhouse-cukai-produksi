@@ -12,6 +12,7 @@ import {
   Upload,
   notification,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
@@ -20,14 +21,13 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { idMenu } from "utils/idMenu";
+import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
 import ModalDaftarKota from "../ModalDaftarKota";
 import ModalDaftarHT from "../ModalDaftarMerkHT";
 import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import { requestApi } from "utils/requestApi";
-import { idMenu } from "utils/idMenu";
-import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4HT extends Component {
   constructor(props) {
@@ -45,51 +45,51 @@ export default class CK4HT extends Component {
       isModalDaftarMerkHtVisible: false,
       isModalDaftarKotaVisible: false,
 
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nama_nppbkc: null,
+      nppbkc: null,
+      alamat_nppbkc: null,
 
       jenis_laporan_id: "BULANAN",
       jenis_laporan_name: "Bulanan",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Hasil Tembakau (HT)",
 
-      periode_bulan: "",
-      periode_tahun: "",
-      tanggal_produksi_awal: "",
-      tanggal_produksi_akhir: "",
+      periode_bulan: null,
+      periode_tahun: null,
+      tanggal_produksi_awal: null,
+      tanggal_produksi_akhir: null,
       total_jumlah_kemasan: 0,
       total_jumlah_kemasan_dilekati_pita: 0,
       total_jumlah_produksi_ht_btg: 0,
       total_jumlah_produksi_ht_gr: 0,
       total_jumlah_produksi_ht_ml: 0,
 
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
 
       uraian_rincian_file: [],
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      kota_id: null,
+      kota_name: null,
+      nama_pengusaha: null,
 
       columns: [
         {
@@ -281,7 +281,7 @@ export default class CK4HT extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
   handleTableChange = (page) => {
     this.setState({ page: page.current });
@@ -398,20 +398,20 @@ export default class CK4HT extends Component {
     });
 
     this.setState({
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -473,20 +473,20 @@ export default class CK4HT extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
       dataSource: newDataSource,
     });
   };
@@ -499,48 +499,48 @@ export default class CK4HT extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
     });
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nama_nppbkc: null,
+      nppbkc: null,
+      alamat_nppbkc: null,
 
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
-      periode_bulan: "",
-      periode_tahun: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
+      periode_bulan: null,
+      periode_tahun: null,
 
-      merk_ht_id: "",
-      merk_ht_name: "",
-      jenis_ht: "",
-      hje_ht: "",
-      isi_ht: "",
-      bahan_ht: "",
-      tarif_ht: "",
-      satuan_ht: "",
+      merk_ht_id: null,
+      merk_ht_name: null,
+      jenis_ht: null,
+      hje_ht: null,
+      isi_ht: null,
+      bahan_ht: null,
+      tarif_ht: null,
+      satuan_ht: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_kemasan: "",
-      jumlah_produksi: "",
-      jumlah_kemasan_dilekati_pita: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_kemasan: null,
+      jumlah_produksi: null,
+      jumlah_kemasan_dilekati_pita: null,
       uraian_rincian_file: [],
       dataSource: [],
     });

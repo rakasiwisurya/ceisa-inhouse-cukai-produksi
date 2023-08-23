@@ -11,19 +11,19 @@ import {
   Table,
   notification,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import React, { Component } from "react";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { pathName } from "configs/constants";
+import moment from "moment";
+import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
-import moment from "moment";
-import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
-import ButtonCustom from "components/Button/ButtonCustom";
 
 export default class CK4EAPerbaikan extends Component {
   constructor(props) {
@@ -44,49 +44,49 @@ export default class CK4EAPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
-      nama_pemrakarsa: "",
-      id_process_pemrakarsa: "",
-      jabatan_pemrakarsa: "",
-      nip_pemrakarsa: "",
+      nama_pemrakarsa: null,
+      id_process_pemrakarsa: null,
+      jabatan_pemrakarsa: null,
+      nip_pemrakarsa: null,
 
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      alamat_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
       jenis_laporan_name: "Harian",
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
 
-      tanggal_jam_produksi_awal: "",
-      tanggal_jam_produksi_akhir: "",
+      tanggal_jam_produksi_awal: null,
+      tanggal_jam_produksi_akhir: null,
       total_jumlah_produksi: 0,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
 
-      tanggal_diterima: "",
-      penyampaian_ck4_id: "",
-      penyampaian_ck4_name: "",
-      kota_id: "",
-      kota_name: "",
-      nama_pengusaha: "",
+      tanggal_diterima: null,
+      penyampaian_ck4_id: null,
+      penyampaian_ck4_name: null,
+      kota_id: null,
+      kota_name: null,
+      nama_pengusaha: null,
 
-      nomor_surat: "",
-      tanggal_surat: "",
-      penjabat_bc_nip: "",
-      penjabat_bc_name: "",
-      asal_kesalahan_id: "",
-      asal_kesalahan_name: "",
-      keterangan_perbaikan: "",
+      nomor_surat: null,
+      tanggal_surat: null,
+      penjabat_bc_nip: null,
+      penjabat_bc_name: null,
+      asal_kesalahan_id: null,
+      asal_kesalahan_name: null,
+      keterangan_perbaikan: null,
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
       list_penyampaian_ck4: [
@@ -143,7 +143,11 @@ export default class CK4EAPerbaikan extends Component {
                   onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
                 />
               ) : (
-                <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.handleDeleteRincian(index)}
+                />
               )}
             </div>
           ),
@@ -300,7 +304,7 @@ export default class CK4EAPerbaikan extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
   handleTableChange = (page) => {
     this.setState({ page: page.current });
@@ -382,11 +386,11 @@ export default class CK4EAPerbaikan extends Component {
     });
 
     this.setState({
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
     });
   };
   handleEditRincian = (record, index) => {
@@ -417,11 +421,11 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
       dataSource: newDataSource,
     });
   };
@@ -434,31 +438,31 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
     });
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: "",
-      nppbkc: "",
-      nama_nppbkc: "",
-      alamat_nppbkc: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      alamat_nppbkc: null,
 
-      nomor_pemberitahuan: "",
-      tanggal_pemberitahuan: "",
+      nomor_pemberitahuan: null,
+      tanggal_pemberitahuan: null,
 
-      tanggal_jam_produksi_awal: "",
-      tanggal_jam_produksi_akhir: "",
+      tanggal_jam_produksi_awal: null,
+      tanggal_jam_produksi_akhir: null,
 
-      nomor_produksi: "",
-      tanggal_produksi: "",
-      jumlah_produksi: "",
-      nomor_tangki: "",
-      keterangan: "",
+      nomor_produksi: null,
+      tanggal_produksi: null,
+      jumlah_produksi: null,
+      nomor_tangki: null,
+      keterangan: null,
     });
   };
   handleSimpanPerbaikan = async () => {
