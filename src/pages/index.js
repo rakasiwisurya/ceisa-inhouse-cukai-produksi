@@ -248,17 +248,17 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/brck-1-Detail/:id"}
+        path={pathName + "/brck-1/detail/:id"}
         render={(props) => <BRCK1Detil {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/brck-1-Perbaikan/:id"}
+        path={pathName + "/brck-1/perbaikan/:id"}
         render={(props) => <BRCK1Perbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
-        path={pathName + "/brck-1-rekam"}
+        path={pathName + "/brck-1/rekam"}
         render={(props) => <BRCK1Rekam {...props} {...propsExtra} />}
         exact={true}
       />

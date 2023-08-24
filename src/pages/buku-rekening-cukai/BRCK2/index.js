@@ -197,7 +197,7 @@ export default class BRCK2 extends Component {
     };
   }
 
-  getColumnSearchProps = (dataIndex, inputType) => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
