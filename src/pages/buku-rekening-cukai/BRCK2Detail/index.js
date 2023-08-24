@@ -1,54 +1,24 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Icon,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Table,
-  notification,
-} from "antd";
+import { Button, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import ModalDaftarMerkBrck2 from "components/ModalDaftarMerkBrck2";
-import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import moment from "moment";
 import React, { Component } from "react";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
-export default class BRCK2Rekam extends Component {
+export default class BRCK2Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-2)",
 
-      isModalDaftarNppbkcVisible: false,
-      isModalDaftarMerkVisible: false,
-      isSearchLoading: false,
-      isRekamLoading: false,
+      isDetailLoading: true,
 
       page: 1,
       totalData: 0,
-
-      jenis_bkc_id: 2,
-
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      merk_mmea_id: null,
-      merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
-      tarif: null,
-      isi: null,
-      periode_awal: null,
-      periode_akhir: null,
 
       saldo_awal_kemasan: null,
       saldo_awal_lt: null,
@@ -222,6 +192,10 @@ export default class BRCK2Rekam extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getDetailBrck2();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.dataSource.length !== this.state.dataSource.length ||
@@ -282,6 +256,73 @@ export default class BRCK2Rekam extends Component {
       }
     }
   }
+
+  getDetailBrck2 = async () => {
+    // const payload = { idBrck2: this.props.match.params.id };
+
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "get",
+    //   endpoint: "/brck/detail-brck2",
+    //   params: payload,
+    //   setLoading: (bool) => this.setState({ isDetailLoading: bool }),
+    // });
+
+    // if (response) {
+    //   console.log("response.data.data", response.data.data);
+    // }
+
+    this.setState({ isDetailLoading: true });
+    const timeout = setTimeout(() => {
+      this.setState({
+        saldo_awal_kemasan: 200,
+        saldo_awal_lt: 300,
+
+        hasil_pencacahan_back5_kemasan: 6000,
+        hasil_pencacahan_back5_lt: 3000,
+        hasil_pencarian_back5_description: "SESUAI",
+        no_back5: "NO/BACK/5",
+        tgl_back5: moment(new Date()),
+
+        jenis_penutupan: "PENUTUPAN TRIWULAN",
+
+        dataSource: [
+          {
+            key: "1",
+            jenis_dokumen: "jenis_dokumen_1",
+            nomor_dokumen: "nomor_dokumen_1",
+            tanggal_dokumen: "tanggal_dokumen_1",
+            tanggal_transaksi: "tanggal_transaksi_1",
+            uraian_kegiatan: "uraian_kegiatan_1",
+            debet_kemasan: 1000,
+            debet_lt: 1000,
+            kredit_kemasan: 1000,
+            kredit_lt: 1000,
+            saldo_kemasan: 1000,
+            saldo_lt: 1000,
+            keterangan: "keterangan_1",
+          },
+          {
+            key: "2",
+            jenis_dokumen: "jenis_dokumen_2",
+            nomor_dokumen: "nomor_dokumen_2",
+            tanggal_dokumen: "tanggal_dokumen_2",
+            tanggal_transaksi: "tanggal_transaksi_2",
+            uraian_kegiatan: "uraian_kegiatan_2",
+            debet_kemasan: 2000,
+            debet_lt: 3000,
+            kredit_kemasan: 4000,
+            kredit_lt: 5000,
+            saldo_kemasan: 6000,
+            saldo_lt: 7000,
+            keterangan: "keterangan_2",
+          },
+        ],
+      });
+      this.setState({ isDetailLoading: false });
+      clearTimeout(timeout);
+    }, 2000);
+  };
 
   getBrck2 = async () => {
     const { jenis_dokumen, nomor_dokumen, tanggal_dokumen, tanggal_transaksi, uraian_kegiatan } =
@@ -402,257 +443,15 @@ export default class BRCK2Rekam extends Component {
     this.getBrck2();
   };
 
-  handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value.toUpperCase() });
-  };
-  handleInputNumberChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleDatepickerChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleSelectChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleModalShow = (visibleState) => {
-    this.setState({ [visibleState]: true });
-  };
-  handleModalClose = (visibleState) => {
-    this.setState({ [visibleState]: false });
-  };
-
-  handleDataNppbkc = (record) => {
-    this.setState({
-      nppbkc_id: record.nppbkc_id,
-      nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
-    });
-    this.handleModalClose("isModalDaftarNppbkcVisible");
-  };
-  handleDaftarMerkBrck2 = (record) => {
-    this.setState({
-      merk_mmea_id: record.merk_mmea_id,
-      merk_mmea_name: record.merk_mmea_name,
-      jenis_mmea: record.jenis_mmea,
-      tarif: record.tarif,
-      isi: record.isi,
-    });
-
-    this.handleModalClose("isModalDaftarMerkVisible");
-  };
-
-  handleSearch = () => {
-    if (
-      !this.state.nppbkc_id ||
-      !this.state.merk_mmea_id ||
-      !this.state.periode_akhir ||
-      !this.state.periode_akhir
-    ) {
-      return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
-    }
-
-    const dataSource = [
-      {
-        key: "1",
-        jenis_dokumen: "jenis_dokumen_1",
-        nomor_dokumen: "nomor_dokumen_1",
-        tanggal_dokumen: "tanggal_dokumen_1",
-        tanggal_transaksi: "tanggal_transaksi_1",
-        uraian_kegiatan: "uraian_kegiatan_1",
-        debet_kemasan: 1000,
-        debet_lt: 1000,
-        kredit_kemasan: 1000,
-        kredit_lt: 1000,
-        saldo_kemasan: 1000,
-        saldo_lt: 1000,
-        keterangan: "keterangan_1",
-      },
-      {
-        key: "2",
-        jenis_dokumen: "jenis_dokumen_2",
-        nomor_dokumen: "nomor_dokumen_2",
-        tanggal_dokumen: "tanggal_dokumen_2",
-        tanggal_transaksi: "tanggal_transaksi_2",
-        uraian_kegiatan: "uraian_kegiatan_2",
-        debet_kemasan: 2000,
-        debet_lt: 3000,
-        kredit_kemasan: 4000,
-        kredit_lt: 5000,
-        saldo_kemasan: 6000,
-        saldo_lt: 7000,
-        keterangan: "keterangan_2",
-      },
-    ];
-
-    this.setState({
-      hasil_pencacahan_back5_kemasan: sumArrayOfObject(dataSource, "saldo_kemasan"),
-      hasil_pencacahan_back5_lt: sumArrayOfObject(dataSource, "saldo_lt"),
-      hasil_pencarian_back5_description: "SESUAI",
-      dataSource,
-    });
-
-    this.getBrck2();
-  };
-  handleReset = () => {
-    this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
-      tarif: null,
-      isi: null,
-      periode_awal: null,
-      periode_akhir: null,
-    });
-  };
-
-  handleRekam = async () => {
-    const {
-      hasil_pencacahan_back5_kemasan,
-      hasil_pencacahan_back5_lt,
-      hasil_pencarian_back5_description,
-      jenis_penutupan,
-      no_back5,
-      saldo_awal_kemasan,
-      saldo_awal_lt,
-      tgl_back5,
-    } = this.state;
-
-    const payload = {
-      idMenu: idMenu("brck2"),
-      catatan: hasil_pencarian_back5_description,
-      hasilPencacahanBack5Kemasan: hasil_pencacahan_back5_kemasan,
-      hasilPencacahanBack5Liter: hasil_pencacahan_back5_lt,
-      jenisPenutupan: jenis_penutupan,
-      nomorBack5: no_back5,
-      saldoAwalKemasan: saldo_awal_kemasan,
-      saldoAwalLiter: saldo_awal_lt,
-      tanggalBack5: tgl_back5,
-    };
-
-    const response = await requestApi({
-      service: "produksi",
-      method: "post",
-      endpoint: "/brck/rekam-brck2",
-      body: payload,
-      setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-    });
-
-    if (response) {
-      notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push(`${pathName}/brck-2`);
-    }
-  };
-
   render() {
     return (
       <>
         <Container menuName="Buku Rekening Cukai" contentName="BRCK-2" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>NPPBKC</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                  >
-                    Cari
-                  </Button>
-                  <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
-                </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Merk</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <Input id="merk_mmea_name" value={this.state.merk_mmea_name} disabled />
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarMerkVisible")}
-                  >
-                    Cari
-                  </Button>
-                </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jenis</FormLabel>
-                </div>
-                <Input id="jenis" value={this.state.jenis_mmea} disabled />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tarif</FormLabel>
-                </div>
-                <Input id="tarif" value={this.state.tarif} disabled />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Isi</FormLabel>
-                </div>
-                <Input id="isi" value={this.state.isi} disabled />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Periode</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <DatePicker
-                    id="periode_awal"
-                    format="DD-MM-YYYY"
-                    onChange={(date) => this.handleDatepickerChange("periode_awal", date)}
-                    value={this.state.periode_awal}
-                    style={{ width: "100%" }}
-                  />
-                  <div>s.d</div>
-                  <DatePicker
-                    id="periode_akhir"
-                    format="DD-MM-YYYY"
-                    onChange={(date) => this.handleDatepickerChange("periode_akhir", date)}
-                    value={this.state.periode_akhir}
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: 30 }}>
-              <Col span={8} offset={16}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Button
-                      type="primary"
-                      onClick={this.handleSearch}
-                      loading={this.state.isSearchLoading}
-                      block
-                    >
-                      Tampilkan
-                    </Button>
-                  </Col>
-
-                  <Col span={12}>
-                    <Button type="danger" block onClick={this.handleReset}>
-                      Reset
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-
-            {this.state.dataSource.length > 0 && (
+            {this.state.isDetailLoading ? (
+              <LoadingWrapperSkeleton />
+            ) : (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Row style={{ marginBottom: 20 }}>
@@ -669,6 +468,7 @@ export default class BRCK2Rekam extends Component {
                             onChange={this.handleSaldoAwalKemasanChange}
                             min={0}
                             style={{ width: "100%" }}
+                            disabled
                           />
                         </Col>
 
@@ -683,6 +483,7 @@ export default class BRCK2Rekam extends Component {
                             onChange={this.handleSaldoAwalLtChange}
                             min={0}
                             style={{ width: "100%" }}
+                            disabled
                           />
                         </Col>
                       </Row>
@@ -851,6 +652,7 @@ export default class BRCK2Rekam extends Component {
                             this.handleInputNumberChange("hasil_pencacahan_back5_kemasan", value)
                           }
                           style={{ width: "100%" }}
+                          disabled
                         />
                       </Col>
                       <Col span={5}>
@@ -861,6 +663,7 @@ export default class BRCK2Rekam extends Component {
                             this.handleInputNumberChange("hasil_pencacahan_back5_lt", value)
                           }
                           style={{ width: "100%" }}
+                          disabled
                         />
                       </Col>
                       <Col span={6}>
@@ -869,6 +672,7 @@ export default class BRCK2Rekam extends Component {
                           value={this.state.hasil_pencarian_back5_description}
                           onChange={this.handleInputChange}
                           autoSize
+                          disabled
                         />
                       </Col>
                     </Row>
@@ -891,6 +695,7 @@ export default class BRCK2Rekam extends Component {
                           id="no_back5"
                           onChange={this.handleInputChange}
                           value={this.state.no_back5}
+                          disabled
                         />
                       </Col>
                     </Row>
@@ -915,6 +720,7 @@ export default class BRCK2Rekam extends Component {
                           onChange={(date) => this.handleDatepickerChange("tgl_back5", date)}
                           value={this.state.tgl_back5}
                           style={{ width: "100%" }}
+                          disabled
                         />
                       </Col>
                     </Row>
@@ -1033,6 +839,7 @@ export default class BRCK2Rekam extends Component {
                           id="jenis_penutupan"
                           onChange={(value) => this.handleSelectChange("jenis_penutupan", value)}
                           style={{ width: "100%" }}
+                          disabled
                         >
                           {this.state.list_jenis_penutupan.length > 0 &&
                             this.state.list_jenis_penutupan.map((item, index) => (
@@ -1057,33 +864,9 @@ export default class BRCK2Rekam extends Component {
                   Kembali
                 </ButtonCustom>
               </Col>
-
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
             </Row>
           </div>
         </Container>
-
-        <ModalDaftarNPPBKC
-          isVisible={this.state.isModalDaftarNppbkcVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
-          onDataDoubleClick={this.handleDataNppbkc}
-          idJenisBkc={this.state.jenis_bkc_id}
-        />
-
-        <ModalDaftarMerkBrck2
-          isVisible={this.state.isModalDaftarMerkVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarMerkVisible")}
-          onDataDoubleClick={this.handleDaftarMerkBrck2}
-        />
       </>
     );
   }

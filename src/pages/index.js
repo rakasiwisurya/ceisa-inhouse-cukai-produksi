@@ -40,8 +40,8 @@ import RekamJenisPitaRekam from "./rekam-jenis-pita/RekamJenisPitaRekam";
 import RekamJenisPitaPerbaikan from "./rekam-jenis-pita/RekamJenisPitaPerbaikan";
 import BRCK1Detil from "./buku-rekening-cukai/BRCK1Rekam/Detil";
 import BRCK1Perbaikan from "./buku-rekening-cukai/BRCK1Rekam/Perbaikan";
-import BRCK2Detil from "./buku-rekening-cukai/BRCK2Rekam/Detil";
-import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Rekam/Perbaikan";
+import BRCK2Detail from "./buku-rekening-cukai/BRCK2Detail";
+import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Perbaikan";
 import BACKEA from "./buku-rekening-cukai/BACKEA";
 import BACKMMEA from "./buku-rekening-cukai/BACKMMEA";
 import BACKEARekam67 from "./buku-rekening-cukai/BACKEARekam67";
@@ -268,18 +268,18 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/brck-2-Detail"}
-        render={(props) => <BRCK2Detil {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/brck-2-Perbaikan"}
-        render={(props) => <BRCK2Perbaikan {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/brck-2-rekam"}
+        path={pathName + "/brck-2/rekam"}
         render={(props) => <BRCK2Rekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/brck-2/detail/:id"}
+        render={(props) => <BRCK2Detail {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/brck-2/perbaikan/:id"}
+        render={(props) => <BRCK2Perbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
