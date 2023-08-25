@@ -65,28 +65,36 @@ export default class BACKMMEA extends Component {
           key: "kppbc",
           title: "KPPBC",
           dataIndex: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           key: "nama_perusahaan",
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           key: "jenis_back",
           title: "Jenis BACK",
           dataIndex: "jenis_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jenis_back"),
         },
         {
           key: "nomor_back",
           title: "Nomor BACK",
           dataIndex: "nomor_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("nomor_back"),
         },
         {
@@ -104,56 +112,72 @@ export default class BACKMMEA extends Component {
           key: "merk",
           title: "Merk",
           dataIndex: "merk",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("merk"),
         },
         {
           key: "golongan",
           title: "Golongan",
           dataIndex: "golongan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("golongan"),
         },
         {
           key: "kadar",
           title: "Kadar",
           dataIndex: "kadar",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("kadar"),
         },
         {
           key: "tarif",
           title: "Tarif",
           dataIndex: "tarif",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("tarif"),
         },
         {
           key: "isi",
           title: "Isi",
           dataIndex: "isi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("isi"),
         },
         {
           key: "kemasan",
           title: "Kemasan",
           dataIndex: "kemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("kemasan"),
         },
         {
           key: "jumlah_kemasan",
           title: "Jumlah Kemasan",
           dataIndex: "jumlah_kemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jumlah_kemasan"),
         },
         {
           key: "jumlah_lt",
           title: "Jumlah Liter",
           dataIndex: "jumlah_lt",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jumlah_lt"),
         },
       ],
@@ -186,14 +210,18 @@ export default class BACKMMEA extends Component {
       jumlah_kemasan,
       jumlah_lt,
     } = this.state.table;
+
     const payload = { page: this.state.page };
 
     if (kppbc) payload.namaKantor = kppbc;
+    console.log("ini kppbc", kppbc);
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (jenis_back) payload.jenisBackMmea = jenis_back;
     if (nomor_back) payload.nomorBackMmea = nomor_back;
     if (tanggal_back)
-      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (merk) payload.namaMerk = merk;
     if (golongan) payload.namaGolongan = golongan;
     if (kadar) payload.kadarEa = kadar;
@@ -212,6 +240,7 @@ export default class BACKMMEA extends Component {
     });
 
     if (response) {
+      console.log("ini response", response);
       const newData = response.data.data.listData.map((item, index) => ({
         key: `back-mmea-${index}`,
         back_mmea_id: item.idBackMmeaHeader,
@@ -239,7 +268,12 @@ export default class BACKMMEA extends Component {
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -247,7 +281,9 @@ export default class BACKMMEA extends Component {
           }}
           value={this.state.table[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({
+              table: { ...this.state.table, [dataIndex]: e.target.value },
+            })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -302,14 +338,23 @@ export default class BACKMMEA extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BACK MMEA" hideContentHeader>
+        <Container
+          menuName="Buku Rekening Cukai"
+          contentName="BACK MMEA"
+          hideContentHeader
+        >
           <Header>{this.state.subtitle}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+          >
             <Row>
               <Col span={6}>
                 <ButtonCustom
                   variant="info"
-                  onClick={() => this.props.history.push(`${pathName}/back-mmea/rekam-8-9`)}
+                  onClick={() =>
+                    this.props.history.push(`${pathName}/back-mmea/rekam-8-9`)
+                  }
                   block
                 >
                   + Perekaman BACK 8 & 9
@@ -322,7 +367,10 @@ export default class BACKMMEA extends Component {
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isBackMmeaLoading}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
+                pagination={{
+                  current: this.state.page,
+                  total: this.state.totalData,
+                }}
                 onChange={(page) => this.setState({ page: page.current })}
                 scroll={{ x: "max-content" }}
               />
@@ -334,7 +382,10 @@ export default class BACKMMEA extends Component {
           id={this.state.detail89Id}
           isVisible={this.state.isModalBackMmea89DetailVisible}
           onCancel={() =>
-            this.setState({ detail89Id: null, isModalBackMmea89DetailVisible: false })
+            this.setState({
+              detail89Id: null,
+              isModalBackMmea89DetailVisible: false,
+            })
           }
         />
       </>

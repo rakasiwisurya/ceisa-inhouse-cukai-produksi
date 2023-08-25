@@ -16,7 +16,6 @@ import ModalDaftarNPPBKC from "./ModalDaftarNPPBKC";
 import Header from "components/Header";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
-import { api } from "configs/api";
 import { requestApi } from "utils/requestApi";
 import { idMenu } from "utils/idMenu";
 export default class BRCK1Rekam extends Component {
@@ -27,8 +26,8 @@ export default class BRCK1Rekam extends Component {
       isHidden: false,
       nppbkc: "",
       namaPerusahaan: "",
-      periode_awal: "",
-      periode_akhir: "",
+      awalTanggalPeriode: "",
+      akhirTanggalPeriode: "",
 
       totalJumlahSaldo: "",
       totalJumlahTransaksiDebit: "",
@@ -68,62 +67,84 @@ export default class BRCK1Rekam extends Component {
           jenis_penutupan_name: "Dugaan Pelanggaran",
         },
       ],
+
+      notifError: false,
       selectedDate: "",
       columns: [
         {
           title: "DOKUMEN",
           children: [
             {
-              key: "jenisDokumen",
+              key: "jenisDok",
               title: "JENIS",
-              dataIndex: "jenisDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenisDokumen"),
+              dataIndex: "jenisDok",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("jenisDok"),
             },
             {
-              key: "nomorDokumen",
+              key: "nomorDok",
               title: "NOMOR",
-              dataIndex: "nomorDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomorDokumen"),
+              dataIndex: "nomorDok",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("nomorDok"),
             },
             {
-              key: "tanggalDokumen",
+              key: "tanggalDok",
               title: "TANGGAL",
-              dataIndex: "tanggalDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tanggalDokumen"),
+              dataIndex: "tanggalDok",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("tanggalDok"),
             },
           ],
         },
         {
-          key: "tanggalTransaksi",
-          title: "TGL PEMASUKAN/ PEMBUATAN ATAU PENGELUARAN",
-          dataIndex: "tanggalTransaksi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggalTransaksi"),
+          title: "",
+          children: [
+            {
+              key: "tanggalCioChar",
+              title: "TGL PEMASUKAN/ PEMBUATAN ATAU PENGELUARAN",
+              dataIndex: "tanggalCioChar",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("tanggalCioChar"),
+            },
+            {
+              key: "uraianKegiatan",
+              title: "URAIAN KEGIATAN",
+              dataIndex: "uraianKegiatan",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("uraianKegiatan"),
+            },
+            {
+              key: "jumlahKemasan",
+              title: "JUMLAH KEMASAN",
+              dataIndex: "jumlahKemasan",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("jumlahKemasan"),
+            },
+            {
+              key: "isiPerKemasan",
+              title: "ISI/ KEMASAN",
+              dataIndex: "isiPerKemasan",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+              ...this.getColumnSearchProps("isiPerKemasan"),
+            },
+          ],
         },
-        {
-          key: "uraianKegiatan",
-          title: "URAIAN KEGIATAN",
-          dataIndex: "uraianKegiatan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("uraianKegiatan"),
-        },
-        {
-          key: "jumlahKemasan",
-          title: "JUMLAH KEMASAN",
-          dataIndex: "jumlahKemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jumlahKemasan"),
-        },
-        {
-          key: "isiKemasan",
-          title: "ISI/ KEMASAN",
-          dataIndex: "isiKemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("isiKemasan"),
-        },
+
         {
           title: "TRANSAKSI",
           fixed: "right",
@@ -132,35 +153,39 @@ export default class BRCK1Rekam extends Component {
               key: "debitTransaksi",
               title: "DEBIT (Lt)",
               dataIndex: "debitTransaksi",
-              width: 80,
               fixed: "right",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
             },
             {
               key: "kreditTransaksi",
               title: "KREDIT (Lt)",
               dataIndex: "kreditTransaksi",
-              width: 80,
               fixed: "right",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+            },
+            {
+              key: "saldo",
+              title: "SALDO",
+              dataIndex: "saldo",
+              fixed: "right",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
+            },
+            {
+              key: "keterangan",
+              title: "KETERANGAN",
+              dataIndex: "keterangan",
+              fixed: "right",
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
             },
           ],
-        },
-        {
-          key: "saldo",
-          title: "SALDO",
-          dataIndex: "saldo",
-          width: 80,
-          fixed: "right",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-        },
-        {
-          key: "keterangan",
-          title: "KETERANGAN",
-          dataIndex: "keterangan",
-          width: 80,
-          fixed: "right",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
         },
       ],
       dataSource: [],
@@ -168,7 +193,12 @@ export default class BRCK1Rekam extends Component {
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -176,13 +206,19 @@ export default class BRCK1Rekam extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -209,6 +245,8 @@ export default class BRCK1Rekam extends Component {
       }
     },
   });
+
+  //Form Handler
 
   handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -240,62 +278,30 @@ export default class BRCK1Rekam extends Component {
   handleCari = () => {
     this.handleModalNPPBKCShow();
   };
-  handleTampilkan = () => {
-    this.setState({
-      ...this.state,
-      dataSource: [
-        {
-          key: "1",
-          jenisDokumen: "jenis_dokumen",
-          nomorDokumen: "nomor_dokumen",
-          tanggalDokumen: "tanggal_dokumen",
-          tanggalTransaksi: "tanggal_transaksi",
-          uraianKegiatan: "uraian_kegiatan",
-          jumlahKemasan: "jumlah_kemasan",
-          isiKemasan: "isi",
-          debitTransaksi: "1000",
-          kreditTransaksi: "2000",
-          saldo: "3000",
-          keterangan: "keterangan",
-        },
-        {
-          key: "2",
-          jenisDokumen: "jenis_dokumen",
-          nomorDokumen: "nomor_dokumen",
-          tanggalDokumen: "tanggal_dokumen",
-          tanggalTransaksi: "tanggal_transaksi",
-          uraianKegiatan: "uraian_kegiatan",
-          jumlahKemasan: "jumlah_kemasan",
-          isiKemasan: "isi",
-          debitTransaksi: "2000",
-          kreditTransaksi: "3000",
-          saldo: "4000",
-          keterangan: "keterangan",
-        },
-        {
-          key: "3",
-          jenisDokumen: "jenis_dokumen",
-          nomorDokumen: "nomor_dokumen",
-          tanggalDokumen: "tanggal_dokumen",
-          tanggalTransaksi: "tanggal_transaksi",
-          uraianKegiatan: "uraian_kegiatan",
-          jumlahKemasan: "jumlah_kemasan",
-          isiKemasan: "isi",
-          debitTransaksi: "3000",
-          kreditTransaksi: "4000",
-          saldo: "5000",
-          keterangan: "keterangan",
-        },
-      ],
-    });
+
+  handleTampilkan = async () => {
+    const { nppbkc, awalTanggalPeriode, akhirTanggalPeriode } = this.state;
+
+    if (!nppbkc || !awalTanggalPeriode || !akhirTanggalPeriode) {
+      message.error("Please fill in all required fields.");
+      this.setState({ notifError: true });
+
+      setTimeout(() => {
+        this.setState({ notifError: false });
+      }, 3000);
+      return;
+    } else {
+      await this.apiBrowseBrck1();
+    }
   };
+
   handleReset = () => {
     this.setState({
       ...this.state,
       nppbkc: "",
       namaPerusahaan: "",
-      periode_awal: "",
-      periode_akhir: "",
+      awalTanggalPeriode: "",
+      akhirTanggalPeriode: "",
     });
   };
 
@@ -319,27 +325,37 @@ export default class BRCK1Rekam extends Component {
     this.setState({ ...this.state, jenis_penutupan: value });
   };
 
-  handleGetRekam = async () => {
+  //api handler
+  apiBrowseBrck1 = async () => {
+    const { nppbkc, awalTanggalPeriode, akhirTanggalPeriode } = this.state;
+
+    const payload = {
+      nppbkc: nppbkc,
+      awalTanggalPeriode: awalTanggalPeriode.format("YYYY" - "MM" - "DD"),
+      akhirTanggalPeriode: akhirTanggalPeriode.format("YYYY" - "MM" - "DD"),
+    };
+
     this.setState({ isLoading: true });
     try {
-      const responseGetRekam = await api.produksi.json.get("/brck/browse-rekam-brck1", {
-        params: {
-          pageSize: this.state.limitRekamPage,
-          pageNumber: this.state.currentRekamPage,
-        },
+      const responseBrowseBrck1 = await requestApi({
+        service: "perdagangan",
+        method: "get",
+        endpoint: "/ck5/browse-brck1",
+        params: payload,
       });
-      this.setState({ dataSource: responseGetRekam.data.data.listData });
-      this.setState({ isLoading: false });
-      return;
+
+      this.setState({
+        dataSource: responseBrowseBrck1.data.data,
+        isLoading: false,
+        error: null,
+      });
     } catch (error) {
-      this.setState({ error: "An error occurred" });
+      this.setState({ error: "An error occurred", isLoading: false });
       message.error("Tidak bisa memuat data");
-      this.setState({ isLoading: false });
-      return;
     }
   };
 
-  handleRekam = async () => {
+  apiRekamBrowseBrck1 = async () => {
     const {
       idBrck1,
       saldo_awal,
@@ -370,9 +386,16 @@ export default class BRCK1Rekam extends Component {
     });
 
     if (response) {
-      notification.success({ message: "Success", description: response.data.message });
+      notification.success({
+        message: "Success",
+        description: response.data.message,
+      });
       this.props.history.push(`${pathName}/brck-1`);
     }
+  };
+
+  handleDateChange = (name, value) => {
+    this.setState({ [name]: value });
   };
 
   totalKeseluruhan = () => {
@@ -386,7 +409,10 @@ export default class BRCK1Rekam extends Component {
       (acc, item) => acc + parseInt(item.kreditTransaksi, 10),
       0
     );
-    const totalJumlahSaldo = dataSource.reduce((acc, item) => acc + parseInt(item.saldo, 10), 0);
+    const totalJumlahSaldo = dataSource.reduce(
+      (acc, item) => acc + parseInt(item.saldo, 10),
+      0
+    );
 
     this.setState({
       totalJumlahTransaksiDebit,
@@ -479,7 +505,7 @@ export default class BRCK1Rekam extends Component {
 
   render() {
     const {
-      isHidden,
+      // isHidden,
       hasil_pencacahan_back5,
       totalJumlahTransaksiDebit,
       totalJumlahTransaksiKredit,
@@ -498,12 +524,23 @@ export default class BRCK1Rekam extends Component {
       // keteranaganSelisihLebih,
       // keteranaganBatasLebih,
       // ketentuan,
+      saldo_awal,
+      notifError,
+      awalTanggalPeriode,
+      akhirTanggalPeriode,
     } = this.state;
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1" hideContentHeader>
+        <Container
+          menuName="Buku Rekening Cukai"
+          contentName="BRCK-1"
+          hideContentHeader
+        >
           <Header>Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+          >
             <div style={{ marginBottom: 20 }}>
               <div
                 style={{
@@ -525,7 +562,11 @@ export default class BRCK1Rekam extends Component {
                 <Button type="primary" onClick={() => this.handleCari()}>
                   Cari
                 </Button>
-                <Input disabled value={this.state.namaPerusahaan} style={{ flex: 3 }} />
+                <Input
+                  disabled
+                  value={this.state.namaPerusahaan}
+                  style={{ flex: 3 }}
+                />
               </div>
 
               <div
@@ -537,14 +578,32 @@ export default class BRCK1Rekam extends Component {
                 }}
               >
                 <FormLabel>PERIODE</FormLabel>
-                <DatePicker onChange={this.handlePeriodeAwalChange} style={{ width: "100%" }} />
+                <DatePicker
+                  name="awalTanggalPeriode"
+                  value={awalTanggalPeriode}
+                  onChange={(date) =>
+                    this.handleDateChange("awalTanggalPeriode", date)
+                  }
+                  style={{ width: "100%" }}
+                />
                 <div>s.d</div>
-                <DatePicker onChange={this.handlePeriodeAkhirChange} style={{ width: "100%" }} />
+                <DatePicker
+                  name="akhirTanggalPeriode"
+                  value={akhirTanggalPeriode}
+                  onChange={(date) =>
+                    this.handleDateChange("akhirTanggalPeriode", date)
+                  }
+                  style={{ width: "100%" }}
+                />
               </div>
             </div>
 
             <div style={{ display: "flex", gap: 5, justifyContent: "end" }}>
-              <Button type="primary" onClick={this.handleTampilkan}>
+              <Button
+                type="primary"
+                onClick={this.handleTampilkan}
+                disabled={notifError ? true : false}
+              >
                 Tampilkan
               </Button>
               <Button type="danger" onClick={this.handleReset}>
@@ -564,11 +623,13 @@ export default class BRCK1Rekam extends Component {
                   >
                     <div>
                       <div style={{ marginBottom: 10 }}>
-                        <FormLabel>SALDO AWAL (Hasil penutupan periode sebelumnya)</FormLabel>
+                        <FormLabel>
+                          SALDO AWAL (Hasil penutupan periode sebelumnya)
+                        </FormLabel>
                       </div>
                       <div>
                         <InputNumber
-                          value={this.state.saldo_awal}
+                          value={saldo_awal}
                           onChange={this.handleSaldoAwalChange}
                           min={0}
                           style={{ width: 200 }}
@@ -597,41 +658,59 @@ export default class BRCK1Rekam extends Component {
                               title: "Title",
                               dataIndex: "title",
                               render: (text, record, index) => (
-                                <div style={{ textAlign: "center" }}>{text}</div>
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
                               ),
                             },
                             {
                               key: "debitTransaksi",
                               title: "Transaksi Debit",
                               dataIndex: "debitTransaksi",
-                              width: 80,
+                              width: 101,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                             {
                               key: "kreditTransaksi",
                               title: "Transaksi Kredit",
                               dataIndex: "kreditTransaksi",
-                              width: 80,
+                              width: 101,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
 
                             {
                               key: "saldo",
                               title: "Saldo",
                               dataIndex: "saldo",
-                              width: 80,
+                              width: 101,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                             {
                               key: "keterangan",
                               title: "Keterangan",
                               dataIndex: "keterangan",
-                              width: 80,
+                              width: 101,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                           ]}
                           dataSource={[
@@ -674,259 +753,277 @@ export default class BRCK1Rekam extends Component {
                   />
                 </div>
 
-                {this.state.saldo_awal && (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "end",
-                      gap: 10,
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Hasil Pencacahan (BACK-5)</div>
-                      <div style={{ width: 200 }}>
-                        <Input
-                          id="hasil_pencacahan_back5"
-                          value={this.state.hasil_pencacahan_back5}
-                          onChange={this.handleInputChange}
-                        />
-                      </div>
-                      <div style={{ width: 200 }}>
-                        <Input.TextArea
-                          id="hasil_pencarian_back5_text_area"
-                          disabled
-                          onChange={this.handleInputChange}
-                          autoSize
-                        />
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>No. BACK-5</div>
-                      <div style={{ width: 200 }}>
-                        <Input id="no_back5" onChange={this.handleInputChange} />
-                      </div>
-                      <div style={{ width: 200 }}></div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Tgl. BACK-5</div>
-                      <div style={{ width: 200 }}>
-                        <DatePicker onChange={this.handleTanggalBack5Change} />
-                      </div>
-                      <div style={{ width: 200 }}></div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Selisih Kurang</div>
-                      <div style={{ width: 200 }}>
-                        <Input
-                          id="selisihKurang"
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={5000}
-                          // value={totalSelisih}
-                        />
-                      </div>
-                      <div style={{ width: 200 }}>
-                        <Input.TextArea
-                          disabled
-                          onChange={this.handleInputChange}
-                          autoSize
-                          value={"12000-7000"}
-                          // saldo buku - hasil pencacahan back 5
-                          // value={keteranganSelisih}
-                        />
-                      </div>
-                    </div>
-
-                    {isHidden && (
-                      <>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                          }}
-                        >
-                          <div>Selisih Lebih</div>
-                          <div style={{ width: 200 }}>
-                            <Input
-                              id="selisihlebih"
-                              disabled
-                              onChange={this.handleInputChange}
-                              value={"1.000"}
-                              // value={totalSelisihLebih}
-                            />
-                          </div>
-                          <div style={{ width: 200 }}>
-                            <Input.TextArea
-                              disabled
-                              onChange={this.handleInputChange}
-                              value={"13.000 -12.000"}
-                              // value={keteranaganSelisihLebih}
-                              // pencacahan back 5 - saldo buku
-                              autoSize
-                            />
-                          </div>
-                        </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                          }}
-                        >
-                          <div>Batas Kelonggaran</div>
-                          <div style={{ width: 200 }}>
-                            <Input
-                              id="potongan"
-                              disabled
-                              onChange={this.handleInputChange}
-                              // value={totalBatasLebih}
-                            />
-                          </div>
-                          <div style={{ width: 200 }}>
-                            <Input.TextArea
-                              disabled
-                              onChange={this.handleInputChange}
-                              value={12}
-                              // value={keteranaganBatasLebih}
-                              // 0.01 * updateSaldo(saldo buku)
-                              autoSize
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Potongan</div>
-                      <div style={{ width: 200 }}>
-                        <Input
-                          id="potongan"
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={90}
-                          // value={totalPotongan}
-                        />
-                      </div>
-                      <div style={{ width: 200 }}>
-                        <Input.TextArea
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={"0,5% x (6000 + 12000)"}
-                          // value={keteranganPotongan}
-                          // 0.005 * (totalJumlahTransaksiDebit + saldo_awal)
-                          autoSize
-                        />
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Kekuranagan</div>
-                      <div style={{ width: 200 }}>
-                        <Input
-                          id="Kekuranagan"
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={4080}
-                          // value={totalKekurangan}
-                        />
-                      </div>
-                      <div style={{ width: 200 }}>
-                        <Input.TextArea
-                          id="hasil_pencarian_back5_text_area"
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={"5000 - 90"}
-                          // value={keteranganKekurangan}
-                          // selish kurang - potongan
-                          autoSize
-                        />
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Batas Kelongaran</div>
-                      <div style={{ width: 200 }}>
-                        <Input
-                          id="batasKelongaran"
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={270}
-                          // value={totalBatasKelonggaran}
-                        />
-                      </div>
-                      <div style={{ width: 200 }}>
-                        <Input.TextArea
-                          disabled
-                          onChange={this.handleInputChange}
-                          value={"3 x 90"}
-                          // value={keteranganBatasKelongaran}
-                          // 3 x totalPotongan
-                          autoSize
-                        />
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 400 }}>
-                        <Input.TextArea
-                          id="ketentuan"
-                          // value={ketentuan}
-                          onChange={this.handleInputChange}
-                          value={this.state.ketentuan}
-                          // readOnly
-                          rows={5}
-                        />
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div>Jenis Penutupan</div>
-                      <div style={{ width: 200 }}>
-                        <Select
-                          onChange={this.handleJenisPenutupanChange}
-                          style={{ width: "100%" }}
-                        >
-                          {this.state.list_jenis_penutupan.length > 0 &&
-                            this.state.list_jenis_penutupan.map((item) => (
-                              <Select.Option value={item.jenis_penutupan_code}>
-                                {item.jenis_penutupan_name}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      </div>
-                      <div style={{ width: 200 }}></div>
-                    </div>
-                  </div>
-                )}
-
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "end",
-                    marginTop: 30,
-                    marginRight: 20,
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "end",
+                    gap: 10,
                   }}
                 >
-                  <Button type="primary" onClick={this.handleRekam} style={{ marginRight: 20 }}>
-                    Rekam
-                  </Button>
-                  <ButtonCustom
-                    variant="secondary"
-                    width={200}
-                    onClick={() => this.props.history.push(`${pathName}/brck-1`)}
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
                   >
-                    Kembali
-                  </ButtonCustom>
+                    <div>Hasil Pencacahan (BACK-5)</div>
+                    <div style={{ width: 200 }}>
+                      <Input
+                        id="hasil_pencacahan_back5"
+                        value={this.state.hasil_pencacahan_back5}
+                        onChange={this.handleInputChange}
+                      />
+                    </div>
+                    <div style={{ width: 200 }}>
+                      <Input.TextArea
+                        id="hasil_pencarian_back5_text_area"
+                        disabled
+                        onChange={this.handleInputChange}
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>No. BACK-5</div>
+                    <div style={{ width: 200 }}>
+                      <Input id="no_back5" onChange={this.handleInputChange} />
+                    </div>
+                    <div style={{ width: 200 }}></div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Tgl. BACK-5</div>
+                    <div style={{ width: 200 }}>
+                      <DatePicker onChange={this.handleTanggalBack5Change} />
+                    </div>
+                    <div style={{ width: 200 }}></div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Selisih Kurang</div>
+                    <div style={{ width: 200 }}>
+                      <Input
+                        id="selisihKurang"
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={5000}
+                        // value={totalSelisih}
+                      />
+                    </div>
+                    <div style={{ width: 200 }}>
+                      <Input.TextArea
+                        disabled
+                        onChange={this.handleInputChange}
+                        autoSize
+                        value={"12000-7000"}
+                        // saldo buku - hasil pencacahan back 5
+                        // value={keteranganSelisih}
+                      />
+                    </div>
+                  </div>
+
+                  {this.state.saldo_awal && (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                        }}
+                      >
+                        <div>Selisih Lebih</div>
+                        <div style={{ width: 200 }}>
+                          <Input
+                            id="selisihlebih"
+                            disabled
+                            onChange={this.handleInputChange}
+                            value={"1.000"}
+                            // value={totalSelisihLebih}
+                          />
+                        </div>
+                        <div style={{ width: 200 }}>
+                          <Input.TextArea
+                            disabled
+                            onChange={this.handleInputChange}
+                            value={"13.000 -12.000"}
+                            // value={keteranaganSelisihLebih}
+                            // pencacahan back 5 - saldo buku
+                            autoSize
+                          />
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                        }}
+                      >
+                        <div>Batas Kelonggaran</div>
+                        <div style={{ width: 200 }}>
+                          <Input
+                            id="potongan"
+                            disabled
+                            onChange={this.handleInputChange}
+                            // value={totalBatasLebih}
+                          />
+                        </div>
+                        <div style={{ width: 200 }}>
+                          <Input.TextArea
+                            disabled
+                            onChange={this.handleInputChange}
+                            value={12}
+                            // value={keteranaganBatasLebih}
+                            // 0.01 * updateSaldo(saldo buku)
+                            autoSize
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Potongan</div>
+                    <div style={{ width: 200 }}>
+                      <Input
+                        id="potongan"
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={90}
+                        // value={totalPotongan}
+                      />
+                    </div>
+                    <div style={{ width: 200 }}>
+                      <Input.TextArea
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={"0,5% x (6000 + 12000)"}
+                        // value={keteranganPotongan}
+                        // 0.005 * (totalJumlahTransaksiDebit + saldo_awal)
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Kekuranagan</div>
+                    <div style={{ width: 200 }}>
+                      <Input
+                        id="Kekuranagan"
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={4080}
+                        // value={totalKekurangan}
+                      />
+                    </div>
+                    <div style={{ width: 200 }}>
+                      <Input.TextArea
+                        id="hasil_pencarian_back5_text_area"
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={"5000 - 90"}
+                        // value={keteranganKekurangan}
+                        // selish kurang - potongan
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Batas Kelongaran</div>
+                    <div style={{ width: 200 }}>
+                      <Input
+                        id="batasKelongaran"
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={270}
+                        // value={totalBatasKelonggaran}
+                      />
+                    </div>
+                    <div style={{ width: 200 }}>
+                      <Input.TextArea
+                        disabled
+                        onChange={this.handleInputChange}
+                        value={"3 x 90"}
+                        // value={keteranganBatasKelongaran}
+                        // 3 x totalPotongan
+                        autoSize
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div style={{ width: 400 }}>
+                      <Input.TextArea
+                        id="ketentuan"
+                        // value={ketentuan}
+                        onChange={this.handleInputChange}
+                        value={this.state.ketentuan}
+                        // readOnly
+                        rows={5}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <div>Jenis Penutupan</div>
+                    <div style={{ width: 200 }}>
+                      <Select
+                        onChange={this.handleJenisPenutupanChange}
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.list_jenis_penutupan.length > 0 &&
+                          this.state.list_jenis_penutupan.map((item) => (
+                            <Select.Option value={item.jenis_penutupan_code}>
+                              {item.jenis_penutupan_name}
+                            </Select.Option>
+                          ))}
+                      </Select>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                marginTop: 30,
+                marginRight: 20,
+              }}
+            >
+              <Button
+                type="primary"
+                onClick={this.apiRekamBrowseBrck1}
+                style={{ marginRight: 20 }}
+              >
+                Rekam
+              </Button>
+              <ButtonCustom
+                variant="secondary"
+                width={200}
+                onClick={() => this.props.history.push(`${pathName}/brck-1`)}
+              >
+                Kembali
+              </ButtonCustom>
+            </div>
           </div>
         </Container>
 

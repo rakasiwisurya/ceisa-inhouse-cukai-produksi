@@ -1,4 +1,13 @@
-import { Button, DatePicker, Icon, Input, InputNumber, Select, Table, message } from "antd";
+import {
+  Button,
+  DatePicker,
+  Icon,
+  Input,
+  InputNumber,
+  Select,
+  Table,
+  message,
+} from "antd";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import React, { Component } from "react";
@@ -65,21 +74,27 @@ export default class BRCK1Detil extends Component {
               key: "jenisDokumen",
               title: "JENIS",
               dataIndex: "jenisDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
               ...this.getColumnSearchProps("jenisDokumen"),
             },
             {
               key: "nomorDokumen",
               title: "NOMOR",
               dataIndex: "nomorDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
               ...this.getColumnSearchProps("nomorDokumen"),
             },
             {
               key: "tanggalDokumen",
               title: "TANGGAL",
               dataIndex: "tanggalDokumen",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
               ...this.getColumnSearchProps("tanggalDokumen"),
             },
           ],
@@ -122,7 +137,9 @@ export default class BRCK1Detil extends Component {
               dataIndex: "debitTransaksi",
               width: 80,
               fixed: "right",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
             },
             {
               key: "kreditTransaksi",
@@ -130,7 +147,9 @@ export default class BRCK1Detil extends Component {
               dataIndex: "kreditTransaksi",
               width: 80,
               fixed: "right",
-              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text}</div>
+              ),
             },
           ],
         },
@@ -156,7 +175,12 @@ export default class BRCK1Detil extends Component {
   }
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -164,13 +188,19 @@ export default class BRCK1Detil extends Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() =>
+            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
+          }
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -239,7 +269,7 @@ export default class BRCK1Detil extends Component {
           tanggalDokumen: "tanggal_dokumen",
           tanggalTransaksi: "tanggal_transaksi",
           uraianKegiatan: "uraian_kegiatan",
-          jumlahKemasan: "jumlah_kemasan",
+          jumlahKemasan: "jumlah_kemasan TEST",
           isiKemasan: "isi",
           debitTransaksi: "1000",
           kreditTransaksi: "2000",
@@ -338,7 +368,10 @@ export default class BRCK1Detil extends Component {
       (acc, item) => acc + parseInt(item.kreditTransaksi, 10),
       0
     );
-    const totalJumlahSaldo = dataSource.reduce((acc, item) => acc + parseInt(item.saldo, 10), 0);
+    const totalJumlahSaldo = dataSource.reduce(
+      (acc, item) => acc + parseInt(item.saldo, 10),
+      0
+    );
 
     this.setState({
       totalJumlahTransaksiDebit,
@@ -453,9 +486,16 @@ export default class BRCK1Detil extends Component {
     } = this.state;
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1" hideContentHeader>
+        <Container
+          menuName="Buku Rekening Cukai"
+          contentName="BRCK-1"
+          hideContentHeader
+        >
           <Header>Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+          >
             <div style={{ marginBottom: 20 }}>
               <div
                 style={{
@@ -524,7 +564,9 @@ export default class BRCK1Detil extends Component {
                   >
                     <div>
                       <div style={{ marginBottom: 10 }}>
-                        <FormLabel>SALDO AWAL (Hasil penutupan periode sebelumnya)</FormLabel>
+                        <FormLabel>
+                          SALDO AWAL (Hasil penutupan periode sebelumnya)
+                        </FormLabel>
                       </div>
                       <div>
                         <InputNumber
@@ -558,7 +600,9 @@ export default class BRCK1Detil extends Component {
                               title: "Title",
                               dataIndex: "title",
                               render: (text, record, index) => (
-                                <div style={{ textAlign: "center" }}>{text}</div>
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
                               ),
                             },
                             {
@@ -567,7 +611,11 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "debitTransaksi",
                               width: 80,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                             {
                               key: "kreditTransaksi",
@@ -575,7 +623,11 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "kreditTransaksi",
                               width: 80,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
 
                             {
@@ -584,7 +636,11 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "saldo",
                               width: 80,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                             {
                               key: "keterangan",
@@ -592,7 +648,11 @@ export default class BRCK1Detil extends Component {
                               dataIndex: "keterangan",
                               width: 80,
                               fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                              render: (text) => (
+                                <div style={{ textAlign: "center" }}>
+                                  {text}
+                                </div>
+                              ),
                             },
                           ]}
                           dataSource={[
@@ -644,7 +704,9 @@ export default class BRCK1Detil extends Component {
                     gap: 10,
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Hasil Pencacahan (BACK-5)</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -664,23 +726,36 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>No. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} disabled />
+                      <Input
+                        id="no_back5"
+                        onChange={this.handleInputChange}
+                        disabled
+                      />
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Tgl. BACK-5</div>
                     <div style={{ width: 200 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} disabled />
+                      <DatePicker
+                        onChange={this.handleTanggalBack5Change}
+                        disabled
+                      />
                     </div>
                     <div style={{ width: 200 }}></div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Selisih Kurang</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -764,7 +839,9 @@ export default class BRCK1Detil extends Component {
                     </>
                   )}
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Potongan</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -787,7 +864,9 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Kekuranagan</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -811,7 +890,9 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Batas Kelongaran</div>
                     <div style={{ width: 200 }}>
                       <Input
@@ -834,7 +915,9 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div style={{ width: 400 }}>
                       <Input.TextArea
                         id="catatan"
@@ -850,10 +933,15 @@ export default class BRCK1Detil extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <div>Jenis Penutupan</div>
                     <div style={{ width: 200 }}>
-                      <Select onChange={this.handleJenisPenutupanChange} style={{ width: "100%" }}>
+                      <Select
+                        onChange={this.handleJenisPenutupanChange}
+                        style={{ width: "100%" }}
+                      >
                         {this.state.list_jenis_penutupan.length > 0 &&
                           this.state.list_jenis_penutupan.map((item) => (
                             <Select.Option value={item.jenis_penutupan_code}>
@@ -877,7 +965,9 @@ export default class BRCK1Detil extends Component {
                   <ButtonCustom
                     variant="secondary"
                     width={200}
-                    onClick={() => this.props.history.push(`${pathName}/brck-1`)}
+                    onClick={() =>
+                      this.props.history.push(`${pathName}/brck-1`)
+                    }
                   >
                     Kembali
                   </ButtonCustom>

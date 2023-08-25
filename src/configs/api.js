@@ -7,11 +7,14 @@ const axiosConfig = (baseURL, contentType, apiKey) => {
   instance.interceptors.request.use(
     async (config) => {
       const headers = {
-        "Beacukai-api-key": apiKey ? apiKey : process.env.REACT_APP_API_ALL_V2_KEY,
+        "Beacukai-api-key": apiKey
+          ? apiKey
+          : process.env.REACT_APP_API_ALL_V2_KEY,
         "Content-Type": contentType,
       };
 
-      if (!apiKey) headers.Authorization = `Bearer ${await getUserAccessToken()}`;
+      if (!apiKey)
+        headers.Authorization = `Bearer ${await getUserAccessToken()}`;
 
       const newConfig = {
         ...config,
@@ -36,6 +39,7 @@ export const api = {
   produksi: apiContentType(process.env.REACT_APP_API_PRODUKSI),
   pita_cukai: apiContentType(process.env.REACT_APP_API_PITA_CUKAI),
   perbendaharaan: apiContentType(process.env.REACT_APP_API_PERBENDAHARAAN),
+  perdagangan: apiContentType(process.env.REACT_APP_API_PERDAGANGAN),
   referensi_beacukai: apiContentType(
     process.env.REACT_APP_REFERENSI_BC,
     process.env.REACT_APP_API_REFERENSI_BC_KEY
