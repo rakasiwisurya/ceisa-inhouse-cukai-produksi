@@ -283,7 +283,7 @@ export default class BRCK1Rekam extends Component {
     const { nppbkc, awalTanggalPeriode, akhirTanggalPeriode } = this.state;
 
     if (!nppbkc || !awalTanggalPeriode || !akhirTanggalPeriode) {
-      message.error("Please fill in all required fields.");
+      message.error("Silakan isi semua kolom yang diperlukan.");
       this.setState({ notifError: true });
 
       setTimeout(() => {
@@ -331,8 +331,8 @@ export default class BRCK1Rekam extends Component {
 
     const payload = {
       nppbkc: nppbkc,
-      awalTanggalPeriode: awalTanggalPeriode.format("YYYY" - "MM" - "DD"),
-      akhirTanggalPeriode: akhirTanggalPeriode.format("YYYY" - "MM" - "DD"),
+      awalTanggalPeriode: awalTanggalPeriode.format("YYYY-MM-DD"),
+      akhirTanggalPeriode: akhirTanggalPeriode.format("YYYY-MM-DD"),
     };
 
     this.setState({ isLoading: true });
@@ -344,11 +344,19 @@ export default class BRCK1Rekam extends Component {
         params: payload,
       });
 
-      this.setState({
-        dataSource: responseBrowseBrck1.data.data,
-        isLoading: false,
-        error: null,
-      });
+      if (responseBrowseBrck1.data.data.length === 0) {
+        message.error("Tidak ada data pada periode tersebut!");
+        this.setState({ notifError: true });
+        setTimeout(() => {
+          this.setState({ notifError: false });
+        }, 3000);
+      } else {
+        this.setState({
+          dataSource: responseBrowseBrck1.data.data,
+          isLoading: false,
+          error: null,
+        });
+      }
     } catch (error) {
       this.setState({ error: "An error occurred", isLoading: false });
       message.error("Tidak bisa memuat data");
@@ -999,31 +1007,33 @@ export default class BRCK1Rekam extends Component {
                     </div>
                   </div>
                 </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "end",
+                    marginTop: 30,
+                    marginRight: 20,
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    onClick={this.apiRekamBrowseBrck1}
+                    style={{ marginRight: 20 }}
+                  >
+                    Rekam
+                  </Button>
+                  <ButtonCustom
+                    variant="secondary"
+                    width={200}
+                    onClick={() =>
+                      this.props.history.push(`${pathName}/brck-1`)
+                    }
+                  >
+                    Kembali
+                  </ButtonCustom>
+                </div>
               </>
             )}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                marginTop: 30,
-                marginRight: 20,
-              }}
-            >
-              <Button
-                type="primary"
-                onClick={this.apiRekamBrowseBrck1}
-                style={{ marginRight: 20 }}
-              >
-                Rekam
-              </Button>
-              <ButtonCustom
-                variant="secondary"
-                width={200}
-                onClick={() => this.props.history.push(`${pathName}/brck-1`)}
-              >
-                Kembali
-              </ButtonCustom>
-            </div>
           </div>
         </Container>
 
