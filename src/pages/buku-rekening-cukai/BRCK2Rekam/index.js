@@ -17,6 +17,7 @@ import Header from "components/Header";
 import ModalDaftarMerkBrck2 from "components/ModalDaftarMerkBrck2";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
+import moment from "moment";
 import React, { Component } from "react";
 import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
@@ -32,9 +33,6 @@ export default class BRCK2Rekam extends Component {
       isModalDaftarMerkVisible: false,
       isSearchLoading: false,
       isRekamLoading: false,
-
-      page: 1,
-      totalData: 0,
 
       jenis_bkc_id: 2,
 
@@ -53,36 +51,23 @@ export default class BRCK2Rekam extends Component {
       saldo_awal_kemasan: null,
       saldo_awal_lt: null,
 
-      table: {
-        jenis_dokumen: null,
-        nomor_dokumen: null,
-        tanggal_dokumen: null,
-        tanggal_transaksi: null,
-        uraian_kegiatan: null,
-      },
+      total_debet_kemasan: null,
+      total_debet_lt: null,
+      total_kredit_kemasan: null,
+      total_kredit_lt: null,
 
-      total_debet_kemasan: 0,
-      total_debet_lt: 0,
-      total_kredit_kemasan: 0,
-      total_kredit_lt: 0,
-      total_saldo_kemasan: 0,
-      total_saldo_lt: 0,
+      saldo_buku_kemasan: null,
+      saldo_buku_lt: null,
 
-      saldo_buku_saldo_kemasan: 0,
-      saldo_buku_saldo_lt: 0,
-
-      selisih_saldo_kemasan: 0,
-      selisih_saldo_lt: 0,
-
-      hasil_pencacahan_back5_kemasan: 0,
-      hasil_pencacahan_back5_lt: 0,
+      hasil_pencacahan_back5_kemasan: null,
+      hasil_pencacahan_back5_lt: null,
       hasil_pencarian_back5_description: null,
       no_back5: null,
       tgl_back5: null,
-      selisih_kemasan: 0,
-      selisih_lt: 0,
+      selisih_kemasan: null,
+      selisih_lt: null,
       selisih_description: null,
-      batas_kelonggaran_kemasan: 0,
+      batas_kelonggaran_kemasan: null,
       batas_kelonggaran_description: null,
       notif: null,
       jenis_penutupan: null,
@@ -101,6 +86,10 @@ export default class BRCK2Rekam extends Component {
           jenis_penutupan_name: "DUGAAN PELANGGARAN",
         },
       ],
+
+      searchText: null,
+      searchedColumn: null,
+      page: 1,
 
       dataSource: [],
       columns: [
@@ -228,7 +217,14 @@ export default class BRCK2Rekam extends Component {
       prevState.hasil_pencacahan_back5_kemasan !== this.state.hasil_pencacahan_back5_kemasan ||
       prevState.hasil_pencacahan_back5_lt !== this.state.hasil_pencacahan_back5_lt
     ) {
-      this.calculate();
+      this.setState({
+        total_debet_kemasan: sumArrayOfObject(this.state.dataSource, "debet_kemasan"),
+        total_debet_lt: sumArrayOfObject(this.state.dataSource, "debet_lt"),
+        total_kredit_kemasan: sumArrayOfObject(this.state.dataSource, "kredit_kemasan"),
+        total_kredit_lt: sumArrayOfObject(this.state.dataSource, "kredit_lt"),
+        selisih_kemasan: this.state.hasil_pencacahan_back5_kemasan - this.state.saldo_buku_kemasan,
+        selisih_lt: this.state.hasil_pencacahan_back5_lt - this.state.saldo_buku_lt,
+      });
     }
 
     if (
@@ -247,30 +243,38 @@ export default class BRCK2Rekam extends Component {
       Math.sign(this.state.selisih_kemasan) === 1
     ) {
       this.setState({
-        batas_kelonggaran_kemasan: (1 / 100) * this.state.saldo_buku_saldo_lt,
-        batas_kelonggaran_description: `1% x ${this.state.saldo_buku_saldo_lt}`,
+        batas_kelonggaran_kemasan: (1 / 100) * this.state.saldo_buku_lt,
+        batas_kelonggaran_description: `1% x ${this.state.saldo_buku_lt}`,
       });
     }
 
     if (
-      (prevState.selisih_kemasan !== this.state.selisih_kemasan ||
-        prevState.batas_kelonggaran_kemasan !== this.state.batas_kelonggaran_kemasan ||
+      (prevState.batas_kelonggaran_kemasan !== this.state.batas_kelonggaran_kemasan ||
+        prevState.selisih_kemasan !== this.state.selisih_kemasan ||
         prevState.selisih_lt !== this.state.selisih_lt) &&
-      Math.sign(this.state.selisih_kemasan) !== 0
+      Math.sign(this.state.selisih_kemasan) !== 0 &&
+      Math.sign(this.state.selisih_lt) !== 0
     ) {
       switch (true) {
-        case Math.sign(this.state.selisih_kemasan) === -1:
+        case Math.sign(this.state.selisih_kemasan) === -1 ||
+          Math.sign(this.state.selisih_lt) === -1:
           this.setState({
             notif: "Terdapat selisih dengan BACK-5 dan dikenai Sanksi Administrasi",
           });
           break;
-        case this.state.batas_kelonggaran_kemasan > this.state.selisih_lt:
+        case (Math.sign(this.state.selisih_kemasan) === 1 ||
+          Math.sign(this.state.selisih_lt) === 1) &&
+          Math.abs(this.state.selisih_lt) > this.state.batas_kelonggaran_kemasan &&
+          Math.abs(this.state.selisih_kemasan) > this.state.batas_kelonggaran_kemasan:
           this.setState({
             notif:
               "Jumlah kelebihan BKC lebih besar daripada Batas Kelonggaran, dikenal Sanksi Administrasi Denda",
           });
           break;
-        case this.state.batas_kelonggaran_kemasan <= this.state.selisih_lt:
+        case (Math.sign(this.state.selisih_kemasan) === 1 ||
+          Math.sign(this.state.selisih_lt) === 1) &&
+          Math.abs(this.state.selisih_lt) <= this.state.batas_kelonggaran_kemasan &&
+          Math.abs(this.state.selisih_kemasan) <= this.state.batas_kelonggaran_kemasan:
           this.setState({
             notif:
               "Jumlah kelebihan BKC tidak lebih besar daripada Batas Kelonggaran tidak dikenai Sanksi Administrasi Denda",
@@ -284,68 +288,66 @@ export default class BRCK2Rekam extends Component {
   }
 
   getBrck2 = async () => {
-    const { jenis_dokumen, nomor_dokumen, tanggal_dokumen, tanggal_transaksi, uraian_kegiatan } =
-      this.state.table;
-
-    const payload = { page: this.state.page };
-
-    if (jenis_dokumen) payload.jenisDokumen = jenis_dokumen;
-    if (nomor_dokumen) payload.nomorDokumen = nomor_dokumen;
-    if (tanggal_dokumen) payload.tanggalDokumen = tanggal_dokumen;
-    if (tanggal_transaksi) payload.tanggalTransaksi = tanggal_transaksi;
-    if (uraian_kegiatan) payload.uraianKegiatan = uraian_kegiatan;
+    const payload = {
+      page: this.state.page,
+      nppbkc: this.state.nppbkc,
+      namaMerk: this.state.merk_mmea_name,
+      awalTanggalPeriode: moment(this.state.periode_awal).format("YYYY-MM-DD"),
+      akhirTanggalPeriode: moment(this.state.periode_akhir).format("YYYY-MM-DD"),
+    };
 
     const response = await requestApi({
-      service: "produksi",
+      service: "perdagangan",
       method: "get",
-      endpoint: "/brck/browse-rekam-brck2",
+      endpoint: "/ck5/browse-brck2",
       params: payload,
-      setLoading: (bool) => this.setState({ isTableLoading: bool }),
+      setLoading: (bool) => this.setState({ isSearchLoading: bool, isTableLoading: bool }),
     });
 
     if (response) {
       const { data } = response.data;
 
-      const newData = data.listData.map((item) => item);
+      await this.setState({
+        saldo_awal_kemasan: sumArrayOfObject(data, "saldoKemasan"),
+        saldo_awal_lt: sumArrayOfObject(data, "saldo"),
+      });
+
+      let saldoKemasan = this.state.saldo_awal_kemasan || 0;
+      let saldoLt = this.state.saldo_awal_lt || 0;
+
+      const newData = data.map((item, index) => {
+        if (item.jenisTransaksi === "K") {
+          saldoKemasan -= +item.jumlahKemasan || 0;
+          saldoLt += +item.jumlah || 0;
+        } else if (item.jenisTransaksi === "D") {
+          saldoKemasan += +item.jumlahKemasan || 0;
+          saldoLt -= +item.jumlah || 0;
+        }
+
+        return {
+          key: `brck-2-ck5-${index}`,
+          jenis_dokumen: item.jenisDok,
+          nomor_dokumen: item.nomorDok,
+          tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
+          tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
+          uraian_kegiatan: item.uraianKegiatan,
+          debet_kemasan: item.jenisTransaksi === "D" ? +item.jumlahKemasan : 0,
+          debet_lt: item.jenisTransaksi === "D" ? +item.jumlah : 0,
+          kredit_kemasan: item.jenisTransaksi === "K" ? +item.jumlahKemasan : 0,
+          kredit_lt: item.jenisTransaksi === "K" ? +item.jumlah : 0,
+          saldo_kemasan: saldoKemasan,
+          saldo_lt: saldoLt,
+        };
+      });
 
       this.setState({
         dataSource: newData,
-        page: data.currentPage,
-        totalData: data.totalData,
-        hasil_pencacahan_back5_kemasan: sumArrayOfObject(
-          response.data.data.listData,
-          "saldo_kemasan"
-        ),
-        hasil_pencacahan_back5_lt: sumArrayOfObject(response.data.data.listData, "saldo_lt"),
-        hasil_pencarian_back5_description: "SESUAI",
+        saldo_buku_kemasan: saldoKemasan,
+        saldo_buku_lt: saldoLt,
+        hasil_pencacahan_back5_kemasan: saldoKemasan,
+        hasil_pencacahan_back5_lt: saldoLt,
       });
     }
-  };
-
-  calculate = () => {
-    this.setState({
-      total_debet_kemasan: sumArrayOfObject(this.state.dataSource, "debet_kemasan"),
-      total_debet_lt: sumArrayOfObject(this.state.dataSource, "debet_lt"),
-      total_kredit_kemasan: sumArrayOfObject(this.state.dataSource, "kredit_kemasan"),
-      total_kredit_lt: sumArrayOfObject(this.state.dataSource, "kredit_lt"),
-      total_saldo_kemasan: sumArrayOfObject(this.state.dataSource, "saldo_kemasan"),
-      total_saldo_lt: sumArrayOfObject(this.state.dataSource, "saldo_lt"),
-
-      saldo_buku_saldo_kemasan: sumArrayOfObject(this.state.dataSource, "saldo_kemasan"),
-      saldo_buku_saldo_lt: sumArrayOfObject(this.state.dataSource, "saldo_lt"),
-
-      selisih_saldo_kemasan:
-        this.state.hasil_pencacahan_back5_kemasan -
-        sumArrayOfObject(this.state.dataSource, "saldo_kemasan"),
-      selisih_saldo_lt:
-        this.state.hasil_pencacahan_back5_lt - sumArrayOfObject(this.state.dataSource, "saldo_lt"),
-
-      selisih_kemasan:
-        this.state.hasil_pencacahan_back5_kemasan -
-        sumArrayOfObject(this.state.dataSource, "saldo_kemasan"),
-      selisih_lt:
-        this.state.hasil_pencacahan_back5_lt - sumArrayOfObject(this.state.dataSource, "saldo_lt"),
-    });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -355,16 +357,14 @@ export default class BRCK2Rekam extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
-          onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-          }
-          onPressEnter={() => this.handleColumnSearch(confirm)}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(confirm)}
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -372,7 +372,7 @@ export default class BRCK2Rekam extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
+          onClick={() => this.handleColumnReset(clearFilters)}
           size="small"
           style={{ width: 90 }}
         >
@@ -383,6 +383,8 @@ export default class BRCK2Rekam extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         const timeout = setTimeout(() => {
@@ -392,21 +394,23 @@ export default class BRCK2Rekam extends Component {
       }
     },
   });
-  handleColumnSearch = (confirm) => {
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.getBrck2();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getBrck2();
+    this.setState({ searchText: null });
   };
 
   handleInputChange = (e) => {
     this.setState({ ...this.state, [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
-    this.setState({ [field]: value });
+    this.setState({ [field]: typeof value === "number" ? value : 0 });
   };
   handleDatepickerChange = (field, value) => {
     this.setState({ [field]: value });
@@ -451,46 +455,6 @@ export default class BRCK2Rekam extends Component {
       return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
     }
 
-    const dataSource = [
-      {
-        key: "1",
-        jenis_dokumen: "jenis_dokumen_1",
-        nomor_dokumen: "nomor_dokumen_1",
-        tanggal_dokumen: "tanggal_dokumen_1",
-        tanggal_transaksi: "tanggal_transaksi_1",
-        uraian_kegiatan: "uraian_kegiatan_1",
-        debet_kemasan: 1000,
-        debet_lt: 1000,
-        kredit_kemasan: 1000,
-        kredit_lt: 1000,
-        saldo_kemasan: 1000,
-        saldo_lt: 1000,
-        keterangan: "keterangan_1",
-      },
-      {
-        key: "2",
-        jenis_dokumen: "jenis_dokumen_2",
-        nomor_dokumen: "nomor_dokumen_2",
-        tanggal_dokumen: "tanggal_dokumen_2",
-        tanggal_transaksi: "tanggal_transaksi_2",
-        uraian_kegiatan: "uraian_kegiatan_2",
-        debet_kemasan: 2000,
-        debet_lt: 3000,
-        kredit_kemasan: 4000,
-        kredit_lt: 5000,
-        saldo_kemasan: 6000,
-        saldo_lt: 7000,
-        keterangan: "keterangan_2",
-      },
-    ];
-
-    this.setState({
-      hasil_pencacahan_back5_kemasan: sumArrayOfObject(dataSource, "saldo_kemasan"),
-      hasil_pencacahan_back5_lt: sumArrayOfObject(dataSource, "saldo_lt"),
-      hasil_pencarian_back5_description: "SESUAI",
-      dataSource,
-    });
-
     this.getBrck2();
   };
   handleReset = () => {
@@ -510,26 +474,60 @@ export default class BRCK2Rekam extends Component {
 
   handleRekam = async () => {
     const {
-      hasil_pencacahan_back5_kemasan,
-      hasil_pencacahan_back5_lt,
-      hasil_pencarian_back5_description,
-      jenis_penutupan,
-      no_back5,
-      saldo_awal_kemasan,
+      nppbkc_id,
+      merk_mmea_id,
+      merk_mmea_name,
+      periode_awal,
+      periode_akhir,
+
       saldo_awal_lt,
+      saldo_awal_kemasan,
+
+      hasil_pencacahan_back5_lt,
+      hasil_pencacahan_back5_kemasan,
+      hasil_pencarian_back5_description,
+      selisih_lt,
+      selisih_kemasan,
+      selisih_description,
+      batas_kelonggaran_kemasan,
+      no_back5,
       tgl_back5,
+      jenis_penutupan,
     } = this.state;
 
     const payload = {
       idMenu: idMenu("brck2"),
-      catatan: hasil_pencarian_back5_description,
-      hasilPencacahanBack5Kemasan: hasil_pencacahan_back5_kemasan,
-      hasilPencacahanBack5Liter: hasil_pencacahan_back5_lt,
-      jenisPenutupan: jenis_penutupan,
-      nomorBack5: no_back5,
+      idNppbkc: nppbkc_id,
+      idMerk: merk_mmea_id,
+      namaMerk: merk_mmea_name,
+      periodeAwal: periode_awal,
+      periodeAkhir: periode_akhir,
+      saldoAwalLt: saldo_awal_lt,
       saldoAwalKemasan: saldo_awal_kemasan,
-      saldoAwalLiter: saldo_awal_lt,
-      tanggalBack5: tgl_back5,
+      hasilCacahLt: hasil_pencacahan_back5_lt,
+      hasilCacahKemasan: hasil_pencacahan_back5_kemasan,
+      keteranganHasilCacah: hasil_pencarian_back5_description,
+      selisihLt: Math.abs(selisih_lt),
+      selisihKemasan: Math.abs(selisih_kemasan),
+      keteranganSelisih: selisih_description,
+      flagSelisih: Math.abs(selisih_lt) || Math.abs(selisih_kemasan) ? "Y" : "N",
+      nomorBack5: no_back5,
+      tanggalBack5: moment(tgl_back5, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      kekuranganLt: Math.sign(selisih_lt) === -1 ? Math.abs(selisih_lt) : null,
+      kekuranganKemasan: Math.sign(selisih_kemasan) === -1 ? Math.abs(selisih_kemasan) : null,
+      keteranganKekurangan:
+        Math.sign(selisih_lt) === -1 || Math.sign(selisih_kemasan) === -1
+          ? selisih_description
+          : null,
+      flagSanksi:
+        Math.sign(selisih_kemasan) === -1 ||
+        Math.sign(selisih_lt) === -1 ||
+        ((Math.sign(selisih_kemasan) === 1 || Math.sign(selisih_lt) === 1) &&
+          selisih_lt > batas_kelonggaran_kemasan &&
+          selisih_kemasan > batas_kelonggaran_kemasan)
+          ? "Y"
+          : "N",
+      jenisPenutupan: jenis_penutupan,
     };
 
     const response = await requestApi({
@@ -549,7 +547,7 @@ export default class BRCK2Rekam extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2" hideContentHeader>
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2 Rekam" hideContentHeader>
           <Header>{this.state.subtitle1}</Header>
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <Row gutter={[16, 16]}>
@@ -693,7 +691,7 @@ export default class BRCK2Rekam extends Component {
                     columns={this.state.columns}
                     dataSource={this.state.dataSource}
                     loading={this.state.isTableLoading}
-                    pagination={{ current: this.state.page, total: this.state.totalData }}
+                    pagination={{ current: this.state.page }}
                     onChange={(page) => this.setState({ page: page.current })}
                     scroll={{ x: "max-content" }}
                     footer={() => {
@@ -776,9 +774,9 @@ export default class BRCK2Rekam extends Component {
                               total_debet_lt: this.state.total_debet_lt,
                               total_kredit_kemasan: this.state.total_kredit_kemasan,
                               total_kredit_lt: this.state.total_kredit_lt,
-                              total_saldo_kemasan: this.state.total_saldo_kemasan,
-                              total_saldo_lt: this.state.total_saldo_lt,
-                              total_keterangan: `Size Data: ${this.state.totalData}`,
+                              total_saldo_kemasan: this.state.saldo_buku_kemasan,
+                              total_saldo_lt: this.state.saldo_buku_lt,
+                              total_keterangan: `Size Data: ${this.state.dataSource.length}`,
                             },
                             {
                               key: "2",
@@ -787,8 +785,8 @@ export default class BRCK2Rekam extends Component {
                               total_debet_lt: null,
                               total_kredit_kemasan: null,
                               total_kredit_lt: null,
-                              total_saldo_kemasan: this.state.saldo_buku_saldo_kemasan,
-                              total_saldo_lt: this.state.saldo_buku_saldo_lt,
+                              total_saldo_kemasan: this.state.saldo_buku_kemasan,
+                              total_saldo_lt: this.state.saldo_buku_lt,
                               total_keterangan: null,
                             },
                             {
@@ -798,8 +796,8 @@ export default class BRCK2Rekam extends Component {
                               total_debet_lt: null,
                               total_kredit_kemasan: null,
                               total_kredit_lt: null,
-                              total_saldo_kemasan: Math.abs(this.state.selisih_saldo_kemasan),
-                              total_saldo_lt: Math.abs(this.state.selisih_saldo_lt),
+                              total_saldo_kemasan: Math.abs(this.state.selisih_kemasan),
+                              total_saldo_lt: Math.abs(this.state.selisih_lt),
                               total_keterangan: null,
                             },
                             {
@@ -847,9 +845,13 @@ export default class BRCK2Rekam extends Component {
                         <InputNumber
                           id="hasil_pencacahan_back5_kemasan"
                           value={this.state.hasil_pencacahan_back5_kemasan}
-                          onChange={(value) =>
-                            this.handleInputNumberChange("hasil_pencacahan_back5_kemasan", value)
-                          }
+                          onChange={(value) => {
+                            this.handleInputNumberChange("hasil_pencacahan_back5_kemasan", value);
+                            this.setState({
+                              hasil_pencacahan_back5_lt:
+                                (typeof value === "number" ? value : 0) * (this.state.isi || 1),
+                            });
+                          }}
                           style={{ width: "100%" }}
                         />
                       </Col>
@@ -857,9 +859,14 @@ export default class BRCK2Rekam extends Component {
                         <InputNumber
                           id="hasil_pencacahan_back5_lt"
                           value={this.state.hasil_pencacahan_back5_lt}
-                          onChange={(value) =>
-                            this.handleInputNumberChange("hasil_pencacahan_back5_lt", value)
-                          }
+                          onChange={(value) => {
+                            this.handleInputNumberChange("hasil_pencacahan_back5_lt", value);
+
+                            this.setState({
+                              hasil_pencacahan_back5_kemasan:
+                                (typeof value === "number" ? value : 0) / (this.state.isi || 1),
+                            });
+                          }}
                           style={{ width: "100%" }}
                         />
                       </Col>
@@ -962,7 +969,7 @@ export default class BRCK2Rekam extends Component {
                       </Row>
                     )}
 
-                    {Math.sign(this.state.selisih_saldo_kemasan) === 1 && (
+                    {Math.sign(this.state.selisih_kemasan) === 1 && (
                       <Row gutter={[10, 10]}>
                         <Col span={8}>
                           <div
@@ -1005,7 +1012,11 @@ export default class BRCK2Rekam extends Component {
                           style={{
                             color:
                               Math.sign(this.state.selisih_kemasan) === -1 ||
-                              this.state.batas_kelonggaran_kemasan > this.state.selisih_lt
+                              Math.sign(this.state.selisih_lt) === -1 ||
+                              ((Math.sign(this.state.selisih_kemasan) === 1 ||
+                                Math.sign(this.state.selisih_lt) === 1) &&
+                                this.state.selisih_lt > this.state.batas_kelonggaran_kemasan &&
+                                this.state.selisih_kemasan > this.state.batas_kelonggaran_kemasan)
                                 ? "red"
                                 : "blue",
                           }}
@@ -1031,6 +1042,7 @@ export default class BRCK2Rekam extends Component {
                       <Col span={7}>
                         <Select
                           id="jenis_penutupan"
+                          value={this.state.jenis_penutupan}
                           onChange={(value) => this.handleSelectChange("jenis_penutupan", value)}
                           style={{ width: "100%" }}
                         >

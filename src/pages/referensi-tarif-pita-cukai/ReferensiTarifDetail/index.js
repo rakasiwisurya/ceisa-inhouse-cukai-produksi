@@ -53,6 +53,17 @@ export default class ReferensiTarifDetail extends Component {
       searchedColumn: null,
       page: 1,
 
+      list_personal: [
+        {
+          personal_id: "Y",
+          personal_name: "YA",
+        },
+        {
+          personal_id: "N",
+          personal_name: "TIDAK",
+        },
+      ],
+
       columns: [],
       dataSource: [],
     };
@@ -451,9 +462,21 @@ export default class ReferensiTarifDetail extends Component {
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.personal_id}>
-                            {this.state.personal_name}
-                          </Select.Option>
+                          <Select
+                            id="personal"
+                            onChange={(value, option) =>
+                              this.handleSelectCustomChange("personal", value, option)
+                            }
+                            value={this.state.personal_id}
+                            style={{ width: "100%" }}
+                          >
+                            {this.state.list_personal.length > 0 &&
+                              this.state.list_personal.map((item, index) => (
+                                <Select.Option key={`personal-${index}`} value={item.personal_id}>
+                                  {item.personal_name}
+                                </Select.Option>
+                              ))}
+                          </Select>
                         </Select>
                       </Col>
 

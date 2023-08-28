@@ -83,7 +83,7 @@ export default class ReferensiTarifEdit extends Component {
           personal_name: "YA",
         },
         {
-          personal_id: "T",
+          personal_id: "N",
           personal_name: "TIDAK",
         },
       ],

@@ -79,7 +79,7 @@ export default class ReferensiTarifRekam extends Component {
           personal_name: "YA",
         },
         {
-          personal_id: "T",
+          personal_id: "N",
           personal_name: "TIDAK",
         },
       ],
