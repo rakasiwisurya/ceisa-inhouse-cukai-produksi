@@ -279,8 +279,9 @@ export default class BRCK2 extends Component {
     if (tarif) payload.tarif = tarif;
     if (isi) payload.isi = isi;
     if (kadar) payload.kadar = kadar;
-    if (tanggal_awal) payload.tanggalAwal = tanggal_awal;
-    if (tanggal_akhir) payload.tanggalAkhir = tanggal_akhir;
+    if (tanggal_awal) payload.tanggalAwal = moment(tanggal_awal, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggal_akhir)
+      payload.tanggalAkhir = moment(tanggal_akhir, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (saldo_awal_liter) payload.saldoAwalLiter = saldo_awal_liter;
     if (saldo_awal_kemasan) payload.saldoAwalKemasan = saldo_awal_kemasan;
     if (saldo_penutupan_liter) payload.saldoPenutupanLiter = saldo_penutupan_liter;

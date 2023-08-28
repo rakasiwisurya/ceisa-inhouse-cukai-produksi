@@ -7,14 +7,11 @@ const axiosConfig = (baseURL, contentType, apiKey) => {
   instance.interceptors.request.use(
     async (config) => {
       const headers = {
-        "Beacukai-api-key": apiKey
-          ? apiKey
-          : process.env.REACT_APP_API_ALL_V2_KEY,
+        "Beacukai-api-key": apiKey ? apiKey : process.env.REACT_APP_API_ALL_V2_KEY,
         "Content-Type": contentType,
       };
 
-      if (!apiKey)
-        headers.Authorization = `Bearer ${await getUserAccessToken()}`;
+      if (!apiKey) headers.Authorization = `Bearer ${await getUserAccessToken()}`;
 
       const newConfig = {
         ...config,

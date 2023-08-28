@@ -120,7 +120,7 @@ export default class PenelitianCK4 extends Component {
         nama_perusahaan: item.namaPerusahaan,
         jenis_bkc: item.jenisBkc,
         nomor_pemberitahuan: item.nomorPemberitauhuan,
-        tanggal_pemberitahuan: item.tanggalPemberitahuan,
+        tanggal_pemberitahuan: moment(item.tanggalPemberitahuan, "DD-MM-YYYY").format("YYYY-MM-DD"),
         jumlah_produksi: item.jumlahProdukasi,
         status: item.status,
       }));

@@ -149,20 +149,24 @@ export default class PencabutanTarif extends Component {
 
     const payload = { page: this.state.page, status: "AKTIF" };
 
+    console.log("tanggal_skep", tanggal_skep);
+    console.log("tanggal_skep", moment(tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"));
+
     if (kode_kantor) payload.kodeKantor = kode_kantor;
     if (nama_kantor) payload.namaKantor = nama_kantor;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (nomor_skep) payload.nomorSkep = nomor_skep;
-    if (tanggal_skep) payload.tanggalSkep = moment(tanggal_skep).format("YYYY-MM-DD");
+    if (tanggal_skep) payload.tanggalSkep = moment(tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (nama_merk) payload.namaMerk = nama_merk;
     if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
     if (hje) payload.hjePerKemasan = hje;
     if (isi) payload.isiPerKemasan = isi;
     if (tarif) payload.tarifSpesifik = tarif;
     if (tujuan) payload.tujuanPemasaran = tujuan;
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku).format("YYYY-MM-DD");
-    if (akhir_berlaku) payload.akhirBerlaku = moment(akhir_berlaku).format("YYYY-MM-DD");
+    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (akhir_berlaku)
+      payload.akhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
 
     const response = await requestApi({
       service: "produksi",

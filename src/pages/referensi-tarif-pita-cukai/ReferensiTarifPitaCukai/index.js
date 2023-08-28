@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import { Button, Row, Input, Icon, Table, Col } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { baseUrlCeisaInhouse, pathName } from "configs/constants";
-import { requestApi } from "utils/requestApi";
 import moment from "moment";
-import ButtonCustom from "components/Button/ButtonCustom";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
+
 export default class ReferensiTarifPitaCukai extends Component {
   constructor(props) {
     super(props);

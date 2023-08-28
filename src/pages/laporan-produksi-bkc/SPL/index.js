@@ -112,7 +112,8 @@ export default class SPL extends Component {
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (nomor_spl) payload.nomorSpl = nomor_spl;
-    if (tanggal_spl) payload.tanggalSpl = moment(tanggal_spl).format("yyyy-MM-DD HH:mm:ss.SSS");
+    if (tanggal_spl)
+      payload.tanggalSpl = moment(tanggal_spl, "DD-MM-YYYY").format("yyyy-MM-DD HH:mm:ss.SSS");
     if (status) payload.status = status;
 
     const response = await requestApi({
