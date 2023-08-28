@@ -173,7 +173,7 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/laporan-ck4/laporan-ck4/ck4-ea/tasktodo/:id"}
+        path={pathName + "/laporan-ck4/ck4-ea/tasktodo/:id"}
         render={(props) => <CK4EATaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
