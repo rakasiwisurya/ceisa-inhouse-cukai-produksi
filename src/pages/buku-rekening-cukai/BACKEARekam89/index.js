@@ -268,18 +268,9 @@ export default class BACKEARekam89 extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
-
       jenis_barang_kena_cukai_rusak: null,
       jumlah_barang_kena_cukai_rusak: null,
       catatan: null,
-
-      dataSource: [],
     });
   };
   handleRekam = async () => {

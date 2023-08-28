@@ -329,13 +329,6 @@ export default class BACKMMEARekam89 extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
-
       merk_id: null,
       merk_name: null,
       tarif: null,
@@ -343,8 +336,6 @@ export default class BACKMMEARekam89 extends Component {
       kadar: null,
       jumlah_kemasan: null,
       jumlah_lt: null,
-
-      dataSource: [],
     });
   };
   handleRekam = async () => {

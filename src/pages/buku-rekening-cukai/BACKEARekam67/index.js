@@ -368,21 +368,12 @@ export default class BACKEARekam67 extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
-
       jumlah_ea_yang_akan_dicampur: null,
       jumlah_bahan_pencampur: null,
       satuan: null,
       jenis_bahan: null,
       jumlah_setelah_dicampur: null,
       hasil_akhir: null,
-
-      dataSource: [],
     });
   };
   handleRekam = async () => {
