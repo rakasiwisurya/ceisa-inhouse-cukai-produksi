@@ -15,14 +15,14 @@ export default class PencabutanTarif extends Component {
       totalData: 0,
 
       table: {
-        status: "",
-        kode_kantor: "",
-        nama_kantor: "",
-        nppbkc: "",
-        nomor_skep: "",
-        tanggal_skep: "",
-        awal_berlaku: "",
-        akhir_berlaku: "",
+        status: null,
+        kode_kantor: null,
+        nama_kantor: null,
+        nppbkc: null,
+        nomor_skep: null,
+        tanggal_skep: null,
+        awal_berlaku: null,
+        akhir_berlaku: null,
       },
 
       dataSource: [],
@@ -135,8 +135,8 @@ export default class PencabutanTarif extends Component {
       nama_kantor,
       nppbkc,
       nama_perusahaan,
-      nomor_kep,
-      tanggal_kep,
+      nomor_skep,
+      tanggal_skep,
       nama_merk,
       jenis_produksi,
       hje,
@@ -153,8 +153,8 @@ export default class PencabutanTarif extends Component {
     if (nama_kantor) payload.namaKantor = nama_kantor;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (nomor_kep) payload.nomorSkep = nomor_kep;
-    if (tanggal_kep) payload.tanggalSkep = moment(tanggal_kep).format("YYYY-MM-DD");
+    if (nomor_skep) payload.nomorSkep = nomor_skep;
+    if (tanggal_skep) payload.tanggalSkep = moment(tanggal_skep).format("YYYY-MM-DD");
     if (nama_merk) payload.namaMerk = nama_merk;
     if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
     if (hje) payload.hjePerKemasan = hje;
@@ -251,7 +251,7 @@ export default class PencabutanTarif extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getPencabutanTarif();
   };
 

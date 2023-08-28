@@ -65,23 +65,24 @@ export default class ModalDaftarNPPBKC extends Component {
   }
 
   getDaftarNppbkc = async () => {
-    const { idJenisBkc } = this.props;
+    const { idJenisBkc, idJenisUsaha } = this.props;
     const { nppbkc_id, nama_nppbkc, nppbkc, npwp_nppbkc, alamat_nppbkc } = this.state.table;
 
     const payload = { page: this.state.page };
 
     if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
+    if (idJenisUsaha) payload.kodeJenisUsaha = idJenisUsaha;
 
     if (nppbkc_id) payload.idNppbkc = nppbkc_id;
-    if (nama_nppbkc) payload.namaNppbkc = nama_nppbkc;
+    if (nama_nppbkc) payload.namaPerusahaan = nama_nppbkc;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (npwp_nppbkc) payload.npwp = npwp_nppbkc;
-    if (alamat_nppbkc) payload.alamatNppbkc = alamat_nppbkc;
+    if (alamat_nppbkc) payload.alamatPerusahaan = alamat_nppbkc;
 
     const response = await requestApi({
-      service: "produksi",
+      service: "referensi",
       method: "get",
-      endpoint: "/referensi/daftar-nppbkc",
+      endpoint: "/nppbkc/inhouse/browseNppbkc",
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarNppbkcLoading: bool }),
     });
@@ -90,10 +91,10 @@ export default class ModalDaftarNPPBKC extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `nppbkc-${index}`,
         nppbkc_id: item.idNppbkc,
-        nama_nppbkc: item.namaNppbkc,
+        nama_nppbkc: item.namaPerusahaan,
         nppbkc: item.nppbkc,
         npwp_nppbkc: item.npwp,
-        alamat_nppbkc: item.alamatNppbkc,
+        alamat_nppbkc: item.alamatPerusahaan,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;

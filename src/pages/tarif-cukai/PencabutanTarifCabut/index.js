@@ -494,7 +494,7 @@ export default class PencabutanTarifCabut extends Component {
                       type="danger"
                       loading={this.state.isCabutLoading}
                       onClick={this.handleCabut}
-                      disabled={!this.validationForm()}
+                      // disabled={!this.validationForm()}
                       block
                     >
                       Simpan Pencabutan
