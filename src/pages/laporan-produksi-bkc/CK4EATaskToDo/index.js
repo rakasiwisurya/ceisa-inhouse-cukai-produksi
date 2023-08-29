@@ -16,13 +16,13 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
 import ModalStck from "components/ModalStck";
 import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
-import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
 
 export default class CK4EATaskToDo extends Component {
   constructor(props) {

@@ -16,17 +16,17 @@ export default class RekamJenisPita extends Component {
       totalData: 0,
 
       table: {
-        kode_kantor: "",
-        nama_kantor: "",
-        nppbkc: "",
-        nama_perusahaan: "",
-        jenis_produksi: "",
-        hje: "",
-        isi: "",
-        awal_berlaku: "",
-        tarif: "",
-        warna: "",
-        tahun_pita: "",
+        kode_kantor: null,
+        nama_kantor: null,
+        nppbkc: null,
+        nama_perusahaan: null,
+        jenis_produksi: null,
+        hje: null,
+        isi: null,
+        awal_berlaku: null,
+        tarif: null,
+        warna: null,
+        tahun_pita: null,
       },
 
       dataSource: [],
@@ -244,7 +244,7 @@ export default class RekamJenisPita extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getRekamJenisPita();
   };
 

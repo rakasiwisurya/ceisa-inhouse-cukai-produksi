@@ -16,14 +16,14 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
+import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import ModalDaftarPenjabatBc from "../ModalDaftarPenjabatBC";
 
 export default class CK4EAPerbaikan extends Component {
   constructor(props) {

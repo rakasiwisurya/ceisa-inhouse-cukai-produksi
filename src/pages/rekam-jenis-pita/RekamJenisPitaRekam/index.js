@@ -3,11 +3,11 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import React, { Component } from "react";
-import { requestApi } from "utils/requestApi";
-import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class RekamJenisPitaRekam extends Component {
   constructor(props) {
@@ -144,49 +144,7 @@ export default class RekamJenisPitaRekam extends Component {
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
-  validationForm = () => {
-    const {
-      nppbkc_id,
-      nppbkc,
-      nama_nppbkc,
-      jenis_bkc_id_nppbkc,
-      personal_nppbkc,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      hje,
-      isi,
-      tarif,
-      awal_berlaku,
-      warna,
-      kode_warna,
-      tahun_pita,
-    } = this.state;
-
-    if (
-      !nppbkc_id ||
-      !nppbkc ||
-      !nama_nppbkc ||
-      !jenis_bkc_id_nppbkc ||
-      !personal_nppbkc ||
-      !jenis_produksi_id ||
-      !jenis_produksi_name ||
-      !hje ||
-      !isi ||
-      !tarif ||
-      !awal_berlaku ||
-      !warna ||
-      !kode_warna ||
-      !tahun_pita
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
   handleRekam = async () => {
-    // if (!this.validationForm()) return;
-
     const {
       nppbkc_id,
       nppbkc,
@@ -399,7 +357,6 @@ export default class RekamJenisPitaRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam

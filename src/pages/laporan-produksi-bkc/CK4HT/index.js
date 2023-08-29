@@ -16,6 +16,9 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarHTCK4 from "components/ModalDaftarMerkHTCK4";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
@@ -25,9 +28,6 @@ import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarHT from "../ModalDaftarMerkHT";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 
 export default class CK4HT extends Component {
   constructor(props) {
@@ -1158,7 +1158,7 @@ export default class CK4HT extends Component {
           onDataDoubleClick={this.handleDataNppbkc}
         />
 
-        <ModalDaftarHT
+        <ModalDaftarHTCK4
           isVisible={this.state.isModalDaftarMerkHtVisible}
           onCancel={() => this.handleModalClose("isModalDaftarMerkHtVisible")}
           onDataDoubleClick={this.handleDataMerkHt}

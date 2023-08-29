@@ -2,7 +2,7 @@ import { Button, Icon, Input, Modal, Table } from "antd";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
-export default class ModalDaftarMerkMMEA extends Component {
+export default class ModalDaftarMerkMMEACK4 extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -16,6 +16,9 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarMerkMMEACK4 from "components/ModalDaftarMerkMMEACK4";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
@@ -25,9 +28,6 @@ import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarMerkMMEA from "../ModalDaftarMerkMMEA";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 
 export default class CK4MMEA extends Component {
   constructor(props) {
@@ -1122,7 +1122,7 @@ export default class CK4MMEA extends Component {
           onDataDoubleClick={this.handleDataNppbkc}
         />
 
-        <ModalDaftarMerkMMEA
+        <ModalDaftarMerkMMEACK4
           isVisible={this.state.isModalDaftarMerkMmeaVisible}
           onCancel={() => this.handleModalClose("isModalDaftarMerkMmeaVisible")}
           onDataDoubleClick={this.handleDataMerkMmea}

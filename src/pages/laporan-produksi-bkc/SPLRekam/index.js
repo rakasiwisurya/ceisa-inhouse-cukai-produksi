@@ -3,13 +3,13 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import React, { Component } from "react";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import ModalDaftarKota from "../ModalDaftarKota";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
-import { requestApi } from "utils/requestApi";
 import moment from "moment";
+import React, { Component } from "react";
 import { idMenu } from "utils/idMenu";
+import { requestApi } from "utils/requestApi";
 
 export default class SPLRekam extends Component {
   constructor(props) {
@@ -74,48 +74,6 @@ export default class SPLRekam extends Component {
       pernyataan_kota_name: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
-  };
-
-  validationForm = () => {
-    const {
-      nomor_spl,
-      tanggal_spl,
-      nama_pengusaha,
-      jabatan,
-      alamat_pemohon,
-
-      nppbkc_id,
-      nama_nppbkc,
-      nppbkc,
-      alamat_nppbkc,
-
-      tanggal_libur_awal,
-      tanggal_libur_akhir,
-      pernyataan_tanggal,
-      pernyataan_kota_id,
-      pernyataan_kota_name,
-    } = this.state;
-
-    if (
-      !nomor_spl ||
-      !tanggal_spl ||
-      !nama_pengusaha ||
-      !jabatan ||
-      !alamat_pemohon ||
-      !nppbkc_id ||
-      !nama_nppbkc ||
-      !nppbkc ||
-      !alamat_nppbkc ||
-      !tanggal_libur_awal ||
-      !tanggal_libur_akhir ||
-      !pernyataan_tanggal ||
-      !pernyataan_kota_id ||
-      !pernyataan_kota_name
-    ) {
-      return false;
-    }
-
-    return true;
   };
 
   handleRekam = async () => {
@@ -339,7 +297,6 @@ export default class SPLRekam extends Component {
                   type="primary"
                   loading={this.state.isRekamLoading}
                   onClick={this.handleRekam}
-                  // disabled={!this.validationForm()}
                   block
                 >
                   Rekam

@@ -1,17 +1,17 @@
 import { Button, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import ButtonCustom from "components/Button/ButtonCustom";
+import ModalDaftarHtlRel from "components/ModalDaftarHtlRel";
+import ModalDaftarJenisPita from "components/ModalDaftarJenisPita";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarNegara from "components/ModalDaftarNegara";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
-import ModalDaftarHtlRel from "../ModalDaftarHtlRel";
-import ModalDaftarJenisPita from "../ModalDaftarJenisPita";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarNegara from "../ModalDaftarNegara";
-import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 
 export default class PermohonanTarifRekam extends Component {
   constructor(props) {

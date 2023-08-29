@@ -9,13 +9,13 @@ export default class ModalDaftarKota extends Component {
       isDaftarKotaLoading: true,
       isMouseEnter: false,
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
 
       table: {
-        kota_id: "",
-        kota_name: "",
+        kota_id: null,
+        kota_name: null,
       },
 
       dataSource: [],
@@ -114,7 +114,7 @@ export default class ModalDaftarKota extends Component {
   };
   handleColumnReset = async (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   render() {

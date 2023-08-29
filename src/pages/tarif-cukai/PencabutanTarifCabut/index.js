@@ -1,14 +1,14 @@
 import { Button, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import { pathName } from "configs/constants";
-import React, { Component } from "react";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ButtonCustom from "components/Button/ButtonCustom";
-import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import { pathName } from "configs/constants";
 import moment from "moment";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class PencabutanTarifCabut extends Component {
   constructor(props) {
@@ -20,8 +20,7 @@ export default class PencabutanTarifCabut extends Component {
 
       isDetailLoading: true,
       isCabutLoading: false,
-      isModalDaftarNppbkcVisible: false,
-      isModalDaftarMerkVisible: false,
+
       isModalDaftarKotaVisible: false,
 
       nppbkc_id: null,
@@ -140,34 +139,6 @@ export default class PencabutanTarifCabut extends Component {
       kota_name: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
-  };
-
-  validationForm = () => {
-    // const {
-    //   nomor_permohonan,
-    //   tanggal_permohonan,
-    //   kota_id,
-    //   kota_name,
-    //   tanggal_kep_pencabutan,
-    //   akhir_berlaku,
-    //   keterangan_pencabutan,
-    //   asal_merk_id,
-    //   asal_merk_name,
-    // } = this.state;
-    // if (
-    //   !nomor_permohonan ||
-    //   !tanggal_permohonan ||
-    //   !kota_id ||
-    //   !kota_name ||
-    //   !tanggal_kep_pencabutan ||
-    //   !akhir_berlaku ||
-    //   !keterangan_pencabutan ||
-    //   !asal_merk_id ||
-    //   !asal_merk_name
-    // ) {
-    //   return false;
-    // }
-    // return true;
   };
 
   handleCabut = async () => {
@@ -494,7 +465,6 @@ export default class PencabutanTarifCabut extends Component {
                       type="danger"
                       loading={this.state.isCabutLoading}
                       onClick={this.handleCabut}
-                      // disabled={!this.validationForm()}
                       block
                     >
                       Simpan Pencabutan

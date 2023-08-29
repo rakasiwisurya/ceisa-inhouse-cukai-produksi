@@ -20,10 +20,10 @@ export default class SPL extends Component {
       totalData: 0,
 
       table: {
-        status: "",
-        nppbkc: "",
-        nama_perusahaan: "",
-        nomor_spl: "",
+        status: null,
+        nppbkc: null,
+        nama_perusahaan: null,
+        nomor_spl: null,
         tanggal_spl: null,
       },
 
@@ -191,7 +191,7 @@ export default class SPL extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getSpl();
   };
 

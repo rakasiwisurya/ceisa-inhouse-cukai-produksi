@@ -15,14 +15,14 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
 
 export default class CK4EA extends Component {
   constructor(props) {

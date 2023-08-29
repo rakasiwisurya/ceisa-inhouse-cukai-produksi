@@ -1,10 +1,10 @@
 import { Button, Col, Icon, Input, Row, Table, notification } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import Header from "components/Header";
-import { requestApi } from "utils/requestApi";
-import React, { Component } from "react";
-import ButtonCustom from "components/Button/ButtonCustom";
 import moment from "moment";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class PenelitianCK4 extends Component {
   constructor(props) {
@@ -18,13 +18,13 @@ export default class PenelitianCK4 extends Component {
       totalData: 0,
 
       table: {
-        nppbkc: "",
-        nama_perusahaan: "",
-        jenis_bkc: "",
-        nomor_pemberitahuan: "",
-        tanggal_pemberitahuan: "",
-        jumlah_produksi: "",
-        status: "",
+        nppbkc: null,
+        nama_perusahaan: null,
+        jenis_bkc: null,
+        nomor_pemberitahuan: null,
+        tanggal_pemberitahuan: null,
+        jumlah_produksi: null,
+        status: null,
       },
 
       selectedRowKeys: [],
@@ -202,7 +202,7 @@ export default class PenelitianCK4 extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   render() {

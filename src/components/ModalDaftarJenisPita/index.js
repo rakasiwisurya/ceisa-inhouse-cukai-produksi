@@ -2,7 +2,6 @@ import { Button, Icon, Input, Modal, Table } from "antd";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
-// import { requestApi } from "utils/requestApi";
 
 export default class ModalDaftarJenisPita extends Component {
   constructor(props) {

@@ -2,104 +2,75 @@ import { Button, Icon, Input, Modal, Table } from "antd";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
-export default class ModalDaftarHT extends Component {
+export default class ModalDaftarPenjabatBc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDaftarMerkHtLoading: true,
+      isDaftarPenjabatBcLoading: true,
       isMouseEnter: false,
 
       page: 1,
       totalData: 0,
 
       table: {
-        merk_ht_name: "",
-        isi_ht: "",
-        hje_ht: "",
-        tarif_ht: "",
-        bahan_ht: "",
-        jenis_produksi_ht: "",
+        penjabat_bc_nip: "",
+        penjabat_bc_name: "",
       },
 
       dataSource: [],
       columns: [
         {
-          title: "Merk ht",
-          dataIndex: "merk_ht_name",
-          key: "merk_ht_name",
+          title: "NIP",
+          dataIndex: "penjabat_bc_nip",
+          key: "penjabat_bc_nip",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("merk_ht_name"),
+          ...this.getColumnSearchProps("penjabat_bc_nip"),
         },
         {
-          title: "Isi",
-          dataIndex: "isi_ht",
-          key: "isi_ht",
+          title: "Nama Pegawai",
+          dataIndex: "penjabat_bc_name",
+          key: "penjabat_bc_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("isi_ht"),
-        },
-        {
-          title: "HJE",
-          dataIndex: "hje_ht",
-          key: "hje_ht",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("hje_ht"),
-        },
-        {
-          title: "Tarif Spesifik",
-          dataIndex: "tarif_ht",
-          key: "tarif_ht",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tarif_ht"),
-        },
-        {
-          title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_ht",
-          key: "jenis_produksi_ht",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_produksi_ht"),
+          ...this.getColumnSearchProps("penjabat_bc_name"),
         },
       ],
     };
   }
 
   componentDidMount() {
-    this.getDaftarMerkHt();
+    this.getDaftarPenjabatBc();
   }
 
-  getDaftarMerkHt = async () => {
-    const { merk_ht_name, isi_ht, hje_ht, tarif_ht, jenis_produksi_ht } = this.state.table;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getDaftarPenjabatBc();
+    }
+  }
+
+  getDaftarPenjabatBc = async () => {
+    const { penjabat_bc_nip, penjabat_bc_name } = this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (merk_ht_name) payload.namaMerkht = merk_ht_name;
-    if (isi_ht) payload.isiHt = isi_ht;
-    if (hje_ht) payload.hjeHt = hje_ht;
-    if (tarif_ht) payload.tarifHt = tarif_ht;
-    if (jenis_produksi_ht) payload.jenisProduksiHt = jenis_produksi_ht;
+    if (penjabat_bc_nip) payload.nipPenjabatBc = penjabat_bc_nip;
+    if (penjabat_bc_name) payload.namaPenjabatBc = penjabat_bc_name;
 
     const response = await requestApi({
-      service: "produksi",
+      service: "referensi",
       method: "get",
-      endpoint: "/ck4/daftar-merk-ht",
+      endpoint: "/referensi/daftar-penjabat-bc-new",
       params: payload,
-      setLoading: (bool) => this.setState({ isDaftarMerkHtLoading: bool }),
+      setLoading: (bool) => this.setState({ isDaftarPenjabatBcLoading: bool }),
     });
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
-        key: `merk-ht-${index}`,
-        merk_ht_id: item.idMerkHt,
-        merk_ht_name: item.namaMerkHt,
-        jenis_ht: item.jenisHt,
-        isi_ht: item.isiHt,
-        hje_ht: item.hjeHt,
-        tarif_ht: item.tarifHt,
-        satuan_ht: item.satuanHt,
-        bahan_ht: item.bahanHt,
-        jenis_produksi_ht: item.jenisProduksiHt,
+        key: `penjabat-bc-${index}`,
+        penjabat_bc_nip: item.nipPegawai,
+        penjabat_bc_name: item.namaPegawai,
       }));
-      const page = response.data.currentPage;
-      const totalData = response.data.totalData;
+      const page = response.data.data.currentPage;
+      const totalData = response.data.data.totalData;
       this.setState({ dataSource: newData, page, totalData });
     }
   };
@@ -150,24 +121,25 @@ export default class ModalDaftarHT extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarMerkHt();
+    this.getDaftarPenjabatBc();
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
     await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarMerkHt();
+    this.getDaftarPenjabatBc();
   };
 
   render() {
     const { isVisible, onCancel, onDataDoubleClick } = this.props;
 
     return (
-      <Modal title="Daftar Merk HT" visible={isVisible} onCancel={onCancel} footer={null}>
+      <Modal title="Daftar Pegawai" visible={isVisible} onCancel={onCancel} footer={null}>
         <Table
           dataSource={this.state.dataSource}
           columns={this.state.columns}
-          loading={this.state.isDaftarMerkHtLoading}
+          loading={this.state.isDaftarPenjabatBcLoading}
           pagination={{ current: this.state.page, total: this.state.totalData }}
+          onChange={(page) => this.setState({ page: page.current })}
           onRow={(record, rowIndex) => ({
             onDoubleClick: (event) => onDataDoubleClick(record),
             onMouseEnter: (event) => this.setState({ isMouseEnter: true }),

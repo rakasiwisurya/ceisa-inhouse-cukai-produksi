@@ -3,12 +3,12 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import React, { Component } from "react";
-import { requestApi } from "utils/requestApi";
-import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
+import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
-import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class RekamJenisPitaPerbaikan extends Component {
   constructor(props) {
@@ -185,49 +185,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
-  validationForm = () => {
-    const {
-      nppbkc_id,
-      nppbkc,
-      nama_nppbkc,
-      jenis_bkc_id_nppbkc,
-      personal_nppbkc,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      hje,
-      isi,
-      tarif,
-      awal_berlaku,
-      warna,
-      kode_warna,
-      tahun_pita,
-    } = this.state;
-
-    if (
-      !nppbkc_id ||
-      !nppbkc ||
-      !nama_nppbkc ||
-      !jenis_bkc_id_nppbkc ||
-      !personal_nppbkc ||
-      !jenis_produksi_id ||
-      !jenis_produksi_name ||
-      !hje ||
-      !isi ||
-      !tarif ||
-      !awal_berlaku ||
-      !warna ||
-      !kode_warna ||
-      !tahun_pita
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
   handleUpdate = async () => {
-    // if (!this.validationForm()) return;
-
     const {
       nppbkc_id,
       nppbkc,
@@ -455,7 +413,6 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       type="primary"
                       loading={this.state.isUpdateLoading}
                       onClick={this.handleUpdate}
-                      // disabled={!this.validationForm()}
                       block
                     >
                       Update

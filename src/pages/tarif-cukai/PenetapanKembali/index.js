@@ -3,11 +3,11 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
+import ModalDaftarKota from "components/ModalDaftarKota";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
-import ModalDaftarKota from "../ModalDaftarKota";
-import ModalDaftarNPPBKC from "../ModalDaftarNppbkc";
 
 export default class PenetapanKembali extends Component {
   constructor(props) {
