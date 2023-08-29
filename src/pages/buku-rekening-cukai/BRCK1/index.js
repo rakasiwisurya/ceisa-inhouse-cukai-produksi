@@ -286,6 +286,7 @@ export default class BRCK1 extends Component {
                 <Button
                   type="primary"
                   onClick={() => this.props.history.push(`${pathName}/brck-1/rekam`)}
+                  block
                 >
                   Rekam BRCK-1
                 </Button>
@@ -298,10 +299,7 @@ export default class BRCK1 extends Component {
                 columns={this.state.columns}
                 loading={this.state.isBrck1Loading}
                 onChange={(page) => this.setState({ page: page.current })}
-                pagination={{
-                  current: this.state.page,
-                  total: this.state.totalData,
-                }}
+                pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
               />
             </div>

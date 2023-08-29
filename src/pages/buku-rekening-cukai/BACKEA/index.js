@@ -354,10 +354,10 @@ export default class BACKEA extends Component {
 
     if (kppbc) payload.namaKantor = kppbc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_back) payload.jenisBackMmea = jenis_back;
-    if (nomor_back) payload.nomorBackMmea = nomor_back;
+    if (jenis_back) payload.jenisBackEa = jenis_back;
+    if (nomor_back) payload.nomorBackEA = nomor_back;
     if (tanggal_back)
-      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+      payload.tanggalBackEa = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (jenis_ea) payload.jenisBkc = jenis_ea;
     if (jumlah) payload.jumlah = jumlah;
     if (keterangan) payload.keterangan = keterangan;
