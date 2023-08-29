@@ -14,13 +14,13 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import { pathName } from "configs/constants";
-import React, { Component } from "react";
-import ModalDaftarNPPBKC from "../ModalDaftarNPPBKC";
-import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
+import { pathName } from "configs/constants";
 import moment from "moment";
+import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
 export default class BACKEAPerbaikan89 extends Component {
   constructor(props) {
