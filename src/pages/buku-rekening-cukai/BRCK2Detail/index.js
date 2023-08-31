@@ -393,10 +393,10 @@ export default class BRCK2Detail extends Component {
       const newData = data.map((item, index) => {
         if (item.jenisTransaksi === "K") {
           saldoKemasan -= +item.jumlahKemasan || 0;
-          saldoLt += +item.jumlah || 0;
+          saldoLt -= +item.jumlah || 0;
         } else if (item.jenisTransaksi === "D") {
           saldoKemasan += +item.jumlahKemasan || 0;
-          saldoLt -= +item.jumlah || 0;
+          saldoLt += +item.jumlah || 0;
         }
 
         return {
@@ -482,7 +482,7 @@ export default class BRCK2Detail extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value.toUpperCase() });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: typeof value === "number" ? value : 0 });

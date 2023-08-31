@@ -327,10 +327,7 @@ export default class BACKMMEA extends Component {
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isBackMmeaLoading}
-                pagination={{
-                  current: this.state.page,
-                  total: this.state.totalData,
-                }}
+                pagination={{ current: this.state.page, total: this.state.totalData }}
                 onChange={(page) => this.setState({ page: page.current })}
                 scroll={{ x: "max-content" }}
               />

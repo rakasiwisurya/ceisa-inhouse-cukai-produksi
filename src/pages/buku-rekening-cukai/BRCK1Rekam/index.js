@@ -1,224 +1,340 @@
 import {
   Button,
+  Col,
   DatePicker,
   Icon,
   Input,
   InputNumber,
+  Row,
   Select,
   Table,
-  message,
   notification,
 } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import React, { Component } from "react";
-import ModalDaftarNPPBKC from "./ModalDaftarNPPBKC";
 import Header from "components/Header";
+import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
-import ButtonCustom from "components/Button/ButtonCustom";
-import { requestApi } from "utils/requestApi";
+import moment from "moment";
+import React, { Component } from "react";
 import { idMenu } from "utils/idMenu";
+import { requestApi } from "utils/requestApi";
+import { sumArrayOfObject } from "utils/sumArrayOfObject";
+
 export default class BRCK1Rekam extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalNPPBKCOpen: false,
-      isHidden: false,
-      nppbkc: "",
-      namaPerusahaan: "",
-      awalTanggalPeriode: "",
-      akhirTanggalPeriode: "",
+      subtitle1: "Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)",
 
-      totalJumlahSaldo: "",
-      totalJumlahTransaksiDebit: "",
-      totalSelisih: "",
-      updateSaldo: "",
-      totalPotongan: "",
-      totalKekurangan: "",
-      totalBatasKelonggaran: "",
-      totalSelisihLebih: "",
-      totalBatasLebih: "",
-      keteranganSelisih: "",
-      keteranganPotongan: "",
-      keteranganKekurangan: "",
-      keteranganBatasKelongaran: "",
-      keteranaganSelisihLebih: "",
-      keteranaganBatasLebih: "",
+      isModalDaftarNppbkcVisible: false,
+      isModalDaftarMerkVisible: false,
+      isSearchLoading: false,
+      isRekamLoading: false,
 
-      idNppbkc: "",
-      hasil_pencacahan_back5: "",
-      saldo_awal: "",
-      no_back5: "",
-      tgl_back5: "",
-      idBrck1: "",
-      ketentuan: "",
-      jenis_penutupan: "",
+      jenis_bkc_id: 1,
+
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      periode_awal: null,
+      periode_akhir: null,
+
+      saldo_awal: null,
+
+      total_debet: null,
+      total_kredit: null,
+
+      saldo_buku: null,
+
+      hasil_pencacahan_back5: null,
+      hasil_pencarian_back5_description: null,
+      no_back5: null,
+      tgl_back5: null,
+      selisih: null,
+      selisih_description: null,
+      potongan: null,
+      potongan_description: null,
+      kekurangan: null,
+      kekurangan_description: null,
+      batas_kelonggaran: null,
+      batas_kelonggaran_description: null,
+      notif: null,
+      jenis_penutupan: null,
+
       list_jenis_penutupan: [
         {
-          jenis_penutupan_code: "Penutupan Triwulan",
-          jenis_penutupan_name: "Penutupan Triwulan",
+          jenis_penutupan_code: "PENUTUPAN TRIWULAN",
+          jenis_penutupan_name: "PENUTUPAN TRIWULAN",
         },
         {
-          jenis_penutupan_code: "Permohonan Pengusaha",
-          jenis_penutupan_name: "Permohonan Pengusaha",
+          jenis_penutupan_code: "PERMOHONAN PENGUSAHA",
+          jenis_penutupan_name: "PERMOHONAN PENGUSAHA",
         },
         {
-          jenis_penutupan_code: "Dugaan Pelanggaran",
-          jenis_penutupan_name: "Dugaan Pelanggaran",
+          jenis_penutupan_code: "DUGAAN PELANGGARAN",
+          jenis_penutupan_name: "DUGAAN PELANGGARAN",
         },
       ],
 
-      notifError: false,
-      selectedDate: "",
+      searchText: null,
+      searchedColumn: null,
+      page: 1,
+
+      dataSource: [],
       columns: [
         {
           title: "DOKUMEN",
           children: [
             {
-              key: "jenisDok",
+              key: "jenis_dokumen",
               title: "JENIS",
-              dataIndex: "jenisDok",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("jenisDok"),
+              dataIndex: "jenis_dokumen",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("jenis_dokumen"),
             },
             {
-              key: "nomorDok",
+              key: "nomor_dokumen",
               title: "NOMOR",
-              dataIndex: "nomorDok",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("nomorDok"),
+              dataIndex: "nomor_dokumen",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("nomor_dokumen"),
             },
             {
-              key: "tanggalDok",
+              key: "tanggal_dokumen",
               title: "TANGGAL",
-              dataIndex: "tanggalDok",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("tanggalDok"),
+              dataIndex: "tanggal_dokumen",
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+              ...this.getColumnSearchProps("tanggal_dokumen"),
             },
           ],
         },
         {
-          title: "",
-          children: [
-            {
-              key: "tanggalCioChar",
-              title: "TGL PEMASUKAN/ PEMBUATAN ATAU PENGELUARAN",
-              dataIndex: "tanggalCioChar",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("tanggalCioChar"),
-            },
-            {
-              key: "uraianKegiatan",
-              title: "URAIAN KEGIATAN",
-              dataIndex: "uraianKegiatan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("uraianKegiatan"),
-            },
-            {
-              key: "jumlahKemasan",
-              title: "JUMLAH KEMASAN",
-              dataIndex: "jumlahKemasan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("jumlahKemasan"),
-            },
-            {
-              key: "isiPerKemasan",
-              title: "ISI/ KEMASAN",
-              dataIndex: "isiPerKemasan",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-              ...this.getColumnSearchProps("isiPerKemasan"),
-            },
-          ],
+          key: "tanggal_transaksi",
+          title: "TGL PEMASUKAN/ PEMBUATAN ATAU PENGELUARAN",
+          dataIndex: "tanggal_transaksi",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("tanggal_transaksi"),
         },
-
+        {
+          key: "uraian_kegiatan",
+          title: "URAIAN KEGIATAN",
+          dataIndex: "uraian_kegiatan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("uraian_kegiatan"),
+        },
+        {
+          key: "jumlah_kemasan",
+          title: "JUMLAH KEMASAN",
+          dataIndex: "jumlah_kemasan",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("jumlah_kemasan"),
+        },
+        {
+          key: "isi",
+          title: "ISI/ KEMASAN",
+          dataIndex: "isi",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("isi"),
+        },
         {
           title: "TRANSAKSI",
           fixed: "right",
           children: [
             {
-              key: "debitTransaksi",
+              key: "transaksi_debet",
               title: "DEBIT (Lt)",
-              dataIndex: "debitTransaksi",
+              dataIndex: "transaksi_debet",
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
-              key: "kreditTransaksi",
+              key: "transaksi_kredit",
               title: "KREDIT (Lt)",
-              dataIndex: "kreditTransaksi",
+              dataIndex: "transaksi_kredit",
               fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-            },
-            {
-              key: "saldo",
-              title: "SALDO",
-              dataIndex: "saldo",
-              fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
-            },
-            {
-              key: "keterangan",
-              title: "KETERANGAN",
-              dataIndex: "keterangan",
-              fixed: "right",
-              render: (text) => (
-                <div style={{ textAlign: "center" }}>{text}</div>
-              ),
+              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
           ],
         },
+        {
+          key: "saldo",
+          title: "SALDO",
+          dataIndex: "saldo",
+          fixed: "right",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+        },
+        {
+          key: "keterangan",
+          title: "KETERANGAN",
+          dataIndex: "keterangan",
+          fixed: "right",
+          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+        },
       ],
-      dataSource: [],
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.dataSource.length !== this.state.dataSource.length ||
+      prevState.hasil_pencacahan_back5 !== this.state.hasil_pencacahan_back5
+    ) {
+      this.setState({
+        total_debet_kemasan: sumArrayOfObject(this.state.dataSource, "transaksi_debet"),
+        total_kredit_kemasan: sumArrayOfObject(this.state.dataSource, "transaksi_kredit"),
+        selisih: this.state.hasil_pencacahan_back5 - this.state.saldo_buku,
+      });
+    }
+
+    if (
+      prevState.selisih !== this.state.selisih &&
+      prevState.saldo_awal !== this.state.saldo_awal &&
+      Math.sign(this.state.selisih) !== 0
+    ) {
+      if (Math.sign(this.state.selisih_kemasan) === -1) {
+        const hasilPotong = (5 / 100) * (this.state.saldo_buku + this.state.saldo_awal);
+
+        this.setState({
+          selisih_description: `${this.state.saldo_buku} - ${this.state.hasil_pencacahan_back5}`,
+          potongan: hasilPotong,
+          potongan_description: `0.5% x ${this.state.saldo_buku + this.state.saldo_awal}`,
+          kekurangan: this.state.selisih - hasilPotong,
+          kekurangan_description: `${this.state.selisih} - ${this.state.potongan}`,
+          batas_kelonggaran: 3 * hasilPotong,
+          batas_kelonggaran_description: `3 x ${this.state.potongan}`,
+        });
+      }
+
+      if (Math.sign(this.state.selisih) === 1) {
+        this.setState({
+          batas_kelonggaran: (1 / 100) * this.state.saldo_buku,
+          batas_kelonggaran_description: `1% x ${this.state.saldo_buku}`,
+        });
+      }
+
+      this.setState({ notif: "Tuliskan pesan error merah atau biru dengan kondisi" });
+    }
+  }
+
+  getBrck1 = async () => {
+    // const { nppbkc, periode_awal, periode_akhir } = this.state;
+
+    // const payload = {
+    //   nppbkc,
+    //   periode_awal: moment(periode_awal).format("YYYY-MM-DD"),
+    //   periode_akhir: moment(periode_akhir).format("YYYY-MM-DD"),
+    // };
+
+    // const payload = {
+    //   nppbkc: "0011335387641000070611",
+    //   periode_awal: moment("2020-06-12 00:00:00").format("YYYY-MM-DD"),
+    //   periode_akhir: moment("2023-07-13 00:00:00").format("YYYY-MM-DD"),
+    // };
+
+    // const response = await requestApi({
+    //   service: "perdagangan",
+    //   method: "get",
+    //   endpoint: "/ck5/browse-brck1",
+    //   params: payload,
+    // });
+
+    // if (response) {
+    //   console.log("response.data.data", response.data.data);
+    // }
+
+    // delete dummy data below when you have done integrate with real api
+    this.setState({ isSearchLoading: true, isTableLoading: true });
+    const timeout = setTimeout(() => {
+      const data = [
+        {
+          jenisDok: "jenisDok_1",
+          nomorDok: "nomorDok_1",
+          tanggalDok: new Date(),
+          tanggalCio: new Date(),
+          uraianKegiatan: "uraianKegiatan_1",
+          jumlahKoli: 1,
+          isiPerKemasan: 10,
+          jenisTransaksi: "D",
+          jumlah: 10,
+          saldo: null,
+        },
+        {
+          jenisDok: "jenisDok_2",
+          nomorDok: "nomorDok_2",
+          tanggalDok: new Date(),
+          tanggalCio: new Date(),
+          uraianKegiatan: "uraianKegiatan_2",
+          jumlahKoli: 2,
+          isiPerKemasan: 20,
+          jenisTransaksi: "K",
+          jumlah: 5,
+          saldo: null,
+        },
+        {
+          jenisDok: "jenisDok_3",
+          nomorDok: "nomorDok_3",
+          tanggalDok: new Date(),
+          tanggalCio: new Date(),
+          uraianKegiatan: "uraianKegiatan_3",
+          jumlahKoli: 3,
+          isiPerKemasan: 30,
+          jenisTransaksi: "D",
+          jumlah: 7,
+          saldo: null,
+        },
+      ];
+
+      let saldo = this.state.saldo_awal || 0;
+
+      const newData = data.map((item, index) => {
+        if (item.jenisTransaksi === "K") {
+          saldo -= +item.jumlah || 0;
+        } else if (item.jenisTransaksi === "D") {
+          saldo += +item.jumlah || 0;
+        }
+
+        return {
+          key: `brck1-ck5-${index}`,
+          jenis_dokumen: item.jenisDok,
+          nomor_dokumen: item.nomorDok,
+          tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
+          tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
+          uraian_kegiatan: item.uraianKegiatan,
+          jumlah_kemasan: item.jumlahKoli,
+          isi: item.isiPerKemasan,
+          transaksi_debet: item.jenisTransaksi === "D" ? item.jumlah : 0,
+          transaksi_kredit: item.jenisTransaksi === "K" ? item.jumlah : 0,
+          saldo,
+        };
+      });
+
+      this.setState({
+        dataSource: newData,
+        saldo_buku: saldo,
+        hasil_pencacahan_back5: saldo,
+      });
+      this.setState({ isSearchLoading: false, isTableLoading: false });
+      clearTimeout(timeout);
+    }, 2000);
+  };
+
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() =>
-            this.handleColumnSearch(selectedKeys, confirm, dataIndex)
-          }
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -241,13 +357,13 @@ export default class BRCK1Rekam extends Component {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
-
-  //Form Handler
-
   handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -257,128 +373,62 @@ export default class BRCK1Rekam extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
-  handlePeriodeAwalChange = (date, dateString) => {
-    this.setState({ ...this.state, periode_awal: dateString });
+  handleInputNumberChange = (field, value) => {
+    this.setState({ [field]: typeof value === "number" ? value : 0 });
   };
-  handlePeriodeAkhirChange = (date, dateString) => {
-    this.setState({ ...this.state, periode_akhir: dateString });
+  handleDatepickerChange = (field, value) => {
+    this.setState({ [field]: value });
   };
-  handleModalNPPBKCShow = () => {
-    this.setState({ ...this.state, isModalNPPBKCOpen: true });
+  handleSelectChange = (field, value) => {
+    this.setState({ [field]: value });
   };
-  handleModalNPPBKCCancel = () => {
-    this.setState({ ...this.state, isModalNPPBKCOpen: false });
+  handleModalShow = (visibleState) => {
+    this.setState({ [visibleState]: true });
   };
-  handleCari = () => {
-    this.handleModalNPPBKCShow();
-  };
-
-  handleTampilkan = async () => {
-    const { nppbkc, awalTanggalPeriode, akhirTanggalPeriode } = this.state;
-
-    if (!nppbkc || !awalTanggalPeriode || !akhirTanggalPeriode) {
-      message.error("Silakan isi semua kolom yang diperlukan.");
-      this.setState({ notifError: true });
-
-      setTimeout(() => {
-        this.setState({ notifError: false });
-      }, 3000);
-      return;
-    } else {
-      await this.apiBrowseBrck1();
-    }
+  handleModalClose = (visibleState) => {
+    this.setState({ [visibleState]: false });
   };
 
+  handleDataNppbkc = (record) => {
+    this.setState({
+      nppbkc_id: record.nppbkc_id,
+      nppbkc: record.nppbkc,
+      nama_nppbkc: record.nama_nppbkc,
+    });
+    this.handleModalClose("isModalDaftarNppbkcVisible");
+  };
+
+  handleSearch = async () => {
+    // if (!this.state.nppbkc_id || !this.state.periode_akhir || !this.state.periode_akhir) {
+    //   return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
+    // }
+
+    await this.getBrck1();
+  };
   handleReset = () => {
     this.setState({
-      ...this.state,
-      nppbkc: "",
-      namaPerusahaan: "",
-      awalTanggalPeriode: "",
-      akhirTanggalPeriode: "",
+      nppbkc_id: null,
+      nppbkc: null,
+      nama_nppbkc: null,
+      periode_awal: null,
+      periode_akhir: null,
     });
   };
 
-  handleRow = (record, rowIndex) => ({
-    onDoubleClick: (event) => {
-      this.setState({
-        ...this.state,
-        isModalNPPBKCOpen: false,
-        namaPerusahaan: record.namaPerusahaan,
-        nppbkc: record.nppbkc,
-      });
-    },
-  });
-  handleSaldoAwalChange = (value) => {
-    this.setState({ ...this.state, saldo_awal: value });
-  };
-  handleTanggalBack5Change = (date, dateString) => {
-    this.setState({ ...this.state, tgl_back5: dateString });
-  };
-  handleJenisPenutupanChange = (value) => {
-    this.setState({ ...this.state, jenis_penutupan: value });
-  };
-
-  //api handler
-  apiBrowseBrck1 = async () => {
-    const { nppbkc, awalTanggalPeriode, akhirTanggalPeriode } = this.state;
-
-    const payload = {
-      nppbkc: nppbkc,
-      awalTanggalPeriode: awalTanggalPeriode.format("YYYY-MM-DD"),
-      akhirTanggalPeriode: akhirTanggalPeriode.format("YYYY-MM-DD"),
-    };
-
-    this.setState({ isLoading: true });
-    try {
-      const responseBrowseBrck1 = await requestApi({
-        service: "perdagangan",
-        method: "get",
-        endpoint: "/ck5/browse-brck1",
-        params: payload,
-      });
-
-      if (responseBrowseBrck1.data.data.length === 0) {
-        message.error("Tidak ada data pada periode tersebut!");
-        this.setState({ notifError: true });
-        setTimeout(() => {
-          this.setState({ notifError: false });
-        }, 3000);
-      } else {
-        this.setState({
-          dataSource: responseBrowseBrck1.data.data,
-          isLoading: false,
-          error: null,
-        });
-      }
-    } catch (error) {
-      this.setState({ error: "An error occurred", isLoading: false });
-      message.error("Tidak bisa memuat data");
-    }
-  };
-
-  apiRekamBrowseBrck1 = async () => {
-    const {
-      idBrck1,
-      saldo_awal,
-      ketentuan,
-      no_back5,
-      tgl_back5,
-      hasil_pencacahan_back5,
-      jenis_penutupan,
-    } = this.state;
+  handleRekam = async () => {
+    const { saldo_awal, notif, no_back5, tgl_back5, hasil_pencacahan_back5, jenis_penutupan } =
+      this.state;
 
     const payload = {
       idMenu: idMenu("brck1"),
-      catatan: ketentuan,
+      catatan: notif,
       hasilPencacahanBack5: hasil_pencacahan_back5,
-      idBrck1: idBrck1,
       jenisPenutupan: jenis_penutupan,
       nomorBack5: no_back5,
       saldoAwal: saldo_awal,
@@ -394,266 +444,107 @@ export default class BRCK1Rekam extends Component {
     });
 
     if (response) {
-      notification.success({
-        message: "Success",
-        description: response.data.message,
-      });
+      notification.success({ message: "Success", description: response.data.message });
       this.props.history.push(`${pathName}/brck-1`);
     }
   };
 
-  handleDateChange = (name, value) => {
-    this.setState({ [name]: value });
-  };
-
-  totalKeseluruhan = () => {
-    const { dataSource } = this.state;
-
-    const totalJumlahTransaksiDebit = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.debitTransaksi, 10),
-      0
-    );
-    const totalJumlahTransaksiKredit = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.kreditTransaksi, 10),
-      0
-    );
-    const totalJumlahSaldo = dataSource.reduce(
-      (acc, item) => acc + parseInt(item.saldo, 10),
-      0
-    );
-
-    this.setState({
-      totalJumlahTransaksiDebit,
-      totalJumlahTransaksiKredit,
-      totalJumlahSaldo,
-    });
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.dataSource !== this.state.dataSource) {
-      this.totalKeseluruhan();
-    }
-    //  else if (
-    //   prevState.dataSource !== this.state.dataSource || prevState.hasil_pencacahan_back5 !== this.state.hasil_pencacahan_back5 ||
-    //     prevState.totalJumlahSaldo !== this.state.totalJumlahSaldo ||
-    //     prevState.saldo_awal !== this.state.saldo_awal ||
-    //     prevState.totalJumlahTransaksiDebit !== this.state.totalJumlahTransaksiDebit
-    //   ) {
-    //     const hasil_pencacahan_back5 = parseInt(this.state.hasil_pencacahan_back5);
-    //     const totalJumlahSaldo = parseInt(this.state.totalJumlahSaldo);
-    //     const saldo_awal = parseInt(this.state.saldo_awal);
-    //     const totalJumlahTransaksiDebit = parseInt(
-    //       this.state.totalJumlahTransaksiDebit
-    //     );
-
-    //     let updateSaldo = totalJumlahSaldo;
-    //     if (
-    //       !isNaN(totalJumlahSaldo) &&
-    //       !isNaN(saldo_awal) &&
-    //       !isNaN(totalJumlahTransaksiDebit)
-    //     ) {
-    //       updateSaldo += saldo_awal;
-    //     }
-
-    //     let totalSelisih = 0;
-    //     let totalSelisihLebih = 0;
-
-    //     if (!isNaN(hasil_pencacahan_back5) && !isNaN(updateSaldo)) {
-    //       totalSelisih = updateSaldo - hasil_pencacahan_back5;
-    //       totalSelisihLebih = hasil_pencacahan_back5 - updateSaldo;
-    //     }
-
-    //     const totalPotongan = 0.005 * (totalJumlahTransaksiDebit + saldo_awal);
-    //     const totalBatasLebih = 0.01 * updateSaldo;
-    //     const totalKekurangan = totalSelisih - totalPotongan;
-    //     const totalBatasKelonggaran = 3 * totalPotongan;
-
-    //     let ketentuan = "";
-    //     if (totalKekurangan > totalBatasKelonggaran) {
-    //       ketentuan =
-    //         "Jumlah Kekurangan setelah potongan lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-    //     } else if (totalKekurangan < totalBatasKelonggaran) {
-    //       ketentuan =
-    //         "Jumlah Kekurangan setelah potongan tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-    //     } else if (totalSelisih < totalBatasKelonggaran) {
-    //       ketentuan =
-    //         "Jumlah kelebihan BKC tidak lebih besar dari pada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda";
-    //     } else if (totalSelisih > totalBatasKelonggaran) {
-    //       ketentuan =
-    //         "Jumlah kelebihan BKC lebih besar dari pada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda";
-    //     }
-
-    //     const keteranganSelisih = `${updateSaldo}-${hasil_pencacahan_back5}`;
-    //     const keteranganPotongan = `0.5% X (${totalJumlahTransaksiDebit}+${saldo_awal})`;
-    //     const keteranganKekurangan = `${totalSelisih}-${totalPotongan}`;
-    //     const keteranganBatasKelongaran = `3 x ${totalPotongan}`;
-    //     const keteranaganSelisihLebih = `${hasil_pencacahan_back5}-${updateSaldo}`;
-    //     const keteranaganBatasLebih = `0.1% X ${updateSaldo}`;
-
-    //     this.setState({
-    //       totalJumlahTransaksiDebit,
-    //       totalJumlahSaldo,
-    //       totalSelisih,
-    //       updateSaldo,
-    //       totalPotongan,
-    //       totalKekurangan,
-    //       totalBatasKelonggaran,
-    //       totalSelisihLebih,
-    //       totalBatasLebih,
-    //       keteranganSelisih,
-    //       keteranganPotongan,
-    //       keteranganKekurangan,
-    //       keteranganBatasKelongaran,
-    //       keteranaganSelisihLebih,
-    //       keteranaganBatasLebih,
-    //       ketentuan,
-    //     });
-    //   }
-  }
-
   render() {
-    const {
-      // isHidden,
-      hasil_pencacahan_back5,
-      totalJumlahTransaksiDebit,
-      totalJumlahTransaksiKredit,
-      totalJumlahSaldo,
-      // totalSelisih,
-      // updateSaldo,
-      // totalPotongan,
-      // totalKekurangan,
-      // totalBatasKelonggaran,
-      // totalSelisihLebih,
-      // totalBatasLebih,
-      // keteranganSelisih,
-      // keteranganPotongan,
-      // keteranganKekurangan,
-      // keteranganBatasKelongaran,
-      // keteranaganSelisihLebih,
-      // keteranaganBatasLebih,
-      // ketentuan,
-      saldo_awal,
-      notifError,
-      awalTanggalPeriode,
-      akhirTanggalPeriode,
-    } = this.state;
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BRCK-1"
-          hideContentHeader
-        >
-          <Header>Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-          >
-            <div style={{ marginBottom: 20 }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  marginBottom: 20,
-                  maxWidth: 550,
-                }}
-              >
-                <FormLabel>NPPBKC</FormLabel>
-                <Input
-                  id="nppbkc"
-                  onChange={this.handleInputChange}
-                  value={this.state.nppbkc}
-                  style={{ flex: 3 }}
-                  disabled
-                />
-                <Button type="primary" onClick={() => this.handleCari()}>
-                  Cari
-                </Button>
-                <Input
-                  disabled
-                  value={this.state.namaPerusahaan}
-                  style={{ flex: 3 }}
-                />
-              </div>
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1 Rekam" hideContentHeader>
+          <Header>{this.state.subtitle1}</Header>
+          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NPPBKC</FormLabel>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                  <Button
+                    type="primary"
+                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                  >
+                    Cari
+                  </Button>
+                  <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                </div>
+              </Col>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  maxWidth: 550,
-                }}
-              >
-                <FormLabel>PERIODE</FormLabel>
-                <DatePicker
-                  name="awalTanggalPeriode"
-                  value={awalTanggalPeriode}
-                  onChange={(date) =>
-                    this.handleDateChange("awalTanggalPeriode", date)
-                  }
-                  style={{ width: "100%" }}
-                />
-                <div>s.d</div>
-                <DatePicker
-                  name="akhirTanggalPeriode"
-                  value={akhirTanggalPeriode}
-                  onChange={(date) =>
-                    this.handleDateChange("akhirTanggalPeriode", date)
-                  }
-                  style={{ width: "100%" }}
-                />
-              </div>
-            </div>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Periode</FormLabel>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <DatePicker
+                    id="periode_awal"
+                    format="DD-MM-YYYY"
+                    onChange={(date) => this.handleDatepickerChange("periode_awal", date)}
+                    value={this.state.periode_awal}
+                    style={{ width: "100%" }}
+                  />
+                  <div>s.d</div>
+                  <DatePicker
+                    id="periode_akhir"
+                    format="DD-MM-YYYY"
+                    onChange={(date) => this.handleDatepickerChange("periode_akhir", date)}
+                    value={this.state.periode_akhir}
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              </Col>
+            </Row>
 
-            <div style={{ display: "flex", gap: 5, justifyContent: "end" }}>
-              <Button
-                type="primary"
-                onClick={this.handleTampilkan}
-                disabled={notifError ? true : false}
-              >
-                Tampilkan
-              </Button>
-              <Button type="danger" onClick={this.handleReset}>
-                Reset
-              </Button>
-            </div>
+            <Row style={{ marginTop: 30 }}>
+              <Col span={8} offset={16}>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Button
+                      type="primary"
+                      onClick={this.handleSearch}
+                      loading={this.state.isSearchLoading}
+                      block
+                    >
+                      Tampilkan
+                    </Button>
+                  </Col>
+
+                  <Col span={12}>
+                    <Button type="danger" block onClick={this.handleReset}>
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
             {this.state.dataSource.length > 0 && (
               <>
-                <div style={{ marginTop: 40, marginBottom: 20 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                      marginBottom: 20,
-                    }}
-                  >
-                    <div>
+                <div style={{ marginTop: 30, marginBottom: 20 }}>
+                  <Row style={{ marginBottom: 20 }}>
+                    <Col span={8} offset={16}>
                       <div style={{ marginBottom: 10 }}>
                         <FormLabel>
-                          SALDO AWAL (Hasil penutupan periode sebelumnya)
+                          SALDO AWAL <br /> (Hasil penutupan periode sebelumnya)
                         </FormLabel>
                       </div>
-                      <div>
-                        <InputNumber
-                          value={saldo_awal}
-                          onChange={this.handleSaldoAwalChange}
-                          min={0}
-                          style={{ width: 200 }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                      <InputNumber
+                        id="saldo_awal"
+                        value={this.state.saldo_awal}
+                        onChange={(value) => this.handleInputNumberChange("saldo_awal", value)}
+                        min={0}
+                        style={{ width: "100%" }}
+                      />
+                    </Col>
+                  </Row>
+
                   <Table
                     columns={this.state.columns}
                     dataSource={this.state.dataSource}
                     scroll={{ x: "max-content" }}
-                    loading={this.state.isLoading}
-                    pagination={{
-                      current: this.state.currenRekamPage,
-                      total: this.state.limitRekamPage,
-                    }}
+                    loading={this.state.isTableLoading}
+                    pagination={{ current: this.state.page }}
                     footer={(currentPageData) => {
                       return (
                         <Table
@@ -665,48 +556,31 @@ export default class BRCK1Rekam extends Component {
                               key: "title",
                               title: "Title",
                               dataIndex: "title",
-                              render: (text, record, index) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
-                              key: "debitTransaksi",
+                              key: "transaksi_debet",
                               title: "Transaksi Debit",
-                              dataIndex: "debitTransaksi",
+                              dataIndex: "transaksi_debet",
                               width: 101,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
-                              key: "kreditTransaksi",
+                              key: "transaksi_kredit",
                               title: "Transaksi Kredit",
-                              dataIndex: "kreditTransaksi",
+                              dataIndex: "transaksi_kredit",
                               width: 101,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
-
                             {
                               key: "saldo",
                               title: "Saldo",
                               dataIndex: "saldo",
                               width: 101,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                             {
                               key: "keterangan",
@@ -714,45 +588,41 @@ export default class BRCK1Rekam extends Component {
                               dataIndex: "keterangan",
                               width: 101,
                               fixed: "right",
-                              render: (text) => (
-                                <div style={{ textAlign: "center" }}>
-                                  {text}
-                                </div>
-                              ),
+                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
                             },
                           ]}
                           dataSource={[
                             {
                               key: "1",
                               title: "Jumlah",
-                              debitTransaksi: totalJumlahTransaksiDebit,
-                              kreditTransaksi: totalJumlahTransaksiKredit,
-                              saldo: totalJumlahSaldo,
-                              keterangan: "Size Data: 31",
+                              transaksi_debet: this.state.total_debet,
+                              transaksi_kredit: this.state.total_kredit,
+                              saldo: this.state.saldo_buku,
+                              keterangan: `Size Data: ${this.state.dataSource.length}`,
                             },
                             {
                               key: "2",
                               title: "Saldo Buku",
-                              debitTransaksi: "",
-                              kreditTransaksi: "",
-                              saldo: totalJumlahSaldo,
-                              keterangan: "",
+                              transaksi_debet: null,
+                              transaksi_kredit: null,
+                              saldo: this.state.saldo_buku,
+                              keterangan: null,
                             },
                             {
                               key: "3",
                               title: "Selisih",
-                              debitTransaksi: "",
-                              kreditTransaksi: "",
-                              saldo: "5000",
-                              keterangan: "",
+                              transaksi_debet: null,
+                              transaksi_kredit: null,
+                              saldo: Math.abs(this.state.selisih),
+                              keterangan: null,
                             },
                             {
                               key: "4",
                               title: "Saldo Akhir",
-                              debitTransaksi: "",
-                              kreditTransaksi: "",
-                              saldo: hasil_pencacahan_back5,
-                              keterangan: "",
+                              transaksi_debet: null,
+                              transaksi_kredit: null,
+                              saldo: this.state.hasil_pencacahan_back5,
+                              keterangan: null,
                             },
                           ]}
                         />
@@ -761,287 +631,292 @@ export default class BRCK1Rekam extends Component {
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "end",
-                    gap: 10,
-                  }}
-                >
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Hasil Pencacahan (BACK-5)</div>
-                    <div style={{ width: 200 }}>
-                      <Input
-                        id="hasil_pencacahan_back5"
-                        value={this.state.hasil_pencacahan_back5}
-                        onChange={this.handleInputChange}
-                      />
-                    </div>
-                    <div style={{ width: 200 }}>
-                      <Input.TextArea
-                        id="hasil_pencarian_back5_text_area"
-                        disabled
-                        onChange={this.handleInputChange}
-                        autoSize
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>No. BACK-5</div>
-                    <div style={{ width: 200 }}>
-                      <Input id="no_back5" onChange={this.handleInputChange} />
-                    </div>
-                    <div style={{ width: 200 }}></div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Tgl. BACK-5</div>
-                    <div style={{ width: 200 }}>
-                      <DatePicker onChange={this.handleTanggalBack5Change} />
-                    </div>
-                    <div style={{ width: 200 }}></div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Selisih Kurang</div>
-                    <div style={{ width: 200 }}>
-                      <Input
-                        id="selisihKurang"
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={5000}
-                        // value={totalSelisih}
-                      />
-                    </div>
-                    <div style={{ width: 200 }}>
-                      <Input.TextArea
-                        disabled
-                        onChange={this.handleInputChange}
-                        autoSize
-                        value={"12000-7000"}
-                        // saldo buku - hasil pencacahan back 5
-                        // value={keteranganSelisih}
-                      />
-                    </div>
-                  </div>
-
-                  {this.state.saldo_awal && (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 10,
-                        }}
-                      >
-                        <div>Selisih Lebih</div>
-                        <div style={{ width: 200 }}>
-                          <Input
-                            id="selisihlebih"
-                            disabled
-                            onChange={this.handleInputChange}
-                            value={"1.000"}
-                            // value={totalSelisihLebih}
-                          />
+                <Row gutter={[10, 10]}>
+                  <Col span={21} offset={3}>
+                    <Row gutter={[10, 10]}>
+                      <Col span={13}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          Hasil Pencacahan (BACK-5)
                         </div>
-                        <div style={{ width: 200 }}>
+                      </Col>
+                      <Col span={5}>
+                        <InputNumber
+                          id="hasil_pencacahan_back5"
+                          value={this.state.hasil_pencacahan_back5}
+                          onChange={(value) => {
+                            this.handleInputNumberChange("hasil_pencacahan_back5", value);
+                          }}
+                          style={{ width: "100%" }}
+                        />
+                      </Col>
+                      <Col span={6}>
+                        <Input.TextArea
+                          id="hasil_pencarian_back5_description"
+                          value={this.state.hasil_pencarian_back5_description}
+                          onChange={this.handleInputChange}
+                          autoSize
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row gutter={[10, 10]}>
+                      <Col span={13}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          No. BACK-5
+                        </div>
+                      </Col>
+                      <Col span={5}>
+                        <Input
+                          id="no_back5"
+                          onChange={this.handleInputChange}
+                          value={this.state.no_back5}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row gutter={[10, 10]}>
+                      <Col span={13}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          Tgl. BACK-5
+                        </div>
+                      </Col>
+                      <Col span={5}>
+                        <DatePicker
+                          id="tgl_back5"
+                          format="DD-MM-YYYY"
+                          onChange={(date) => this.handleDatepickerChange("tgl_back5", date)}
+                          value={this.state.tgl_back5}
+                          style={{ width: "100%" }}
+                        />
+                      </Col>
+                    </Row>
+
+                    {Math.sign(this.state.selisih) !== 0 && (
+                      <>
+                        <Row gutter={[10, 10]}>
+                          <Col span={13}>
+                            <div
+                              style={{
+                                height: 32,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "end",
+                              }}
+                            >
+                              {Math.sign(this.state.selisih) === -1
+                                ? "Selisih Kurang"
+                                : "Selisih Lebih"}
+                            </div>
+                          </Col>
+                          <Col span={5}>
+                            <InputNumber
+                              id="selisih"
+                              value={Math.abs(this.state.selisih)}
+                              style={{ width: "100%" }}
+                              disabled
+                            />
+                          </Col>
+                          <Col span={6}>
+                            <Input.TextArea
+                              id="selisih_description"
+                              value={this.state.selisih_description}
+                              autoSize
+                              disabled
+                            />
+                          </Col>
+                        </Row>
+
+                        <Row gutter={[10, 10]}>
+                          <Col span={13}>
+                            <div
+                              style={{
+                                height: 32,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "end",
+                              }}
+                            >
+                              Potongan
+                            </div>
+                          </Col>
+                          <Col span={5}>
+                            <InputNumber
+                              id="potongan"
+                              value={this.state.potongan}
+                              style={{ width: "100%" }}
+                              disabled
+                            />
+                          </Col>
+                          <Col span={6}>
+                            <Input.TextArea
+                              id="potongan_description"
+                              value={this.state.potongan_description}
+                              autoSize
+                              disabled
+                            />
+                          </Col>
+                        </Row>
+
+                        <Row gutter={[10, 10]}>
+                          <Col span={13}>
+                            <div
+                              style={{
+                                height: 32,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "end",
+                              }}
+                            >
+                              Kekurangan
+                            </div>
+                          </Col>
+                          <Col span={5}>
+                            <InputNumber
+                              id="kekurangan"
+                              value={this.state.kekurangan}
+                              style={{ width: "100%" }}
+                              disabled
+                            />
+                          </Col>
+                          <Col span={6}>
+                            <Input.TextArea
+                              id="kekurangan_description"
+                              value={this.state.kekurangan_description}
+                              autoSize
+                              disabled
+                            />
+                          </Col>
+                        </Row>
+                      </>
+                    )}
+
+                    {Math.sign(this.state.selisih) === 1 && (
+                      <Row gutter={[10, 10]}>
+                        <Col span={8}>
+                          <div
+                            style={{
+                              height: 32,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "end",
+                            }}
+                          >
+                            Batas Kelonggaran
+                          </div>
+                        </Col>
+
+                        <Col span={5}>
+                          <InputNumber
+                            id="batas_kelonggaran"
+                            value={this.state.batas_kelonggaran}
+                            style={{ width: "100%" }}
+                            disabled
+                          />
+                        </Col>
+
+                        <Col span={6} offset={5}>
                           <Input.TextArea
-                            disabled
-                            onChange={this.handleInputChange}
-                            value={"13.000 -12.000"}
-                            // value={keteranaganSelisihLebih}
-                            // pencacahan back 5 - saldo buku
+                            id="batas_kelonggaran_description"
+                            value={this.state.batas_kelonggaran_description}
                             autoSize
-                          />
-                        </div>
-                      </div>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 10,
-                        }}
-                      >
-                        <div>Batas Kelonggaran</div>
-                        <div style={{ width: 200 }}>
-                          <Input
-                            id="potongan"
                             disabled
-                            onChange={this.handleInputChange}
-                            // value={totalBatasLebih}
                           />
+                        </Col>
+                      </Row>
+                    )}
+
+                    {Math.sign(this.state.selisih) !== 0 && (
+                      <Row gutter={[10, 10]}>
+                        <Col span={11} offset={13} style={{ color: "blue" }}>
+                          {this.state.notif}
+                        </Col>
+                      </Row>
+                    )}
+
+                    <Row gutter={[10, 50]}>
+                      <Col span={8} offset={9}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          Jenis Penutupan
                         </div>
-                        <div style={{ width: 200 }}>
-                          <Input.TextArea
-                            disabled
-                            onChange={this.handleInputChange}
-                            value={12}
-                            // value={keteranaganBatasLebih}
-                            // 0.01 * updateSaldo(saldo buku)
-                            autoSize
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Potongan</div>
-                    <div style={{ width: 200 }}>
-                      <Input
-                        id="potongan"
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={90}
-                        // value={totalPotongan}
-                      />
-                    </div>
-                    <div style={{ width: 200 }}>
-                      <Input.TextArea
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={"0,5% x (6000 + 12000)"}
-                        // value={keteranganPotongan}
-                        // 0.005 * (totalJumlahTransaksiDebit + saldo_awal)
-                        autoSize
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Kekuranagan</div>
-                    <div style={{ width: 200 }}>
-                      <Input
-                        id="Kekuranagan"
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={4080}
-                        // value={totalKekurangan}
-                      />
-                    </div>
-                    <div style={{ width: 200 }}>
-                      <Input.TextArea
-                        id="hasil_pencarian_back5_text_area"
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={"5000 - 90"}
-                        // value={keteranganKekurangan}
-                        // selish kurang - potongan
-                        autoSize
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Batas Kelongaran</div>
-                    <div style={{ width: 200 }}>
-                      <Input
-                        id="batasKelongaran"
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={270}
-                        // value={totalBatasKelonggaran}
-                      />
-                    </div>
-                    <div style={{ width: 200 }}>
-                      <Input.TextArea
-                        disabled
-                        onChange={this.handleInputChange}
-                        value={"3 x 90"}
-                        // value={keteranganBatasKelongaran}
-                        // 3 x totalPotongan
-                        autoSize
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div style={{ width: 400 }}>
-                      <Input.TextArea
-                        id="ketentuan"
-                        // value={ketentuan}
-                        onChange={this.handleInputChange}
-                        value={this.state.ketentuan}
-                        // readOnly
-                        rows={5}
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
-                  >
-                    <div>Jenis Penutupan</div>
-                    <div style={{ width: 200 }}>
-                      <Select
-                        onChange={this.handleJenisPenutupanChange}
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.list_jenis_penutupan.length > 0 &&
-                          this.state.list_jenis_penutupan.map((item) => (
-                            <Select.Option value={item.jenis_penutupan_code}>
-                              {item.jenis_penutupan_name}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "end",
-                    marginTop: 30,
-                    marginRight: 20,
-                  }}
-                >
-                  <Button
-                    type="primary"
-                    onClick={this.apiRekamBrowseBrck1}
-                    style={{ marginRight: 20 }}
-                  >
-                    Rekam
-                  </Button>
-                  <ButtonCustom
-                    variant="secondary"
-                    width={200}
-                    onClick={() =>
-                      this.props.history.push(`${pathName}/brck-1`)
-                    }
-                  >
-                    Kembali
-                  </ButtonCustom>
-                </div>
+                      </Col>
+                      <Col span={7}>
+                        <Select
+                          id="jenis_penutupan"
+                          value={this.state.jenis_penutupan}
+                          onChange={(value) => this.handleSelectChange("jenis_penutupan", value)}
+                          style={{ width: "100%" }}
+                        >
+                          {this.state.list_jenis_penutupan.length > 0 &&
+                            this.state.list_jenis_penutupan.map((item, index) => (
+                              <Select.Option
+                                key={`jenis-penutupan-${index}`}
+                                value={item.jenis_penutupan_code}
+                              >
+                                {item.jenis_penutupan_name}
+                              </Select.Option>
+                            ))}
+                        </Select>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
               </>
             )}
+
+            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+              <Col span={4}>
+                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                  Kembali
+                </ButtonCustom>
+              </Col>
+
+              <Col span={4}>
+                <Button
+                  type="primary"
+                  loading={this.state.isRekamLoading}
+                  onClick={this.handleRekam}
+                  block
+                >
+                  Rekam
+                </Button>
+              </Col>
+            </Row>
           </div>
         </Container>
 
         <ModalDaftarNPPBKC
-          isOpen={this.state.isModalNPPBKCOpen}
-          onCancel={this.handleModalNPPBKCCancel}
-          onRow={this.handleRow}
-          loading={this.state.isLoading}
+          isVisible={this.state.isModalDaftarNppbkcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
+          onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
       </>
     );
