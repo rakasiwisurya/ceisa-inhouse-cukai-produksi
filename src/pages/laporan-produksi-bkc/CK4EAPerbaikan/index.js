@@ -64,6 +64,8 @@ export default class CK4EAPerbaikan extends Component {
       tanggal_jam_produksi_akhir: null,
       total_jumlah_produksi: 0,
 
+      ck4_detail_id: null,
+
       nomor_produksi: null,
       tanggal_produksi: null,
       jumlah_produksi: null,
@@ -240,7 +242,7 @@ export default class CK4EAPerbaikan extends Component {
         nama_pengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
-          idCk4Detail: detail.idCk4Detail,
+          ck4_detail_id: detail.idCk4Detail,
           nomor_produksi: detail.nomorProduksi,
           tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
           jumlah_produksi: detail.jumlahProduksi,
@@ -397,6 +399,7 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: true,
       editIndexRincian: index,
+      ck4_detail_id: record.ck4_detail_id,
       nomor_produksi: record.nomor_produksi,
       tanggal_produksi: moment(record.tanggal_produksi),
       jumlah_produksi: record.jumlah_produksi,
@@ -405,12 +408,19 @@ export default class CK4EAPerbaikan extends Component {
     });
   };
   handleUbahRincian = () => {
-    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
-      this.state;
+    const {
+      ck4_detail_id,
+      nomor_produksi,
+      tanggal_produksi,
+      jumlah_produksi,
+      nomor_tangki,
+      keterangan,
+    } = this.state;
 
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
+      ck4_detail_id,
       nomor_produksi,
       tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
       jumlah_produksi,
@@ -421,6 +431,7 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
       nomor_produksi: null,
       tanggal_produksi: null,
       jumlah_produksi: null,
@@ -438,6 +449,7 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
       nomor_produksi: null,
       tanggal_produksi: null,
       jumlah_produksi: null,
@@ -457,6 +469,8 @@ export default class CK4EAPerbaikan extends Component {
 
       tanggal_jam_produksi_awal: null,
       tanggal_jam_produksi_akhir: null,
+
+      ck4_detail_id: null,
 
       nomor_produksi: null,
       tanggal_produksi: null,
@@ -487,8 +501,8 @@ export default class CK4EAPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
+      idCk4Detail: item.ck4_detail_id,
       nomorProduksi: item.nomor_produksi,
-      idCk4Detail: item.idCk4Detail === "null" ? null : item.idCk4Detail,
       tanggalProduksi: moment(item.tanggal_produksi).format("YYYY-MM-DD"),
       jumlahProduksi: item.jumlah_produksi,
       nomorTangki: item.nomor_tangki,

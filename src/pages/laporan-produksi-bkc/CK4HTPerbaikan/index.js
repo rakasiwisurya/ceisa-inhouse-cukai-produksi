@@ -68,6 +68,8 @@ export default class CK4HTPerbaikan extends Component {
       total_jumlah_produksi_ht_gr: 0,
       total_jumlah_produksi_ht_ml: 0,
 
+      ck4_detail_id: null,
+
       merk_ht_id: null,
       merk_ht_name: null,
       jenis_ht: null,
@@ -355,7 +357,7 @@ export default class CK4HTPerbaikan extends Component {
 
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
-          idCk4Detail: detail.idCk4Detail,
+          ck4_detail_id: detail.idCk4Detail,
           merk_ht_id: detail.idMerkHt,
           merk_ht_name: detail.namaMerkHt,
           jenis_ht: detail.jenisHt,
@@ -588,6 +590,8 @@ export default class CK4HTPerbaikan extends Component {
     this.setState({
       isEditRincian: true,
       editIndexRincian: index,
+      ck4_detail_id: record.ck4_detail_id,
+
       merk_ht_id: record.merk_ht_id,
       merk_ht_name: record.merk_ht_name,
       jenis_ht: record.jenis_ht,
@@ -606,6 +610,8 @@ export default class CK4HTPerbaikan extends Component {
   };
   handleUbahRincian = () => {
     const {
+      ck4_detail_id,
+
       merk_ht_id,
       merk_ht_name,
       jenis_ht,
@@ -625,6 +631,9 @@ export default class CK4HTPerbaikan extends Component {
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
+
+      ck4_detail_id,
+
       merk_ht_id,
       merk_ht_name,
       jenis_ht,
@@ -643,6 +652,8 @@ export default class CK4HTPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
+
       merk_ht_id: null,
       merk_ht_name: null,
       jenis_ht: null,
@@ -669,6 +680,8 @@ export default class CK4HTPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
+
       merk_ht_id: null,
       merk_ht_name: null,
       jenis_ht: null,
@@ -696,6 +709,8 @@ export default class CK4HTPerbaikan extends Component {
       tanggal_pemberitahuan: null,
       periode_bulan: null,
       periode_tahun: null,
+
+      ck4_detail_id: null,
 
       merk_ht_id: null,
       merk_ht_name: null,
@@ -737,8 +752,8 @@ export default class CK4HTPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id === "null" ? null : item.merk_ht_id,
-      idCk4Detail: item.idCk4Detail === undefined ? null : item.idCk4Detail,
+      idMerkHt: item.merk_ht_id,
+      idCk4Detail: item.ck4_detail_id,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,

@@ -74,6 +74,8 @@ export default class CK4MMEAPerbaikan extends Component {
       total_jumlah_kemasan_dilekati_pita: 0,
       total_jumlah_produksi: 0,
 
+      ck4_detail_id: null,
+
       jenis_mmea: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
@@ -333,7 +335,7 @@ export default class CK4MMEAPerbaikan extends Component {
         nama_pengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
-          idCk4Detail: detail.idCk4Detail,
+          ck4_detail_id: detail.idCk4Detail,
           jenis_mmea: detail.jenisMmea,
           merk_mmea_id: detail.idMerkMmea,
           merk_mmea_name: detail.namaMerkMmea,
@@ -561,6 +563,8 @@ export default class CK4MMEAPerbaikan extends Component {
     this.setState({
       isEditRincian: true,
       editIndexRincian: index,
+      ck4_detail_id: record.ck4_detail_id,
+
       jenis_mmea: record.jenis_mmea,
       merk_mmea_id: record.merk_mmea_id,
       merk_mmea_name: record.merk_mmea_name,
@@ -579,6 +583,8 @@ export default class CK4MMEAPerbaikan extends Component {
   };
   handleUbahRincian = () => {
     const {
+      ck4_detail_id,
+
       jenis_mmea,
       merk_mmea_id,
       merk_mmea_name,
@@ -598,6 +604,8 @@ export default class CK4MMEAPerbaikan extends Component {
     const newDataSource = this.state.dataSource.map((item) => item);
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
+      ck4_detail_id,
+
       jenis_mmea,
       merk_mmea_id,
       merk_mmea_name,
@@ -616,6 +624,8 @@ export default class CK4MMEAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
+
       jenis_mmea: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
@@ -642,6 +652,8 @@ export default class CK4MMEAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
+      ck4_detail_id: null,
+
       jenis_mmea: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
@@ -672,6 +684,8 @@ export default class CK4MMEAPerbaikan extends Component {
       tanggal_jam_produksi_akhir: null,
       periode_bulan: null,
       periode_tahun: null,
+
+      ck4_detail_id: null,
 
       jenis_mmea: null,
       merk_mmea_id: null,
@@ -714,8 +728,8 @@ export default class CK4MMEAPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkMmea: item.merk_mmea_id === "null" ? null : item.idMerkMmea,
-      idCk4Detail: item.idCk4Detail === "null" ? null : item.idCk4Detail,
+      idMerkMmea: item.merk_mmea_id,
+      idCk4Detail: item.ck4_detail_id,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: item.tanggal_produksi,
       jumlahKemasan: item.jumlah_kemasan,

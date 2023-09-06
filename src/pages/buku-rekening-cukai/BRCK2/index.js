@@ -49,12 +49,12 @@ export default class BRCK2 extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit(record.back_mmea_id)}
+                  onClick={() => this.handleEdit(record.brck2_id)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail(record.back_mmea_id)}
+                  onClick={() => this.handleDetail(record.brck2_id)}
                 />
               </>
             </div>
@@ -298,11 +298,29 @@ export default class BRCK2 extends Component {
     });
 
     if (response) {
-      const { data } = response.data;
+      const { listData, currentPage, totalData } = response.data.data;
 
-      const newData = data.listData.map((item) => item);
+      const newData = listData.map((item, index) => ({
+        key: `brkc2-${index}`,
+        brck2_id: item.idBrck2,
+        kppbc: item.kppbc,
+        nama_perusahaan: item.namaPerusahaan,
+        merk: item.merk,
+        jenis: item.jenis,
+        tarif: item.tarif,
+        isi: item.isi,
+        kadar: item.kadar,
+        tanggal_awal: item.tanggalAwal,
+        tanggal_akhir: item.tanggalAkhir,
+        saldo_awal_liter: item.saldoAwalLiter,
+        saldo_awal_kemasan: item.saldoAwalKemasan,
+        saldo_penutupan_liter: item.saldoPenutupanLiter,
+        saldo_penutupan_kemasan: item.saldoPenutupanKemasan,
+        selisih_liter: item.selisihLiter,
+        selisih_kemasan: item.selisihKemasan,
+      }));
 
-      this.setState({ dataSource: newData, page: data.currentPage, totalData: data.totalData });
+      this.setState({ dataSource: newData, page: currentPage, totalData: totalData });
     }
   };
 

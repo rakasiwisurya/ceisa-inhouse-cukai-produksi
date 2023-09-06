@@ -35,6 +35,7 @@ export default class BRCK2Perbaikan extends Component {
       isModalDaftarMerkVisible: false,
       isSearchLoading: false,
       isUpdateLoading: false,
+      isBrowseShow: false,
 
       jenis_bkc_id: 2,
 
@@ -234,7 +235,8 @@ export default class BRCK2Perbaikan extends Component {
     }
 
     if (
-      prevState.selisih_kemasan !== this.state.selisih_kemasan &&
+      (prevState.selisih_kemasan !== this.state.selisih_kemasan ||
+        prevState.selisih_lt !== this.state.selisih_lt) &&
       Math.sign(this.state.selisih_kemasan) !== 0
     ) {
       if (Math.sign(this.state.selisih_kemasan) === -1) {
@@ -245,7 +247,8 @@ export default class BRCK2Perbaikan extends Component {
     }
 
     if (
-      prevState.selisih_kemasan !== this.state.selisih_kemasan &&
+      (prevState.selisih_kemasan !== this.state.selisih_kemasan ||
+        prevState.selisih_lt !== this.state.selisih_lt) &&
       Math.sign(this.state.selisih_kemasan) === 1
     ) {
       this.setState({
@@ -380,53 +383,55 @@ export default class BRCK2Perbaikan extends Component {
       method: "get",
       endpoint: "/ck5/browse-brck2",
       params: payload,
-      setLoading: (bool) => this.setState({ isSearchLoading: bool, isTableLoading: bool }),
+      setLoading: (bool) => this.setState({ isSearchLoading: bool }),
     });
 
     if (response) {
       const { data } = response.data;
 
-      await this.setState({
-        // saldo_awal_kemasan: sumArrayOfObject(data, "saldoKemasan"),
-        // saldo_awal_lt: sumArrayOfObject(data, "saldo"),
-        saldo_awal_kemasan: data[0].saldoKemasan,
-        saldo_awal_lt: data[0].saldo,
-      });
-
       let saldoKemasan = this.state.saldo_awal_kemasan || 0;
       let saldoLt = this.state.saldo_awal_lt || 0;
 
-      const newData = data.map((item, index) => {
-        if (item.jenisTransaksi === "K") {
-          saldoKemasan -= +item.jumlahKemasan || 0;
-          saldoLt -= +item.jumlah || 0;
-        } else if (item.jenisTransaksi === "D") {
-          saldoKemasan += +item.jumlahKemasan || 0;
-          saldoLt += +item.jumlah || 0;
-        }
+      if (data?.length > 0) {
+        await this.setState({
+          saldo_awal_kemasan: data[0].saldoKemasan,
+          saldo_awal_lt: data[0].saldo,
+        });
 
-        return {
-          key: `brck-2-ck5-${index}`,
-          jenis_dokumen: item.jenisDok,
-          nomor_dokumen: item.nomorDok,
-          tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
-          tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
-          uraian_kegiatan: item.uraianKegiatan,
-          debet_kemasan: item.jenisTransaksi === "D" ? +item.jumlahKemasan : 0,
-          debet_lt: item.jenisTransaksi === "D" ? +item.jumlah : 0,
-          kredit_kemasan: item.jenisTransaksi === "K" ? +item.jumlahKemasan : 0,
-          kredit_lt: item.jenisTransaksi === "K" ? +item.jumlah : 0,
-          saldo_kemasan: saldoKemasan,
-          saldo_lt: saldoLt,
-        };
-      });
+        const newData = data.map((item, index) => {
+          if (item.jenisTransaksi === "K") {
+            saldoKemasan -= +item.jumlahKemasan || 0;
+            saldoLt -= +item.jumlah || 0;
+          } else if (item.jenisTransaksi === "D") {
+            saldoKemasan += +item.jumlahKemasan || 0;
+            saldoLt += +item.jumlah || 0;
+          }
+
+          return {
+            key: `brck-2-ck5-${index}`,
+            jenis_dokumen: item.jenisDok,
+            nomor_dokumen: item.nomorDok,
+            tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
+            tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
+            uraian_kegiatan: item.uraianKegiatan,
+            debet_kemasan: item.jenisTransaksi === "D" ? +item.jumlahKemasan : 0,
+            debet_lt: item.jenisTransaksi === "D" ? +item.jumlah : 0,
+            kredit_kemasan: item.jenisTransaksi === "K" ? +item.jumlahKemasan : 0,
+            kredit_lt: item.jenisTransaksi === "K" ? +item.jumlah : 0,
+            saldo_kemasan: saldoKemasan,
+            saldo_lt: saldoLt,
+          };
+        });
+
+        this.setState({ dataSource: newData });
+      }
 
       this.setState({
-        dataSource: newData,
         saldo_buku_kemasan: saldoKemasan,
         saldo_buku_lt: saldoLt,
         hasil_pencacahan_back5_kemasan: saldoKemasan,
         hasil_pencacahan_back5_lt: saldoLt,
+        isBrowseShow: true,
       });
     }
   };
@@ -740,7 +745,7 @@ export default class BRCK2Perbaikan extends Component {
                   </Col>
                 </Row>
 
-                {this.state.dataSource.length > 0 && (
+                {this.state.isBrowseShow && (
                   <>
                     <div style={{ marginTop: 30, marginBottom: 20 }}>
                       <Row style={{ marginBottom: 20 }}>
@@ -780,7 +785,6 @@ export default class BRCK2Perbaikan extends Component {
                       <Table
                         columns={this.state.columns}
                         dataSource={this.state.dataSource}
-                        loading={this.state.isTableLoading}
                         pagination={{ current: this.state.page }}
                         onChange={(page) => this.setState({ page: page.current })}
                         scroll={{ x: "max-content" }}
