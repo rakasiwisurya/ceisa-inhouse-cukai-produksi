@@ -19,7 +19,6 @@ import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
@@ -30,10 +29,11 @@ export default class BRCK1Perbaikan extends Component {
       subtitle1: "Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)",
 
       isDetailLoading: true,
-      isModalDaftarNppbkcVisible: false,
-      isModalDaftarMerkVisible: false,
       isSearchLoading: false,
       isUpdateLoading: false,
+      isBrowseShow: false,
+      isModalDaftarNppbkcVisible: false,
+      isModalDaftarMerkVisible: false,
 
       jenis_bkc_id: 1,
 
@@ -190,37 +190,86 @@ export default class BRCK1Perbaikan extends Component {
       this.setState({
         total_debet_kemasan: sumArrayOfObject(this.state.dataSource, "transaksi_debet"),
         total_kredit_kemasan: sumArrayOfObject(this.state.dataSource, "transaksi_kredit"),
-        selisih: this.state.hasil_pencacahan_back5 - this.state.saldo_buku,
+        selisih: (this.state.hasil_pencacahan_back5 - this.state.saldo_buku).toFixed(4),
       });
     }
 
     if (
-      prevState.selisih !== this.state.selisih &&
-      prevState.saldo_awal !== this.state.saldo_awal &&
+      (prevState.selisih !== this.state.selisih ||
+        prevState.saldo_awal !== this.state.saldo_awal) &&
       Math.sign(this.state.selisih) !== 0
     ) {
-      if (Math.sign(this.state.selisih_kemasan) === -1) {
-        const hasilPotong = (5 / 100) * (this.state.saldo_buku + this.state.saldo_awal);
+      if (Math.sign(this.state.selisih) === -1) {
+        const hasilPotong = (
+          (0.5 / 100) *
+          (this.state.saldo_buku || 0 + this.state.saldo_awal || 0)
+        ).toFixed(4);
 
         this.setState({
           selisih_description: `${this.state.saldo_buku} - ${this.state.hasil_pencacahan_back5}`,
           potongan: hasilPotong,
-          potongan_description: `0.5% x ${this.state.saldo_buku + this.state.saldo_awal}`,
-          kekurangan: this.state.selisih - hasilPotong,
-          kekurangan_description: `${this.state.selisih} - ${this.state.potongan}`,
-          batas_kelonggaran: 3 * hasilPotong,
-          batas_kelonggaran_description: `3 x ${this.state.potongan}`,
+          potongan_description: `0.5% x (${this.state.saldo_buku} + ${this.state.saldo_awal || 0})`,
+          kekurangan:
+            Math.sign((Math.abs(this.state.selisih) - hasilPotong).toFixed(4)) === -1
+              ? 0
+              : (Math.abs(this.state.selisih) - hasilPotong).toFixed(4),
+          kekurangan_description:
+            Math.sign((Math.abs(this.state.selisih) - hasilPotong).toFixed(4)) === -1
+              ? "Selisih Kurang < Potongan"
+              : `${Math.abs(this.state.selisih)} - ${hasilPotong}`,
+          batas_kelonggaran: (3 * hasilPotong).toFixed(4),
+          batas_kelonggaran_description: `3 x ${hasilPotong}`,
         });
       }
 
       if (Math.sign(this.state.selisih) === 1) {
         this.setState({
+          selisih_description: `(${this.state.hasil_pencacahan_back5} - ${this.state.saldo_buku})`,
           batas_kelonggaran: (1 / 100) * this.state.saldo_buku,
           batas_kelonggaran_description: `1% x ${this.state.saldo_buku}`,
         });
       }
+    }
 
-      this.setState({ notif: "Tuliskan pesan error merah atau biru dengan kondisi" });
+    if (
+      (prevState.selisih !== this.state.selisih ||
+        prevState.kekurangan !== this.state.kekurangan ||
+        prevState.batas_kelonggaran !== this.state.batas_kelonggaran) &&
+      Math.sign(this.state.selisih) !== 0
+    ) {
+      switch (true) {
+        case Math.sign(this.state.selisih) === -1 &&
+          this.state.kekurangan > this.state.batas_kelonggaran:
+          this.setState({
+            notif:
+              "Jumlah kekurangan setelah potongan lebih besar daripada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda",
+          });
+          break;
+        case Math.sign(this.state.selisih) === -1 &&
+          this.state.kekurangan <= this.state.batas_kelonggaran:
+          this.setState({
+            notif:
+              "Jumlah kekurangan setelah potongan tidak lebih besar daripada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda",
+          });
+          break;
+        case Math.sign(this.state.selisih) === 1 &&
+          this.state.selisih > this.state.batas_kelonggaran:
+          this.setState({
+            notif:
+              "Jumlah kelebihan BKC lebih besar daripada Batas Kelonggaran, dikenakan Sanksi Administrasi Denda",
+          });
+          break;
+        case Math.sign(this.state.selisih) === 1 &&
+          this.state.selisih <= this.state.batas_kelonggaran:
+          this.setState({
+            notif:
+              "Jumlah kelebihan BKC tidak lebih besar daripada Batas Kelonggaran, tidak dikenakan Sanksi Administrasi Denda",
+          });
+          break;
+        default:
+          this.setState({ notif: null });
+          break;
+      }
     }
   }
 
@@ -228,6 +277,19 @@ export default class BRCK1Perbaikan extends Component {
     // delete dummy data below when you have done integrate with real api
     this.setState({ isDetailLoading: true });
     const timeout = setTimeout(() => {
+      this.setState({
+        nppbkc_id: "0499af9b-f53b-40c7-b1f8-9b16c9f89b76",
+        nppbkc: "0014539407415000150312",
+        nama_nppbkc: "PANJANG JIWO PT",
+        periode_awal: moment(new Date()),
+        periode_akhir: moment(new Date()),
+        saldo_awal: null,
+        hasil_pencacahan_back5: 120,
+        hasil_pencarian_back5_description: "hasil_pencarian_back5_description",
+        no_back5: "no_back5",
+        tgl_back5: moment(new Date()),
+        jenis_penutupan: "PERMOHONAN PENGUSAHA",
+      });
       this.setState({ isDetailLoading: false });
       this.getBrck1();
       clearTimeout(timeout);
@@ -261,7 +323,7 @@ export default class BRCK1Perbaikan extends Component {
     // }
 
     // delete dummy data below when you have done integrate with real api
-    this.setState({ isSearchLoading: true, isTableLoading: true });
+    this.setState({ isSearchLoading: true });
     const timeout = setTimeout(() => {
       const data = [
         {
@@ -327,11 +389,13 @@ export default class BRCK1Perbaikan extends Component {
       });
 
       this.setState({
+        isBrowseShow: true,
         dataSource: newData,
+        saldo_awal: data[0].saldo,
         saldo_buku: saldo,
         hasil_pencacahan_back5: saldo,
       });
-      this.setState({ isSearchLoading: false, isTableLoading: false });
+      this.setState({ isSearchLoading: false });
       clearTimeout(timeout);
     }, 2000);
   };
@@ -421,9 +485,9 @@ export default class BRCK1Perbaikan extends Component {
   };
 
   handleSearch = async () => {
-    // if (!this.state.nppbkc_id || !this.state.periode_akhir || !this.state.periode_akhir) {
-    //   return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
-    // }
+    if (!this.state.nppbkc_id || !this.state.periode_akhir || !this.state.periode_akhir) {
+      return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
+    }
 
     await this.getBrck1();
   };
@@ -438,18 +502,55 @@ export default class BRCK1Perbaikan extends Component {
   };
 
   handleUpdate = async () => {
-    const { saldo_awal, notif, no_back5, tgl_back5, hasil_pencacahan_back5, jenis_penutupan } =
-      this.state;
+    const {
+      nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      periode_awal,
+      periode_akhir,
+      saldo_awal,
+      hasil_pencacahan_back5,
+      hasil_pencarian_back5_description,
+      no_back5,
+      tgl_back5,
+      selisih,
+      selisih_description,
+      potongan,
+      potongan_description,
+      kekurangan,
+      kekurangan_description,
+      batas_kelonggaran,
+      jenis_penutupan,
+    } = this.state;
 
     const payload = {
-      idMenu: idMenu("brck1"),
-      catatan: notif,
-      hasilPencacahanBack5: hasil_pencacahan_back5,
-      jenisPenutupan: jenis_penutupan,
-      nomorBack5: no_back5,
+      idNppbkc: nppbkc_id,
+      nppbkc: nppbkc,
+      namaPerusahaan: nama_nppbkc,
+      periodeAwal: moment(periode_awal, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      periodeAkhir: moment(periode_akhir, "DD-MM-YYYY").format("YYYY-MM-DD"),
       saldoAwal: saldo_awal,
-      tanggalBack5: tgl_back5,
+      hasilCacah: hasil_pencacahan_back5,
+      keteranganCacah: hasil_pencarian_back5_description,
+      nomorBack5: no_back5,
+      tanggalBack5: moment(tgl_back5, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      flagSelisih: Math.sign(selisih) !== 0 ? "Y" : "N",
+      selisih: Math.abs(selisih),
+      keteranganSelisih: selisih_description,
+      flagSanksi:
+        (Math.sign(selisih) === -1 && kekurangan > batas_kelonggaran) ||
+        (Math.sign(selisih) === 1 && selisih > batas_kelonggaran)
+          ? "Y"
+          : "N",
+      jenisPenutupan: jenis_penutupan,
     };
+
+    if (Math.sign(selisih) === -1) {
+      payload.potongan = potongan;
+      payload.keteranganPotongan = potongan_description;
+      payload.kekurangan = kekurangan;
+      payload.keteranganKekurangan = kekurangan_description;
+    }
 
     const response = await requestApi({
       service: "produksi",
@@ -468,7 +569,7 @@ export default class BRCK1Perbaikan extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1 Perbaikan" hideContentHeader>
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1 Rekam" hideContentHeader>
           {this.state.isDetailLoading ? (
             <LoadingWrapperSkeleton />
           ) : (
@@ -543,7 +644,7 @@ export default class BRCK1Perbaikan extends Component {
                   </Col>
                 </Row>
 
-                {this.state.dataSource.length > 0 && (
+                {this.state.isBrowseShow && (
                   <>
                     <div style={{ marginTop: 30, marginBottom: 20 }}>
                       <Row style={{ marginBottom: 20 }}>
@@ -567,7 +668,6 @@ export default class BRCK1Perbaikan extends Component {
                         columns={this.state.columns}
                         dataSource={this.state.dataSource}
                         scroll={{ x: "max-content" }}
-                        loading={this.state.isTableLoading}
                         pagination={{ current: this.state.page }}
                         footer={(currentPageData) => {
                           return (
@@ -781,73 +881,77 @@ export default class BRCK1Perbaikan extends Component {
                               </Col>
                             </Row>
 
-                            <Row gutter={[10, 10]}>
-                              <Col span={13}>
-                                <div
-                                  style={{
-                                    height: 32,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "end",
-                                  }}
-                                >
-                                  Potongan
-                                </div>
-                              </Col>
-                              <Col span={5}>
-                                <InputNumber
-                                  id="potongan"
-                                  value={this.state.potongan}
-                                  style={{ width: "100%" }}
-                                  disabled
-                                />
-                              </Col>
-                              <Col span={6}>
-                                <Input.TextArea
-                                  id="potongan_description"
-                                  value={this.state.potongan_description}
-                                  autoSize
-                                  disabled
-                                />
-                              </Col>
-                            </Row>
+                            {Math.sign(this.state.selisih) === -1 && (
+                              <>
+                                <Row gutter={[10, 10]}>
+                                  <Col span={13}>
+                                    <div
+                                      style={{
+                                        height: 32,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "end",
+                                      }}
+                                    >
+                                      Potongan
+                                    </div>
+                                  </Col>
+                                  <Col span={5}>
+                                    <InputNumber
+                                      id="potongan"
+                                      value={this.state.potongan}
+                                      style={{ width: "100%" }}
+                                      disabled
+                                    />
+                                  </Col>
+                                  <Col span={6}>
+                                    <Input.TextArea
+                                      id="potongan_description"
+                                      value={this.state.potongan_description}
+                                      autoSize
+                                      disabled
+                                    />
+                                  </Col>
+                                </Row>
 
-                            <Row gutter={[10, 10]}>
-                              <Col span={13}>
-                                <div
-                                  style={{
-                                    height: 32,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "end",
-                                  }}
-                                >
-                                  Kekurangan
-                                </div>
-                              </Col>
-                              <Col span={5}>
-                                <InputNumber
-                                  id="kekurangan"
-                                  value={this.state.kekurangan}
-                                  style={{ width: "100%" }}
-                                  disabled
-                                />
-                              </Col>
-                              <Col span={6}>
-                                <Input.TextArea
-                                  id="kekurangan_description"
-                                  value={this.state.kekurangan_description}
-                                  autoSize
-                                  disabled
-                                />
-                              </Col>
-                            </Row>
+                                <Row gutter={[10, 10]}>
+                                  <Col span={13}>
+                                    <div
+                                      style={{
+                                        height: 32,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "end",
+                                      }}
+                                    >
+                                      Kekurangan
+                                    </div>
+                                  </Col>
+                                  <Col span={5}>
+                                    <InputNumber
+                                      id="kekurangan"
+                                      value={this.state.kekurangan}
+                                      style={{ width: "100%" }}
+                                      disabled
+                                    />
+                                  </Col>
+                                  <Col span={6}>
+                                    <Input.TextArea
+                                      id="kekurangan_description"
+                                      value={this.state.kekurangan_description}
+                                      autoSize
+                                      disabled
+                                    />
+                                  </Col>
+                                </Row>
+                              </>
+                            )}
                           </>
                         )}
 
-                        {Math.sign(this.state.selisih) === 1 && (
+                        {Math.sign(this.state.selisih) !== 0 && (
                           <Row gutter={[10, 10]}>
-                            <Col span={8}>
+                            <Col span={13}>
                               <div
                                 style={{
                                   height: 32,
@@ -869,7 +973,7 @@ export default class BRCK1Perbaikan extends Component {
                               />
                             </Col>
 
-                            <Col span={6} offset={5}>
+                            <Col span={6}>
                               <Input.TextArea
                                 id="batas_kelonggaran_description"
                                 value={this.state.batas_kelonggaran_description}
@@ -882,7 +986,19 @@ export default class BRCK1Perbaikan extends Component {
 
                         {Math.sign(this.state.selisih) !== 0 && (
                           <Row gutter={[10, 10]}>
-                            <Col span={11} offset={13} style={{ color: "blue" }}>
+                            <Col
+                              span={11}
+                              offset={13}
+                              style={{
+                                color:
+                                  (Math.sign(this.state.selisih) === -1 &&
+                                    this.state.kekurangan > this.state.batas_kelonggaran) ||
+                                  (Math.sign(this.state.selisih) === 1 &&
+                                    this.state.selisih > this.state.batas_kelonggaran)
+                                    ? "red"
+                                    : "blue",
+                              }}
+                            >
                               {this.state.notif}
                             </Col>
                           </Row>
@@ -927,7 +1043,7 @@ export default class BRCK1Perbaikan extends Component {
                   </>
                 )}
 
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+                <Row gutter={[16, 16]}>
                   <Col span={4}>
                     <ButtonCustom
                       variant="secondary"

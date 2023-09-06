@@ -43,12 +43,12 @@ export default class BRCK1 extends Component {
               <ButtonCustom
                 icon="form"
                 variant="warning"
-                onClick={() => this.handleEdit(record.back_mmea_id)}
+                onClick={() => this.handleEdit(record.brck1_id)}
               />
               <ButtonCustom
                 icon="eye"
                 variant="info"
-                onClick={() => this.handleDetail(record.back_mmea_id)}
+                onClick={() => this.handleDetail(record.brck1_id)}
               />
             </div>
           ),
@@ -239,6 +239,7 @@ export default class BRCK1 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `brck1-${index}`,
+        brck1_id: item.idBrck1,
         kppbc: item.kppbc,
         nama_perusahaan: item.namaPerusahaan,
         warna: item.warna,

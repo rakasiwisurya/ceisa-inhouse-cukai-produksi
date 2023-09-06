@@ -383,8 +383,10 @@ export default class BRCK2Detail extends Component {
       const { data } = response.data;
 
       await this.setState({
-        saldo_awal_kemasan: sumArrayOfObject(data, "saldoKemasan"),
-        saldo_awal_lt: sumArrayOfObject(data, "saldo"),
+        // saldo_awal_kemasan: sumArrayOfObject(data, "saldoKemasan"),
+        // saldo_awal_lt: sumArrayOfObject(data, "saldo"),
+        saldo_awal_kemasan: data[0].saldoKemasan,
+        saldo_awal_lt: data[0].saldo,
       });
 
       let saldoKemasan = this.state.saldo_awal_kemasan || 0;
