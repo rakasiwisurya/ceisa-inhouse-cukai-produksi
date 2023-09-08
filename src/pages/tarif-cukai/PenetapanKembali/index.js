@@ -276,13 +276,19 @@ export default class PenetapanKembali extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getDetailMerk();
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nppbkc_id !== this.state.nppbkc_id) {
       this.getJenisProduksi();
+    }
+
+    if (
+      prevState.tanggal_skep !== this.state.tanggal_skep ||
+      prevState.nppbkc_id !== this.state.nppbkc_id ||
+      prevState.jenis_produksi_id !== this.state.jenis_produksi_id
+    ) {
+      if (this.state.tanggal_skep && this.state.nppbkc_id) {
+        this.getDetailMerk();
+      }
     }
   }
 
@@ -295,56 +301,86 @@ export default class PenetapanKembali extends Component {
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
-    if (response) this.setState({ list_jenis_produksi: response.data.data });
-  };
-  getDetailMerk = async () => {
-    this.setState({ isDetailMerkLoading: true });
-    const timeout = setTimeout(() => {
+    if (response)
       this.setState({
-        dataSourceTop: [
+        list_jenis_produksi: [
+          ...response.data.data,
           {
-            key: "1",
-            id: "1",
-            nama_merk: "nama_merk_1",
-            jenis_produksi_merk: "jenis_produksi_merk_1",
-            isi_merk: "isi_merk_1",
-            volume_merk: "volume_merk_1",
-            nomor_kep_merk: "nomor_kep_merk_1",
-            tanggal_kep_merk: "tanggal_kep_merk_1",
-            golongan_merk: "golongan_merk_1",
-            hje_lama_merk: "hje_lama_merk_1",
-            hje_baru_merk: "hje_baru_merk_1",
-            hje_satuan_lama_merk: "hje_satuan_lama_merk_1",
-            hje_satuan_baru_merk: "hje_satuan_baru_merk_1",
-            tarif_lama: "tarif_lama_1",
-            tarif_baru: "tarif_baru_1",
-            seri_pita: "seri_pita_1",
-            warna_dasar: "warna_dasar_1",
-          },
-          {
-            key: "2",
-            id: "2",
-            nama_merk: "nama_merk_2",
-            jenis_produksi_merk: "jenis_produksi_merk_2",
-            isi_merk: "isi_merk_2",
-            volume_merk: "volume_merk_2",
-            nomor_kep_merk: "nomor_kep_merk_2",
-            tanggal_kep_merk: "tanggal_kep_merk_2",
-            golongan_merk: "golongan_merk_2",
-            hje_lama_merk: "hje_lama_merk_2",
-            hje_baru_merk: "hje_baru_merk_2",
-            hje_satuan_lama_merk: "hje_satuan_lama_merk_2",
-            hje_satuan_baru_merk: "hje_satuan_baru_merk_2",
-            tarif_lama: "tarif_lama_2",
-            tarif_baru: "tarif_baru_2",
-            seri_pita: "seri_pita_2",
-            warna_dasar: "warna_dasar_2",
+            idJenisProduksiBkc: null,
+            kodeJenisProduksi: null,
+            idGolonganBkc: null,
+            namaGolonganBkc: null,
+            kodeSatuan: null,
+            satuan: null,
           },
         ],
       });
-      this.setState({ isDetailMerkLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+  };
+  getDetailMerk = async () => {
+    const payload = {
+      tanggalSkep: moment(this.state.tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      idNppbkc: this.state.nppbkc_id,
+    };
+
+    if (this.state.jenis_produksi_id) {
+      const splitNamaJenisProduksi = this.state.jenis_produksi_name
+        .split("-")
+        .map((item) => item.trim());
+      payload.jenisProduksi = splitNamaJenisProduksi[0];
+    }
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/pita-cukai/detail-penetapan-kembali-tarif",
+      params: payload,
+      setLoading: (bool) => this.setState({ isDetailMerkLoading: bool }),
+    });
+
+    if (response) {
+      const newData = response.data.data.map((item, index) => ({
+        key: `detail-merk-${index}`,
+        tarif_merk_id: item.idTarifMerkHeader,
+        merk_id: item.idMerk,
+        nama_merk: item.namaMerk,
+        kode_kantor: item.kodeKantor,
+        nppbkc_id: item.idNppbkc,
+        jenis_produksi_merk: item.jenisProduksiBkc,
+        jenis_htl_rel: item.jenisHtlRel,
+        isi_merk: item.isiPerkemasan,
+        volume_merk: null,
+        nomor_kep_merk: item.nomorSkep,
+        tanggal_kep_merk: moment(item.tanggalSkep).format("DD-MM-YYYY"),
+        golongan_merk_id: item.idGolonganBkc,
+        golongan_merk: null,
+        hje_lama_merk: item.hjeLama,
+        hje_baru_merk: item.hjeBaru,
+        hje_satuan_lama_merk: item.hjeBtgLama,
+        hje_satuan_baru_merk: item.hjeBtgBaru,
+        kode_satuan: item.kodeSatuan,
+        kode_satuan_rel: item.kodeSatuanRel,
+        tarif_lama: item.tarifSpesifik,
+        tarif_baru: item.tarifBaru,
+        seri_pita: item.seriPita,
+        warna_dasar: item.warnaDasar,
+        tampak_depan: item.tampakDepan,
+        tampak_belakang: item.tampakBelakang,
+        tampak_atas: item.tampakAtas,
+        tampak_bawah: item.tampakBawah,
+        tampak_kiri: item.tampakKiri,
+        tampak_kanan: item.tampakKanan,
+        asal_produksi: item.asalProduksi,
+        nomor_lisensi: item.nomorLisensi,
+        tanggal_lisensi: item.tanggalLisensi,
+        awal_berlaku: item.awalBerlaku,
+        akhir_berlaku: item.akhirBerlaku,
+        bahan_kemasan: item.bahanKemasan,
+        tujuan_pemasaran: item.tujuanPemasaran,
+        kode_foto: item.kodeFoto,
+      }));
+
+      this.setState({ dataSourceTop: newData });
+    }
   };
 
   getColumnSearchPropsTop = (dataIndex) => ({
@@ -539,12 +575,64 @@ export default class PenetapanKembali extends Component {
   };
 
   handlePenetapan = async () => {
-    this.setState({ isPenetapanLoading: true });
-    const timeout = setTimeout(() => {
-      this.setState({ isPenetapanLoading: false });
-      notification.success({ message: "Success", description: "Success" });
-      clearTimeout(timeout);
-    }, 2000);
+    if (this.state.dataSourceBottom.length <= 0) {
+      return notification.info({
+        message: "Info",
+        description: "Data detail merk yang akan ditetapkan tidak boleh kosong",
+      });
+    }
+
+    const details = this.state.dataSourceBottom.map((item) => ({
+      kodeKantor: item.kode_kantor,
+      idNppbkc: item.nppbkc_id,
+      idMerk: item.merk_id,
+      namaMerk: item.nama_merk,
+      bahanKemasan: item.bahan_kemasan,
+      kodeSatuan: item.kode_satuan,
+      tarifSpesifik: item.tarif_baru,
+      idGolonganBkc: item.golongan_merk_id,
+      isiPerkemasan: item.isi_merk,
+      tujuanPemasaran: item.tujuan_pemasaran,
+      awalBerlaku: item.awal_berlaku,
+      tanggalSkep: moment(item.tanggal_kep_merk, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      nomorSkep: item.nomor_kep_merk,
+      asalProduksi: item.asal_produksi,
+      seriPita: item.seri_pita,
+      nomorLisensi: item.nomor_lisensi,
+      akhirBerlaku: item.akhir_berlaku,
+      tanggalLisensi: moment(item.tanggal_lisensi, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tampakAtas: item.tampak_atas,
+      tampakBelakang: item.tampak_belakang,
+      tampakBawah: item.tampak_bawah,
+      jenisHtlRel: item.jenis_htl_rel,
+      tampakDepan: item.tampak_atas,
+      tampakKiri: item.tampak_kiri,
+      kodeFoto: item.kode_foto,
+      tampakKanan: item.tampak_kanan,
+      kodeSatuanRel: item.kode_satuan_rel,
+      idTarifMerkHeader: item.tarif_merk_id,
+      jenisProduksiBkc: item.jenis_produksi_merk,
+      hje: item.hje_baru_merk,
+      tarif: item.tarif_baru,
+      hjeBtg: item.hje_satuan_baru_merk,
+      warnaDasar: item.warna_dasar,
+    }));
+
+    const payload = {
+      lokasiPenetapanKembali: this.state.kota_name,
+      tanggalSkep: moment(this.state.tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      details,
+    };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/pita-cukai/penetapan-kembali-tarif",
+      body: payload,
+      setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
+    });
+
+    if (response) notification.success({ message: "Success", description: response.data.message });
   };
 
   render() {
@@ -627,9 +715,15 @@ export default class PenetapanKembali extends Component {
                       this.state.list_jenis_produksi.map((item, index) => (
                         <Select.Option
                           key={`jenis-produksi-${index}`}
-                          value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}`}
+                          value={
+                            item.idJenisProduksiBkc && item.idGolonganBkc
+                              ? `${item.idJenisProduksiBkc}-${item.idGolonganBkc}`
+                              : null
+                          }
                         >
-                          {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
+                          {item.kodeJenisProduksi && item.namaGolonganBkc
+                            ? `${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`
+                            : "ALL"}
                         </Select.Option>
                       ))}
                   </Select>
@@ -689,7 +783,6 @@ export default class PenetapanKembali extends Component {
                   <Table
                     dataSource={this.state.dataSourceBottom}
                     columns={this.state.columnBottom}
-                    loading={this.state.isDetailMerkLoading}
                     scroll={{ x: "max-content" }}
                     onChange={(page) => this.setState({ pageBottom: page.current })}
                     pagination={{ current: this.state.pageBottom }}
