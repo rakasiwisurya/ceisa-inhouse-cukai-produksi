@@ -19,31 +19,41 @@ export default class RekamJenisPitaRekam extends Component {
       isJenisProduksiLoading: true,
       isTarifLoading: false,
       isWarnaLoading: false,
+      isSeripitaLoading: true,
       isModalDaftarNppbkcVisible: false,
 
       nppbkc_id: null,
       nppbkc: null,
       nama_nppbkc: null,
-      jenis_bkc_id_nppbkc: null,
+      jenis_bkc_id: null,
       personal_nppbkc: null,
 
       jenis_produksi_id: null,
       jenis_produksi_name: null,
+      satuan_id: null,
+      satuan_name: null,
       hje: null,
       isi: null,
       tarif: null,
       awal_berlaku: null,
       warna: null,
       kode_warna: null,
+      seri_pita_id: null,
+      seri_pita_name: null,
       tahun_pita: String(new Date().getFullYear()),
 
       list_jenis_produksi: [],
+      list_seri_pita: [],
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nppbkc_id !== this.state.nppbkc_id) {
       this.getJenisProduksi();
+    }
+
+    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
+      this.getSeripita();
     }
 
     if (
@@ -107,6 +117,19 @@ export default class RekamJenisPitaRekam extends Component {
       this.setState({ warna: response.data.data.warna, kode_warna: response.data.data?.kodeWarna });
     }
   };
+  getSeripita = async () => {
+    const payload = { idJenisBkc: this.state.jenis_bkc_id };
+
+    const response = await requestApi({
+      service: "referensi",
+      method: "get",
+      endpoint: "/seripita/get-seripita-jenis-bkc",
+      params: payload,
+      setLoading: (bool) => this.setState({ isSeripitaLoading: bool }),
+    });
+
+    if (response) this.setState({ list_seri_pita: response.data.data });
+  };
 
   handleInputChange = (e) => {
     this.setState({ [e.target.id]: e.target.value.toUpperCase() });
@@ -138,7 +161,7 @@ export default class RekamJenisPitaRekam extends Component {
       nppbkc_id: record.nppbkc_id,
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
-      jenis_bkc_id_nppbkc: record.jenis_bkc_id_nppbkc,
+      jenis_bkc_id: record.jenis_bkc_id,
       personal_nppbkc: record.personal_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
@@ -149,7 +172,7 @@ export default class RekamJenisPitaRekam extends Component {
       nppbkc_id,
       nppbkc,
       nama_nppbkc,
-      jenis_bkc_id_nppbkc,
+      jenis_bkc_id,
       personal_nppbkc,
       jenis_produksi_id,
       jenis_produksi_name,
@@ -166,7 +189,7 @@ export default class RekamJenisPitaRekam extends Component {
     const splitNamaJenisProduksi = jenis_produksi_name.split("-").map((item) => item.trim());
 
     const payload = {
-      idJenisBkc: jenis_bkc_id_nppbkc,
+      idJenisBkc: jenis_bkc_id,
       idJenisProduksiBkc: splitIdJenisProduksi[0],
       kodeJenisProduksiBkc: splitNamaJenisProduksi[0],
       isiKemasan: isi,
@@ -182,6 +205,7 @@ export default class RekamJenisPitaRekam extends Component {
       personalisasi: personal_nppbkc,
       idGolonganBkc: splitIdJenisProduksi[1],
       namaGolonganBkc: splitNamaJenisProduksi[1],
+      kodeSatuan: splitIdJenisProduksi[2],
     };
 
     const response = await requestApi({
@@ -242,7 +266,7 @@ export default class RekamJenisPitaRekam extends Component {
                         this.state.list_jenis_produksi.map((item, index) => (
                           <Select.Option
                             key={`jenis-produksi-${index}`}
-                            value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}`}
+                            value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}-${item.kodeSatuan}`}
                           >
                             {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
                           </Select.Option>
@@ -326,6 +350,30 @@ export default class RekamJenisPitaRekam extends Component {
                       <FormLabel>Warna</FormLabel>
                     </div>
                     <Input id="warna" value={this.state.warna} style={{ width: "100%" }} disabled />
+                  </div>
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Seri Pita</FormLabel>
+                    </div>
+                    <Select
+                      id="seri_pita"
+                      value={this.state.seri_pita_id}
+                      loading={this.state.isSeripitaLoading}
+                      onChange={(value, option) => {
+                        this.handleSelectCustomChange("seri_pita", value, option);
+                      }}
+                      style={{ width: "100%" }}
+                    >
+                      {this.state.list_seri_pita.length > 0 &&
+                        this.state.list_seri_pita.map((item, index) => (
+                          <Select.Option key={`seri-pita-${index}`} value={item.idSeripita}>
+                            {item.namaSeripita}
+                          </Select.Option>
+                        ))}
+                    </Select>
                   </div>
                 </Col>
 

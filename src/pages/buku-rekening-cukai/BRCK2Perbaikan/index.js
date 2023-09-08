@@ -247,9 +247,9 @@ export default class BRCK2Perbaikan extends Component {
     }
 
     if (
-      (prevState.selisih_kemasan !== this.state.selisih_kemasan ||
-        prevState.selisih_lt !== this.state.selisih_lt) &&
-      Math.sign(this.state.selisih_kemasan) === 1
+      (prevState.selisih_kemasan !== this.state.selisih_kemasan &&
+        Math.sign(this.state.selisih_kemasan) === 1) ||
+      (prevState.selisih_lt !== this.state.selisih_lt && Math.sign(this.state.selisih_lt) === 1)
     ) {
       this.setState({
         batas_kelonggaran_kemasan: (1 / 100) * this.state.saldo_buku_lt,

@@ -95,6 +95,7 @@ export default class ModalDaftarNPPBKC extends Component {
         nppbkc: item.nppbkc,
         npwp_nppbkc: item.npwp,
         alamat_nppbkc: item.alamatNppbkc,
+        jenis_bkc_id: item.idJenisBkc,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
