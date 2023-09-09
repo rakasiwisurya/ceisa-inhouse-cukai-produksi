@@ -66,14 +66,12 @@ export default class CK4BelumLapor extends Component {
           dataIndex: "bulan",
           key: "bulan",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("bulan"),
         },
         {
           title: "Tahun",
           dataIndex: "tahun",
           key: "tahun",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tahun"),
         },
       ],
     });
@@ -143,21 +141,18 @@ export default class CK4BelumLapor extends Component {
               dataIndex: "tanggal",
               key: "tanggal",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("tanggal"),
             },
             {
               title: "Bulan",
               dataIndex: "bulan",
               key: "bulan",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("bulan"),
             },
             {
               title: "Tahun",
               dataIndex: "tahun",
               key: "tahun",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("tahun"),
             },
           ],
         });
