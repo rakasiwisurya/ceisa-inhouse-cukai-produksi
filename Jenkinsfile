@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 script {
-                    app = docker.build(DOCKER_IMAGE_NAME, "-m 4g .")
+                    app = docker.build(DOCKER_IMAGE_NAME, "-m 4g -f Dockerfile_drcdev .")
                 }
             }
         }
