@@ -93,7 +93,7 @@ export default class PenetapanKembali extends Component {
           key: "tanggal_kep_merk",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYY") : "-"}
+              {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchPropsTop("tanggal_kep_merk"),
@@ -350,7 +350,7 @@ export default class PenetapanKembali extends Component {
         isi_merk: item.isiPerkemasan,
         volume_merk: item.beratVolume,
         nomor_kep_merk: item.nomorSkep,
-        tanggal_kep_merk: moment(item.tanggalSkep).format("DD-MM-YYYY"),
+        tanggal_kep_merk: item.tanggalSkep,
         golongan_merk_id: item.idGolonganBkc,
         golongan_merk: item.namaGolonganBkc,
         hje_lama_merk: item.hjeLama,
@@ -594,13 +594,13 @@ export default class PenetapanKembali extends Component {
       isiPerkemasan: item.isi_merk,
       tujuanPemasaran: item.tujuan_pemasaran,
       awalBerlaku: item.awal_berlaku,
-      tanggalSkep: moment(item.tanggal_kep_merk, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalSkep: item.tanggal_kep_merk,
       nomorSkep: item.nomor_kep_merk,
       asalProduksi: item.asal_produksi,
       seriPita: item.seri_pita,
       nomorLisensi: item.nomor_lisensi,
       akhirBerlaku: item.akhir_berlaku,
-      tanggalLisensi: moment(item.tanggal_lisensi, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalLisensi: item.tanggal_lisensi,
       tampakAtas: item.tampak_atas,
       tampakBelakang: item.tampak_belakang,
       tampakBawah: item.tampak_bawah,
@@ -731,7 +731,7 @@ export default class PenetapanKembali extends Component {
               </Col>
             </Row>
 
-            {this.state.nppbkc_id && this.state.jenis_produksi_id && (
+            {this.state.nppbkc_id && this.state.tanggal_skep && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
