@@ -592,6 +592,7 @@ export default class PenetapanKembali extends Component {
       tarifSpesifik: item.tarif_baru,
       idGolonganBkc: item.golongan_merk_id,
       isiPerkemasan: item.isi_merk,
+      beratVolume: item.volume_merk,
       tujuanPemasaran: item.tujuan_pemasaran,
       awalBerlaku: item.awal_berlaku,
       tanggalSkep: item.tanggal_kep_merk,
