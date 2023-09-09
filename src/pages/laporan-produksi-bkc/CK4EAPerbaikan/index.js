@@ -44,6 +44,8 @@ export default class CK4EAPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
+      jenis_bkc_id: 1,
+
       nama_pemrakarsa: null,
       id_process_pemrakarsa: null,
       jabatan_pemrakarsa: null,
@@ -313,7 +315,7 @@ export default class CK4EAPerbaikan extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
@@ -671,6 +673,7 @@ export default class CK4EAPerbaikan extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_pemberitahuan"
+                          format="DD-MM-YYYY"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_pemberitahuan", date)
                           }
@@ -700,7 +703,7 @@ export default class CK4EAPerbaikan extends Component {
                         <DatePicker
                           id="tanggal_jam_produksi_awal"
                           showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
+                          format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
                           }
@@ -716,7 +719,7 @@ export default class CK4EAPerbaikan extends Component {
                         <DatePicker
                           id="tanggal_jam_produksi_akhir"
                           showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
+                          format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
                           }
@@ -769,6 +772,7 @@ export default class CK4EAPerbaikan extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_produksi"
+                          format="DD-MM-YYYY"
                           onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
                           value={this.state.tanggal_produksi}
                           style={{ width: "100%" }}
@@ -875,6 +879,7 @@ export default class CK4EAPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_diterima"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
@@ -950,6 +955,7 @@ export default class CK4EAPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_surat}
@@ -1049,6 +1055,7 @@ export default class CK4EAPerbaikan extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
 
         <ModalDaftarKota

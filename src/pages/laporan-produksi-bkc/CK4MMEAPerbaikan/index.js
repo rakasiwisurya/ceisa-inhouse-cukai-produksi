@@ -50,6 +50,8 @@ export default class CK4MMEAPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
+      jenis_bkc_id: 2,
+
       nama_pemrakarsa: null,
       id_process_pemrakarsa: null,
       jabatan_pemrakarsa: null,
@@ -415,7 +417,7 @@ export default class CK4MMEAPerbaikan extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
@@ -742,18 +744,20 @@ export default class CK4MMEAPerbaikan extends Component {
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DD"),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DD"),
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      ),
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
 
-      tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
+      tanggalDiterima: moment(tanggal_diterima, "DD-MM-YYYY").format("YYYY-MM-DD"),
       penyampaianCk4: penyampaian_ck4_id,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       nomorSurat: nomor_surat,
-      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
+      tanggalSurat: moment(tanggal_surat, "DD-MM-YYYY").format("YYYY-MM-DD"),
       nipPenjabatBc: penjabat_bc_nip,
       asalKesalahan: asal_kesalahan_id,
       keteranganPerbaikan: keterangan_perbaikan,
@@ -914,6 +918,7 @@ export default class CK4MMEAPerbaikan extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_pemberitahuan"
+                          format="DD-MM-YYYY"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_pemberitahuan", date)
                           }
@@ -945,7 +950,7 @@ export default class CK4MMEAPerbaikan extends Component {
                             <DatePicker
                               id="tanggal_jam_produksi_awal"
                               showTime={{ format: "HH:mm" }}
-                              format="YYYY-MM-DD HH:mm"
+                              format="DD-MM-YYYY HH:mm"
                               onChange={(date) =>
                                 this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
                               }
@@ -961,7 +966,7 @@ export default class CK4MMEAPerbaikan extends Component {
                             <DatePicker
                               id="tanggal_jam_produksi_akhir"
                               showTime={{ format: "HH:mm" }}
-                              format="YYYY-MM-DD HH:mm"
+                              format="DD-MM-YYYY HH:mm"
                               onChange={(date) =>
                                 this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
                               }
@@ -1157,6 +1162,7 @@ export default class CK4MMEAPerbaikan extends Component {
                             </div>
                             <DatePicker
                               id="tanggal_produksi"
+                              format="DD-MM-YYYY"
                               onChange={(date) =>
                                 this.handleDatepickerChange("tanggal_produksi", date)
                               }
@@ -1314,9 +1320,10 @@ export default class CK4MMEAPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_diterima"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
-                      style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
+                      style={{ width: "100%" }}
                     />
                   </Col>
 
@@ -1389,6 +1396,7 @@ export default class CK4MMEAPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_surat}
@@ -1488,6 +1496,7 @@ export default class CK4MMEAPerbaikan extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
 
         <ModalDaftarMerkMMEA

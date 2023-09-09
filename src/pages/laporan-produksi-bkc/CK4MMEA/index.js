@@ -24,7 +24,6 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
@@ -44,6 +43,8 @@ export default class CK4MMEA extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
       isModalDaftarKotaVisible: false,
+
+      jenis_bkc_id: 2,
 
       nppbkc_id: null,
       nama_nppbkc: null,
@@ -285,7 +286,7 @@ export default class CK4MMEA extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ [field]: value });
@@ -383,7 +384,7 @@ export default class CK4MMEA extends Component {
           kadar_mmea,
 
           nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
           jumlah_kemasan,
           jumlah_produksi,
           jumlah_kemasan_dilekati_pita,
@@ -422,7 +423,7 @@ export default class CK4MMEA extends Component {
       kadar_mmea: record.kadar_mmea,
 
       nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi),
+      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_kemasan: record.jumlah_kemasan,
       jumlah_produksi: record.jumlah_produksi,
       jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
@@ -459,7 +460,7 @@ export default class CK4MMEA extends Component {
       kadar_mmea,
 
       nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
       jumlah_kemasan,
       jumlah_produksi,
       jumlah_kemasan_dilekati_pita,
@@ -510,24 +511,11 @@ export default class CK4MMEA extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nama_nppbkc: null,
-      nppbkc: null,
-      alamat_nppbkc: null,
-
-      jenis_laporan_id: null,
-      jenis_laporan_name: null,
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-      tanggal_jam_produksi_awal: null,
-      tanggal_jam_produksi_akhir: null,
-      periode_bulan: null,
-      periode_tahun: null,
-
       jenis_mmea: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
+      tarif_mmea: null,
       jenis_kemasan_mmea: null,
       golongan_mmea: null,
       kadar_mmea: null,
@@ -537,8 +525,6 @@ export default class CK4MMEA extends Component {
       jumlah_kemasan: null,
       jumlah_produksi: null,
       jumlah_kemasan_dilekati_pita: null,
-      uraian_rincian_file: [],
-      dataSource: [],
     });
   };
   handleRekam = async () => {
@@ -552,33 +538,46 @@ export default class CK4MMEA extends Component {
       periode_bulan,
       periode_tahun,
       kota_id,
+      kota_name,
       nama_pengusaha,
       dataSource,
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkMmea: item.merk_mmea_id === "null" ? null : item.merk_mmea_id,
+      idMerkMmea: item.merk_mmea_id,
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
+      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
       jumlahProduksi: item.jumlah_produksi,
       jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
     }));
 
     const payload = {
-      idMenu: idMenu("ck4"),
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
       tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      periodeBulan: periode_bulan,
-      periodeTahun: periode_tahun,
       idKota: kota_id,
+      namaKota: kota_name,
       namaPengusaha: nama_pengusaha,
       details,
     };
+
+    if (jenis_laporan_id === "HARIAN") {
+      payload.tanggalJamProduksiAwal = moment(
+        tanggal_jam_produksi_awal,
+        "DD-MM-YYYY HH:mm"
+      ).toDate();
+      payload.tanggalJamProduksiAkhir = moment(
+        tanggal_jam_produksi_akhir,
+        "DD-MM-YYYY HH:mm"
+      ).toDate();
+    }
+
+    if (jenis_laporan_id === "BULANAN") {
+      payload.periodeBulan = periode_bulan;
+      payload.periodeTahun = periode_tahun;
+    }
 
     const response = await requestApi({
       service: "produksi",
@@ -689,6 +688,7 @@ export default class CK4MMEA extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_pemberitahuan"
+                      format="DD-MM-YYYY"
                       onChange={(date) =>
                         this.handleDatepickerChange("tanggal_pemberitahuan", date)
                       }
@@ -720,7 +720,7 @@ export default class CK4MMEA extends Component {
                         <DatePicker
                           id="tanggal_jam_produksi_awal"
                           showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
+                          format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
                           }
@@ -736,7 +736,7 @@ export default class CK4MMEA extends Component {
                         <DatePicker
                           id="tanggal_jam_produksi_akhir"
                           showTime={{ format: "HH:mm" }}
-                          format="YYYY-MM-DD HH:mm"
+                          format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
                             this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
                           }
@@ -922,6 +922,7 @@ export default class CK4MMEA extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_produksi"
+                          format="DD-MM-YYYY"
                           onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
                           value={this.state.tanggal_produksi}
                           style={{ width: "100%" }}
@@ -1120,6 +1121,7 @@ export default class CK4MMEA extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
 
         <ModalDaftarMerkMMEACK4

@@ -89,6 +89,12 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
     this.getDaftarMerkMmea();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getDaftarMerkMmea();
+    }
+  }
+
   getDaftarMerkMmea = async () => {
     const {
       merk_mmea_name,
@@ -131,60 +137,12 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
         tarif_mmea: item.tarifMmea,
         isi_mmea: item.isiMmea,
         jenis_kemasan_mmea: item.jenisKemasanMmea,
-        negara_asal_mmea: item.negaraAsalMmeaMmea,
+        negara_asal_mmea: item.negaraAsalMmea,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
       this.setState({ dataSource: newData, page, totalData });
     }
-
-    // this.setState({ isDaftarMerkMmeaLoading: true });
-    // const timeout = setTimeout(() => {
-    //   this.setState({
-    //     page: 1,
-    //     totalData: 10,
-    //     dataSource: [
-    //       {
-    //         key: 1,
-    //         merk_mmea_id: 1,
-    //         merk_mmea_name: "merk_mmea_name_1",
-    //         jenis_mmea: "jenis_mmea_1",
-    //         golongan_mmea: "golongan_mmea_1",
-    //         kadar_mmea: "kadar_mmea_1",
-    //         tarif_mmea: "tarif_mmea_1",
-    //         isi_mmea: "isi_mmea_1",
-    //         jenis_kemasan_mmea: "jenis_kemasan_mmea_1",
-    //         negara_asal_mmea: "negara_asal_mmea_1",
-    //       },
-    //       {
-    //         key: 2,
-    //         merk_mmea_id: 2,
-    //         merk_mmea_name: "merk_mmea_name_2",
-    //         jenis_mmea: "jenis_mmea_2",
-    //         golongan_mmea: "golongan_mmea_2",
-    //         kadar_mmea: "kadar_mmea_2",
-    //         tarif_mmea: "tarif_mmea_2",
-    //         isi_mmea: "isi_mmea_2",
-    //         jenis_kemasan_mmea: "jenis_kemasan_mmea_2",
-    //         negara_asal_mmea: "negara_asal_mmea_2",
-    //       },
-    //       {
-    //         key: 3,
-    //         merk_mmea_id: 3,
-    //         merk_mmea_name: "merk_mmea_name_3",
-    //         jenis_mmea: "jenis_mmea_3",
-    //         golongan_mmea: "golongan_mmea_3",
-    //         kadar_mmea: "kadar_mmea_3",
-    //         tarif_mmea: "tarif_mmea_3",
-    //         isi_mmea: "isi_mmea_3",
-    //         jenis_kemasan_mmea: "jenis_kemasan_mmea_3",
-    //         negara_asal_mmea: "negara_asal_mmea_3",
-    //       },
-    //     ],
-    //   });
-    //   this.setState({ isDaftarMerkMmeaLoading: false });
-    //   clearTimeout(timeout);
-    // }, 2000);
   };
 
   getColumnSearchProps = (dataIndex) => ({

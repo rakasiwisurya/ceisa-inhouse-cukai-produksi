@@ -47,6 +47,8 @@ export default class CK4HTPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
+      jenis_bkc_id: 3,
+
       nppbkc_id: null,
       nama_nppbkc: null,
       nppbkc: null,
@@ -453,7 +455,7 @@ export default class CK4HTPerbaikan extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({ ...this.state, [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleInputNumberChange = (field, value) => {
     this.setState({ ...this.state, [field]: value });
@@ -1373,6 +1375,7 @@ export default class CK4HTPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tangal_diterima"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
@@ -1448,6 +1451,7 @@ export default class CK4HTPerbaikan extends Component {
                     </div>
                     <DatePicker
                       id="tanggal_surat"
+                      format="DD-MM-YYYY"
                       onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
                       style={{ width: "100%" }}
                       value={this.state.tanggal_surat}
@@ -1547,6 +1551,7 @@ export default class CK4HTPerbaikan extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+          idJenisBkc={this.state.jenis_bkc_id}
         />
 
         <ModalDaftarHTCK4
