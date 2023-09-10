@@ -26,15 +26,17 @@ export const requestApi = async ({
     });
     return false;
   } catch (error) {
-    if (error?.response?.status === 401) {
-      clearCookies();
-      window.location.reload();
-      localStorage.clear();
-    }
     if (setLoading) setLoading(false);
     notification["error"]({
       message: "Failed",
       description: error?.response?.data?.message || error.message,
+      onClose: () => {
+        if (error?.response?.status === 401) {
+          clearCookies();
+          window.location.reload();
+          localStorage.clear();
+        }
+      },
     });
     return false;
   }
