@@ -75,8 +75,6 @@ export default class CK4EAPerbaikan extends Component {
       keterangan: null,
 
       tanggal_diterima: null,
-      penyampaian_ck4_id: null,
-      penyampaian_ck4_name: null,
       kota_id: null,
       kota_name: null,
       nama_pengusaha: null,
@@ -92,39 +90,6 @@ export default class CK4EAPerbaikan extends Component {
       searchText: null,
       searchedColumn: null,
       page: 1,
-
-      list_penyampaian_ck4: [
-        {
-          penyampaian_ck4_id: "TEPAT WAKTU",
-          penyampaian_ck4_name: "Tepat Waktu",
-        },
-        {
-          penyampaian_ck4_id: "TERLAMBAT",
-          penyampaian_ck4_name: "Terlambat",
-        },
-      ],
-      list_asal_kesalahan: [
-        {
-          asal_kesalahan_id: "PENGGUNA JASA",
-          asal_kesalahan_name: "Pengguna Jasa",
-        },
-        {
-          asal_kesalahan_id: "PENGAWAS/PETUGAS",
-          asal_kesalahan_name: "Pengawas/Petugas",
-        },
-        {
-          asal_kesalahan_id: "APLIKASI SAC-2",
-          asal_kesalahan_name: "Aplikasi SAC-2",
-        },
-        {
-          asal_kesalahan_id: "JARINGAN",
-          asal_kesalahan_name: "Jaringan",
-        },
-        {
-          asal_kesalahan_id: "LAINNYA",
-          asal_kesalahan_name: "Lainnya",
-        },
-      ],
 
       dataSource: [],
       columns: [
@@ -243,10 +208,10 @@ export default class CK4EAPerbaikan extends Component {
         kota_name: data.namaKota,
         nama_pengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
-          key: `ck4-${index}`,
+          key: `ck4-detail-${index}`,
           ck4_detail_id: detail.idCk4Detail,
           nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
           jumlah_produksi: detail.jumlahProduksi,
           nomor_tangki: detail.nomorTangki,
           keterangan: detail.keterangan,
@@ -381,7 +346,7 @@ export default class CK4EAPerbaikan extends Component {
         {
           key: new Date().getTime(),
           nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
           jumlah_produksi,
           nomor_tangki,
           keterangan,
@@ -403,7 +368,7 @@ export default class CK4EAPerbaikan extends Component {
       editIndexRincian: index,
       ck4_detail_id: record.ck4_detail_id,
       nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi),
+      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_produksi: record.jumlah_produksi,
       nomor_tangki: record.nomor_tangki,
       keterangan: record.keterangan,
@@ -424,7 +389,7 @@ export default class CK4EAPerbaikan extends Component {
       key: new Date().getTime(),
       ck4_detail_id,
       nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
       jumlah_produksi,
       nomor_tangki,
       keterangan,
@@ -461,19 +426,7 @@ export default class CK4EAPerbaikan extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      alamat_nppbkc: null,
-
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-
-      tanggal_jam_produksi_awal: null,
-      tanggal_jam_produksi_akhir: null,
-
       ck4_detail_id: null,
-
       nomor_produksi: null,
       tanggal_produksi: null,
       jumlah_produksi: null,
@@ -491,7 +444,6 @@ export default class CK4EAPerbaikan extends Component {
       tanggal_jam_produksi_akhir,
 
       tanggal_diterima,
-      penyampaian_ck4_id,
       kota_id,
       nama_pengusaha,
       nomor_surat,
@@ -517,11 +469,10 @@ export default class CK4EAPerbaikan extends Component {
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
       tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
 
       tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
-      penyampaianCk4: penyampaian_ck4_id,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       nomorSurat: nomor_surat,
@@ -884,28 +835,6 @@ export default class CK4EAPerbaikan extends Component {
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
                     />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Penyampaian CK-4</FormLabel>
-                    </div>
-                    <Select
-                      id="penyampaian_ck4"
-                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.penyampaian_ck4}
-                    >
-                      {this.state.list_penyampaian_ck4.length > 0 &&
-                        this.state.list_penyampaian_ck4.map((item, index) => (
-                          <Select.Option
-                            key={`penyampaian-ck4-${index}`}
-                            value={item.penyampaian_ck4_id}
-                          >
-                            {item.penyampaian_ck4_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
                   </Col>
 
                   <Col span={12}>

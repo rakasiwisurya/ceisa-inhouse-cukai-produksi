@@ -20,7 +20,6 @@ import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
@@ -244,7 +243,7 @@ export default class CK4EA extends Component {
         {
           key: new Date().getTime(),
           nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
           jumlah_produksi,
           nomor_tangki,
           keterangan,
@@ -265,7 +264,7 @@ export default class CK4EA extends Component {
       isEditRincian: true,
       editIndexRincian: index,
       nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi),
+      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_produksi: record.jumlah_produksi,
       nomor_tangki: record.nomor_tangki,
       keterangan: record.keterangan,
@@ -279,7 +278,7 @@ export default class CK4EA extends Component {
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
       nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
       jumlah_produksi,
       nomor_tangki,
       keterangan,
@@ -314,17 +313,6 @@ export default class CK4EA extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nppbkc: null,
-      nama_nppbkc: null,
-      alamat_nppbkc: null,
-
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-
-      tanggal_jam_produksi_awal: null,
-      tanggal_jam_produksi_akhir: null,
-
       nomor_produksi: null,
       tanggal_produksi: null,
       jumlah_produksi: null,
@@ -347,20 +335,19 @@ export default class CK4EA extends Component {
 
     const details = dataSource.map((item) => ({
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
+      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahProduksi: item.jumlah_produksi,
       identitasTangki: item.nomor_tangki,
       keterangan: item.keterangan,
     }));
 
     const payload = {
-      idMenu: idMenu("ck4"),
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: tanggal_pemberitahuan,
-      tanggalJamProduksiAwal: tanggal_jam_produksi_awal,
-      tanggalJamProduksiAkhir: tanggal_jam_produksi_akhir,
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       details,

@@ -391,7 +391,7 @@ export default class CK4HT extends Component {
           satuan_ht,
 
           nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
           jumlah_kemasan,
           jumlah_produksi,
           jumlah_kemasan_dilekati_pita,
@@ -430,7 +430,7 @@ export default class CK4HT extends Component {
       satuan_ht: record.satuan_ht,
 
       nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi),
+      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_kemasan: record.jumlah_kemasan,
       jumlah_produksi: record.jumlah_produksi,
       jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
@@ -467,7 +467,7 @@ export default class CK4HT extends Component {
       satuan_ht,
 
       nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
       jumlah_kemasan,
       jumlah_produksi,
       jumlah_kemasan_dilekati_pita,
@@ -519,16 +519,6 @@ export default class CK4HT extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nama_nppbkc: null,
-      nppbkc: null,
-      alamat_nppbkc: null,
-
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-      periode_bulan: null,
-      periode_tahun: null,
-
       merk_ht_id: null,
       merk_ht_name: null,
       jenis_ht: null,
@@ -543,8 +533,8 @@ export default class CK4HT extends Component {
       jumlah_kemasan: null,
       jumlah_produksi: null,
       jumlah_kemasan_dilekati_pita: null,
+
       uraian_rincian_file: [],
-      dataSource: [],
     });
   };
   handleRekam = async () => {
@@ -561,16 +551,15 @@ export default class CK4HT extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id === "null" ? null : item.merk_ht_id,
+      idMerkHt: item.merk_ht_id,
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
+      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
       jumlahProduksi: item.jumlah_produksi,
       jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
     }));
 
     const payload = {
-      idMenu: idMenu("ck4"),
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
       nomorPemberitahuan: nomor_pemberitahuan,

@@ -115,16 +115,6 @@ export default class CK4HTTaskToDo extends Component {
           jenis_laporan_name: "BULANAN",
         },
       ],
-      list_penyampaian_ck4: [
-        {
-          penyampaian_ck4_id: "TEPAT WAKTU",
-          penyampaian_ck4_name: "TEPAT WAKTU",
-        },
-        {
-          penyampaian_ck4_id: "TERLAMBAT",
-          penyampaian_ck4_name: "TERLAMBAT",
-        },
-      ],
       list_asal_kesalahan: [
         {
           asal_kesalahan_id: "PENGGUNA JASA",

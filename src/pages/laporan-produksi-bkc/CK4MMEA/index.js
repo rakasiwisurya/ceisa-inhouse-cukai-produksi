@@ -525,6 +525,8 @@ export default class CK4MMEA extends Component {
       jumlah_kemasan: null,
       jumlah_produksi: null,
       jumlah_kemasan_dilekati_pita: null,
+
+      uraian_rincian_file: [],
     });
   };
   handleRekam = async () => {

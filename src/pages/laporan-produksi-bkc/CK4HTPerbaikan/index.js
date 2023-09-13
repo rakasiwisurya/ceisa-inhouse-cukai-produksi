@@ -88,8 +88,6 @@ export default class CK4HTPerbaikan extends Component {
       jumlah_kemasan_dilekati_pita: null,
 
       tanggal_diterima: null,
-      penyampaian_ck4_id: null,
-      penyampaian_ck4_name: null,
       kota_id: null,
       kota_name: null,
       nama_pengusaha: null,
@@ -116,16 +114,6 @@ export default class CK4HTPerbaikan extends Component {
         {
           jenis_laporan_id: "BULANAN",
           jenis_laporan_name: "Bulanan",
-        },
-      ],
-      list_penyampaian_ck4: [
-        {
-          penyampaian_ck4_id: "TEPAT WAKTU",
-          penyampaian_ck4_name: "Tepat Waktu",
-        },
-        {
-          penyampaian_ck4_id: "TERLAMBAT",
-          penyampaian_ck4_name: "Terlambat",
         },
       ],
       list_asal_kesalahan: [
@@ -563,7 +551,7 @@ export default class CK4HTPerbaikan extends Component {
           satuan_ht,
 
           nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
           jumlah_kemasan,
           jumlah_produksi,
           jumlah_kemasan_dilekati_pita,
@@ -604,7 +592,7 @@ export default class CK4HTPerbaikan extends Component {
       satuan_ht: record.satuan_ht,
 
       nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi),
+      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_kemasan: record.jumlah_kemasan,
       jumlah_produksi: record.jumlah_produksi,
       jumlah_kemasan_dilekati_pita: record.jumlah_kemasan_dilekati_pita,
@@ -646,7 +634,7 @@ export default class CK4HTPerbaikan extends Component {
       satuan_ht,
 
       nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("YYYY-MM-DD"),
+      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
       jumlah_kemasan,
       jumlah_produksi,
       jumlah_kemasan_dilekati_pita,
@@ -702,16 +690,6 @@ export default class CK4HTPerbaikan extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
-      nama_nppbkc: null,
-      nppbkc: null,
-      alamat_nppbkc: null,
-
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-      periode_bulan: null,
-      periode_tahun: null,
-
       ck4_detail_id: null,
 
       merk_ht_id: null,
@@ -728,8 +706,8 @@ export default class CK4HTPerbaikan extends Component {
       jumlah_kemasan: null,
       jumlah_produksi: null,
       jumlah_kemasan_dilekati_pita: null,
+
       uraian_rincian_file: [],
-      dataSource: [],
     });
   };
   handleSimpanPerbaikan = async () => {
@@ -742,7 +720,6 @@ export default class CK4HTPerbaikan extends Component {
       periode_tahun,
 
       tanggal_diterima,
-      penyampaian_ck4_id,
       kota_id,
       nama_pengusaha,
       nomor_surat,
@@ -754,10 +731,10 @@ export default class CK4HTPerbaikan extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idMerkHt: item.merk_ht_id,
       idCk4Detail: item.ck4_detail_id,
+      idMerkHt: item.merk_ht_id,
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: item.tanggal_produksi,
+      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
       jumlahProduksi: item.jumlah_produksi,
       jumlahKemasanDilekatiPita: item.jumlah_kemasan_dilekati_pita,
@@ -773,7 +750,6 @@ export default class CK4HTPerbaikan extends Component {
       periodeTahun: periode_tahun,
 
       tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
-      penyampaianCk4: penyampaian_ck4_id,
       idKota: kota_id,
       namaPengusaha: nama_pengusaha,
       nomorSurat: nomor_surat,
@@ -1380,28 +1356,6 @@ export default class CK4HTPerbaikan extends Component {
                       style={{ width: "100%" }}
                       value={this.state.tanggal_diterima}
                     />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Penyampaian CK-4</FormLabel>
-                    </div>
-                    <Select
-                      id="penyampaian_ck4"
-                      onChange={(value) => this.handleSelectChange("penyampaian_ck4", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.penyampaian_ck4}
-                    >
-                      {this.state.list_penyampaian_ck4.length > 0 &&
-                        this.state.list_penyampaian_ck4.map((item, index) => (
-                          <Select.Option
-                            key={`penyampaian-ck4-${index}`}
-                            value={item.penyampaian_ck4_id}
-                          >
-                            {item.penyampaian_ck4_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
                   </Col>
 
                   <Col span={12}>
