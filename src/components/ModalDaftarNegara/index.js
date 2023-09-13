@@ -1,8 +1,6 @@
-import { Modal, Table } from "antd";
+import { Button, Icon, Input, Modal, Table } from "antd";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
-
-const limit = 10;
 
 export default class ModalDaftarNegara extends Component {
   constructor(props) {
@@ -11,15 +9,9 @@ export default class ModalDaftarNegara extends Component {
       isDaftarNegaraLoading: true,
       isMouseEnter: false,
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
-      totalData: 0,
-
-      table: {
-        negara_id: "",
-        negara_name: "",
-      },
 
       dataSource: [],
       columns: [
@@ -28,12 +20,14 @@ export default class ModalDaftarNegara extends Component {
           dataIndex: "negara_id",
           key: "negara_id",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("negara_id"),
         },
         {
           title: "Nama Negara",
           dataIndex: "negara_name",
           key: "negara_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+          ...this.getColumnSearchProps("negara_name"),
         },
       ],
     };
@@ -43,20 +37,11 @@ export default class ModalDaftarNegara extends Component {
     this.getDaftarNegara();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
-      this.getDaftarNegara();
-    }
-  }
-
   getDaftarNegara = async () => {
-    const payload = { page: this.state.page > 1 ? this.state.page * 10 - 10 : 0, size: limit };
-
     const response = await requestApi({
       service: "referensi_beacukai",
       method: "get",
-      endpoint: "Referensi/v1/negara",
-      params: payload,
+      endpoint: "Referensi/v1/negara/all",
       setLoading: (bool) => this.setState({ isDaftarNegaraLoading: bool }),
     });
 
@@ -67,8 +52,64 @@ export default class ModalDaftarNegara extends Component {
         negara_name: item.namaNegara,
       }));
 
-      this.setState({ dataSource: newData, totalData: response.data.total });
+      this.setState({ dataSource: newData });
     }
+  };
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
+      }
+    },
+  });
+  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+  handleColumnReset = async (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: null });
   };
 
   render() {
@@ -81,7 +122,7 @@ export default class ModalDaftarNegara extends Component {
           columns={this.state.columns}
           loading={this.state.isDaftarNegaraLoading}
           onChange={(page) => this.setState({ page: page.current })}
-          pagination={{ current: this.state.page, total: this.state.totalData }}
+          pagination={{ current: this.state.page }}
           onRow={(record, rowIndex) => ({
             onDoubleClick: (event) => onDataDoubleClick(record),
             onMouseEnter: (event) => this.setState({ isMouseEnter: true }),
