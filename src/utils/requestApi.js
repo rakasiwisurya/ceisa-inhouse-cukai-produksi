@@ -10,21 +10,31 @@ export const requestApi = async ({
   endpoint,
   body,
   params,
+  config,
   setLoading,
 }) => {
   if (setLoading) setLoading(true);
   try {
     const newParams = params ? queryParams(params) : "";
-    const response = await api[service][contentType][method](`${endpoint}${newParams}`, body);
+    const response = await api[service][contentType][method](
+      `${endpoint}${newParams}`,
+      method !== "get" ? body : config,
+      config
+    );
     if (setLoading) setLoading(false);
 
-    if (response.data.status === true) return response;
+    if (response?.data?.status) {
+      if (response.data.status === true) return response;
 
-    notification.error({
-      message: "Failed",
-      description: response.data.message,
-    });
-    return false;
+      notification.error({
+        message: "Failed",
+        description: response.data.message,
+      });
+
+      return false;
+    }
+
+    return response;
   } catch (error) {
     if (setLoading) setLoading(false);
     notification["error"]({

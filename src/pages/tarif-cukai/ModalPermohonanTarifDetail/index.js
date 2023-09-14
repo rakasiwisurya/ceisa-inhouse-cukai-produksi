@@ -1,7 +1,19 @@
-import { Card, Col, DatePicker, Input, InputNumber, Modal, Row, Select, Skeleton } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  Skeleton,
+} from "antd";
 import FormLabel from "components/FormLabel";
 import moment from "moment";
 import React, { Component } from "react";
+import { download } from "utils/files";
 import { requestApi } from "utils/requestApi";
 
 export default class ModalPermohonanTarifDetail extends Component {
@@ -14,6 +26,7 @@ export default class ModalPermohonanTarifDetail extends Component {
       subtitle4: "Tampilan Kemasan",
 
       isDetailLoading: true,
+      isDownloadLoading: false,
 
       jenis_bkc_id: null,
       jenis_bkc_name: null,
@@ -73,6 +86,7 @@ export default class ModalPermohonanTarifDetail extends Component {
       sisi_kanan: null,
       sisi_atas: null,
       sisi_bawah: null,
+      kode_foto: null,
       file_gambar_etiket: null,
       preview_gambar_etiket: null,
 
@@ -222,9 +236,21 @@ export default class ModalPermohonanTarifDetail extends Component {
         sisi_kanan: data.sisiKanan,
         sisi_atas: data.sisiAtas,
         sisi_bawah: data.sisiBawah,
-        preview_gambar_etiket: data.etiket,
+        kode_foto: data.kodeFoto,
       });
     }
+  };
+
+  handleDownload = async () => {
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/${this.state.kode_foto}`,
+      setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
+      config: { responseType: "blob" },
+    });
+
+    if (response) download(response.data);
   };
 
   render() {
@@ -766,15 +792,17 @@ export default class ModalPermohonanTarifDetail extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {this.state.preview_gambar_etiket && (
-                          <div style={{ marginTop: 20 }}>
-                            <img
-                              src={this.state.preview_gambar_etiket}
-                              alt="Foto Etiket"
-                              style={{ maxWidth: "100%" }}
-                            />
-                          </div>
-                        )}
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Etiket</FormLabel>
+                        </div>
+                        <Button
+                          type="primary"
+                          loading={this.state.isDownloadLoading}
+                          onClick={this.handleDownload}
+                          disabled={!this.state.kode_foto}
+                        >
+                          Download
+                        </Button>
                       </Col>
                     </Row>
                   </Card>

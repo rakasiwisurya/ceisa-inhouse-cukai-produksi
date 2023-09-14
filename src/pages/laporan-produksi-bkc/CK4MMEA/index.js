@@ -66,12 +66,12 @@ export default class CK4MMEA extends Component {
       total_jumlah_produksi: 0,
 
       jenis_mmea: null,
+      merk_detail_id: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       tarif_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
       kadar_mmea: null,
 
       nomor_produksi: null,
@@ -160,13 +160,6 @@ export default class CK4MMEA extends Component {
           key: "jenis_kemasan_mmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
           ...this.getColumnSearchProps("jenis_kemasan_mmea"),
-        },
-        {
-          title: "Golongan",
-          dataIndex: "golongan_mmea",
-          key: "golongan_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("golongan_mmea"),
         },
         {
           title: "Dokumen Produksi",
@@ -333,12 +326,12 @@ export default class CK4MMEA extends Component {
   handleDataMerkMmea = (record) => {
     this.setState({
       jenis_mmea: record.jenis_mmea,
+      merk_detail_id: record.merk_detail_id,
       merk_mmea_id: record.merk_mmea_id,
       merk_mmea_name: record.merk_mmea_name,
       isi_mmea: record.isi_mmea,
       tarif_mmea: record.tarif_mmea,
       jenis_kemasan_mmea: record.jenis_kemasan_mmea,
-      golongan_mmea: record.golongan_mmea,
       kadar_mmea: record.kadar_mmea,
     });
     this.handleModalClose("isModalDaftarMerkMmeaVisible");
@@ -354,12 +347,12 @@ export default class CK4MMEA extends Component {
   handleSimpanRincian = () => {
     const {
       jenis_mmea,
+      merk_detail_id,
       merk_mmea_id,
       merk_mmea_name,
       isi_mmea,
       tarif_mmea,
       jenis_kemasan_mmea,
-      golongan_mmea,
       kadar_mmea,
 
       nomor_produksi,
@@ -375,12 +368,12 @@ export default class CK4MMEA extends Component {
         {
           key: new Date().getTime(),
           jenis_mmea,
+          merk_detail_id,
           merk_mmea_id,
           merk_mmea_name,
           isi_mmea,
           tarif_mmea,
           jenis_kemasan_mmea,
-          golongan_mmea,
           kadar_mmea,
 
           nomor_produksi,
@@ -394,12 +387,12 @@ export default class CK4MMEA extends Component {
 
     this.setState({
       jenis_mmea: null,
+      merk_detail_id: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       tarif_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
       kadar_mmea: null,
 
       nomor_produksi: null,
@@ -414,12 +407,12 @@ export default class CK4MMEA extends Component {
       isEditRincian: true,
       editIndexRincian: index,
       jenis_mmea: record.jenis_mmea,
+      merk_detail_id: record.merk_detail_id,
       merk_mmea_id: record.merk_mmea_id,
       merk_mmea_name: record.merk_mmea_name,
       isi_mmea: record.isi_mmea,
       tarif_mmea: record.tarif_mmea,
       jenis_kemasan_mmea: record.jenis_kemasan_mmea,
-      golongan_mmea: record.golongan_mmea,
       kadar_mmea: record.kadar_mmea,
 
       nomor_produksi: record.nomor_produksi,
@@ -432,12 +425,12 @@ export default class CK4MMEA extends Component {
   handleUbahRincian = () => {
     const {
       jenis_mmea,
+      merk_detail_id,
       merk_mmea_id,
       merk_mmea_name,
       isi_mmea,
       tarif_mmea,
       jenis_kemasan_mmea,
-      golongan_mmea,
       kadar_mmea,
 
       nomor_produksi,
@@ -451,12 +444,12 @@ export default class CK4MMEA extends Component {
     newDataSource.splice(this.state.editIndexRincian, 1, {
       key: new Date().getTime(),
       jenis_mmea,
+      merk_detail_id,
       merk_mmea_id,
       merk_mmea_name,
       isi_mmea,
       tarif_mmea,
       jenis_kemasan_mmea,
-      golongan_mmea,
       kadar_mmea,
 
       nomor_produksi,
@@ -469,12 +462,12 @@ export default class CK4MMEA extends Component {
       isEditRincian: false,
       editIndexRincian: null,
       jenis_mmea: null,
+      merk_detail_id: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       tarif_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
       kadar_mmea: null,
 
       nomor_produksi: null,
@@ -495,11 +488,11 @@ export default class CK4MMEA extends Component {
       isEditRincian: false,
       editIndexRincian: null,
       jenis_mmea: null,
+      merk_detail_id: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
       kadar_mmea: null,
 
       nomor_produksi: null,
@@ -512,12 +505,12 @@ export default class CK4MMEA extends Component {
   handleReset = () => {
     this.setState({
       jenis_mmea: null,
+      merk_detail_id: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       tarif_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
       kadar_mmea: null,
 
       nomor_produksi: null,
@@ -546,7 +539,14 @@ export default class CK4MMEA extends Component {
     } = this.state;
 
     const details = dataSource.map((item) => ({
+      idTarifMerkDetail: item.merk_detail_id,
       idMerkMmea: item.merk_mmea_id,
+      merkMmea: item.merk_mmea_name,
+      isi: item.isi_mmea,
+      // tarifSpesifik: item.tarif_mmea,
+      // jenisProduksi: item.jenis_mmea,
+      jenisKemasan: item.jenis_kemasan_mmea,
+      // kadar: item.kadar_mmea,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
@@ -882,13 +882,6 @@ export default class CK4MMEA extends Component {
                       <FormLabel>Jenis Kemasan</FormLabel>
                     </div>
                     <Input id="jenis_kemasan_mmea" value={this.state.jenis_kemasan_mmea} disabled />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Golongan</FormLabel>
-                    </div>
-                    <Input id="golongan_mmea" value={this.state.golongan_mmea} disabled />
                   </div>
 
                   <div>

@@ -1,4 +1,4 @@
-import { Col, DatePicker, Input, InputNumber, Row, Select } from "antd";
+import { Button, Col, DatePicker, Input, InputNumber, Row, Select } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -6,6 +6,7 @@ import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
+import { download } from "utils/files";
 import { requestApi } from "utils/requestApi";
 
 export default class PermohonanTarifDetail extends Component {
@@ -18,6 +19,7 @@ export default class PermohonanTarifDetail extends Component {
       subtitle4: "Tampilan Kemasan",
 
       isDetailLoading: true,
+      isDownloadLoading: false,
 
       jenis_bkc_id: null,
       jenis_bkc_name: null,
@@ -77,6 +79,7 @@ export default class PermohonanTarifDetail extends Component {
       sisi_kanan: null,
       sisi_atas: null,
       sisi_bawah: null,
+      kode_foto: null,
       file_gambar_etiket: null,
       preview_gambar_etiket: null,
 
@@ -226,9 +229,21 @@ export default class PermohonanTarifDetail extends Component {
         sisi_kanan: data.sisiKanan,
         sisi_atas: data.sisiAtas,
         sisi_bawah: data.sisiBawah,
-        preview_gambar_etiket: data.etiket,
+        kode_foto: data.kodeFoto,
       });
     }
+  };
+
+  handleDownload = async () => {
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/${this.state.kode_foto}`,
+      setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
+      config: { responseType: "blob" },
+    });
+
+    if (response) download(response.data);
   };
 
   render() {
@@ -779,15 +794,14 @@ export default class PermohonanTarifDetail extends Component {
                       </Col>
 
                       <Col span={12}>
-                        {this.state.preview_gambar_etiket && (
-                          <div style={{ marginTop: 20 }}>
-                            <img
-                              src={this.state.preview_gambar_etiket}
-                              alt="Foto Etiket"
-                              style={{ maxWidth: "100%" }}
-                            />
-                          </div>
-                        )}
+                        <Button
+                          type="primary"
+                          loading={this.state.isDownloadLoading}
+                          onClick={this.handleDownload}
+                          disabled={!this.state.kode_foto}
+                        >
+                          Download Etiket
+                        </Button>
                       </Col>
                     </Row>
 

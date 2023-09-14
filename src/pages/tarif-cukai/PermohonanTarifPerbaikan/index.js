@@ -12,6 +12,7 @@ import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { download } from "utils/files";
 import { requestApi } from "utils/requestApi";
 
 export default class PermohonanTarifPerbaikan extends Component {
@@ -25,6 +26,7 @@ export default class PermohonanTarifPerbaikan extends Component {
 
       isDetailLoading: true,
       isUpdateLoading: false,
+      isDownloadLoading: false,
       isJenisBkcLoading: true,
       isJenisKemasanMmeaLoading: true,
       isModalDaftarNppbkcVisible: false,
@@ -91,6 +93,7 @@ export default class PermohonanTarifPerbaikan extends Component {
       sisi_kanan: null,
       sisi_atas: null,
       sisi_bawah: null,
+      kode_foto: null,
       file_gambar_etiket: null,
       preview_gambar_etiket: null,
 
@@ -159,56 +162,6 @@ export default class PermohonanTarifPerbaikan extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      this.setState({
-        jenis_pita_id: null,
-
-        merk_ht_id: null,
-        merk_ht: null,
-        jenis_produksi_ht_id: null,
-        jenis_produksi_ht_code: null,
-        golongan_id: null,
-        golongan_name: null,
-        jenis_htl_rel_ht_id: null,
-        jenis_htl_rel_ht_name: null,
-        jenis_htl_rel_ht_satuan: null,
-        isi_ht: null,
-        berat_ht: null,
-        hje_perkemasan_ht: null,
-        hje_persatuan_ht: null,
-        tarif_ht: null,
-        bahan_kemasan_ht: null,
-        asal_produk_ht_id: null,
-        asal_produk_ht_name: null,
-        tujuan_pemasaran_ht: null,
-
-        merk_mmea_id: null,
-        merk_mmea: null,
-        negara_asal_mmea_id: null,
-        negara_asal_mmea_name: null,
-        isi_mmea: null,
-        tarif_cukai_per_liter: null,
-        tarif_cukai_per_kemasan: null,
-        asal_produk_mmea_id: null,
-        asal_produk_mmea_name: null,
-
-        personal: null,
-        seri_pita: null,
-
-        nomor_surat_lisensi: null,
-        tanggal_surat_lisensi: null,
-
-        sisi_depan: null,
-        sisi_belakang: null,
-        sisi_kiri: null,
-        sisi_kanan: null,
-        sisi_atas: null,
-        sisi_bawah: null,
-        file_gambar_etiket: null,
-        preview_gambar_etiket: null,
-      });
-    }
-
     if (prevState.jenis_produksi_ht_id !== this.state.jenis_produksi_ht_id) {
       this.setState({ hje_persatuan_ht: this.state.hje_perkemasan_ht / this.state.isi_ht });
     }
@@ -291,7 +244,7 @@ export default class PermohonanTarifPerbaikan extends Component {
         sisi_kanan: data.sisiKanan,
         sisi_atas: data.sisiAtas,
         sisi_bawah: data.sisiBawah,
-        preview_gambar_etiket: data.etiket,
+        kode_foto: data.kodeFoto,
       });
     }
   };
@@ -400,6 +353,18 @@ export default class PermohonanTarifPerbaikan extends Component {
       negara_asal_mmea_name: record.negara_name,
     });
     this.handleModalClose("isModalDaftarNegaraAsalVisible");
+  };
+
+  handleDownload = async () => {
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/${this.state.kode_foto}`,
+      setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
+      config: { responseType: "blob" },
+    });
+
+    if (response) download(response.data);
   };
 
   handleUpdate = async () => {
@@ -582,6 +547,53 @@ export default class PermohonanTarifPerbaikan extends Component {
                       value={this.state.jenis_bkc_id}
                       onChange={(value, option) => {
                         this.handleSelectCustomChange("jenis_bkc", value, option);
+                        this.setState({
+                          jenis_pita_id: null,
+
+                          merk_ht_id: null,
+                          merk_ht: null,
+                          jenis_produksi_ht_id: null,
+                          jenis_produksi_ht_code: null,
+                          golongan_id: null,
+                          golongan_name: null,
+                          jenis_htl_rel_ht_id: null,
+                          jenis_htl_rel_ht_name: null,
+                          jenis_htl_rel_ht_satuan: null,
+                          isi_ht: null,
+                          berat_ht: null,
+                          hje_perkemasan_ht: null,
+                          hje_persatuan_ht: null,
+                          tarif_ht: null,
+                          bahan_kemasan_ht: null,
+                          asal_produk_ht_id: null,
+                          asal_produk_ht_name: null,
+                          tujuan_pemasaran_ht: null,
+
+                          merk_mmea_id: null,
+                          merk_mmea: null,
+                          negara_asal_mmea_id: null,
+                          negara_asal_mmea_name: null,
+                          isi_mmea: null,
+                          tarif_cukai_per_liter: null,
+                          tarif_cukai_per_kemasan: null,
+                          asal_produk_mmea_id: null,
+                          asal_produk_mmea_name: null,
+
+                          personal: null,
+                          seri_pita: null,
+
+                          nomor_surat_lisensi: null,
+                          tanggal_surat_lisensi: null,
+
+                          sisi_depan: null,
+                          sisi_belakang: null,
+                          sisi_kiri: null,
+                          sisi_kanan: null,
+                          sisi_atas: null,
+                          sisi_bawah: null,
+                          file_gambar_etiket: null,
+                          preview_gambar_etiket: null,
+                        });
                       }}
                       style={{ width: "100%" }}
                       loading={this.state.isJenisBkcLoading}
@@ -1186,6 +1198,20 @@ export default class PermohonanTarifPerbaikan extends Component {
                       </Col>
 
                       <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Etiket</FormLabel>
+                        </div>
+
+                        <Button
+                          type="primary"
+                          loading={this.state.isDownloadLoading}
+                          onClick={this.handleDownload}
+                          disabled={!this.state.kode_foto}
+                          style={{ marginBottom: 20 }}
+                        >
+                          Download
+                        </Button>
+
                         <input type="file" onChange={this.handleUploadFile} />
 
                         {this.state.preview_gambar_etiket && (

@@ -13,14 +13,14 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
       totalData: 0,
 
       table: {
-        merk_mmea_name: "",
-        jenis_mmea: "",
-        golongan_mmea: "",
-        kadar_mmea: "",
-        tarif_mmea: "",
-        isi_mmea: "",
-        jenis_kemasan_mmea: "",
-        negara_asal_mmea: "",
+        merk_mmea_name: null,
+        jenis_mmea: null,
+        golongan_mmea: null,
+        kadar_mmea: null,
+        tarif_mmea: null,
+        isi_mmea: null,
+        jenis_kemasan_mmea: null,
+        negara_asal_mmea: null,
       },
 
       dataSource: [],
@@ -129,6 +129,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `merk-mmea-${index}`,
+        merk_detail_id: item.idMerkDetail,
         merk_mmea_id: item.idMerkMmea,
         merk_mmea_name: item.namaMerkMmea,
         jenis_mmea: item.jenisMmea,
@@ -195,7 +196,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getDaftarMerkMmea();
   };
 
