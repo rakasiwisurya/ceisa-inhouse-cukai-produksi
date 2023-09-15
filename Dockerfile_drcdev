@@ -41,7 +41,7 @@ RUN chmod +x ${home_dir}/node_modules/.bin/react-scripts
 
 #RUN npm run build
 #RUN npm run-script build
-RUN yarn build
+RUN yarn build:development
 
 # Main command
 CMD [ "node", "server/index.js"]
