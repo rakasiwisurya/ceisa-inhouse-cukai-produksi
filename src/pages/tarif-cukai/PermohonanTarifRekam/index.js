@@ -1084,6 +1084,10 @@ export default class PermohonanTarifRekam extends Component {
                   </Col>
 
                   <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Etiket</FormLabel>
+                    </div>
+
                     <input type="file" onChange={this.handleUploadFile} />
 
                     {this.state.preview_gambar_etiket && (

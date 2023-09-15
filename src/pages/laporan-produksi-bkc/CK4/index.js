@@ -19,16 +19,16 @@ export default class CK4 extends Component {
       totalData: 0,
 
       table: {
-        kppbc: "",
-        nppbkc: "",
-        nama_perusahaan: "",
-        tanggal_pemberitahuan: "",
-        tanggal_produksi_awal: "",
-        tanggal_produksi_akhir: "",
-        jumlah_produksi_lt: "",
-        jumlah_produksi_btg: "",
-        jumlah_produksi_gram: "",
-        status: "",
+        kppbc: null,
+        nppbkc: null,
+        nama_perusahaan: null,
+        tanggal_pemberitahuan: null,
+        tanggal_produksi_awal: null,
+        tanggal_produksi_akhir: null,
+        jumlah_produksi_lt: null,
+        jumlah_produksi_btg: null,
+        jumlah_produksi_gram: null,
+        status: null,
       },
 
       dataSource: [],
@@ -266,7 +266,7 @@ export default class CK4 extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getCk4();
   };
 

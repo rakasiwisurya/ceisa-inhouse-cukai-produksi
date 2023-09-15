@@ -1202,17 +1202,23 @@ export default class PermohonanTarifPerbaikan extends Component {
                           <FormLabel>Etiket</FormLabel>
                         </div>
 
-                        <Button
-                          type="primary"
-                          loading={this.state.isDownloadLoading}
-                          onClick={this.handleDownload}
-                          disabled={!this.state.kode_foto}
-                          style={{ marginBottom: 20 }}
-                        >
-                          Download
-                        </Button>
+                        <div style={{ marginBottom: 20 }}>
+                          <Button
+                            type="primary"
+                            loading={this.state.isDownloadLoading}
+                            onClick={this.handleDownload}
+                            disabled={!this.state.kode_foto}
+                          >
+                            Download
+                          </Button>
+                        </div>
 
-                        <input type="file" onChange={this.handleUploadFile} />
+                        <input
+                          id="etiket"
+                          name="etiket"
+                          type="file"
+                          onChange={this.handleUploadFile}
+                        />
 
                         {this.state.preview_gambar_etiket && (
                           <div style={{ marginTop: 20 }}>

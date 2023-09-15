@@ -7,6 +7,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { download } from "utils/files";
 import { requestApi } from "utils/requestApi";
 
 export default class PermohonanTarifTaskToDo extends Component {
@@ -20,6 +21,7 @@ export default class PermohonanTarifTaskToDo extends Component {
       subtitle5: "Penentapan Tarif",
 
       isDetailLoading: true,
+      isDownloadLoading: false,
       isSimpanTasktodoLoading: false,
 
       jenis_bkc_id: null,
@@ -80,6 +82,7 @@ export default class PermohonanTarifTaskToDo extends Component {
       sisi_kanan: null,
       sisi_atas: null,
       sisi_bawah: null,
+      kode_foto: null,
       file_gambar_etiket: null,
       preview_gambar_etiket: null,
 
@@ -244,7 +247,7 @@ export default class PermohonanTarifTaskToDo extends Component {
         sisi_kanan: data.sisiKanan,
         sisi_atas: data.sisiAtas,
         sisi_bawah: data.sisiBawah,
-        preview_gambar_etiket: data.etiket,
+        kode_foto: data.kodeFoto,
       });
     }
   };
@@ -260,6 +263,18 @@ export default class PermohonanTarifTaskToDo extends Component {
   };
   handleSelectChange = (field, value) => {
     this.setState({ [field]: value });
+  };
+
+  handleDownload = async () => {
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/${this.state.kode_foto}`,
+      setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
+      config: { responseType: "blob" },
+    });
+
+    if (response) download(response.data);
   };
 
   handleSimpanTasktodo = async () => {
@@ -850,15 +865,17 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </Col>
 
                         <Col span={12}>
-                          {this.state.preview_gambar_etiket && (
-                            <div style={{ marginTop: 20 }}>
-                              <img
-                                src={this.state.preview_gambar_etiket}
-                                alt="Foto Etiket"
-                                style={{ maxWidth: "100%" }}
-                              />
-                            </div>
-                          )}
+                          <div style={{ marginBottom: 10 }}>
+                            <FormLabel>Etiket</FormLabel>
+                          </div>
+                          <Button
+                            type="primary"
+                            loading={this.state.isDownloadLoading}
+                            onClick={this.handleDownload}
+                            disabled={!this.state.kode_foto}
+                          >
+                            Download
+                          </Button>
                         </Col>
                       </Row>
                     </div>

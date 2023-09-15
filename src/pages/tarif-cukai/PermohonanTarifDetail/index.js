@@ -794,6 +794,10 @@ export default class PermohonanTarifDetail extends Component {
                       </Col>
 
                       <Col span={12}>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>Etiket</FormLabel>
+                        </div>
+
                         <Button
                           type="primary"
                           loading={this.state.isDownloadLoading}
