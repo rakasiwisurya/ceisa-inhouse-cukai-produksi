@@ -406,7 +406,6 @@ export default class CK4MMEA extends Component {
     });
   };
   handleEditRincian = (record) => {
-    console.log("record.key", record.key);
     this.setState({
       isEditRincian: true,
       editIndexRincian: record.key,

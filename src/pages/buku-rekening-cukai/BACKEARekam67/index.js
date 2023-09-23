@@ -106,9 +106,9 @@ export default class BACKEARekam67 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
+                onClick={() => this.handleEditRincian(record)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(record)} />
             </div>
           ),
         },
@@ -300,10 +300,10 @@ export default class BACKEARekam67 extends Component {
       hasil_akhir: null,
     });
   };
-  handleEditRincian = (record, index) => {
+  handleEditRincian = (record) => {
     this.setState({
       isEditRincian: true,
-      editIndexRincian: index,
+      editIndexRincian: record.key,
 
       jumlah_ea_yang_akan_dicampur: record.jumlah_ea_yang_akan_dicampur,
       jumlah_bahan_pencampur: record.jumlah_bahan_pencampur,
@@ -323,8 +323,9 @@ export default class BACKEARekam67 extends Component {
       hasil_akhir,
     } = this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndexRincian, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       jumlah_ea_yang_akan_dicampur,
       jumlah_bahan_pencampur,
@@ -348,10 +349,9 @@ export default class BACKEARekam67 extends Component {
       dataSource: newDataSource,
     });
   };
-  handleDeleteRincian = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDeleteRincian = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
   handleBatalEditRincian = () => {
     this.setState({
