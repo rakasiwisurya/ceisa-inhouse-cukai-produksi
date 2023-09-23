@@ -55,9 +55,10 @@ export default class CK4EAPerbaikan extends Component {
       nppbkc: null,
       nama_nppbkc: null,
       alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "Harian",
+      jenis_laporan_name: "HARIAN",
       nomor_pemberitahuan: null,
       tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
@@ -74,7 +75,6 @@ export default class CK4EAPerbaikan extends Component {
       nomor_tangki: null,
       keterangan: null,
 
-      tanggal_diterima: null,
       kota_id: null,
       kota_name: null,
       nama_pengusaha: null,
@@ -83,8 +83,6 @@ export default class CK4EAPerbaikan extends Component {
       tanggal_surat: null,
       penjabat_bc_nip: null,
       penjabat_bc_name: null,
-      asal_kesalahan_id: null,
-      asal_kesalahan_name: null,
       keterangan_perbaikan: null,
 
       searchText: null,
@@ -198,6 +196,7 @@ export default class CK4EAPerbaikan extends Component {
         nppbkc_id: data.idNppbkc,
         nppbkc: data.nppbkc,
         nama_nppbkc: data.namaNppbkc,
+        npwp_nppbkc: data.npwp,
         alamat_nppbkc: data.alamatNppbkc,
         jenis_laporan_id: data.jenisLaporan,
         nomor_pemberitahuan: data.nomorPemberitahuan,
@@ -304,6 +303,7 @@ export default class CK4EAPerbaikan extends Component {
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
       alamat_nppbkc: record.alamat_nppbkc,
+      npwp_nppbkc: record.npwp_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
@@ -437,19 +437,23 @@ export default class CK4EAPerbaikan extends Component {
   handleSimpanPerbaikan = async () => {
     const {
       nppbkc_id,
+      nama_nppbkc,
+      nppbkc,
+      alamat_nppbkc,
+      npwp_nppbkc,
       jenis_laporan_id,
       nomor_pemberitahuan,
       tanggal_pemberitahuan,
       tanggal_jam_produksi_awal,
       tanggal_jam_produksi_akhir,
+      total_jumlah_produksi,
 
-      tanggal_diterima,
-      kota_id,
+      kota_name,
       nama_pengusaha,
       nomor_surat,
       tanggal_surat,
       penjabat_bc_nip,
-      asal_kesalahan_id,
+      penjabat_bc_name,
       keterangan_perbaikan,
       dataSource,
     } = this.state;
@@ -457,30 +461,34 @@ export default class CK4EAPerbaikan extends Component {
     const details = dataSource.map((item) => ({
       idCk4Detail: item.ck4_detail_id,
       nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: moment(item.tanggal_produksi).format("YYYY-MM-DD"),
+      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahProduksi: item.jumlah_produksi,
       nomorTangki: item.nomor_tangki,
       keterangan: item.keterangan,
     }));
 
     const payload = {
+      details,
+      alamatPerusahaan: alamat_nppbkc,
       idCk4: this.props.match.params.id,
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
-      nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
-
-      tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
-      idKota: kota_id,
-      namaPengusaha: nama_pengusaha,
-      nomorSurat: nomor_surat,
-      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
-      nipPenjabatBc: penjabat_bc_nip,
-      asalKesalahan: asal_kesalahan_id,
       keteranganPerbaikan: keterangan_perbaikan,
-      details,
+      namaKota: kota_name,
+      namaPejabat: penjabat_bc_name,
+      namaPengusaha: nama_pengusaha,
+      namaPerusahaan: nama_nppbkc,
+      nipPenjabatBc: penjabat_bc_nip,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      nomorSurat: nomor_surat,
+      nppbkc: nppbkc,
+      npwp: npwp_nppbkc,
+
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
+      totalJumlahProduksi: total_jumlah_produksi,
     };
 
     const response = await requestApi({
@@ -826,19 +834,6 @@ export default class CK4EAPerbaikan extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Diterima</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggal_diterima"
-                      format="DD-MM-YYYY"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
-                      style={{ width: "100%" }}
-                      value={this.state.tanggal_diterima}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
                       <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
@@ -921,28 +916,6 @@ export default class CK4EAPerbaikan extends Component {
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Asal Kesalahan</FormLabel>
-                    </div>
-                    <Select
-                      id="asal_kesalahan"
-                      onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.asal_kesalahan_id}
-                    >
-                      {this.state.list_asal_kesalahan.length > 0 &&
-                        this.state.list_asal_kesalahan.map((item, index) => (
-                          <Select.Option
-                            key={`asal_kesalahan-${index}`}
-                            value={item.asal_kesalahan_id}
-                          >
-                            {item.asal_kesalahan_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
                       <FormLabel>Keterangan</FormLabel>
                     </div>
                     <Input.TextArea
@@ -967,7 +940,7 @@ export default class CK4EAPerbaikan extends Component {
                   <Col span={5}>
                     <Button
                       type="primary"
-                      loading={this.state.isSimpanPerbaikan}
+                      loading={this.state.isSimpanPerbaikanLoading}
                       onClick={this.handleSimpanPerbaikan}
                       block
                     >

@@ -50,6 +50,7 @@ export default class CK4HT extends Component {
       nama_nppbkc: null,
       nppbkc: null,
       alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "BULANAN",
       jenis_laporan_name: "Bulanan",
@@ -212,9 +213,15 @@ export default class CK4HT extends Component {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
-      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
-      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
-      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+      const jumlahProduksiBtg = dataSource.filter(
+        (item) => item.satuan_ht === "BTG" || item.satuan_ht === "btg"
+      );
+      const jumlahProduksiGr = dataSource.filter(
+        (item) => item.satuan_ht === "GR" || item.satuan_ht === "gr"
+      );
+      const jumlahProduksiMl = dataSource.filter(
+        (item) => item.satuan_ht === "ML" || item.satuan_ht === "ml"
+      );
 
       this.setState({
         total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
@@ -333,6 +340,7 @@ export default class CK4HT extends Component {
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
       alamat_nppbkc: record.alamat_nppbkc,
+      npwp_nppbkc: record.npwp_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
@@ -340,7 +348,7 @@ export default class CK4HT extends Component {
     this.setState({
       merk_ht_id: record.merk_ht_id,
       merk_ht_name: record.merk_ht_name,
-      jenis_ht: record.jenis_ht,
+      jenis_ht: record.jenis_produksi_ht,
       hje_ht: record.hje_ht,
       isi_ht: record.isi_ht,
       bahan_ht: record.bahan_ht,
@@ -539,18 +547,35 @@ export default class CK4HT extends Component {
   handleRekam = async () => {
     const {
       nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      alamat_nppbkc,
+      npwp_nppbkc,
       jenis_laporan_id,
       nomor_pemberitahuan,
       tanggal_pemberitahuan,
       periode_bulan,
       periode_tahun,
-      kota_id,
+      tanggal_produksi_awal,
+      tanggal_produksi_akhir,
+      total_jumlah_kemasan,
+      total_jumlah_kemasan_dilekati_pita,
+      total_jumlah_produksi_ht_btg,
+      total_jumlah_produksi_ht_gr,
+      total_jumlah_produksi_ht_ml,
+      kota_name,
       nama_pengusaha,
       dataSource,
     } = this.state;
 
     const details = dataSource.map((item) => ({
       idMerkHt: item.merk_ht_id,
+      namaMerkHt: item.merk_ht_name,
+      bahanKemasan: item.bahan_ht,
+      hje: item.hje_ht,
+      isiPerKemasan: item.isi_ht,
+      tarif: item.tarif_ht,
+      jenisProduksiHt: item.jenis_ht,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
@@ -559,15 +584,26 @@ export default class CK4HT extends Component {
     }));
 
     const payload = {
+      details,
+      alamatPerusahaan: alamat_nppbkc,
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
+      namaKota: kota_name,
+      namaPengusaha: nama_pengusaha,
+      namaPerusahaan: nama_nppbkc,
       nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      nppbkc: nppbkc,
+      npwp: npwp_nppbkc,
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
-      idKota: kota_id,
-      namaPengusaha: nama_pengusaha,
-      details,
+      tanggalProduksiAkhir: moment(tanggal_produksi_akhir).format("YYYY-MM-DD"),
+      tanggalProduksiAwal: moment(tanggal_produksi_awal).format("YYYY-MM-DD"),
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      totalJumlahKemasan: total_jumlah_kemasan,
+      totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
+      totalJumlahProduksiHtBtg: total_jumlah_produksi_ht_btg,
+      totalJumlahProduksiHtGr: total_jumlah_produksi_ht_gr,
+      totalJumlahProduksiHtMl: total_jumlah_produksi_ht_ml,
     };
 
     const response = await requestApi({

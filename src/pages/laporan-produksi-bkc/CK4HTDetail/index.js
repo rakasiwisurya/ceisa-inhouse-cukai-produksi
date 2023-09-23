@@ -42,6 +42,7 @@ export default class CK4HTDetail extends Component {
       nama_nppbkc: null,
       nppbkc: null,
       alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "BULANAN",
       jenis_laporan_name: "Bulanan",
@@ -113,7 +114,7 @@ export default class CK4HTDetail extends Component {
               key: "tanggal_produksi",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>
-                  {text ? moment(text).format("DD-MM-YYYY") : "-"}
+                  {text ? moment(text).format("DD-MM-YYYY") : text}
                 </div>
               ),
               ...this.getColumnSearchProps("tanggal_produksi"),
@@ -207,9 +208,15 @@ export default class CK4HTDetail extends Component {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
-      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
-      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
-      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+      const jumlahProduksiBtg = dataSource.filter(
+        (item) => item.satuan_ht === "BTG" || item.satuan_ht === "btg"
+      );
+      const jumlahProduksiGr = dataSource.filter(
+        (item) => item.satuan_ht === "GR" || item.satuan_ht === "gr"
+      );
+      const jumlahProduksiMl = dataSource.filter(
+        (item) => item.satuan_ht === "ML" || item.satuan_ht === "ml"
+      );
 
       this.setState({
         total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
@@ -240,14 +247,15 @@ export default class CK4HTDetail extends Component {
 
       this.setState({
         nama_pemrakarsa: data.namaPemrakarsa,
-        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        id_process_pemrakarsa: data.idProsesPemrakarsa,
         jabatan_pemrakarsa: data.jabatanPemrakarsa,
         nip_pemrakarsa: data.nipPemrakarsa,
 
         nppbkc_id: data.idNppbkc,
-        nama_nppbkc: data.namaNppbkc,
+        nama_nppbkc: data.namaPerusahaan,
         nppbkc: data.nppbkc,
-        alamat_nppbkc: data.alamatNppbkc,
+        alamat_nppbkc: data.alamatPerusahaan,
+        npwp_nppbkc: data.npwp,
 
         jenis_laporan_id: data.jenisLaporan,
         nomor_pemberitahuan: data.nomorPemberitahuan,
@@ -264,17 +272,18 @@ export default class CK4HTDetail extends Component {
 
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
+          ck4_detail_id: detail.idCk4Detail,
           merk_ht_id: detail.idMerkHt,
           merk_ht_name: detail.namaMerkHt,
-          jenis_ht: detail.jenisHt,
-          hje_ht: detail.hjeHt,
-          isi_ht: detail.isiHt,
-          bahan_ht: detail.bahanHt,
-          tarif_ht: detail.tarifHt,
+          jenis_ht: detail.jenisProduksiHt,
+          hje_ht: detail.hje,
+          isi_ht: detail.isiPerKemasan,
+          bahan_ht: detail.bahanKemasan,
+          tarif_ht: detail.tarif,
           satuan_ht: detail.satuanHt,
 
           nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi),
+          tanggal_produksi: detail.tanggalProduksi,
           jumlah_kemasan: detail.jumlahKemasan,
           jumlah_produksi: detail.jumlahProduksi,
           jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
@@ -779,36 +788,6 @@ export default class CK4HTDetail extends Component {
                         </Button>
                       </div>
                     </Card>
-                  </Col>
-                </Row>
-
-                <Row style={{ marginTop: 20 }}>
-                  <Col span={8} offset={16}>
-                    <Row gutter={[16, 16]}>
-                      <Col span={12}>
-                        {this.state.isEditRincian ? (
-                          <Button type="primary" block onClick={this.handleUbahRincian}>
-                            Ubah Rincian
-                          </Button>
-                        ) : (
-                          <Button type="primary" block onClick={this.handleSimpanRincian}>
-                            Simpan Rincian
-                          </Button>
-                        )}
-                      </Col>
-
-                      <Col span={12}>
-                        {this.state.isEditRincian ? (
-                          <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                            Batal
-                          </Button>
-                        ) : (
-                          <Button type="danger" block onClick={this.handleReset}>
-                            Reset
-                          </Button>
-                        )}
-                      </Col>
-                    </Row>
                   </Col>
                 </Row>
 

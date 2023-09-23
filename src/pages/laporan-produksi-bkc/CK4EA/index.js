@@ -44,9 +44,10 @@ export default class CK4EA extends Component {
       nppbkc: null,
       nama_nppbkc: null,
       alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "Harian",
+      jenis_laporan_name: "HARIAN",
       nomor_pemberitahuan: null,
       tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",
@@ -222,6 +223,7 @@ export default class CK4EA extends Component {
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
       alamat_nppbkc: record.alamat_nppbkc,
+      npwp_nppbkc: record.npwp_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
@@ -323,12 +325,17 @@ export default class CK4EA extends Component {
   handleRekam = async () => {
     const {
       nppbkc_id,
+      alamat_nppbkc,
+      nppbkc,
+      nama_nppbkc,
+      npwp_nppbkc,
       jenis_laporan_id,
       nomor_pemberitahuan,
       tanggal_pemberitahuan,
       tanggal_jam_produksi_awal,
       tanggal_jam_produksi_akhir,
-      kota_id,
+      total_jumlah_produksi,
+      kota_name,
       nama_pengusaha,
       dataSource,
     } = this.state;
@@ -336,20 +343,25 @@ export default class CK4EA extends Component {
     const details = dataSource.map((item) => ({
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      jumlahProduksi: item.jumlah_produksi,
-      identitasTangki: item.nomor_tangki,
+      jumlahIsi: item.jumlah_produksi,
+      nomorTangki: item.nomor_tangki,
       keterangan: item.keterangan,
     }));
 
     const payload = {
+      alamatPerusahaan: alamat_nppbkc,
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
-      nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
-      idKota: kota_id,
+      jumlahProduksi: total_jumlah_produksi,
+      namaKota: kota_name,
       namaPengusaha: nama_pengusaha,
+      namaPerusahaan: nama_nppbkc,
+      nomorPemberitahuan: nomor_pemberitahuan,
+      nppbkc: nppbkc,
+      npwp: npwp_nppbkc,
+      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
+      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
       details,
     };
 

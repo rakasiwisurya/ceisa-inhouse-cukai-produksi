@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table } from "antd";
+import { Button, Col, Icon, Input, Modal, Row, Table } from "antd";
 import Container from "components/Container";
 import React, { Component } from "react";
 import Header from "components/Header";
@@ -43,7 +43,11 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEdit(record.idCk4, record.jenisBkc)}
+                onClick={() => {
+                  if (record.isAlert) return this.handleConfirm();
+                  this.handleEdit(record.idCk4, record.jenisBkc);
+                }}
+                disabled={record.idBrck2 || record.idBrck1}
               />
               <ButtonCustom
                 variant="info"
@@ -295,6 +299,19 @@ export default class CK4 extends Component {
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`);
         break;
     }
+  };
+  handleConfirm = () => {
+    Modal.confirm({
+      icon: <Icon type="warning" />,
+      title: "Alert",
+      content:
+        "CK-4 ini sudah lewat batas waktu perbaikan 3 bulan sejak tanggal pemberitahuan. Perbaikan atas jumlah produksi dapat dikenai sanksi terkait tidak memberitahukan barang kena cukai yang selesai dibuat, atau dilakukan penurunan nilai tingkat kepatuhan Pengusaha Pabrik. Apakah yakin akan melanjutkan perbaikan?",
+      okText: "Continue",
+      onOk: this.handleEdit,
+      cancelText: "Cancel",
+      centered: true,
+      width: 600,
+    });
   };
 
   render() {

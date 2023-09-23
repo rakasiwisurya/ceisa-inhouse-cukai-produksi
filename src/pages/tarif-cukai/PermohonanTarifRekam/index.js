@@ -633,7 +633,7 @@ export default class PermohonanTarifRekam extends Component {
                   <Button
                     type="primary"
                     onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
-                    disabled={!this.state.jenis_bkc_id}
+                    disabled={!this.state.jenis_bkc_id || this.state.jenis_bkc_id === 2}
                   >
                     Cari
                   </Button>

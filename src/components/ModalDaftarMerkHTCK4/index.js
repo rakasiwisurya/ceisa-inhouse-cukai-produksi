@@ -13,12 +13,12 @@ export default class ModalDaftarHTCK4 extends Component {
       totalData: 0,
 
       table: {
-        merk_ht_name: "",
-        isi_ht: "",
-        hje_ht: "",
-        tarif_ht: "",
-        bahan_ht: "",
-        jenis_produksi_ht: "",
+        merk_ht_name: null,
+        isi_ht: null,
+        hje_ht: null,
+        tarif_ht: null,
+        bahan_ht: null,
+        jenis_produksi_ht: null,
       },
 
       dataSource: [],
@@ -154,7 +154,7 @@ export default class ModalDaftarHTCK4 extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getDaftarMerkHt();
   };
 

@@ -13,11 +13,11 @@ export default class ModalDaftarNPPBKC extends Component {
       totalData: 0,
 
       table: {
-        nppbkc_id: "",
-        nama_nppbkc: "",
-        nppbkc: "",
-        npwp_nppbkc: "",
-        alamat_nppbkc: "",
+        nppbkc_id: null,
+        nama_nppbkc: null,
+        nppbkc: null,
+        npwp_nppbkc: null,
+        alamat_nppbkc: null,
       },
 
       dataSource: [],
@@ -70,7 +70,7 @@ export default class ModalDaftarNPPBKC extends Component {
 
     const payload = { page: this.state.page };
 
-    if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
+    if (idJenisBkc) payload.kodeJenisBkc = idJenisBkc;
     if (idJenisUsaha) payload.kodeJenisUsaha = idJenisUsaha;
 
     if (nppbkc_id) payload.idNppbkc = nppbkc_id;
@@ -153,7 +153,7 @@ export default class ModalDaftarNPPBKC extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getDaftarNppbkc();
   };
 

@@ -14,9 +14,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
 
       table: {
         merk_mmea_name: null,
-        jenis_mmea: null,
         golongan_mmea: null,
-        kadar_mmea: null,
         tarif_mmea: null,
         isi_mmea: null,
         jenis_kemasan_mmea: null,
@@ -33,25 +31,11 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
           ...this.getColumnSearchProps("merk_mmea_name"),
         },
         {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
-        },
-        {
           title: "Golongan",
           dataIndex: "golongan_mmea",
           key: "golongan_mmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
           ...this.getColumnSearchProps("golongan_mmea"),
-        },
-        {
-          title: "Kadar (%)",
-          dataIndex: "kadar_mmea",
-          key: "kadar_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("kadar_mmea"),
         },
         {
           title: "Tarif (%)",
@@ -98,9 +82,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
   getDaftarMerkMmea = async () => {
     const {
       merk_mmea_name,
-      jenis_mmea,
       golongan_mmea,
-      kadar_mmea,
       tarif_mmea,
       isi_mmea,
       jenis_kemasan_mmea,
@@ -110,9 +92,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
     const payload = { page: this.state.page };
 
     if (merk_mmea_name) payload.namaMerkMmea = merk_mmea_name;
-    if (jenis_mmea) payload.jenisMmea = jenis_mmea;
     if (golongan_mmea) payload.golonganMmea = golongan_mmea;
-    if (kadar_mmea) payload.kadarMmea = kadar_mmea;
     if (tarif_mmea) payload.tarifMmea = tarif_mmea;
     if (isi_mmea) payload.isiMmea = isi_mmea;
     if (jenis_kemasan_mmea) payload.jenisKemasanMmea = jenis_kemasan_mmea;
@@ -132,9 +112,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
         merk_detail_id: item.idMerkDetail,
         merk_mmea_id: item.idMerkMmea,
         merk_mmea_name: item.namaMerkMmea,
-        jenis_mmea: item.jenisMmea,
         golongan_mmea: item.golonganMmea,
-        kadar_mmea: item.kadarMmea,
         tarif_mmea: item.tarifMmea,
         isi_mmea: item.isiMmea,
         jenis_kemasan_mmea: item.jenisKemasanMmea,

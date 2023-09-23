@@ -53,6 +53,7 @@ export default class CK4HTPerbaikan extends Component {
       nama_nppbkc: null,
       nppbkc: null,
       alamat_nppbkc: null,
+      npwp_nppbkc: null,
 
       jenis_laporan_id: "BULANAN",
       jenis_laporan_name: "Bulanan",
@@ -87,7 +88,6 @@ export default class CK4HTPerbaikan extends Component {
       jumlah_produksi: null,
       jumlah_kemasan_dilekati_pita: null,
 
-      tanggal_diterima: null,
       kota_id: null,
       kota_name: null,
       nama_pengusaha: null,
@@ -96,8 +96,6 @@ export default class CK4HTPerbaikan extends Component {
       tanggal_surat: null,
       penjabat_bc_nip: null,
       penjabat_bc_name: null,
-      asal_kesalahan_id: null,
-      asal_kesalahan_name: null,
       keterangan_perbaikan: null,
 
       uraian_rincian_file: [],
@@ -114,28 +112,6 @@ export default class CK4HTPerbaikan extends Component {
         {
           jenis_laporan_id: "BULANAN",
           jenis_laporan_name: "Bulanan",
-        },
-      ],
-      list_asal_kesalahan: [
-        {
-          asal_kesalahan_id: "PENGGUNA JASA",
-          asal_kesalahan_name: "Pengguna Jasa",
-        },
-        {
-          asal_kesalahan_id: "PENGAWAS/PETUGAS",
-          asal_kesalahan_name: "Pengawas/Petugas",
-        },
-        {
-          asal_kesalahan_id: "APLIKASI SAC-2",
-          asal_kesalahan_name: "Aplikasi SAC-2",
-        },
-        {
-          asal_kesalahan_id: "JARINGAN",
-          asal_kesalahan_name: "Jaringan",
-        },
-        {
-          asal_kesalahan_id: "LAINNYA",
-          asal_kesalahan_name: "Lainnya",
         },
       ],
 
@@ -290,9 +266,15 @@ export default class CK4HTPerbaikan extends Component {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
-      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
-      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
-      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+      const jumlahProduksiBtg = dataSource.filter(
+        (item) => item.satuan_ht === "BTG" || item.satuan_ht === "btg"
+      );
+      const jumlahProduksiGr = dataSource.filter(
+        (item) => item.satuan_ht === "GR" || item.satuan_ht === "gr"
+      );
+      const jumlahProduksiMl = dataSource.filter(
+        (item) => item.satuan_ht === "ML" || item.satuan_ht === "ml"
+      );
 
       this.setState({
         total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),
@@ -323,14 +305,15 @@ export default class CK4HTPerbaikan extends Component {
 
       this.setState({
         nama_pemrakarsa: data.namaPemrakarsa,
-        id_process_pemrakarsa: data.idProcessPemrakarsa,
+        id_process_pemrakarsa: data.idProsesPemrakarsa,
         jabatan_pemrakarsa: data.jabatanPemrakarsa,
         nip_pemrakarsa: data.nipPemrakarsa,
 
         nppbkc_id: data.idNppbkc,
-        nama_nppbkc: data.namaNppbkc,
+        nama_nppbkc: data.namaPerusahaan,
         nppbkc: data.nppbkc,
-        alamat_nppbkc: data.alamatNppbkc,
+        alamat_nppbkc: data.alamatPerusahaan,
+        npwp_nppbkc: data.npwp,
 
         jenis_laporan_id: data.jenisLaporan,
         nomor_pemberitahuan: data.nomorPemberitahuan,
@@ -350,15 +333,15 @@ export default class CK4HTPerbaikan extends Component {
           ck4_detail_id: detail.idCk4Detail,
           merk_ht_id: detail.idMerkHt,
           merk_ht_name: detail.namaMerkHt,
-          jenis_ht: detail.jenisHt,
-          hje_ht: detail.hjeHt,
-          isi_ht: detail.isiHt,
-          bahan_ht: detail.bahanHt,
-          tarif_ht: detail.tarifHt,
+          jenis_ht: detail.jenisProduksiHt,
+          hje_ht: detail.hje,
+          isi_ht: detail.isiPerKemasan,
+          bahan_ht: detail.bahanKemasan,
+          tarif_ht: detail.tarif,
           satuan_ht: detail.satuanHt,
 
           nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi),
+          tanggal_produksi: detail.tanggalProduksi,
           jumlah_kemasan: detail.jumlahKemasan,
           jumlah_produksi: detail.jumlahProduksi,
           jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
@@ -487,6 +470,7 @@ export default class CK4HTPerbaikan extends Component {
       nppbkc: record.nppbkc,
       nama_nppbkc: record.nama_nppbkc,
       alamat_nppbkc: record.alamat_nppbkc,
+      npwp_nppbkc: record.npwp_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
@@ -713,19 +697,29 @@ export default class CK4HTPerbaikan extends Component {
   handleSimpanPerbaikan = async () => {
     const {
       nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
+      alamat_nppbkc,
+      npwp_nppbkc,
       jenis_laporan_id,
       nomor_pemberitahuan,
       tanggal_pemberitahuan,
+      tanggal_produksi_awal,
+      tanggal_produksi_akhir,
       periode_bulan,
       periode_tahun,
+      total_jumlah_kemasan,
+      total_jumlah_kemasan_dilekati_pita,
+      total_jumlah_produksi_ht_btg,
+      total_jumlah_produksi_ht_gr,
+      total_jumlah_produksi_ht_ml,
 
-      tanggal_diterima,
-      kota_id,
+      kota_name,
       nama_pengusaha,
       nomor_surat,
       tanggal_surat,
       penjabat_bc_nip,
-      asal_kesalahan_id,
+      penjabat_bc_name,
       keterangan_perbaikan,
       dataSource,
     } = this.state;
@@ -733,6 +727,12 @@ export default class CK4HTPerbaikan extends Component {
     const details = dataSource.map((item) => ({
       idCk4Detail: item.ck4_detail_id,
       idMerkHt: item.merk_ht_id,
+      namaMerkHt: item.merk_ht_name,
+      bahanKemasan: item.bahan_ht,
+      hje: item.hje_ht,
+      isiPerKemasan: item.isi_ht,
+      jenisProduksiHt: item.jenis_ht,
+      tarif: item.tarif_ht,
       nomorProduksi: item.nomor_produksi,
       tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
       jumlahKemasan: item.jumlah_kemasan,
@@ -741,23 +741,32 @@ export default class CK4HTPerbaikan extends Component {
     }));
 
     const payload = {
+      details,
+      alamatPerusahaan: alamat_nppbkc,
       idCk4: this.props.match.params.id,
       idNppbkc: nppbkc_id,
       jenisLaporan: jenis_laporan_id,
+      keteranganPerbaikan: keterangan_perbaikan,
+      namaKota: kota_name,
+      namaPejabat: penjabat_bc_name,
+      namaPengusaha: nama_pengusaha,
+      nipPenjabatBc: penjabat_bc_nip,
+      namaPerusahaan: nama_nppbkc,
       nomorPemberitahuan: nomor_pemberitahuan,
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      nppbkc: nppbkc,
+      npwp: npwp_nppbkc,
+      nomorSurat: nomor_surat,
       periodeBulan: periode_bulan,
       periodeTahun: periode_tahun,
-
-      tanggalDiterima: moment(tanggal_diterima).format("YYYY-MM-DD"),
-      idKota: kota_id,
-      namaPengusaha: nama_pengusaha,
-      nomorSurat: nomor_surat,
+      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
+      tanggalProduksiAkhir: moment(tanggal_produksi_akhir).format("YYYY-MM-DD"),
+      tanggalProduksiAwal: moment(tanggal_produksi_awal).format("YYYY-MM-DD"),
       tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
-      nipPenjabatBc: penjabat_bc_nip,
-      asalKesalahan: asal_kesalahan_id,
-      keteranganPerbaikan: keterangan_perbaikan,
-      details,
+      totalJumlahKemasan: total_jumlah_kemasan,
+      totalJumlahKemasanDilekatiPita: total_jumlah_kemasan_dilekati_pita,
+      totalJumlahProduksiHtBtg: total_jumlah_produksi_ht_btg,
+      totalJumlahProduksiHtGr: total_jumlah_produksi_ht_gr,
+      totalJumlahProduksiHtMl: total_jumlah_produksi_ht_ml,
     };
 
     const response = await requestApi({
@@ -1347,19 +1356,6 @@ export default class CK4HTPerbaikan extends Component {
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Diterima</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tangal_diterima"
-                      format="DD-MM-YYYY"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_diterima", date)}
-                      style={{ width: "100%" }}
-                      value={this.state.tanggal_diterima}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
                       <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
@@ -1442,28 +1438,6 @@ export default class CK4HTPerbaikan extends Component {
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Asal Kesalahan</FormLabel>
-                    </div>
-                    <Select
-                      id="asal_kesalahan"
-                      onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
-                      style={{ width: "100%" }}
-                      value={this.state.asal_kesalahan_id}
-                    >
-                      {this.state.list_asal_kesalahan.length > 0 &&
-                        this.state.list_asal_kesalahan.map((item, index) => (
-                          <Select.Option
-                            key={`asal_kesalahan-${index}`}
-                            value={item.asal_kesalahan_id}
-                          >
-                            {item.asal_kesalahan_name}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
                       <FormLabel>Keterangan</FormLabel>
                     </div>
                     <Input.TextArea
@@ -1488,7 +1462,7 @@ export default class CK4HTPerbaikan extends Component {
                   <Col span={5}>
                     <Button
                       type="primary"
-                      loading={this.state.isSimpanPerbaikan}
+                      loading={this.state.isSimpanPerbaikanLoading}
                       onClick={this.handleSimpanPerbaikan}
                       block
                     >

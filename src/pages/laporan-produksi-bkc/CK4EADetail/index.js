@@ -31,7 +31,7 @@ export default class CK4EADetail extends Component {
       alamat_nppbkc: null,
 
       jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "Harian",
+      jenis_laporan_name: "HARIAN",
       nomor_pemberitahuan: null,
       tanggal_pemberitahuan: null,
       jenis_barang_kena_cukai: "Etil Alkohol (EA)",

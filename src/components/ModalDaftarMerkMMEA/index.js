@@ -13,11 +13,11 @@ export default class ModalDaftarMerkMMEA extends Component {
       totalData: 0,
 
       table: {
-        merk_name: "",
-        golongan: "",
-        kadar: "",
-        tarif: "",
-        isi: "",
+        merk_name: null,
+        golongan: null,
+        kadar: null,
+        tarif: null,
+        isi: null,
       },
 
       dataSource: [],
@@ -156,7 +156,7 @@ export default class ModalDaftarMerkMMEA extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getDaftarMerkMmea();
   };
 

@@ -271,9 +271,15 @@ export default class CK4HTTaskToDo extends Component {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
-      const jumlahProduksiBtg = dataSource.filter((item) => item.satuan_ht === "BTG");
-      const jumlahProduksiGr = dataSource.filter((item) => item.satuan_ht === "GR");
-      const jumlahProduksiMl = dataSource.filter((item) => item.satuan_ht === "ML");
+      const jumlahProduksiBtg = dataSource.filter(
+        (item) => item.satuan_ht === "BTG" || item.satuan_ht === "btg"
+      );
+      const jumlahProduksiGr = dataSource.filter(
+        (item) => item.satuan_ht === "GR" || item.satuan_ht === "gr"
+      );
+      const jumlahProduksiMl = dataSource.filter(
+        (item) => item.satuan_ht === "ML" || item.satuan_ht === "ml"
+      );
 
       this.setState({
         total_jumlah_kemasan: sumArrayOfObject(dataSource, "jumlah_kemasan"),

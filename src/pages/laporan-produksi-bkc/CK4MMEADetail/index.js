@@ -57,14 +57,11 @@ export default class CK4MMEADetail extends Component {
       total_jumlah_kemasan_dilekati_pita: 0,
       total_jumlah_produksi: 0,
 
-      jenis_mmea: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
       isi_mmea: null,
       tarif_mmea: null,
       jenis_kemasan_mmea: null,
-      golongan_mmea: null,
-      kadar_mmea: null,
 
       nomor_produksi: null,
       tanggal_produksi: null,
@@ -85,23 +82,16 @@ export default class CK4MMEADetail extends Component {
       list_jenis_laporan: [
         {
           jenis_laporan_id: "HARIAN",
-          jenis_laporan_name: "Harian",
+          jenis_laporan_name: "HARIAN",
         },
         {
           jenis_laporan_id: "BULANAN",
-          jenis_laporan_name: "Bulanan",
+          jenis_laporan_name: "BULANAN",
         },
       ],
 
       dataSource: [],
       columns: [
-        {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
-        },
         {
           title: "Merk MMEA",
           dataIndex: "merk_mmea_name",
@@ -117,13 +107,6 @@ export default class CK4MMEADetail extends Component {
           ...this.getColumnSearchProps("isi_mmea"),
         },
         {
-          title: "Kadar (%)",
-          dataIndex: "kadar_mmea",
-          key: "kadar_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("kadar_mmea"),
-        },
-        {
           title: "Tarif (Rp)",
           dataIndex: "tarif_mmea",
           key: "tarif_mmea",
@@ -136,13 +119,6 @@ export default class CK4MMEADetail extends Component {
           key: "jenis_kemasan_mmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
           ...this.getColumnSearchProps("jenis_kemasan_mmea"),
-        },
-        {
-          title: "Golongan",
-          dataIndex: "golongan_mmea",
-          key: "golongan_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("golongan_mmea"),
         },
         {
           title: "Dokumen Produksi",
@@ -230,6 +206,7 @@ export default class CK4MMEADetail extends Component {
         nama_nppbkc: data.namaNppbkc,
         nppbkc: data.nppbkc,
         alamat_nppbkc: data.alamatNppbkc,
+        npwp_nppbkc: data.npwp,
 
         jenis_laporan_id: data.jenisLaporan,
         nomor_pemberitahuan: data.nomorPemberitahuan,
@@ -246,14 +223,13 @@ export default class CK4MMEADetail extends Component {
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
           idCk4Detail: detail.idCk4Detail,
-          jenis_mmea: detail.jenisMmea,
+          merk_detail_id: detail.idTarifMerkDetail,
           merk_mmea_id: detail.idMerkMmea,
           merk_mmea_name: detail.namaMerkMmea,
           isi_mmea: detail.isiMmea,
           tarif_mmea: detail.tarifMmea,
           jenis_kemasan_mmea: detail.jenisKemasanMmea,
-          golongan_mmea: detail.golonganMmea,
-          kadar_mmea: detail.kadarMmea,
+          negara_asal_mmea: detail.negaraAsal,
 
           nomor_produksi: detail.nomorProduksi,
           tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
@@ -608,18 +584,6 @@ export default class CK4MMEADetail extends Component {
                     <Card title="Kep Tarif" style={{ height: 705 }}>
                       <div style={{ marginBottom: 20 }}>
                         <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jenis MMEA</FormLabel>
-                        </div>
-                        <Input
-                          id="jenis_mmea"
-                          value={this.state.jenis_mmea}
-                          style={{ flex: 1 }}
-                          disabled
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
                           <FormLabel>Merk MMEA</FormLabel>
                         </div>
                         <div style={{ display: "flex", gap: 10 }}>
@@ -649,23 +613,6 @@ export default class CK4MMEADetail extends Component {
                           value={this.state.jenis_kemasan_mmea}
                           disabled
                         />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Golongan</FormLabel>
-                        </div>
-                        <Input id="golongan_mmea" value={this.state.golongan_mmea} disabled />
-                      </div>
-
-                      <div>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Kadar</FormLabel>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <Input id="kadar_mmea" value={this.state.kadar_mmea} disabled />
-                          <div>%</div>
-                        </div>
                       </div>
                     </Card>
                   </Col>
