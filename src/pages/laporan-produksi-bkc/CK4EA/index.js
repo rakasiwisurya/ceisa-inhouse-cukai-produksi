@@ -82,9 +82,9 @@ export default class CK4EA extends Component {
               <ButtonCustom
                 variant="warning"
                 icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
+                onClick={() => this.handleEditRincian(record)}
               />
-              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(index)} />
+              <Button type="danger" icon="close" onClick={() => this.handleDeleteRincian(record)} />
             </div>
           ),
         },
@@ -261,10 +261,10 @@ export default class CK4EA extends Component {
       keterangan: null,
     });
   };
-  handleEditRincian = (record, index) => {
+  handleEditRincian = (record) => {
     this.setState({
       isEditRincian: true,
-      editIndexRincian: index,
+      editIndexRincian: record.key,
       nomor_produksi: record.nomor_produksi,
       tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
       jumlah_produksi: record.jumlah_produksi,
@@ -276,8 +276,9 @@ export default class CK4EA extends Component {
     const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
       this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndexRincian, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       nomor_produksi,
       tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
@@ -297,10 +298,9 @@ export default class CK4EA extends Component {
       dataSource: newDataSource,
     });
   };
-  handleDeleteRincian = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDeleteRincian = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
   handleBatalEditRincian = () => {
     this.setState({

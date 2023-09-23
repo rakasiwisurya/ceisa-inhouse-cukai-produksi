@@ -98,22 +98,18 @@ export default class CK4EAPerbaikan extends Component {
           fixed: "left",
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <Button
-                type="primary"
-                icon="form"
-                onClick={() => this.handleEditRincian(record, index)}
-              />
+              <Button type="primary" icon="form" onClick={() => this.handleEditRincian(record)} />
               {record.idCk4Detail ? (
                 <Button
                   type="danger"
                   icon="delete"
-                  onClick={() => this.handleDeleteApi(index, record.idCk4Detail)}
+                  onClick={() => this.handleDeleteApi(record, record.idCk4Detail)}
                 />
               ) : (
                 <Button
                   type="danger"
                   icon="close"
-                  onClick={() => this.handleDeleteRincian(index)}
+                  onClick={() => this.handleDeleteRincian(record)}
                 />
               )}
             </div>
@@ -321,7 +317,7 @@ export default class CK4EAPerbaikan extends Component {
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
-  handleDeleteApi = async (index, id) => {
+  handleDeleteApi = async (record, id) => {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
@@ -332,7 +328,7 @@ export default class CK4EAPerbaikan extends Component {
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.handleDeleteRincian(index);
+      this.handleDeleteRincian(record);
     }
   };
 
@@ -362,10 +358,10 @@ export default class CK4EAPerbaikan extends Component {
       keterangan: null,
     });
   };
-  handleEditRincian = (record, index) => {
+  handleEditRincian = (record) => {
     this.setState({
       isEditRincian: true,
-      editIndexRincian: index,
+      editIndexRincian: record.key,
       ck4_detail_id: record.ck4_detail_id,
       nomor_produksi: record.nomor_produksi,
       tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
@@ -384,8 +380,9 @@ export default class CK4EAPerbaikan extends Component {
       keterangan,
     } = this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndexRincian, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       ck4_detail_id,
       nomor_produksi,
@@ -407,10 +404,9 @@ export default class CK4EAPerbaikan extends Component {
       dataSource: newDataSource,
     });
   };
-  handleDeleteRincian = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDeleteRincian = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
   handleBatalEditRincian = () => {
     this.setState({
