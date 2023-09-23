@@ -131,16 +131,16 @@ export default class ReferensiTarifEdit extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
                   {record.tarif_detail_id ? (
                     <Button
                       type="danger"
                       icon="delete"
-                      onClick={() => this.handleDeleteApi(index, record.tarif_detail_id)}
+                      onClick={() => this.handleDeleteApi(record, record.tarif_detail_id)}
                     />
                   ) : (
-                    <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                    <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                   )}
                 </div>
               ),
@@ -233,16 +233,16 @@ export default class ReferensiTarifEdit extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
                   {record.tarif_detail_id ? (
                     <Button
                       type="danger"
                       icon="delete"
-                      onClick={() => this.handleDeleteApi(index, record.tarif_detail_id)}
+                      onClick={() => this.handleDeleteApi(record, record.tarif_detail_id)}
                     />
                   ) : (
-                    <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                    <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                   )}
                 </div>
               ),
@@ -720,8 +720,9 @@ export default class ReferensiTarifEdit extends Component {
       tarif_detail_id,
     } = this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndex, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndex);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       tarif_detail_id,
 
@@ -814,10 +815,10 @@ export default class ReferensiTarifEdit extends Component {
     });
   };
 
-  handleEdit = (record, index) => {
+  handleEdit = (record) => {
     this.setState({
       isEdit: true,
-      editIndex: index,
+      editIndex: record.key,
 
       jenis_bkc_id: record.jenis_bkc_id,
       jenis_bkc_name: record.jenis_bkc_name,
@@ -848,13 +849,12 @@ export default class ReferensiTarifEdit extends Component {
       tarif_detail_id: record.tarif_detail_id,
     });
   };
-  handleDelete = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDelete = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
 
-  handleDeleteApi = async (index, id) => {
+  handleDeleteApi = async (record, id) => {
     const response = await requestApi({
       service: "referensi",
       method: "post",
@@ -865,13 +865,11 @@ export default class ReferensiTarifEdit extends Component {
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.handleDelete(index);
+      this.handleDelete(record);
     }
   };
 
   handleSimpanPerubahan = async () => {
-    // if (!this.validationForm()) return;
-
     const details = this.state.dataSource.map((item) => {
       const data = {
         idGolonganBkc: item.golongan_id,

@@ -125,9 +125,9 @@ export default class ReferensiTarifRekam extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                 </div>
               ),
             },
@@ -219,9 +219,9 @@ export default class ReferensiTarifRekam extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                 </div>
               ),
             },
@@ -672,8 +672,9 @@ export default class ReferensiTarifRekam extends Component {
       tarif_cukai_impor,
     } = this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndex, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       jenis_bkc_id,
       jenis_bkc_name,
@@ -767,10 +768,10 @@ export default class ReferensiTarifRekam extends Component {
     });
   };
 
-  handleEdit = (record, index) => {
+  handleEdit = (record) => {
     this.setState({
       isEdit: true,
-      editIndex: index,
+      editIndex: record.key,
       jenis_bkc_id: record.jenis_bkc_id,
       jenis_bkc_name: record.jenis_bkc_name,
       golongan_id: record.golongan_id,
@@ -798,15 +799,12 @@ export default class ReferensiTarifRekam extends Component {
       tarif_cukai_impor: record.tarif_cukai_impor,
     });
   };
-  handleDelete = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDelete = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
 
   handleRekam = async () => {
-    // if (!this.validationForm()) return;
-
     const details = this.state.dataSource.map((item) => {
       const data = {
         idGolonganBkc: item.golongan_id,

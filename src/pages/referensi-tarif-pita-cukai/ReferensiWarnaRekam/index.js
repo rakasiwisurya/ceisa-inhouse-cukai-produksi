@@ -77,9 +77,9 @@ export default class ReferensiWarnaRekam extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                 </div>
               ),
             },
@@ -136,9 +136,9 @@ export default class ReferensiWarnaRekam extends Component {
                   <ButtonCustom
                     variant="warning"
                     icon="form"
-                    onClick={() => this.handleEdit(record, index)}
+                    onClick={() => this.handleEdit(record)}
                   />
-                  <Button type="danger" icon="close" onClick={() => this.handleDelete(index)} />
+                  <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
                 </div>
               ),
             },
@@ -425,8 +425,9 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_usaha_name,
     } = this.state;
 
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(this.state.editIndex, 1, {
+    const newDataSource = [...this.state.dataSource];
+    const index = newDataSource.findIndex((item) => item.key === this.state.editIndex);
+    newDataSource.splice(index, 1, {
       key: new Date().getTime(),
       jenis_bkc_id,
       jenis_bkc_name,
@@ -467,10 +468,10 @@ export default class ReferensiWarnaRekam extends Component {
     });
   };
 
-  handleEdit = (record, index) => {
+  handleEdit = (record) => {
     this.setState({
       isEdit: true,
-      editIndex: index,
+      editIndex: record.key,
       jenis_bkc_id: record.jenis_bkc_id,
       jenis_bkc_name: record.jenis_bkc_name,
       kode_warna: record.kode_warna,
@@ -483,15 +484,12 @@ export default class ReferensiWarnaRekam extends Component {
       jenis_usaha_name: record.jenis_usaha_name,
     });
   };
-  handleDelete = (index) => {
-    const newDataSource = this.state.dataSource.map((item) => item);
-    newDataSource.splice(index, 1);
-    this.setState({ dataSource: newDataSource });
+  handleDelete = (record) => {
+    const updatedDataSource = this.state.dataSource.filter((item) => item.key !== record.key);
+    this.setState({ dataSource: updatedDataSource });
   };
 
   handleRekam = async () => {
-    // if (!this.validationForm()) return;
-
     const details = this.state.dataSource.map((item) => {
       const data = {
         kodeWarna: item.kode_warna,
