@@ -347,6 +347,7 @@ export default class PenetapanKembali extends Component {
         nppbkc_id: item.idNppbkc,
         jenis_produksi_merk: item.jenisProduksiBkc,
         jenis_htl_rel: item.jenisHtlRel,
+        jenis_htl_rel_id: item.idJenisHtlRel,
         isi_merk: item.isiPerkemasan,
         volume_merk: item.beratVolume,
         nomor_kep_merk: item.nomorSkep,
@@ -605,6 +606,7 @@ export default class PenetapanKembali extends Component {
       tampakAtas: item.tampak_atas,
       tampakBelakang: item.tampak_belakang,
       tampakBawah: item.tampak_bawah,
+      idJenisHtlRel: item.jenis_htl_rel_id,
       jenisHtlRel: item.jenis_htl_rel,
       tampakDepan: item.tampak_atas,
       tampakKiri: item.tampak_kiri,
@@ -625,15 +627,17 @@ export default class PenetapanKembali extends Component {
       details,
     };
 
-    const response = await requestApi({
-      service: "produksi",
-      method: "post",
-      endpoint: "/pita-cukai/penetapan-kembali-tarif",
-      body: payload,
-      setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
-    });
+    console.log("payload", payload);
 
-    if (response) notification.success({ message: "Success", description: response.data.message });
+    // const response = await requestApi({
+    //   service: "produksi",
+    //   method: "post",
+    //   endpoint: "/pita-cukai/penetapan-kembali-tarif",
+    //   body: payload,
+    //   setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
+    // });
+
+    // if (response) notification.success({ message: "Success", description: response.data.message });
   };
 
   render() {
