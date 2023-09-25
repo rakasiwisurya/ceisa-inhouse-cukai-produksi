@@ -24,6 +24,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { download } from "utils/files";
 import { formatDateFromExcelEpoch } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
@@ -44,6 +45,7 @@ export default class CK4MMEA extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
       isModalDaftarKotaVisible: false,
+      isDownloadTemplateLoading: false,
 
       jenis_bkc_id: 2,
 
@@ -311,6 +313,19 @@ export default class CK4MMEA extends Component {
         dataSource: [...this.state.dataSource, ...newData],
       });
     });
+  };
+  handleDownloadTemplate = async (e) => {
+    e.stopPropagation();
+
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/MpgBCAeAW6XX7VrEyFlfBw==/un8o8qvB9vnBl9rhg-Ofyw==/TmJv_JtjgSU2sZY9HQ4-H03emubFl-dc1IExY7vIwMMVr4plEGhxULtAsNWDNLeZDIYTYfQYnWYolCqgY6Lc5g==`,
+      config: { responseType: "blob" },
+      setLoading: (bool) => this.setState({ isDownloadTemplateLoading: bool }),
+    });
+
+    if (response) download(response.data, "template_ck4_mmea");
   };
   handleModalShow = (visibleState) => {
     this.setState({ [visibleState]: true });
@@ -991,9 +1006,19 @@ export default class CK4MMEA extends Component {
                         onRemove={() => this.handleRemoveFile("uraian_rincian_file")}
                         fileList={this.state.uraian_rincian_file}
                       >
-                        <Button>
-                          <Icon type="upload" /> Upload
-                        </Button>
+                        <div style={{ display: "flex", gap: 10 }}>
+                          <Button>
+                            <Icon type="upload" /> Upload
+                          </Button>
+
+                          <ButtonCustom
+                            variant="info"
+                            loading={this.state.isDownloadTemplateLoading}
+                            onClick={this.handleDownloadTemplate}
+                          >
+                            Download Template
+                          </ButtonCustom>
+                        </div>
                       </Upload>
 
                       <Button

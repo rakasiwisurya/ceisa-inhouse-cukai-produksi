@@ -274,7 +274,7 @@ export default class PermohonanTarifTaskToDo extends Component {
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, "etiket");
   };
 
   handleSimpanTasktodo = async () => {

@@ -243,7 +243,7 @@ export default class PermohonanTarifDetail extends Component {
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, "etiket");
   };
 
   render() {

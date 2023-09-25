@@ -1,6 +1,6 @@
 import { notification } from "antd";
 
-export const download = (blob) => {
+export const download = (blob, filename) => {
   // Create a FileReader to read the Blob content
   const reader = new FileReader();
 
@@ -22,6 +22,7 @@ export const download = (blob) => {
       52494646: "webp",
       "00000100": "ico",
       25504446: "pdf",
+      "504b0304": "xlsx",
       // Add more file signatures as needed
     };
 
@@ -30,7 +31,7 @@ export const download = (blob) => {
 
     if (fileExtension) {
       // If a matching file signature is found, set the file name accordingly
-      const fileName = `etiket.${fileExtension}`;
+      const fileName = `${filename}.${fileExtension}`;
 
       // Create a temporary link for downloading
       const tempLink = document.createElement("a");

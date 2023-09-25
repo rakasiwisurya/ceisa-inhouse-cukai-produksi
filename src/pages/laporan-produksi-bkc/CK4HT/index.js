@@ -23,8 +23,8 @@ import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
-import { templateExcelCk4Ht } from "templateFiles";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { download } from "utils/files";
 import { formatDateFromExcelEpoch } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
@@ -45,6 +45,7 @@ export default class CK4HT extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkHtVisible: false,
       isModalDaftarKotaVisible: false,
+      isDownloadTemplateLoading: false,
 
       jenis_bkc_id: 3,
 
@@ -349,18 +350,18 @@ export default class CK4HT extends Component {
       });
     });
   };
-  handleDownloadTemplate = (e) => {
+  handleDownloadTemplate = async (e) => {
     e.stopPropagation();
 
-    // const link = document.createElement("a");
-    // link.href = templateExcelCk4Ht;
-    // link.download = "template_ck4_ht.xlsx";
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/MpgBCAeAW6XX7VrEyFlfBw==/un8o8qvB9vnBl9rhg-Ofyw==/nAt-aE29fndOGQ4ca6mxZg59IY0F4ZwQLiDwRQEgsVsfInjqPNx2XshUgXILjEUL4KgaTnheY72GwTWMuz5ULw==`,
+      config: { responseType: "blob" },
+      setLoading: (bool) => this.setState({ isDownloadTemplateLoading: bool }),
+    });
 
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-
-    // window.open(fileUrl, '_blank');
+    if (response) download(response.data, "template_ck4_ht");
   };
   handleModalShow = (visibleState) => {
     this.setState({ [visibleState]: true });
@@ -1059,7 +1060,11 @@ export default class CK4HT extends Component {
                           <Icon type="upload" /> Upload
                         </Button>
 
-                        <ButtonCustom variant="info" onClick={this.handleDownloadTemplate}>
+                        <ButtonCustom
+                          variant="info"
+                          loading={this.state.isDownloadTemplateLoading}
+                          onClick={this.handleDownloadTemplate}
+                        >
                           Download Template
                         </ButtonCustom>
                       </div>

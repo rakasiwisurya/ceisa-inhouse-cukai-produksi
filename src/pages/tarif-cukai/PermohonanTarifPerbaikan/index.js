@@ -364,7 +364,7 @@ export default class PermohonanTarifPerbaikan extends Component {
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, "etiket");
   };
 
   handleUpdate = async () => {
