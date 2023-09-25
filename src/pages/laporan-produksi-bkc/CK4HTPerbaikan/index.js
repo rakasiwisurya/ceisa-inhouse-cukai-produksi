@@ -26,6 +26,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { formatDateFromExcelEpoch } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
@@ -450,7 +451,31 @@ export default class CK4HTPerbaikan extends Component {
     ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
       if (err) return console.error(err);
       const data = convertArrayExcelToTable(res.rows);
-      this.setState({ uraian_rincian_file: [], dataSource: [...this.state.dataSource, data] });
+      const newData = data?.map((item, index) => ({
+        key: `ht-detail-${index}`,
+
+        merk_ht_id: item.id_merk_ht,
+        merk_ht_name: item.nama_merk_ht,
+        jenis_ht: item.jenis_produksi_ht,
+        hje_ht: item.hje,
+        isi_ht: item.isi_per_kemasan,
+        bahan_ht: item.bahan_kemasan,
+        tarif_ht: item.tarif_spesifik,
+        satuan_ht: item.kode_satuan,
+
+        nomor_produksi: item.nomor_dok_produksi,
+        tanggal_produksi: moment(formatDateFromExcelEpoch(item.tanggal_dok_produksi)).format(
+          "DD-MM-YYYY"
+        ),
+        jumlah_kemasan: item.jumlah_kemasan,
+        jumlah_produksi: item.jumlah_produksi_ht,
+        jumlah_kemasan_dilekati_pita: item.jumlah_kemasan_berpita,
+      }));
+
+      this.setState({
+        uraian_rincian_file: [],
+        dataSource: [...this.state.dataSource, ...newData],
+      });
     });
   };
   handleModalShow = (visibleState) => {

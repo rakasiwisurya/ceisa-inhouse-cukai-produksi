@@ -26,6 +26,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { formatDateFromExcelEpoch } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
@@ -380,7 +381,29 @@ export default class CK4MMEAPerbaikan extends Component {
     ExcelRenderer(this.state.uraian_rincian_file[0], (err, res) => {
       if (err) return console.error(err);
       const data = convertArrayExcelToTable(res.rows);
-      this.setState({ uraian_rincian_file: [], dataSource: [...this.state.dataSource, data] });
+      const newData = data?.map((item, index) => ({
+        key: `mmea-detail-${index}`,
+
+        merk_mmea_id: item.id_merk_mmea,
+        merk_mmea_name: item.nama_merk_mmea,
+        isi_mmea: +item.isi_per_kemasan || item.isi_per_kemasan,
+        tarif_mmea: +item.tarif_spesifik || item.tarif_spesifik,
+        jenis_kemasan_mmea: item.jumlah_kemasan,
+        negara_asal_mmea: item.negara_asal_mmea,
+
+        nomor_produksi: item.nomor_dok_produksi,
+        tanggal_produksi: moment(formatDateFromExcelEpoch(item.tanggal_dok_produksi)).format(
+          "DD-MM-YYYY"
+        ),
+        jumlah_kemasan: +item.jumlah_kemasan || item.jumlah_kemasan,
+        jumlah_produksi: +item.jumlah_produksi_mmea || item.jumlah_produksi_mmea,
+        jumlah_kemasan_dilekati_pita: +item.jumlah_kemasan_berpita || item.jumlah_kemasan_berpita,
+      }));
+
+      this.setState({
+        uraian_rincian_file: [],
+        dataSource: [...this.state.dataSource, ...newData],
+      });
     });
   };
   handleModalShow = (visibleState) => {
