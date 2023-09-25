@@ -627,17 +627,15 @@ export default class PenetapanKembali extends Component {
       details,
     };
 
-    console.log("payload", payload);
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/pita-cukai/penetapan-kembali-tarif",
+      body: payload,
+      setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
+    });
 
-    // const response = await requestApi({
-    //   service: "produksi",
-    //   method: "post",
-    //   endpoint: "/pita-cukai/penetapan-kembali-tarif",
-    //   body: payload,
-    //   setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
-    // });
-
-    // if (response) notification.success({ message: "Success", description: response.data.message });
+    if (response) notification.success({ message: "Success", description: response.data.message });
   };
 
   render() {
