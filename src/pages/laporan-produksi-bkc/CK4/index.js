@@ -115,21 +115,27 @@ export default class CK4 extends Component {
           title: "Jumlah Produksi (lt)",
           dataIndex: "jumlah_produksi_lt",
           key: "jumlah_produksi_lt",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jumlah_produksi_lt"),
         },
         {
           title: "Jumlah Produksi (btg)",
           dataIndex: "jumlah_produksi_btg",
           key: "jumlah_produksi_btg",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jumlah_produksi_btg"),
         },
         {
           title: "Jumlah Produksi (gram)",
           dataIndex: "jumlah_produksi_gram",
           key: "jumlah_produksi_gram",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("jumlah_produksi_gram"),
         },
         {
@@ -208,7 +214,7 @@ export default class CK4 extends Component {
         tanggal_pemberitahuan: item.tanggalPemberitahuan,
         tanggal_produksi_awal: item.tanggalProduksiAwal,
         tanggal_produksi_akhir: item.tanggalProduksiAkhir,
-        jumlah_produksi_lt: item.jumlahProduksiLt,
+        jumlah_produksi_lt: item.jumlahProduksiLiter,
         jumlah_produksi_btg: item.jumlahProduksiBtg,
         jumlah_produksi_gram: item.jumlahProduksiGram,
         status: item.status,
