@@ -100,42 +100,54 @@ export default class BRCK1 extends Component {
           title: "Saldo Awal",
           dataIndex: "saldo_awal",
           key: "saldo_awal",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("saldo_awal"),
         },
         {
           title: "Saldo Buku",
           dataIndex: "saldo_buku",
           key: "saldo_buku",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("saldo_buku"),
         },
         {
           title: "Saldo Penutupan BRCK",
           dataIndex: "saldo_penutupan_brck",
           key: "saldo_penutupan_brck",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("saldo_penutupan_brck"),
         },
         {
           title: "Selisih",
           dataIndex: "selisih",
           key: "selisih",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("selisih"),
         },
         {
           title: "Potongan",
           dataIndex: "potongan",
           key: "potongan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("potongan"),
         },
         {
           title: "Kekurangan",
           dataIndex: "kekurangan",
           key: "kekurangan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("kekurangan"),
         },
       ],
