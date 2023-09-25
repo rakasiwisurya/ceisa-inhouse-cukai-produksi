@@ -59,6 +59,21 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
     if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
       this.getSeripita();
+
+      if (this.state.jenis_bkc_id === 2) {
+        this.setState({ hje: 0 });
+      }
+    }
+
+    if (
+      prevState.list_seri_pita?.length !== this.state.list_seri_pita?.length ||
+      prevState.jenis_bkc_id !== this.state.jenis_bkc_id
+    ) {
+      if (this.state.jenis_bkc_id === 2 && this.state.list_seri_pita?.length > 0)
+        this.setState({
+          seri_pita_id: this.state.list_seri_pita[0]?.idSeripita,
+          seri_pita_name: this.state.list_seri_pita[0]?.namaSeripita,
+        });
     }
 
     if (
@@ -124,8 +139,9 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const payload = {
       kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
       idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
-      hje: this.state.hje,
     };
+
+    if (this.state.jenis_bkc_id === 3) payload.hje = this.state.hje;
 
     const response = await requestApi({
       service: "referensi",
@@ -326,12 +342,26 @@ export default class RekamJenisPitaPerbaikan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>HJE</FormLabel>
                         </div>
-                        <InputNumber
-                          id="hje"
-                          onChange={(value) => this.handleInputNumberChange("hje", value)}
-                          value={this.state.hje}
-                          style={{ width: "100%" }}
-                        />
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <InputNumber
+                            id="hje"
+                            onChange={(value) => this.handleInputNumberChange("hje", value)}
+                            value={this.state.hje}
+                            style={{ width: "100%" }}
+                            disabled={this.state.jenis_bkc_id === 2}
+                          />
+
+                          <Button
+                            type="primary"
+                            icon="search"
+                            loading={this.state.isTarifLoading || this.state.isWarnaLoading}
+                            onClick={this.getTarifWarna}
+                            disabled={
+                              !this.state.jenis_produksi_id ||
+                              (this.state.jenis_bkc_id === 3 && !this.state.hje)
+                            }
+                          />
+                        </div>
                       </div>
                     </Col>
 
@@ -340,23 +370,13 @@ export default class RekamJenisPitaPerbaikan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Isi Per Kemasan</FormLabel>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <InputNumber
-                            id="isi"
-                            onChange={(value) => this.handleInputNumberChange("isi", value)}
-                            value={this.state.isi}
-                            style={{ width: "100%" }}
-                          />
-                          <Button
-                            type="primary"
-                            icon="search"
-                            loading={this.state.isTarifLoading || this.state.isWarnaLoading}
-                            onClick={this.getTarifWarna}
-                            disabled={
-                              !this.state.jenis_produksi_id || !this.state.hje || !this.state.isi
-                            }
-                          />
-                        </div>
+
+                        <InputNumber
+                          id="isi"
+                          onChange={(value) => this.handleInputNumberChange("isi", value)}
+                          value={this.state.isi}
+                          style={{ width: "100%" }}
+                        />
                       </div>
                     </Col>
 
@@ -417,6 +437,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                             this.handleSelectCustomChange("seri_pita", value, option);
                           }}
                           style={{ width: "100%" }}
+                          disabled={this.state.jenis_bkc_id === 2}
                         >
                           {this.state.list_seri_pita.length > 0 &&
                             this.state.list_seri_pita.map((item, index) => (
