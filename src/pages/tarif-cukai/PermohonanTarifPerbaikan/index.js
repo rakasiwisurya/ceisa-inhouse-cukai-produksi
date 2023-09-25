@@ -745,7 +745,7 @@ export default class PermohonanTarifPerbaikan extends Component {
                       <Button
                         type="primary"
                         onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
-                        disabled={!this.state.jenis_bkc_id || this.state.jenis_bkc_id === 2}
+                        disabled={!this.state.jenis_bkc_id}
                       >
                         Cari
                       </Button>
