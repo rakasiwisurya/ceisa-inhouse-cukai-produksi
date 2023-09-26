@@ -6,6 +6,8 @@ import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import ButtonCustom from "components/Button/ButtonCustom";
 import moment from "moment";
+import { PDFViewer } from "@react-pdf/renderer";
+import PdfPreview from "./PdfPreview";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -30,6 +32,8 @@ export default class CK4 extends Component {
         jumlah_produksi_gram: null,
         status: null,
       },
+      pdfModalVisible: false, // State to control PDF modal visibility
+      pdfContent: null, // State to store PDF content
 
       dataSource: [],
       columns: [
@@ -54,6 +58,11 @@ export default class CK4 extends Component {
                 icon="eye"
                 onClick={() => this.handleDetail(record.idCk4, record.jenisBkc)}
               />
+              <Button
+                className="btn-green"
+                icon="file-pdf"
+                onClick={() => this.generateAndDownloadPDF(record)}
+              />
             </div>
           ),
         },
@@ -61,21 +70,27 @@ export default class CK4 extends Component {
           title: "KPPBC",
           dataIndex: "kppbc",
           key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
@@ -116,7 +131,9 @@ export default class CK4 extends Component {
           dataIndex: "jumlah_produksi_lt",
           key: "jumlah_produksi_lt",
           render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+            <div style={{ textAlign: "center" }}>
+              {text || text === 0 ? text : "-"}
+            </div>
           ),
           ...this.getColumnSearchProps("jumlah_produksi_lt"),
         },
@@ -125,7 +142,9 @@ export default class CK4 extends Component {
           dataIndex: "jumlah_produksi_btg",
           key: "jumlah_produksi_btg",
           render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+            <div style={{ textAlign: "center" }}>
+              {text || text === 0 ? text : "-"}
+            </div>
           ),
           ...this.getColumnSearchProps("jumlah_produksi_btg"),
         },
@@ -134,7 +153,9 @@ export default class CK4 extends Component {
           dataIndex: "jumlah_produksi_gram",
           key: "jumlah_produksi_gram",
           render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+            <div style={{ textAlign: "center" }}>
+              {text || text === 0 ? text : "-"}
+            </div>
           ),
           ...this.getColumnSearchProps("jumlah_produksi_gram"),
         },
@@ -142,7 +163,9 @@ export default class CK4 extends Component {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>
+          ),
           ...this.getColumnSearchProps("status"),
         },
       ],
@@ -172,24 +195,26 @@ export default class CK4 extends Component {
       jumlah_produksi_gram,
       status,
     } = this.state.table;
-
     const payload = { page: this.state.page };
 
     if (kppbc) payload.kppbc = kppbc;
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (tanggal_pemberitahuan)
-      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+      payload.tanggalPemberitahuan = moment(
+        tanggal_pemberitahuan,
+        "DD-MM-YYYY"
+      ).format("YYYY-MM-DD");
     if (tanggal_produksi_awal)
-      payload.tanggalProduksiAwal = moment(tanggal_produksi_awal, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+      payload.tanggalProduksiAwal = moment(
+        tanggal_produksi_awal,
+        "DD-MM-YYYY"
+      ).format("YYYY-MM-DD");
     if (tanggal_produksi_akhir)
-      payload.tanggalProduksiAkhir = moment(tanggal_produksi_akhir, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+      payload.tanggalProduksiAkhir = moment(
+        tanggal_produksi_akhir,
+        "DD-MM-YYYY"
+      ).format("YYYY-MM-DD");
     if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
     if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
     if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
@@ -218,6 +243,7 @@ export default class CK4 extends Component {
         jumlah_produksi_btg: item.jumlahProduksiBtg,
         jumlah_produksi_gram: item.jumlahProduksiGram,
         status: item.status,
+        nomorPemberitahuan: item.nomorPemberitahuan,
       }));
 
       const page = response.data.data.currentPage;
@@ -227,7 +253,12 @@ export default class CK4 extends Component {
   };
 
   getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -235,7 +266,9 @@ export default class CK4 extends Component {
           }}
           value={this.state.table[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({
+              table: { ...this.state.table, [dataIndex]: e.target.value },
+            })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -280,13 +313,43 @@ export default class CK4 extends Component {
     this.getCk4();
   };
 
+  generateAndDownloadPDF = (rowData) => {
+    console.log("...rowData", rowData);
+    try {
+      const {
+        nomorPemberitahuan,
+        tanggalPemberitahuan,
+        nama_perusahaan,
+        nppbkc,
+      } = rowData;
+      this.setState({
+        pdfContent: {
+          noPemberitahu: nomorPemberitahuan,
+          tanggalPemberitahuan:
+            moment(tanggalPemberitahuan).format("DD-MM-YYYY"),
+          namaPerusahaan: nama_perusahaan,
+          nppbkc: nppbkc,
+        },
+        pdfModalVisible: true,
+      });
+    } catch (error) {
+      console.error("Error generating and displaying PDF:", error);
+    }
+  };
+
+  closePdfModal = () => {
+    this.setState({ pdfModalVisible: false, pdfContent: null });
+  };
+
   handleDetail = (id, jenisBkc) => {
     switch (true) {
       case jenisBkc === "EA":
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-detail/${id}`);
         break;
       case jenisBkc === "MMEA":
-        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-detail/${id}`);
+        this.props.history.push(
+          `${pathName}/laporan-ck4/ck4-mmea-detail/${id}`
+        );
         break;
       default:
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-detail/${id}`);
@@ -296,13 +359,19 @@ export default class CK4 extends Component {
   handleEdit = (id, jenisBkc) => {
     switch (true) {
       case jenisBkc === "EA":
-        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-perbaikan/${id}`);
+        this.props.history.push(
+          `${pathName}/laporan-ck4/ck4-ea-perbaikan/${id}`
+        );
         break;
       case jenisBkc === "MMEA":
-        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-perbaikan/${id}`);
+        this.props.history.push(
+          `${pathName}/laporan-ck4/ck4-mmea-perbaikan/${id}`
+        );
         break;
       default:
-        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`);
+        this.props.history.push(
+          `${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`
+        );
         break;
     }
   };
@@ -321,11 +390,20 @@ export default class CK4 extends Component {
   };
 
   render() {
+    const { pdfModalVisible, pdfContent } = this.state;
+
     return (
       <>
-        <Container menuName="Laporan Produksi BKC" contentName="CK4" hideContentHeader>
+        <Container
+          menuName="Laporan Produksi BKC"
+          contentName="CK4"
+          hideContentHeader
+        >
           <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <div
+            className="kt-content  kt-grid__item kt-grid__item--fluid"
+            id="kt_content"
+          >
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Row gutter={[16, 16]}>
@@ -333,7 +411,9 @@ export default class CK4 extends Component {
                     <ButtonCustom
                       variant="info"
                       onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-rekam`)
+                        this.props.history.push(
+                          `${pathName}/laporan-ck4/ck4-ea-rekam`
+                        )
                       }
                       block
                     >
@@ -345,7 +425,9 @@ export default class CK4 extends Component {
                     <ButtonCustom
                       variant="warning"
                       onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-rekam`)
+                        this.props.history.push(
+                          `${pathName}/laporan-ck4/ck4-mmea-rekam`
+                        )
                       }
                       block
                     >
@@ -357,7 +439,9 @@ export default class CK4 extends Component {
                     <ButtonCustom
                       variant="danger"
                       onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-rekam`)
+                        this.props.history.push(
+                          `${pathName}/laporan-ck4/ck4-ht-rekam`
+                        )
                       }
                       block
                     >
@@ -374,11 +458,31 @@ export default class CK4 extends Component {
                 columns={this.state.columns}
                 loading={this.state.isCk4Loading}
                 onChange={(page) => this.setState({ page: page.current })}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
+                pagination={{
+                  current: this.state.page,
+                  total: this.state.totalData,
+                }}
                 scroll={{ x: "max-content" }}
               />
             </div>
           </div>
+
+          <Modal
+            title={`View PDF ${pdfContent?.namaPerusahaan || ""}`}
+            visible={pdfModalVisible}
+            onCancel={this.closePdfModal}
+            footer={null}
+            width={800} // Set the width as needed
+          >
+            {/* Render the PDF content */}
+            {pdfModalVisible && (
+              <>
+                <PDFViewer width="100%" height={500}>
+                  <PdfPreview {...pdfContent} />
+                </PDFViewer>
+              </>
+            )}
+          </Modal>
         </Container>
       </>
     );
