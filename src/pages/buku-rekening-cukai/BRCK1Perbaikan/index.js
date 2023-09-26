@@ -534,6 +534,7 @@ export default class BRCK1Perbaikan extends Component {
     } = this.state;
 
     const payload = {
+      idBrck1: this.props.match.params.id,
       idNppbkc: nppbkc_id,
       nppbkc: nppbkc,
       namaPerusahaan: nama_nppbkc,

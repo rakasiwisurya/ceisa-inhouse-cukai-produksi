@@ -612,6 +612,7 @@ export default class BRCK1Detail extends Component {
                       <Table
                         columns={this.state.columns}
                         dataSource={this.state.dataSource}
+                        loading={this.state.isSearchLoading}
                         scroll={{ x: "max-content" }}
                         pagination={{ current: this.state.page }}
                         footer={(currentPageData) => {
