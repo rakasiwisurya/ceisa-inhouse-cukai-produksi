@@ -125,6 +125,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
         warna: data.warna,
         kode_warna: data.kodeWarna,
         tahun_pita: data.tahunPita,
+        seri_pita_id: data.idSeripita,
+        seri_pita_name: data.namaSeripita,
       });
 
       this.setState({ tarif: data.tarif, warna: data.warna, kode_warna: data.kodeWarna });
