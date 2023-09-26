@@ -38,6 +38,7 @@ import SPLDetail from "./laporan-produksi-bkc/SPLDetail";
 import SPLPerbaikan from "./laporan-produksi-bkc/SPLPerbaikan";
 import RekamJenisPitaRekam from "./rekam-jenis-pita/RekamJenisPitaRekam";
 import RekamJenisPitaPerbaikan from "./rekam-jenis-pita/RekamJenisPitaPerbaikan";
+import RekamJenisPitaTaskToDo from "./rekam-jenis-pita/RekamJenisPitaTaskToDo";
 import BRCK2Detail from "./buku-rekening-cukai/BRCK2Detail";
 import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Perbaikan";
 import BACKEA from "./buku-rekening-cukai/BACKEA";
@@ -150,6 +151,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/rekam-jenis-pita/perbaikan/:id"}
         render={(props) => <RekamJenisPitaPerbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/tasktodo/:id"}
+        render={(props) => <RekamJenisPitaTaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
