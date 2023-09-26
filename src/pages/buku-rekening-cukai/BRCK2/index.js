@@ -19,10 +19,8 @@ export default class BRCK2 extends Component {
         kppbc: null,
         nama_perusahaan: null,
         merk: null,
-        jenis: null,
         tarif: null,
         isi: null,
-        kadar: null,
         tanggal_awal: null,
         tanggal_akhir: null,
         saldo_awal_liter: null,
@@ -82,13 +80,6 @@ export default class BRCK2 extends Component {
           ...this.getColumnSearchProps("merk"),
         },
         {
-          title: "Jenis",
-          dataIndex: "jenis",
-          key: "jenis",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis"),
-        },
-        {
           title: "Tarif",
           dataIndex: "tarif",
           key: "tarif",
@@ -105,15 +96,6 @@ export default class BRCK2 extends Component {
             <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
           ),
           ...this.getColumnSearchProps("isi"),
-        },
-        {
-          title: "Kadar",
-          dataIndex: "kadar",
-          key: "kadar",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
-          ...this.getColumnSearchProps("kadar"),
         },
         {
           title: "Periode Penutupan BRCK",

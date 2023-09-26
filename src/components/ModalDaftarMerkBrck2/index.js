@@ -15,7 +15,6 @@ export default class ModalDaftarMerkBrck2 extends Component {
 
       table: {
         merk_mmea_name: null,
-        jenis_mmea: null,
         golongan: null,
         tarif: null,
         isi: null,
@@ -32,13 +31,6 @@ export default class ModalDaftarMerkBrck2 extends Component {
           key: "merk_mmea_name",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
           ...this.getColumnSearchProps("merk_mmea_name"),
-        },
-        {
-          title: "Jenis MMEA",
-          dataIndex: "jenis_mmea",
-          key: "jenis_mmea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_mmea"),
         },
         {
           title: "Golongan",
@@ -95,21 +87,12 @@ export default class ModalDaftarMerkBrck2 extends Component {
   }
 
   getDaftarMerkBrck2 = async () => {
-    const {
-      merk_mmea_name,
-      jenis_mmea,
-      golongan,
-      tarif,
-      isi,
-      kemasan,
-      no_skep,
-      tanggal_penutupan_brck2,
-    } = this.state.table;
+    const { merk_mmea_name, golongan, tarif, isi, kemasan, no_skep, tanggal_penutupan_brck2 } =
+      this.state.table;
 
     const payload = { page: this.state.page };
 
     if (merk_mmea_name) payload.namaMerk = merk_mmea_name;
-    if (jenis_mmea) payload.namaJenisBkc = jenis_mmea;
     if (golongan) payload.namaGolongan = golongan;
     if (tarif) payload.tarifSpesifik = tarif;
     if (isi) payload.isiPerKemasan = isi;
@@ -133,7 +116,6 @@ export default class ModalDaftarMerkBrck2 extends Component {
         key: `merk-brck2-${index}`,
         merk_mmea_id: item.idMerk,
         merk_mmea_name: item.namaMerk,
-        jenis_mmea: item.namaJenisBkc,
         golongan: item.namaGolongan,
         tarif: item.tarifSpesifik,
         isi: item.isiPerKemasan,

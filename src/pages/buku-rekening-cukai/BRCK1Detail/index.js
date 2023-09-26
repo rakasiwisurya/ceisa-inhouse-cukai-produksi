@@ -389,13 +389,14 @@ export default class BRCK1Detail extends Component {
 
       this.setState({
         isBrowseShow: true,
-        isSearchLoading: false,
         dataSource: newData,
         saldo_awal: responseSaldoAwal.data.data,
         saldo_buku: saldo,
         hasil_pencacahan_back5: saldo,
       });
     }
+
+    this.setState({ isSearchLoading: false });
   };
 
   calculateSaldo = () => {

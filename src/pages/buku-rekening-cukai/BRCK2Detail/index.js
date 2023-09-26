@@ -40,8 +40,6 @@ export default class BRCK2Detail extends Component {
       nama_nppbkc: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
       tarif: null,
       isi: null,
       periode_awal: null,
@@ -216,6 +214,16 @@ export default class BRCK2Detail extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
+      prevState.saldo_awal_lt !== this.state.saldo_awal_lt ||
+      prevState.saldo_awal_kemasan !== this.state.saldo_awal_kemasan ||
+      prevState.dataSource?.length !== this.state.dataSource?.length
+    ) {
+      if (this.state.dataSource?.length > 0) {
+        this.calculateSaldo();
+      }
+    }
+
+    if (
       prevState.dataSource.length !== this.state.dataSource.length ||
       prevState.hasil_pencacahan_back5_kemasan !== this.state.hasil_pencacahan_back5_kemasan ||
       prevState.hasil_pencacahan_back5_lt !== this.state.hasil_pencacahan_back5_lt
@@ -306,94 +314,82 @@ export default class BRCK2Detail extends Component {
     if (response) {
       const { data } = response.data;
 
-      await this.setState({
-        nppbkc_id: data.idNppbkc,
-        nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaNppbkc,
-        merk_mmea_id: data.idMerk,
-        merk_mmea_name: data.namaMerk,
-        jenis_mmea: data.namaJenisUsaha,
-        golongan: data.namaGolongan,
-        tarif: data.tarifSpesifik,
-        isi: data.isiPerKemasan,
-        periode_awal: moment(data.periodeAwal),
-        periode_akhir: moment(data.periodeAkhir),
-        saldo_awal_lt: data.saldoAwalLt,
-        saldo_awal_kemasan: data.saldoAwalKemasan,
-        hasil_pencacahan_back5_lt: data.hasilCacahLt,
-        hasil_pencacahan_back5_kemasan: data.hasilCacahKemasan,
-        hasil_pencarian_back5_description: data.keteranganHasilCacah,
-        no_back5: data.nomorBack5,
-        tgl_back5: moment(data.tanggalBack5),
-        jenis_penutupan: data.jenisPenutupan,
-      });
-
-      this.getBrck2();
+      this.setState(
+        {
+          nppbkc_id: data.idNppbkc,
+          nppbkc: data.nppbkc,
+          nama_nppbkc: data.namaPerusahaan,
+          merk_mmea_id: data.idMerk,
+          merk_mmea_name: data.namaMerk,
+          tarif: data.tarif,
+          isi: data.isi,
+          periode_awal: moment(data.periodeAwal),
+          periode_akhir: moment(data.periodeAkhir),
+          saldo_awal_lt: data.saldoAwalLt,
+          saldo_awal_kemasan: data.saldoAwalKemasan,
+          hasil_pencacahan_back5_lt: data.hasilCacahLt,
+          hasil_pencacahan_back5_kemasan: data.hasilCacahKemasan,
+          hasil_pencarian_back5_description: data.keteranganHasilCacah,
+          no_back5: data.nomorBack5,
+          tgl_back5: moment(data.tanggalBack5),
+          jenis_penutupan: data.jenisPenutupan,
+        },
+        () => this.getBrck2()
+      );
     }
-
-    // delete data dummy below when API is ready to comsume
-    // this.setState({ isDetailLoading: true });
-    // await new Promise((resolve, reject) => {
-    //   const timeout = setTimeout(() => {
-    //     resolve();
-    //     this.setState({
-    //       nppbkc_id: "0499af9b-f53b-40c7-b1f8-9b16c9f89b76",
-    //       nppbkc: "0014539407415000150312",
-    //       nama_nppbkc: "PANJANG JIWO PT",
-    //       merk_mmea_id: null,
-    //       merk_mmea_name: "ICELAND VODKA MIX LONG ISLAND",
-    //       jenis_mmea: "MMEA",
-    //       golongan: "TANPA GOLONGAN",
-    //       tarif: 100,
-    //       isi: 10,
-    //       periode_awal: moment("2020-06-12 00:00:00"),
-    //       periode_akhir: moment("2024-07-13 00:00:00"),
-    //       saldo_awal_lt: 500,
-    //       saldo_awal_kemasan: 1000,
-    //       hasil_pencacahan_back5_lt: 150,
-    //       hasil_pencacahan_back5_kemasan: 200,
-    //       hasil_pencarian_back5_description: "SESUAI",
-    //       no_back5: "nomor_back5",
-    //       tgl_back5: moment(new Date()),
-    //       jenis_penutupan: "PENUTUPAN TRIWULAN",
-    //     });
-    //     this.setState({ isDetailLoading: false });
-    //     clearTimeout(timeout);
-    //   }, 2000);
-    // });
-    // this.getBrck2();
   };
 
   getBrck2 = async () => {
     const payload = {
-      page: this.state.page,
       nppbkc: this.state.nppbkc,
       namaMerk: this.state.merk_mmea_name,
       awalTanggalPeriode: moment(this.state.periode_awal).format("YYYY-MM-DD"),
       akhirTanggalPeriode: moment(this.state.periode_akhir).format("YYYY-MM-DD"),
     };
 
-    const response = await requestApi({
+    this.setState({ isSearchLoading: true });
+
+    const responseSaldoAwal = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/brck/saldo-awal-brck2",
+      params: payload,
+    });
+
+    const responseProduksi = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/browse-brck2",
+      params: payload,
+    });
+
+    const responsePerdagangan = await requestApi({
       service: "perdagangan",
       method: "get",
       endpoint: "/ck5/browse-brck2",
       params: payload,
-      setLoading: (bool) => this.setState({ isSearchLoading: bool }),
     });
 
-    if (response) {
-      const { data } = response.data;
-
+    if (responseSaldoAwal && responseProduksi && responsePerdagangan) {
       let saldoKemasan = this.state.saldo_awal_kemasan || 0;
       let saldoLt = this.state.saldo_awal_lt || 0;
 
-      if (data?.length > 0) {
-        await this.setState({
-          saldo_awal_kemasan: data[0].saldoKemasan,
-          saldo_awal_lt: data[0].saldo,
-        });
+      const data = [...responseProduksi.data.data, ...responsePerdagangan.data.data];
 
-        const newData = data.map((item, index) => {
+      const newData = data
+        ?.sort((a, b) => {
+          const date1 = new Date(a?.tanggalCio);
+          const date2 = new Date(b?.tanggalCio);
+
+          if (date1 < date2) {
+            return -1;
+          } else if (date1 > date2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        ?.map((item, index) => {
           if (item.jenisTransaksi === "K") {
             saldoKemasan -= +item.jumlahKemasan || 0;
             saldoLt -= +item.jumlah || 0;
@@ -418,17 +414,38 @@ export default class BRCK2Detail extends Component {
           };
         });
 
-        this.setState({ dataSource: newData });
-      }
-
       this.setState({
+        isBrowseShow: true,
+        dataSource: newData,
+        saldo_awal_lt: responseSaldoAwal.data.data.saldoAwalLiter,
+        saldo_awal_kemasan: responseSaldoAwal.data.data.saldoAwalKemasan,
         saldo_buku_kemasan: saldoKemasan,
         saldo_buku_lt: saldoLt,
         hasil_pencacahan_back5_kemasan: saldoKemasan,
         hasil_pencacahan_back5_lt: saldoLt,
-        isBrowseShow: true,
       });
     }
+
+    this.setState({ isSearchLoading: false });
+  };
+
+  calculateSaldo = () => {
+    let saldoKemasan = this.state.saldo_awal_kemasan || 0;
+    let saldoLt = this.state.saldo_awal_lt || 0;
+
+    const newData = this.state.dataSource?.map((item) => {
+      saldoKemasan = saldoKemasan + item.debet_kemasan - item.kredit_kemasan;
+      saldoLt = saldoLt + item.debet_lt - item.kredit_lt;
+      return { ...item, saldo_kemasan: saldoKemasan, saldo_lt: saldoLt };
+    });
+
+    this.setState({
+      dataSource: newData,
+      saldo_buku_lt: saldoLt,
+      saldo_buku_kemasan: saldoKemasan,
+      hasil_pencacahan_back5_lt: saldoLt,
+      hasil_pencacahan_back5_kemasan: saldoKemasan,
+    });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -518,7 +535,6 @@ export default class BRCK2Detail extends Component {
     this.setState({
       merk_mmea_id: record.merk_mmea_id,
       merk_mmea_name: record.merk_mmea_name,
-      jenis_mmea: record.jenis_mmea,
       tarif: record.tarif,
       isi: record.isi,
     });
@@ -544,8 +560,6 @@ export default class BRCK2Detail extends Component {
       nppbkc: null,
       nama_nppbkc: null,
       merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
       tarif: null,
       isi: null,
       periode_awal: null,
@@ -595,13 +609,6 @@ export default class BRCK2Detail extends Component {
                         Cari
                       </Button>
                     </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis</FormLabel>
-                    </div>
-                    <Input id="jenis" value={this.state.jenis_mmea} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -682,7 +689,6 @@ export default class BRCK2Detail extends Component {
                               </div>
                               <InputNumber
                                 value={this.state.saldo_awal_kemasan}
-                                onChange={this.handleSaldoAwalKemasanChange}
                                 min={0}
                                 style={{ width: "100%" }}
                                 disabled
@@ -697,7 +703,6 @@ export default class BRCK2Detail extends Component {
                               </div>
                               <InputNumber
                                 value={this.state.saldo_awal_lt}
-                                onChange={this.handleSaldoAwalLtChange}
                                 min={0}
                                 style={{ width: "100%" }}
                                 disabled

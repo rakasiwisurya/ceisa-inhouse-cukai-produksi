@@ -19,7 +19,6 @@ import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
@@ -42,8 +41,6 @@ export default class BRCK2Rekam extends Component {
       nama_nppbkc: null,
       merk_mmea_id: null,
       merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
       tarif: null,
       isi: null,
       periode_awal: null,
@@ -214,6 +211,16 @@ export default class BRCK2Rekam extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
+      prevState.saldo_awal_lt !== this.state.saldo_awal_lt ||
+      prevState.saldo_awal_kemasan !== this.state.saldo_awal_kemasan ||
+      prevState.dataSource?.length !== this.state.dataSource?.length
+    ) {
+      if (this.state.dataSource?.length > 0) {
+        this.calculateSaldo();
+      }
+    }
+
+    if (
       prevState.dataSource.length !== this.state.dataSource.length ||
       prevState.hasil_pencacahan_back5_kemasan !== this.state.hasil_pencacahan_back5_kemasan ||
       prevState.hasil_pencacahan_back5_lt !== this.state.hasil_pencacahan_back5_lt
@@ -292,34 +299,55 @@ export default class BRCK2Rekam extends Component {
 
   getBrck2 = async () => {
     const payload = {
-      page: this.state.page,
       nppbkc: this.state.nppbkc,
       namaMerk: this.state.merk_mmea_name,
       awalTanggalPeriode: moment(this.state.periode_awal).format("YYYY-MM-DD"),
       akhirTanggalPeriode: moment(this.state.periode_akhir).format("YYYY-MM-DD"),
     };
 
-    const response = await requestApi({
+    this.setState({ isSearchLoading: true });
+
+    const responseSaldoAwal = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/brck/saldo-awal-brck2",
+      params: payload,
+    });
+
+    const responseProduksi = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/browse-brck2",
+      params: payload,
+    });
+
+    const responsePerdagangan = await requestApi({
       service: "perdagangan",
       method: "get",
       endpoint: "/ck5/browse-brck2",
       params: payload,
-      setLoading: (bool) => this.setState({ isSearchLoading: bool }),
     });
 
-    if (response) {
-      const { data } = response.data;
-
+    if (responseSaldoAwal && responseProduksi && responsePerdagangan) {
       let saldoKemasan = this.state.saldo_awal_kemasan || 0;
       let saldoLt = this.state.saldo_awal_lt || 0;
 
-      if (data?.length > 0) {
-        await this.setState({
-          saldo_awal_kemasan: data[0].saldoKemasan,
-          saldo_awal_lt: data[0].saldo,
-        });
+      const data = [...responseProduksi.data.data, ...responsePerdagangan.data.data];
 
-        const newData = data.map((item, index) => {
+      const newData = data
+        ?.sort((a, b) => {
+          const date1 = new Date(a?.tanggalCio);
+          const date2 = new Date(b?.tanggalCio);
+
+          if (date1 < date2) {
+            return -1;
+          } else if (date1 > date2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        ?.map((item, index) => {
           if (item.jenisTransaksi === "K") {
             saldoKemasan -= +item.jumlahKemasan || 0;
             saldoLt -= +item.jumlah || 0;
@@ -344,17 +372,38 @@ export default class BRCK2Rekam extends Component {
           };
         });
 
-        this.setState({ dataSource: newData });
-      }
-
       this.setState({
+        isBrowseShow: true,
+        dataSource: newData,
+        saldo_awal_lt: responseSaldoAwal.data.data.saldoAwalLiter,
+        saldo_awal_kemasan: responseSaldoAwal.data.data.saldoAwalKemasan,
         saldo_buku_kemasan: saldoKemasan,
         saldo_buku_lt: saldoLt,
         hasil_pencacahan_back5_kemasan: saldoKemasan,
         hasil_pencacahan_back5_lt: saldoLt,
-        isBrowseShow: true,
       });
     }
+
+    this.setState({ isSearchLoading: false });
+  };
+
+  calculateSaldo = () => {
+    let saldoKemasan = this.state.saldo_awal_kemasan || 0;
+    let saldoLt = this.state.saldo_awal_lt || 0;
+
+    const newData = this.state.dataSource?.map((item) => {
+      saldoKemasan = saldoKemasan + item.debet_kemasan - item.kredit_kemasan;
+      saldoLt = saldoLt + item.debet_lt - item.kredit_lt;
+      return { ...item, saldo_kemasan: saldoKemasan, saldo_lt: saldoLt };
+    });
+
+    this.setState({
+      dataSource: newData,
+      saldo_buku_lt: saldoLt,
+      saldo_buku_kemasan: saldoKemasan,
+      hasil_pencacahan_back5_lt: saldoLt,
+      hasil_pencacahan_back5_kemasan: saldoKemasan,
+    });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -444,7 +493,6 @@ export default class BRCK2Rekam extends Component {
     this.setState({
       merk_mmea_id: record.merk_mmea_id,
       merk_mmea_name: record.merk_mmea_name,
-      jenis_mmea: record.jenis_mmea,
       tarif: record.tarif,
       isi: record.isi,
     });
@@ -470,8 +518,6 @@ export default class BRCK2Rekam extends Component {
       nppbkc: null,
       nama_nppbkc: null,
       merk_mmea_name: null,
-      jenis_mmea: null,
-      golongan: null,
       tarif: null,
       isi: null,
       periode_awal: null,
@@ -482,8 +528,12 @@ export default class BRCK2Rekam extends Component {
   handleRekam = async () => {
     const {
       nppbkc_id,
+      nppbkc,
+      nama_nppbkc,
       merk_mmea_id,
       merk_mmea_name,
+      tarif,
+      isi,
       periode_awal,
       periode_akhir,
 
@@ -495,7 +545,6 @@ export default class BRCK2Rekam extends Component {
       hasil_pencarian_back5_description,
       selisih_lt,
       selisih_kemasan,
-      selisih_description,
       batas_kelonggaran_kemasan,
       no_back5,
       tgl_back5,
@@ -503,10 +552,13 @@ export default class BRCK2Rekam extends Component {
     } = this.state;
 
     const payload = {
-      idMenu: idMenu("brck2"),
       idNppbkc: nppbkc_id,
+      nppbkc: nppbkc,
+      namaPerusahaan: nama_nppbkc,
       idMerk: merk_mmea_id,
       namaMerk: merk_mmea_name,
+      tarif: tarif,
+      isi: isi,
       periodeAwal: periode_awal,
       periodeAkhir: periode_akhir,
       saldoAwalLt: saldo_awal_lt,
@@ -516,16 +568,11 @@ export default class BRCK2Rekam extends Component {
       keteranganHasilCacah: hasil_pencarian_back5_description,
       selisihLt: Math.abs(selisih_lt),
       selisihKemasan: Math.abs(selisih_kemasan),
-      keteranganSelisih: selisih_description,
       flagSelisih: Math.abs(selisih_lt) || Math.abs(selisih_kemasan) ? "Y" : "N",
       nomorBack5: no_back5,
       tanggalBack5: moment(tgl_back5, "DD-MM-YYYY").format("YYYY-MM-DD"),
       kekuranganLt: Math.sign(selisih_lt) === -1 ? Math.abs(selisih_lt) : null,
       kekuranganKemasan: Math.sign(selisih_kemasan) === -1 ? Math.abs(selisih_kemasan) : null,
-      keteranganKekurangan:
-        Math.sign(selisih_lt) === -1 || Math.sign(selisih_kemasan) === -1
-          ? selisih_description
-          : null,
       flagSanksi:
         Math.sign(selisih_kemasan) === -1 ||
         Math.sign(selisih_lt) === -1 ||
@@ -587,13 +634,6 @@ export default class BRCK2Rekam extends Component {
                     Cari
                   </Button>
                 </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Jenis</FormLabel>
-                </div>
-                <Input id="jenis" value={this.state.jenis_mmea} disabled />
               </Col>
 
               <Col span={12}>
@@ -671,9 +711,12 @@ export default class BRCK2Rekam extends Component {
                           </div>
                           <InputNumber
                             value={this.state.saldo_awal_kemasan}
-                            onChange={this.handleSaldoAwalKemasanChange}
+                            onChange={(value) =>
+                              this.handleInputNumberChange("saldo_awal_kemasan", value)
+                            }
                             min={0}
                             style={{ width: "100%" }}
+                            disabled={this.state.saldo_awal_kemasan !== null}
                           />
                         </Col>
 
@@ -685,9 +728,12 @@ export default class BRCK2Rekam extends Component {
                           </div>
                           <InputNumber
                             value={this.state.saldo_awal_lt}
-                            onChange={this.handleSaldoAwalLtChange}
+                            onChange={(value) =>
+                              this.handleInputNumberChange("saldo_awal_lt", value)
+                            }
                             min={0}
                             style={{ width: "100%" }}
+                            disabled={this.state.saldo_awal_lt !== null}
                           />
                         </Col>
                       </Row>
@@ -697,6 +743,7 @@ export default class BRCK2Rekam extends Component {
                   <Table
                     columns={this.state.columns}
                     dataSource={this.state.dataSource}
+                    loading={this.state.isSearchLoading}
                     pagination={{ current: this.state.page }}
                     onChange={(page) => this.setState({ page: page.current })}
                     scroll={{ x: "max-content" }}
