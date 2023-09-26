@@ -4,20 +4,19 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
-export default class RekamJenisPitaPerbaikan extends Component {
+export default class RekamJenisPitaTaskToDo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subtitle1: "Permohonan",
 
       isDetailLoading: true,
-      isUpdateLoading: false,
+      isSimpanTaskToDoLoading: false,
       isJenisProduksiLoading: true,
       isTarifLoading: false,
       isWarnaLoading: false,
@@ -42,9 +41,20 @@ export default class RekamJenisPitaPerbaikan extends Component {
       seri_pita_id: null,
       seri_pita_name: null,
       tahun_pita: String(new Date().getFullYear()),
+      tasktodo_status: "SETUJU",
 
       list_jenis_produksi: [],
       list_seri_pita: [],
+      list_status: [
+        {
+          status_id: "SETUJU",
+          status_name: "SETUJU",
+        },
+        {
+          status_id: "TOLAK",
+          status_name: "TOLAK",
+        },
+      ],
     };
   }
 
@@ -108,7 +118,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
         jenis_produksi_id: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}-${data.kodeSatuan}`,
         jenis_produksi_name: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
-        hje: data.hje,
+        hje: data.hje || 0,
         isi: data.isiVolume,
         tarif: data.tarif,
         awal_berlaku: moment(data.awalBerlaku),
@@ -187,95 +197,26 @@ export default class RekamJenisPitaPerbaikan extends Component {
     if (response) this.setState({ list_seri_pita: response.data.data });
   };
 
-  handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
-  };
-  handleInputNumberChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleDatepickerChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleSelectChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  handleSelectCustomChange = (field, value, option) => {
-    this.setState({
-      [`${field}_id`]: value,
-      [`${field}_name`]: option.props.children,
-    });
-  };
-  handleModalShow = (visibleState) => {
-    this.setState({ [visibleState]: true });
-  };
-  handleModalClose = (visibleState) => {
-    this.setState({ [visibleState]: false });
-  };
-
-  handleDataNppbkc = (record) => {
-    this.setState({
-      nppbkc_id: record.nppbkc_id,
-      nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
-      jenis_bkc_id: record.jenis_bkc_id,
-      personal_nppbkc: record.personal_nppbkc,
-    });
-    this.handleModalClose("isModalDaftarNppbkcVisible");
-  };
-
-  handleUpdate = async () => {
-    const {
-      nppbkc_id,
-      nppbkc,
-      nama_nppbkc,
-      jenis_bkc_id,
-      personal_nppbkc,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      hje,
-      isi,
-      tarif,
-      awal_berlaku,
-      warna,
-      kode_warna,
-      tahun_pita,
-    } = this.state;
-
-    const splitIdJenisProduksi = jenis_produksi_id.split("-");
-    const splitNamaJenisProduksi = jenis_produksi_name.split("-").map((item) => item.trim());
-
+  handleSimpanTaskToDo = async () => {
     const payload = {
       idJenisPita: this.props.match.params.id,
-      idJenisBkc: jenis_bkc_id,
-      idJenisProduksiBkc: splitIdJenisProduksi[0],
-      kodeJenisProduksiBkc: splitNamaJenisProduksi[0],
-      isiKemasan: isi,
-      awalBerlaku: moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      tarif: tarif,
-      warna: warna,
-      kodeWarna: kode_warna,
-      tahunPita: tahun_pita,
-      idNppbkc: nppbkc_id,
-      nppbkc: nppbkc,
-      namaPerusahaan: nama_nppbkc,
-      hje: hje,
-      personalisasi: personal_nppbkc,
-      idGolonganBkc: splitIdJenisProduksi[1],
-      namaGolonganBkc: splitNamaJenisProduksi[1],
-      kodeSatuan: splitIdJenisProduksi[2],
+      status: this.state.tasktodo_status,
     };
 
     const response = await requestApi({
-      service: "pita_cukai",
+      service: "produksi",
       method: "post",
-      endpoint: "/pita/perbaikan-jenis",
+      endpoint: "/pita/task-todo",
       body: payload,
-      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+      setLoading: (bool) => this.setState({ isSimpanTaskToDoLoading: bool }),
     });
 
     if (response) {
       notification.success({ message: "Success", description: response.data.message });
-      this.props.history.push(`${pathName}/rekam-jenis-pita`);
+      const timeout = setTimeout(() => {
+        window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
+        clearTimeout(timeout);
+      }, 1000);
     }
   };
 
@@ -296,11 +237,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                        disabled
-                      >
+                      <Button type="primary" disabled>
                         Cari
                       </Button>
                       <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
@@ -319,10 +256,8 @@ export default class RekamJenisPitaPerbaikan extends Component {
                           id="jenis_produksi"
                           value={this.state.jenis_produksi_id}
                           loading={this.state.isJenisProduksiLoading}
-                          onChange={(value, option) => {
-                            this.handleSelectCustomChange("jenis_produksi", value, option);
-                          }}
                           style={{ width: "100%" }}
+                          disabled
                         >
                           {this.state.list_jenis_produksi.length > 0 &&
                             this.state.list_jenis_produksi.map((item, index) => (
@@ -345,10 +280,9 @@ export default class RekamJenisPitaPerbaikan extends Component {
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
                             id="hje"
-                            onChange={(value) => this.handleInputNumberChange("hje", value)}
                             value={this.state.hje}
                             style={{ width: "100%" }}
-                            disabled={this.state.jenis_bkc_id === 2}
+                            disabled
                           />
 
                           <Button
@@ -373,9 +307,9 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
                         <InputNumber
                           id="isi"
-                          onChange={(value) => this.handleInputNumberChange("isi", value)}
                           value={this.state.isi}
                           style={{ width: "100%" }}
+                          disabled
                         />
                       </div>
                     </Col>
@@ -388,7 +322,6 @@ export default class RekamJenisPitaPerbaikan extends Component {
                         <InputNumber
                           id="tarif"
                           value={this.state.tarif}
-                          onChange={(value) => this.handleInputNumberChange("tarif", value)}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -404,8 +337,8 @@ export default class RekamJenisPitaPerbaikan extends Component {
                           id="warna"
                           format="DD-MM-YYYY"
                           value={this.state.awal_berlaku}
-                          onChange={(date) => this.handleDatepickerChange("awal_berlaku", date)}
                           style={{ width: "100%" }}
+                          disabled
                         />
                       </div>
                     </Col>
@@ -433,11 +366,8 @@ export default class RekamJenisPitaPerbaikan extends Component {
                           id="seri_pita"
                           value={this.state.seri_pita_id}
                           loading={this.state.isSeripitaLoading}
-                          onChange={(value, option) => {
-                            this.handleSelectCustomChange("seri_pita", value, option);
-                          }}
                           style={{ width: "100%" }}
-                          disabled={this.state.jenis_bkc_id === 2}
+                          disabled
                         >
                           {this.state.list_seri_pita.length > 0 &&
                             this.state.list_seri_pita.map((item, index) => (
@@ -465,6 +395,27 @@ export default class RekamJenisPitaPerbaikan extends Component {
                   </Row>
                 )}
 
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Persetujuan</FormLabel>
+                    </div>
+                    <Select
+                      id="tasktodo_status"
+                      onChange={(value) => this.handleSelectChange("tasktodo_status", value)}
+                      value={this.state.tasktodo_status}
+                      style={{ width: "100%" }}
+                    >
+                      {this.state.list_status.length > 0 &&
+                        this.state.list_status.map((item, index) => (
+                          <Select.Option key={`tasktodo-status-${index}`} value={item.status_id}>
+                            {item.status_name}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Col>
+                </Row>
+
                 <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
                   <Col span={4}>
                     <ButtonCustom
@@ -479,11 +430,11 @@ export default class RekamJenisPitaPerbaikan extends Component {
                   <Col span={4}>
                     <Button
                       type="primary"
-                      loading={this.state.isUpdateLoading}
-                      onClick={this.handleUpdate}
+                      loading={this.state.isSimpanTaskToDoLoading}
+                      onClick={this.handleSimpanTaskToDo}
                       block
                     >
-                      Update
+                      Simpan
                     </Button>
                   </Col>
                 </Row>
@@ -491,12 +442,6 @@ export default class RekamJenisPitaPerbaikan extends Component {
             </>
           )}
         </Container>
-
-        <ModalDaftarNPPBKC
-          isVisible={this.state.isModalDaftarNppbkcVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
-          onDataDoubleClick={this.handleDataNppbkc}
-        />
       </>
     );
   }
