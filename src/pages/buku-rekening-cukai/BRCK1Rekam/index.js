@@ -178,6 +178,15 @@ export default class BRCK1Rekam extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
+      prevState.saldo_awal !== this.state.saldo_awal ||
+      prevState.dataSource?.length !== this.state.dataSource?.length
+    ) {
+      if (this.state.dataSource?.length > 0) {
+        this.calculateSaldo();
+      }
+    }
+
+    if (
       prevState.dataSource.length !== this.state.dataSource.length ||
       prevState.hasil_pencacahan_back5 !== this.state.hasil_pencacahan_back5
     ) {
@@ -268,107 +277,98 @@ export default class BRCK1Rekam extends Component {
   }
 
   getBrck1 = async () => {
-    // const { nppbkc, periode_awal, periode_akhir } = this.state;
+    const { nppbkc, periode_awal, periode_akhir } = this.state;
 
-    // const payload = {
-    //   nppbkc,
-    //   periode_awal: moment(periode_awal).format("YYYY-MM-DD"),
-    //   periode_akhir: moment(periode_akhir).format("YYYY-MM-DD"),
-    // };
+    const payload = {
+      nppbkc,
+      awalTanggalPeriode: moment(periode_awal).format("YYYY-MM-DD"),
+      akhirTanggalPeriode: moment(periode_akhir).format("YYYY-MM-DD"),
+    };
 
-    // const payload = {
-    //   nppbkc: "0011335387641000070611",
-    //   periode_awal: moment("2020-06-12 00:00:00").format("YYYY-MM-DD"),
-    //   periode_akhir: moment("2023-07-13 00:00:00").format("YYYY-MM-DD"),
-    // };
-
-    // const response = await requestApi({
-    //   service: "perdagangan",
-    //   method: "get",
-    //   endpoint: "/ck5/browse-brck1",
-    //   params: payload,
-    // });
-
-    // if (response) {
-    //   console.log("response.data.data", response.data.data);
-    // }
-
-    // delete dummy data below when you have done integrate with real api
     this.setState({ isSearchLoading: true });
-    const timeout = setTimeout(() => {
-      const data = [
-        {
-          jenisDok: "jenisDok_1",
-          nomorDok: "nomorDok_1",
-          tanggalDok: new Date(),
-          tanggalCio: new Date(),
-          uraianKegiatan: "uraianKegiatan_1",
-          jumlahKoli: 1,
-          isiPerKemasan: 10,
-          jenisTransaksi: "D",
-          jumlah: 10,
-          saldo: null,
-        },
-        {
-          jenisDok: "jenisDok_2",
-          nomorDok: "nomorDok_2",
-          tanggalDok: new Date(),
-          tanggalCio: new Date(),
-          uraianKegiatan: "uraianKegiatan_2",
-          jumlahKoli: 2,
-          isiPerKemasan: 20,
-          jenisTransaksi: "K",
-          jumlah: 5,
-          saldo: null,
-        },
-        {
-          jenisDok: "jenisDok_3",
-          nomorDok: "nomorDok_3",
-          tanggalDok: new Date(),
-          tanggalCio: new Date(),
-          uraianKegiatan: "uraianKegiatan_3",
-          jumlahKoli: 3,
-          isiPerKemasan: 30,
-          jenisTransaksi: "D",
-          jumlah: 7,
-          saldo: null,
-        },
-      ];
+
+    const responseSaldoAwal = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/brck/saldo-awal-brck1",
+      params: payload,
+    });
+
+    const responseProduksi = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: "/ck4/browse-brck1",
+      params: payload,
+    });
+
+    const responsePerdagangan = await requestApi({
+      service: "perdagangan",
+      method: "get",
+      endpoint: "/ck5/browse-brck1",
+      params: payload,
+    });
+
+    if (responseSaldoAwal && responseProduksi && responsePerdagangan) {
+      const data = [...responseProduksi.data.data, ...responsePerdagangan.data.data];
 
       let saldo = this.state.saldo_awal || 0;
 
-      const newData = data.map((item, index) => {
-        if (item.jenisTransaksi === "K") {
-          saldo -= +item.jumlah || 0;
-        } else if (item.jenisTransaksi === "D") {
-          saldo += +item.jumlah || 0;
-        }
+      const newData = data
+        ?.sort((a, b) => {
+          const date1 = new Date(a?.tanggalCio);
+          const date2 = new Date(b?.tanggalCio);
 
-        return {
-          key: `brck1-ck5-${index}`,
-          jenis_dokumen: item.jenisDok,
-          nomor_dokumen: item.nomorDok,
-          tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
-          tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
-          uraian_kegiatan: item.uraianKegiatan,
-          jumlah_kemasan: item.jumlahKoli,
-          isi: item.isiPerKemasan,
-          transaksi_debet: item.jenisTransaksi === "D" ? item.jumlah : 0,
-          transaksi_kredit: item.jenisTransaksi === "K" ? item.jumlah : 0,
-          saldo,
-        };
-      });
+          if (date1 < date2) {
+            return -1;
+          } else if (date1 > date2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+        ?.map((item, index) => {
+          if (item.jenisTransaksi === "K") {
+            saldo -= +item.jumlah || 0;
+          } else if (item.jenisTransaksi === "D") {
+            saldo += +item.jumlah || 0;
+          }
+
+          return {
+            key: `brck1-ck5-${index}`,
+            jenis_dokumen: item.jenisDok,
+            nomor_dokumen: item.nomorDok,
+            tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
+            tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
+            uraian_kegiatan: item.uraianKegiatan,
+            jumlah_kemasan: item.jumlahKemasan,
+            jumlah: item.jumlah,
+            isi: item.isiPerKemasan,
+            transaksi_debet: item.jenisTransaksi === "D" ? item.jumlah : 0,
+            transaksi_kredit: item.jenisTransaksi === "K" ? item.jumlah : 0,
+            saldo,
+          };
+        });
 
       this.setState({
         isBrowseShow: true,
+        isSearchLoading: false,
         dataSource: newData,
-        saldo_awal: data[0].saldo,
+        saldo_awal: responseSaldoAwal.data.data,
         saldo_buku: saldo,
         hasil_pencacahan_back5: saldo,
       });
-      this.setState({ isSearchLoading: false });
-      clearTimeout(timeout);
-    }, 2000);
+    }
+  };
+
+  calculateSaldo = () => {
+    let saldo = this.state.saldo_awal || 0;
+
+    const newData = this.state.dataSource?.map((item) => {
+      saldo = saldo + item.transaksi_debet - item.transaksi_kredit;
+      return { ...item, saldo };
+    });
+
+    this.setState({ dataSource: newData, saldo_buku: saldo, hasil_pencacahan_back5: saldo });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -459,6 +459,8 @@ export default class BRCK1Rekam extends Component {
     if (!this.state.nppbkc_id || !this.state.periode_akhir || !this.state.periode_akhir) {
       return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
     }
+
+    this.setState({ dataSource: [] });
 
     await this.getBrck1();
   };
@@ -623,6 +625,7 @@ export default class BRCK1Rekam extends Component {
                         onChange={(value) => this.handleInputNumberChange("saldo_awal", value)}
                         min={0}
                         style={{ width: "100%" }}
+                        disabled={this.state.saldo_awal !== null}
                       />
                     </Col>
                   </Row>
@@ -630,6 +633,7 @@ export default class BRCK1Rekam extends Component {
                   <Table
                     columns={this.state.columns}
                     dataSource={this.state.dataSource}
+                    loading={this.state.isSearchLoading}
                     scroll={{ x: "max-content" }}
                     pagination={{ current: this.state.page }}
                     footer={(currentPageData) => {
