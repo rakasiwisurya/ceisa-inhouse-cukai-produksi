@@ -206,7 +206,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     };
 
     const response = await requestApi({
-      service: "produksi",
+      service: "pita_cukai",
       method: "post",
       endpoint: "/pita/task-todo",
       body: payload,
