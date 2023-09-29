@@ -268,6 +268,21 @@ export default class CK4HTTaskToDo extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.periode_bulan !== this.state.periode_bulan ||
+      prevState.periode_tahun !== this.state.periode_tahun
+    ) {
+      if (this.state.periode_bulan && this.state.periode_tahun) {
+        const firstDate = moment([+this.state.periode_tahun, +this.state.periode_bulan - 1]);
+        const lastDate = moment(firstDate).endOf("month");
+
+        this.setState({
+          tanggal_produksi_awal: firstDate,
+          tanggal_produksi_akhir: lastDate,
+        });
+      }
+    }
+
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
@@ -324,7 +339,7 @@ export default class CK4HTTaskToDo extends Component {
         nomor_pemberitahuan: data.nomorPemberitahuan,
         tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
 
-        periode_bulan: data.periodeBulan,
+        periode_bulan: months.find((month) => data.periodeBulan === month.month_name)?.month_code,
         periode_tahun: data.periodeTahun,
         tanggal_produksi_awal: moment(data.tanggalProduksiAwal),
         tanggal_produksi_akhir: moment(data.tanggalProduksiAkhir),

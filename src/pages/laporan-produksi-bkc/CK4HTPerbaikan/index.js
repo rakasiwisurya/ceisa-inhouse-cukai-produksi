@@ -262,6 +262,21 @@ export default class CK4HTPerbaikan extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.periode_bulan !== this.state.periode_bulan ||
+      prevState.periode_tahun !== this.state.periode_tahun
+    ) {
+      if (this.state.periode_bulan && this.state.periode_tahun) {
+        const firstDate = moment([+this.state.periode_tahun, +this.state.periode_bulan - 1]);
+        const lastDate = moment(firstDate).endOf("month");
+
+        this.setState({
+          tanggal_produksi_awal: firstDate,
+          tanggal_produksi_akhir: lastDate,
+        });
+      }
+    }
+
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
 
@@ -1010,19 +1025,15 @@ export default class CK4HTPerbaikan extends Component {
                           <DatePicker
                             id="tanggal_produksi_awal"
                             format="DD-MM-YYYY"
-                            onChange={(date) =>
-                              this.handleDatepickerChange("tanggal_produksi_awal", date)
-                            }
                             value={this.state.tanggal_produksi_awal}
+                            disabled
                           />
                           <div>s/d</div>
                           <DatePicker
                             id="tanggal_produksi_akhir"
                             format="DD-MM-YYYY"
-                            onChange={(date) =>
-                              this.handleDatepickerChange("tanggal_produksi_akhir", date)
-                            }
                             value={this.state.tanggal_produksi_akhir}
+                            disabled
                           />
                         </div>
                       </div>
