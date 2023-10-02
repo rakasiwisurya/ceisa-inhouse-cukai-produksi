@@ -424,8 +424,6 @@ export default class BRCK2Perbaikan extends Component {
         saldo_awal_kemasan: responseSaldoAwal.data.data.saldoAwalKemasan,
         saldo_buku_kemasan: saldoKemasan,
         saldo_buku_lt: saldoLt,
-        hasil_pencacahan_back5_kemasan: saldoKemasan,
-        hasil_pencacahan_back5_lt: saldoLt,
       });
     }
 
@@ -446,8 +444,6 @@ export default class BRCK2Perbaikan extends Component {
       dataSource: newData,
       saldo_buku_lt: saldoLt,
       saldo_buku_kemasan: saldoKemasan,
-      hasil_pencacahan_back5_lt: saldoLt,
-      hasil_pencacahan_back5_kemasan: saldoKemasan,
     });
   };
 

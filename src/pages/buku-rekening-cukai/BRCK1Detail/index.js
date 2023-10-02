@@ -392,7 +392,6 @@ export default class BRCK1Detail extends Component {
         dataSource: newData,
         saldo_awal: responseSaldoAwal.data.data,
         saldo_buku: saldo,
-        hasil_pencacahan_back5: saldo,
       });
     }
 
@@ -407,7 +406,7 @@ export default class BRCK1Detail extends Component {
       saldo: saldo + item.transaksi_debet - item.transaksi_kredit,
     }));
 
-    this.setState({ dataSource: newData });
+    this.setState({ dataSource: newData, saldo_buku: saldo });
   };
 
   getColumnSearchProps = (dataIndex) => ({

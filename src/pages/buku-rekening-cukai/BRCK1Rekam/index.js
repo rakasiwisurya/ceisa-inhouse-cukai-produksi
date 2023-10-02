@@ -354,7 +354,6 @@ export default class BRCK1Rekam extends Component {
         dataSource: newData,
         saldo_awal: responseSaldoAwal.data.data,
         saldo_buku: saldo,
-        hasil_pencacahan_back5: saldo,
       });
     }
 
@@ -369,7 +368,7 @@ export default class BRCK1Rekam extends Component {
       return { ...item, saldo };
     });
 
-    this.setState({ dataSource: newData, saldo_buku: saldo, hasil_pencacahan_back5: saldo });
+    this.setState({ dataSource: newData, saldo_buku: saldo });
   };
 
   getColumnSearchProps = (dataIndex) => ({
