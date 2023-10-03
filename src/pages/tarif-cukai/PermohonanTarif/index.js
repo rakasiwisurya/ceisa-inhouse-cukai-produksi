@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
+import { Button, Col, Icon, Input, Modal, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
@@ -6,6 +6,8 @@ import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import ModalPermohonanTarifDetail from "../ModalPermohonanTarifDetail";
+import { PDFViewer } from "@react-pdf/renderer";
+import PdfPenetapanTarifTTEPreview from "./PdfPenetapanTarifTTEPreview";
 
 export default class PermohonanTarif extends Component {
   constructor(props) {
@@ -13,6 +15,9 @@ export default class PermohonanTarif extends Component {
     this.state = {
       isPermohonanTarifLoading: true,
       isModalPermohonanTarifDetailVisible: false,
+      isModalPdfVisible: false,
+
+      pdfContent: {},
 
       detailId: null,
 
@@ -20,21 +25,21 @@ export default class PermohonanTarif extends Component {
       totalData: 0,
 
       table: {
-        status: "",
-        kode_kantor: "",
-        nama_kantor: "",
-        nppbkc: "",
-        nama_perusahaan: "",
-        nomor_kep: "",
-        tanggal_kep: "",
-        nama_merk: "",
-        jenis_produksi: "",
-        hje: "",
-        isi: "",
-        tarif: "",
-        tujuan: "",
-        awal_berlaku: "",
-        akhir_berlaku: "",
+        status: null,
+        kode_kantor: null,
+        nama_kantor: null,
+        nppbkc: null,
+        nama_perusahaan: null,
+        nomor_kep: null,
+        tanggal_kep: null,
+        nama_merk: null,
+        jenis_produksi: null,
+        hje: null,
+        isi: null,
+        tarif: null,
+        tujuan: null,
+        awal_berlaku: null,
+        akhir_berlaku: null,
       },
 
       dataSource: [],
@@ -56,6 +61,11 @@ export default class PermohonanTarif extends Component {
                   icon="form"
                   variant="warning"
                   onClick={() => this.handlePerbaikan(record.permohonan_tarif_id)}
+                />
+                <ButtonCustom
+                  variant="danger"
+                  icon="file-pdf"
+                  onClick={() => this.handleGeneratePdf(record)}
                 />
               </>
             </div>
@@ -314,7 +324,7 @@ export default class PermohonanTarif extends Component {
   };
   handleColumnReset = async (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
+    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
     this.getPermohonanTarif();
   };
 
@@ -323,6 +333,56 @@ export default class PermohonanTarif extends Component {
   };
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/permohonan-tarif/perbaikan/${id}`);
+  };
+  handleGeneratePdf = (rowData) => {
+    // const {
+    //   nomor_pemberitahuan,
+    //   tanggal_pemberitahuan,
+    //   nppbkc,
+    //   nama_perusahaan,
+    //   alamat_perusahaan,
+    //   tanggal_produksi_awal,
+    //   waktu_rekam,
+    // } = rowData;
+
+    this.setState({
+      pdfContent: {
+        nomor_surat: "01/GD-UM/I/2023",
+        tanggal_surat: "10 Januari 2023",
+        nama_perusahaan: "GANDUM, PT.",
+        nppbkc: "012141974-070600-8120106810386",
+        nama_pengusaha: "Gandum, Pt.",
+        npwp: "012141974651000",
+        alamat_pengusaha: "Jl. Mulyosari No.09, Mulyorejo, Sukun, Malang",
+        nama_kota: "Malang",
+        nomor_pkp: "",
+        alamat_perusahaan:
+          "Dusun Niwen Rt 12 Rw 03 Desa Sidorahayu Kecamatan Wagir Kabupaten Malang",
+        nama_merk: "ARISTO 16 (Filter)",
+        jenis_produksi: "SKM",
+        golongan: "II",
+        isi_per_kemasan: 16,
+        satuan: "btg",
+        hje_per_kemasan: 20100,
+        hje_per_satuan: 1256.25,
+        bahan_kemasan: "Kertas dan Sejenisnya",
+        tujuan_pemasaran: "Dalam Negeri",
+        sisi_depan: "ARISTO 16 (Filter)",
+        sisi_belakang:
+          "Warna dasar etiket putih. Pada bagian atas terdapat GAMBAR PERINGATAN KESEHATAN. Pada bagian tengah terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I dan terdapat latar belakang garis-garis melingkar warna abu-abu. Pada bagian bawah terdapat tulisan 16 LASER KRETEK FILTER warna hitam.",
+        sisi_kiri:
+          "Warna dasar putih. Pada bagian atas terdapat angka 16 warna hitam. Pada bagian tengah terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I. Pada bagian bawah terdapat TULISAN PERINGATAN KESEHATAN warna hitam",
+        sisi_kanan:
+          "Warna dasar putih. Pada bagian atas terdapat angka 16 warna hitam. Pada bagian tengah terdapat tulisan SKM warna hitam, dibawahnya terdapat TULISAN INFORMASI KESEHATAN warna hitam di dalam kotak warna putih dengan garis tepi hitam. Pada bagian bawah terdapat barcode dengan garis-garis dan angka warna hitam.",
+        sisi_atas:
+          "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
+        sisi_bawah:
+          "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
+        nama_kantor: "Kantor Pengawasan Dan Pelayanan Bea Dan Cukai Tipe Madya Cukai Malang",
+        nama_kantor_wilayah: "Kantor Wilayah DJBC Jawa Timur II",
+      },
+      isModalPdfVisible: true,
+    });
   };
 
   render() {
@@ -360,6 +420,20 @@ export default class PermohonanTarif extends Component {
             this.setState({ detailId: null, isModalPermohonanTarifDetailVisible: false })
           }
         />
+
+        <Modal
+          title={`Penetapan Tarif Cukai TTE ${this.state.pdfContent?.nama_perusahaan || ""}`}
+          visible={this.state.isModalPdfVisible}
+          onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
+          footer={null}
+          width="75vw"
+          style={{ marginTop: 20 }}
+          centered
+        >
+          <PDFViewer width="100%" height={500}>
+            <PdfPenetapanTarifTTEPreview {...this.state.pdfContent} />
+          </PDFViewer>
+        </Modal>
       </>
     );
   }

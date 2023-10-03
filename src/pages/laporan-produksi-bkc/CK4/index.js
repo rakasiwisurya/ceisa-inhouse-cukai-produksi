@@ -7,7 +7,8 @@ import { requestApi } from "utils/requestApi";
 import ButtonCustom from "components/Button/ButtonCustom";
 import moment from "moment";
 import { PDFViewer } from "@react-pdf/renderer";
-import PdfPreview from "./PdfPreview";
+import PdfTandaTerimaCK4Preview from "./PdfTandaTerimaCK4Preview";
+import { capitalize } from "utils/formatter";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -16,6 +17,9 @@ export default class CK4 extends Component {
       subtitle1: "CK4",
 
       isCk4Loading: true,
+      isModalPdfVisible: false,
+
+      pdfContent: {},
 
       page: 1,
       totalData: 0,
@@ -32,8 +36,6 @@ export default class CK4 extends Component {
         jumlah_produksi_gram: null,
         status: null,
       },
-      isModalPdfVisible: false,
-      pdfContent: {},
 
       dataSource: [],
       columns: [
@@ -48,7 +50,7 @@ export default class CK4 extends Component {
                 variant="warning"
                 icon="form"
                 onClick={() => {
-                  if (record.isAlert) return this.handleConfirm();
+                  if (record.is_alert) return this.handleConfirm();
                   this.handleEdit(record.idCk4, record.jenisBkc);
                 }}
                 disabled={record.idBrck2 || record.idBrck1}
@@ -61,7 +63,7 @@ export default class CK4 extends Component {
               <ButtonCustom
                 variant="danger"
                 icon="file-pdf"
-                onClick={() => this.generateAndDownloadPDF(record)}
+                onClick={() => this.handleGeneratePdf(record)}
               />
             </div>
           ),
@@ -70,21 +72,21 @@ export default class CK4 extends Component {
           title: "KPPBC",
           dataIndex: "kppbc",
           key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
@@ -93,7 +95,7 @@ export default class CK4 extends Component {
           key: "tanggal_pemberitahuan",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
@@ -104,7 +106,7 @@ export default class CK4 extends Component {
           key: "tanggal_produksi_awal",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_produksi_awal"),
@@ -115,7 +117,7 @@ export default class CK4 extends Component {
           key: "tanggal_produksi_akhir",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_produksi_akhir"),
@@ -124,34 +126,28 @@ export default class CK4 extends Component {
           title: "Jumlah Produksi (lt)",
           dataIndex: "jumlah_produksi_lt",
           key: "jumlah_produksi_lt",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_lt"),
         },
         {
           title: "Jumlah Produksi (btg)",
           dataIndex: "jumlah_produksi_btg",
           key: "jumlah_produksi_btg",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_btg"),
         },
         {
           title: "Jumlah Produksi (gram)",
           dataIndex: "jumlah_produksi_gram",
           key: "jumlah_produksi_gram",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi_gram"),
         },
         {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("status"),
         },
       ],
@@ -228,8 +224,11 @@ export default class CK4 extends Component {
         jumlah_produksi_lt: item.jumlahProduksiLiter,
         jumlah_produksi_btg: item.jumlahProduksiBtg,
         jumlah_produksi_gram: item.jumlahProduksiGram,
+        periode_bulan: item.periodeBulan,
+        periode_tahun: item.periodeTahun,
         status: item.status,
         waktu_rekam: item.waktuRekam,
+        is_alert: item.isAlert,
       }));
 
       const page = response.data.data.currentPage;
@@ -294,31 +293,6 @@ export default class CK4 extends Component {
     this.getCk4();
   };
 
-  generateAndDownloadPDF = (rowData) => {
-    const {
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
-      nppbkc,
-      nama_perusahaan,
-      alamat_perusahaan,
-      tanggal_produksi_awal,
-      waktu_rekam,
-    } = rowData;
-
-    this.setState({
-      pdfContent: {
-        nomor_pemberitahuan,
-        tanggal_pemberitahuan: moment(tanggal_pemberitahuan).format("DD MMMM YYYY"),
-        nppbkc,
-        nama_perusahaan,
-        alamat_perusahaan,
-        waktu_rekam: moment(waktu_rekam).format("dddd, DD/MM/YYYY, HH:mm"),
-        periode_pelaporan: moment(tanggal_produksi_awal).format("MMMM YYYY"),
-      },
-      isModalPdfVisible: true,
-    });
-  };
-
   handleDetail = (id, jenisBkc) => {
     switch (true) {
       case jenisBkc === "EA":
@@ -344,6 +318,36 @@ export default class CK4 extends Component {
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`);
         break;
     }
+  };
+  handleGeneratePdf = (rowData) => {
+    const {
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      nppbkc,
+      nama_perusahaan,
+      alamat_perusahaan,
+      jenis_laporan,
+      tanggal_produksi_awal,
+      periode_bulan,
+      periode_tahun,
+      waktu_rekam,
+    } = rowData;
+
+    this.setState({
+      pdfContent: {
+        nomor_pemberitahuan,
+        tanggal_pemberitahuan: moment(tanggal_pemberitahuan).format("DD MMMM YYYY"),
+        nppbkc,
+        nama_perusahaan,
+        alamat_perusahaan,
+        waktu_rekam: moment(waktu_rekam).format("dddd, DD/MM/YYYY, HH:mm"),
+        jenis_laporan,
+        tanggal_produksi: moment(tanggal_produksi_awal).format("DD MMMM YYYY"),
+        periode_bulan: capitalize(periode_bulan),
+        periode_tahun: periode_tahun,
+      },
+      isModalPdfVisible: true,
+    });
   };
   handleConfirm = () => {
     Modal.confirm({
@@ -429,7 +433,7 @@ export default class CK4 extends Component {
             centered
           >
             <PDFViewer width="100%" height={500}>
-              <PdfPreview {...this.state.pdfContent} />
+              <PdfTandaTerimaCK4Preview {...this.state.pdfContent} />
             </PDFViewer>
           </Modal>
         </Container>

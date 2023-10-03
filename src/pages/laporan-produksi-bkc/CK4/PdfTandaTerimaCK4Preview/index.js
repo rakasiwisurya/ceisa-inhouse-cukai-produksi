@@ -78,15 +78,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class PdfPreview extends Component {
+export default class PdfTandaTerimaCK4Preview extends Component {
   render() {
     const {
       nomor_pemberitahuan,
       tanggal_pemberitahuan,
-      periode_pelaporan,
-      nama_perusahaan,
       nppbkc,
+      nama_perusahaan,
       alamat_perusahaan,
+      jenis_laporan,
+      tanggal_produksi,
+      periode_bulan,
+      periode_tahun,
       waktu_rekam,
     } = this.props;
 
@@ -116,7 +119,11 @@ export default class PdfPreview extends Component {
               <View style={styles.viewRow}>
                 <Text style={styles.textPemberitahuanKey}>Periode Pelaporan</Text>
                 <Text style={styles.colon}>:</Text>
-                <Text style={styles.textPemberitahuanValue}>periode bulan {periode_pelaporan}</Text>
+                <Text style={styles.textPemberitahuanValue}>
+                  {jenis_laporan === "BULANAN"
+                    ? `periode bulan ${periode_bulan} ${periode_tahun}`
+                    : tanggal_produksi}
+                </Text>
               </View>
             </View>
             <Text style={styles.text}>
