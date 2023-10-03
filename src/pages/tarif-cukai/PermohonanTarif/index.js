@@ -62,11 +62,11 @@ export default class PermohonanTarif extends Component {
                   variant="warning"
                   onClick={() => this.handlePerbaikan(record.permohonan_tarif_id)}
                 />
-                <ButtonCustom
+                {/* <ButtonCustom
                   variant="danger"
                   icon="file-pdf"
                   onClick={() => this.handleGeneratePdf(record)}
-                />
+                /> */}
               </>
             </div>
           ),
@@ -335,22 +335,34 @@ export default class PermohonanTarif extends Component {
     this.props.history.push(`${pathName}/permohonan-tarif/perbaikan/${id}`);
   };
   handleGeneratePdf = (rowData) => {
-    // const {
-    //   nomor_pemberitahuan,
-    //   tanggal_pemberitahuan,
-    //   nppbkc,
-    //   nama_perusahaan,
-    //   alamat_perusahaan,
-    //   tanggal_produksi_awal,
-    //   waktu_rekam,
-    // } = rowData;
+    const {
+      akhir_berlaku,
+      awal_berlaku,
+      hje,
+      isi,
+      jenis_produksi,
+      kode_kantor,
+      nama_kantor,
+      nama_merk,
+      nama_perusahaan,
+      nomor_kep,
+      nppbkc,
+      permohonan_tarif_id,
+      status,
+      tanggal_kep,
+      tarif,
+      tujuan,
+    } = rowData;
+
+    console.log("rowData", rowData);
 
     this.setState({
       pdfContent: {
-        nomor_surat: "01/GD-UM/I/2023",
-        tanggal_surat: "10 Januari 2023",
-        nama_perusahaan: "GANDUM, PT.",
-        nppbkc: "012141974-070600-8120106810386",
+        nomor_kep: nomor_kep,
+        tanggal_kep: tanggal_kep ? moment(tanggal_kep).format("DD MMMM YYYY") : tanggal_kep,
+        jenis_bkc: "HASIL TEMBAKAU",
+        nama_perusahaan,
+        nppbkc,
         nama_pengusaha: "Gandum, Pt.",
         npwp: "012141974651000",
         alamat_pengusaha: "Jl. Mulyosari No.09, Mulyorejo, Sukun, Malang",
@@ -362,6 +374,7 @@ export default class PermohonanTarif extends Component {
         jenis_produksi: "SKM",
         golongan: "II",
         isi_per_kemasan: 16,
+        tarif_spesifik: 669,
         satuan: "btg",
         hje_per_kemasan: 20100,
         hje_per_satuan: 1256.25,
@@ -378,7 +391,7 @@ export default class PermohonanTarif extends Component {
           "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
         sisi_bawah:
           "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
-        nama_kantor: "Kantor Pengawasan Dan Pelayanan Bea Dan Cukai Tipe Madya Cukai Malang",
+        nama_kantor,
         nama_kantor_wilayah: "Kantor Wilayah DJBC Jawa Timur II",
       },
       isModalPdfVisible: true,
