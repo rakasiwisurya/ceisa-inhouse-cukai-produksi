@@ -635,7 +635,7 @@ export default class BRCK2Perbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/brck/rekam-brck2",
+      endpoint: "/brck/perbaikan-brck2",
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });
