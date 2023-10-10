@@ -59,7 +59,6 @@ import CK4MMEATaskTodo from "./laporan-produksi-bkc/CK4MMEATaskTodo";
 import CK4HTTaskToDo from "./laporan-produksi-bkc/CK4HTTaskToDo";
 import BRCK1Detail from "./buku-rekening-cukai/BRCK1Detail";
 import BRCK1Perbaikan from "./buku-rekening-cukai/BRCK1Perbaikan";
-import PdfPenetapanTarifView from "./tarif-cukai/PdfPenetapanTarifView";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -137,11 +136,6 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/penetapan-kembali"}
         render={(props) => <PenetapanKembali {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/permohonan-tarif/pdf-view/:id"}
-        render={(props) => <PdfPenetapanTarifView {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

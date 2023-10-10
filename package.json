@@ -33,6 +33,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
+    "qrcode.react": "^3.1.0",
     "query-string": "^7.1.1",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",

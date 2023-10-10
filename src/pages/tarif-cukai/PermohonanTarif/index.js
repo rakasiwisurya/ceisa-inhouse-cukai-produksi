@@ -1,24 +1,26 @@
-import { Button, Col, Icon, Input, Modal, Row, Table, Tag } from "antd";
+import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
+import ModalProcessTTE from "components/ModalProcessTTE";
 import { pathName } from "configs/constants";
 import moment from "moment";
+import { QRCodeCanvas } from "qrcode.react";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 import ModalPermohonanTarifDetail from "../ModalPermohonanTarifDetail";
-import { PDFViewer } from "@react-pdf/renderer";
-import PdfPenetapanTarifTTEPreview from "./PdfPenetapanTarifTTEPreview";
+import ModalPermohonanTarifPdf from "../ModalPermohonanTarifPdf";
 
-export default class PermohonanTarif extends Component {
+class PermohonanTarif extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isPermohonanTarifLoading: true,
+      isProcessTteLoading: false,
       isModalPermohonanTarifDetailVisible: false,
       isModalPdfVisible: false,
+      isModalProcessTTEVisible: false,
 
       pdfContent: {},
-
       detailId: null,
 
       page: 1,
@@ -34,10 +36,10 @@ export default class PermohonanTarif extends Component {
         tanggal_kep: null,
         nama_merk: null,
         jenis_produksi: null,
-        hje: null,
-        isi: null,
-        tarif: null,
-        tujuan: null,
+        hje_per_kemasan: null,
+        isi_per_kemasan: null,
+        tarif_spesifik: null,
+        tujuan_pemasaran: null,
         awal_berlaku: null,
         akhir_berlaku: null,
       },
@@ -62,11 +64,23 @@ export default class PermohonanTarif extends Component {
                   variant="warning"
                   onClick={() => this.handlePerbaikan(record.permohonan_tarif_id)}
                 />
-                {/* <ButtonCustom
+                <ButtonCustom
                   variant="danger"
                   icon="file-pdf"
                   onClick={() => this.handleGeneratePdf(record)}
-                /> */}
+                />
+                <QRCodeCanvas
+                  id={record.permohonan_tarif_id}
+                  value={`https://apisdev-gw.beacukai.go.id/download-repo-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.permohonan_tarif_id}.pdf`}
+                  level="Q"
+                  style={{ display: "none" }}
+                  imageSettings={{
+                    src: "/assets/images/logo-kemenkeu.png",
+                    excavate: true,
+                    width: 30,
+                    height: 28,
+                  }}
+                />
               </>
             </div>
           ),
@@ -136,32 +150,32 @@ export default class PermohonanTarif extends Component {
           ...this.getColumnSearchProps("jenis_produksi"),
         },
         {
-          key: "hje",
+          key: "hje_per_kemasan",
           title: "HJE",
-          dataIndex: "hje",
+          dataIndex: "hje_per_kemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje"),
+          ...this.getColumnSearchProps("hje_per_kemasan"),
         },
         {
-          key: "isi",
+          key: "isi_per_kemasan",
           title: "Isi",
-          dataIndex: "isi",
+          dataIndex: "isi_per_kemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("isi"),
+          ...this.getColumnSearchProps("isi_per_kemasan"),
         },
         {
-          key: "tarif",
+          key: "tarif_spesifik",
           title: "Tarif",
-          dataIndex: "tarif",
+          dataIndex: "tarif_spesifik",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tarif"),
+          ...this.getColumnSearchProps("tarif_spesifik"),
         },
         {
-          key: "tujuan",
+          key: "tujuan_pemasaran",
           title: "Tujuan",
-          dataIndex: "tujuan",
+          dataIndex: "tujuan_pemasaran",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tujuan"),
+          ...this.getColumnSearchProps("tujuan_pemasaran"),
         },
         {
           key: "awal_berlaku",
@@ -210,10 +224,10 @@ export default class PermohonanTarif extends Component {
       tanggal_kep,
       nama_merk,
       jenis_produksi,
-      hje,
-      isi,
-      tarif,
-      tujuan,
+      hje_per_kemasan,
+      isi_per_kemasan,
+      tarif_spesifik,
+      tujuan_pemasaran,
       awal_berlaku,
       akhir_berlaku,
     } = this.state.table;
@@ -229,10 +243,10 @@ export default class PermohonanTarif extends Component {
     if (tanggal_kep) payload.tanggalSkep = moment(tanggal_kep, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (nama_merk) payload.namaMerk = nama_merk;
     if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
-    if (hje) payload.hjePerKemasan = hje;
-    if (isi) payload.isiPerKemasan = isi;
-    if (tarif) payload.tarifSpesifik = tarif;
-    if (tujuan) payload.tujuanPemasaran = tujuan;
+    if (hje_per_kemasan) payload.hjePerKemasan = hje_per_kemasan;
+    if (isi_per_kemasan) payload.isiPerKemasan = isi_per_kemasan;
+    if (tarif_spesifik) payload.tarifSpesifik = tarif_spesifik;
+    if (tujuan_pemasaran) payload.tujuanPemasaran = tujuan_pemasaran;
     if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (akhir_berlaku)
       payload.akhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -252,18 +266,38 @@ export default class PermohonanTarif extends Component {
         status: item.status,
         kode_kantor: item.kodeKantor,
         nama_kantor: item.namaKantor,
+        nama_kantor_wilayah: item.namaKantorWilayah,
         nppbkc: item.nppbkc,
+        nomor_pkp: item.nomorPkp,
         nama_perusahaan: item.namaPerusahaan,
+        alamat_perusahaan: item.alamatPerusahaan,
+        npwp: item.npwp,
+        nama_pengusaha: item.namaPengusaha,
+        alamat_pengusaha: item.alamatPengusaha,
+        nama_kota: item.namaKota,
         nomor_kep: item.nomorSkep,
         tanggal_kep: item.tanggalSkep,
+        id_jenis_bkc: item.idJenisBkc,
+        nama_jenis_bkc: item.jenisBkc,
         nama_merk: item.namaMerk,
         jenis_produksi: item.namaJenisProduksiBkc,
-        hje: item.hjePerKemasan,
-        isi: item.isiPerKemasan,
-        tarif: item.tarifSpesifik,
-        tujuan: item.tujuanPemasaran,
+        golongan: item.golongan,
+        hje_per_kemasan: item.hjePerKemasan,
+        hje_per_satuan: item.hjePerSatuan,
+        isi_per_kemasan: item.isiPerKemasan,
+        tarif_spesifik: item.tarifSpesifik,
+        satuan: item.satuan,
+        tujuan_pemasaran: item.tujuanPemasaran,
+        bahan_kemasan: item.bahanKemasan,
         awal_berlaku: item.awalBerlaku,
         akhir_berlaku: item.akhirBerlaku,
+        sisi_depan: item.sisiDepan,
+        sisi_belakang: item.sisiBelakang,
+        sisi_kiri: item.sisiKiri,
+        sisi_kanan: item.sisiKanan,
+        sisi_atas: item.sisiAtas,
+        sisi_bawah: item.sisiBawah,
+        waktu_rekam: item.waktuRekam,
       }));
 
       this.setState({
@@ -320,12 +354,13 @@ export default class PermohonanTarif extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getPermohonanTarif();
+    this.setState({ page: 1 }, () => this.getPermohonanTarif());
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getPermohonanTarif();
+    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, () => {
+      this.getPermohonanTarif();
+    });
   };
 
   handleDetail = (id) => {
@@ -334,65 +369,81 @@ export default class PermohonanTarif extends Component {
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/permohonan-tarif/perbaikan/${id}`);
   };
-  handleGeneratePdf = (rowData) => {
+  handleGeneratePdf = async (rowData) => {
     const {
-      akhir_berlaku,
-      awal_berlaku,
-      hje,
-      isi,
-      jenis_produksi,
-      kode_kantor,
-      nama_kantor,
-      nama_merk,
-      nama_perusahaan,
-      nomor_kep,
-      nppbkc,
       permohonan_tarif_id,
-      status,
+      nama_kantor,
+      nama_kantor_wilayah,
+      nppbkc,
+      nomor_pkp,
+      nama_perusahaan,
+      alamat_perusahaan,
+      npwp,
+      nama_pengusaha,
+      alamat_pengusaha,
+      nama_kota,
+      nomor_kep,
       tanggal_kep,
-      tarif,
-      tujuan,
+      id_jenis_bkc,
+      nama_merk,
+      jenis_produksi,
+      golongan,
+      hje_per_kemasan,
+      hje_per_satuan,
+      isi_per_kemasan,
+      tarif_spesifik,
+      satuan,
+      tujuan_pemasaran,
+      bahan_kemasan,
+      awal_berlaku,
+      sisi_depan,
+      sisi_belakang,
+      sisi_kiri,
+      sisi_kanan,
+      sisi_atas,
+      sisi_bawah,
+      waktu_rekam,
     } = rowData;
-
-    console.log("rowData", rowData);
 
     this.setState({
       pdfContent: {
-        nomor_kep: nomor_kep,
+        permohonan_tarif_id,
+        nomor_kep,
         tanggal_kep: tanggal_kep ? moment(tanggal_kep).format("DD MMMM YYYY") : tanggal_kep,
-        jenis_bkc: "HASIL TEMBAKAU",
+        jenis_bkc:
+          id_jenis_bkc === 3
+            ? "HASIL TEMBAKAU"
+            : id_jenis_bkc === 2
+            ? "MINUMAN MENGANDUNG ETIL ALKOHOL"
+            : null,
         nama_perusahaan,
         nppbkc,
-        nama_pengusaha: "Gandum, Pt.",
-        npwp: "012141974651000",
-        alamat_pengusaha: "Jl. Mulyosari No.09, Mulyorejo, Sukun, Malang",
-        nama_kota: "Malang",
-        nomor_pkp: "",
-        alamat_perusahaan:
-          "Dusun Niwen Rt 12 Rw 03 Desa Sidorahayu Kecamatan Wagir Kabupaten Malang",
-        nama_merk: "ARISTO 16 (Filter)",
-        jenis_produksi: "SKM",
-        golongan: "II",
-        isi_per_kemasan: 16,
-        tarif_spesifik: 669,
-        satuan: "btg",
-        hje_per_kemasan: 20100,
-        hje_per_satuan: 1256.25,
-        bahan_kemasan: "Kertas dan Sejenisnya",
-        tujuan_pemasaran: "Dalam Negeri",
-        sisi_depan: "ARISTO 16 (Filter)",
-        sisi_belakang:
-          "Warna dasar etiket putih. Pada bagian atas terdapat GAMBAR PERINGATAN KESEHATAN. Pada bagian tengah terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I dan terdapat latar belakang garis-garis melingkar warna abu-abu. Pada bagian bawah terdapat tulisan 16 LASER KRETEK FILTER warna hitam.",
-        sisi_kiri:
-          "Warna dasar putih. Pada bagian atas terdapat angka 16 warna hitam. Pada bagian tengah terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I. Pada bagian bawah terdapat TULISAN PERINGATAN KESEHATAN warna hitam",
-        sisi_kanan:
-          "Warna dasar putih. Pada bagian atas terdapat angka 16 warna hitam. Pada bagian tengah terdapat tulisan SKM warna hitam, dibawahnya terdapat TULISAN INFORMASI KESEHATAN warna hitam di dalam kotak warna putih dengan garis tepi hitam. Pada bagian bawah terdapat barcode dengan garis-garis dan angka warna hitam.",
-        sisi_atas:
-          "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
-        sisi_bawah:
-          "Warna dasar putih. Terdapat tulisan ARISTO warna hitam dengan titik merah pada bagian atas huruf I.",
+        nama_pengusaha,
+        npwp,
+        alamat_pengusaha,
+        nama_kota,
+        nomor_pkp,
+        alamat_perusahaan,
+        nama_merk,
+        jenis_produksi,
+        golongan,
+        isi_per_kemasan,
+        tarif_spesifik,
+        satuan,
+        hje_per_kemasan,
+        hje_per_satuan,
+        bahan_kemasan,
+        tujuan_pemasaran,
+        sisi_depan,
+        sisi_belakang,
+        sisi_kiri,
+        sisi_kanan,
+        sisi_atas,
+        sisi_bawah,
         nama_kantor,
-        nama_kantor_wilayah: "Kantor Wilayah DJBC Jawa Timur II",
+        awal_berlaku: awal_berlaku ? moment(awal_berlaku).format("DD MMMM YYYY") : awal_berlaku,
+        nama_kantor_wilayah: nama_kantor_wilayah,
+        waktu_rekam,
       },
       isModalPdfVisible: true,
     });
@@ -434,10 +485,28 @@ export default class PermohonanTarif extends Component {
           }
         />
 
-        <Modal
-          title={`Penetapan Tarif Cukai TTE ${this.state.pdfContent?.nama_perusahaan || ""}`}
+        {/* <Modal
+          title={
+            <Row type="flex" justify="space-between" align="middle" style={{ marginRight: 26 }}>
+              <Col>Penetapan Tarif Cukai TTE</Col>
+              <Col>
+                <Button
+                  type="primary"
+                  onClick={() => this.setState({ isModalProcessTTEVisible: true })}
+                >
+                  Process TTE
+                </Button>
+              </Col>
+            </Row>
+          }
           visible={this.state.isModalPdfVisible}
-          onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
+          onCancel={() =>
+            this.setState({
+              isModalPdfVisible: false,
+              isModalProcessTTEVisible: false,
+              pdfContent: {},
+            })
+          }
           footer={null}
           width="75vw"
           style={{ marginTop: 20 }}
@@ -446,8 +515,29 @@ export default class PermohonanTarif extends Component {
           <PDFViewer width="100%" height={500}>
             <PdfPenetapanTarifTTEPreview {...this.state.pdfContent} />
           </PDFViewer>
-        </Modal>
+        </Modal> */}
+
+        <ModalPermohonanTarifPdf
+          isVisible={this.state.isModalPdfVisible}
+          onButtonTteClick={() => this.setState({ isModalProcessTTEVisible: true })}
+          onCancel={() => {
+            this.setState({
+              isModalPdfVisible: false,
+              isModalProcessTTEVisible: false,
+              pdfContent: {},
+            });
+          }}
+          pdfContent={this.state.pdfContent}
+        />
+
+        <ModalProcessTTE
+          isVisible={this.state.isModalProcessTTEVisible}
+          onCancel={() => this.setState({ isModalProcessTTEVisible: false })}
+          pdfContent={this.state.pdfContent}
+        />
       </>
     );
   }
 }
+
+export default PermohonanTarif;
