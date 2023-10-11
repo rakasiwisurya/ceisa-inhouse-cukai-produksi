@@ -317,10 +317,7 @@ export default class PenetapanKembali extends Component {
       });
   };
   getDetailMerk = async () => {
-    const payload = {
-      tanggalSkep: moment(this.state.tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      idNppbkc: this.state.nppbkc_id,
-    };
+    const payload = { idNppbkc: this.state.nppbkc_id };
 
     if (this.state.jenis_produksi_id) {
       const splitNamaJenisProduksi = this.state.jenis_produksi_name
