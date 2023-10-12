@@ -1,34 +1,36 @@
 import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import React, { Component } from "react";
+import { capitalize } from "utils/formatter";
+
+Font.registerHyphenationCallback((word) => [word]);
 
 Font.register({
   family: "Bookman-Old-Style",
-  fonts: [
-    {
-      src: "/assets/fonts/BOOKOS.TTF",
-    },
-    {
-      src: "/assets/fonts/BOOKOSB.TTF",
-      fontWeight: "bold",
-    },
-    {
-      src: "/assets/fonts/BOOKOSI.TTF",
-      fontStyle: "italic",
-    },
-    {
-      src: "/assets/fonts/BOOKOSBI.TTF",
-      fontWeight: "bold",
-      fontStyle: "italic",
-    },
-  ],
+  src: "/assets/fonts/BOOKOS.TTF",
+});
+
+Font.register({
+  family: "Bookman-Old-Style-Bold",
+  src: "/assets/fonts/BOOKOSB.TTF",
+});
+
+Font.register({
+  family: "Bookman-Old-Style-Italic",
+  src: "/assets/fonts/BOOKOSI.TTF",
+});
+
+Font.register({
+  family: "Bookman-Old-Style-Bold-Italic",
+  src: "/assets/fonts/BOOKOSBI.TTF",
 });
 
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#fff",
-    padding: 50,
+    padding: "113px 95px 95px",
   },
   viewIntroduction: {
+    marginTop: 189,
     marginBottom: 20,
   },
   viewTerm: {
@@ -216,13 +218,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   colon: {
-    marginHorizontal: 8,
     fontSize: 12,
+    width: 25,
     height: "100%",
+    textAlign: "center",
   },
   list: {
-    marginRight: 8,
     fontSize: 12,
+    width: 20,
+    height: "100%",
   },
   signGap: {
     height: 75,
@@ -252,8 +256,11 @@ const styles = StyleSheet.create({
 export default class PdfPenetapanTarifTTE extends Component {
   render() {
     const {
+      nomor_permohonan,
       nomor_kep,
       tanggal_kep,
+      id_jenis_bkc,
+      jenis_bkc,
       nama_perusahaan,
       nppbkc,
       nama_pengusaha,
@@ -278,13 +285,15 @@ export default class PdfPenetapanTarifTTE extends Component {
       sisi_kanan,
       sisi_atas,
       sisi_bawah,
+      asal_produk,
+      negara_asal,
+      tarif_per_kemasan,
       awal_berlaku,
       nama_kantor,
       nama_kantor_wilayah,
       waktu_rekam,
       tte_jabatan,
       tte_nama,
-      tte_sign,
       qr_data_url,
     } = this.props;
 
@@ -299,7 +308,7 @@ export default class PdfPenetapanTarifTTE extends Component {
             <View style={styles.gap} />
             <View>
               <Text style={styles.textTitle}>KEPUTUSAN KEPALA {nama_kantor?.toUpperCase()}</Text>
-              <Text style={styles.textTitle}>NOMOR {nomor_kep}</Text>
+              <Text style={styles.textTitle}>NOMOR {nomor_permohonan}</Text>
             </View>
             <View style={styles.gap} />
             <View>
@@ -308,7 +317,7 @@ export default class PdfPenetapanTarifTTE extends Component {
             <View style={styles.gap} />
             <View>
               <Text style={styles.textTitle}>
-                PENETAPAN TARIF CUKAI HASIL TEMBAKAU UNTUK MEREK BARU
+                PENETAPAN TARIF CUKAI {jenis_bkc?.toUpperCase()} UNTUK MEREK BARU
               </Text>
               <Text style={styles.textTitle}>ATAS NAMA {nama_perusahaan?.toUpperCase()}</Text>
             </View>
@@ -325,9 +334,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.list}>a.</Text>
                 <Text style={styles.textSideContent}>
-                  bahwa {nama_perusahaan} telah mengajukan Surat Permohonan Nomor {nomor_kep}{" "}
-                  tanggal {tanggal_kep} untuk memperoleh penetapan tarif cukai hasil tembakau untuk
-                  merek baru;
+                  bahwa {nama_perusahaan} telah mengajukan Surat Permohonan Nomor {nomor_permohonan}{" "}
+                  tanggal {tanggal_kep} untuk memperoleh penetapan tarif cukai{" "}
+                  {jenis_bkc?.toLowerCase()} untuk merek baru;
                 </Text>
               </View>
 
@@ -340,7 +349,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                   ketentuan dalam Peraturan Direktur Jenderal Bea dan Cukai Nomor 16/BC/2022, perlu
                   menetapkan Keputusan Kepala {nama_kantor} tentang Penetapan Tarif Cukai Hasil
                   Tembakau Untuk Merek Baru Atas Nama {nama_perusahaan} NPPBKC {nppbkc} Di{" "}
-                  {nama_kota};
+                  {capitalize(nama_kota)};
                 </Text>
               </View>
             </View>
@@ -365,8 +374,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>2.</Text>
                 <Text style={styles.textSideContent}>
-                  Peraturan Menteri Keuangan Nomor 191/PMK.010/2022 tentang Tarif Cukai Hasil
-                  Tembakau Berupa Sigaret, Cerutu, Rokok Daun atau Klobot, dan Tembakau Iris;
+                  Peraturan Menteri Keuangan Nomor {nomor_kep} tentang Tarif Cukai{" "}
+                  {capitalize(jenis_bkc)} Berupa Sigaret, Cerutu, Rokok Daun atau Klobot, dan
+                  Tembakau Iris;
                 </Text>
               </View>
 
@@ -376,7 +386,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.list}>3.</Text>
                 <Text style={styles.textSideContent}>
                   Peraturan Direktur Jenderal Bea dan Cukai Nomor 16/BC/2022 tentang Tata Cara
-                  Penetapan Tarif Cukai Hasil Tembakau;
+                  Penetapan Tarif Cukai {capitalize(jenis_bkc)};
                 </Text>
               </View>
             </View>
@@ -401,7 +411,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textBoldSideTitle}>PERTAMA</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textSideContent}>
-                  Memberikan Penetapan Tarif Cukai Hasil Tembakau kepada:
+                  Memberikan Penetapan Tarif Cukai {capitalize(jenis_bkc)} kepada:
                 </Text>
               </View>
 
@@ -468,200 +478,314 @@ export default class PdfPenetapanTarifTTE extends Component {
                       </View>
                     </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Merek</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{nama_merk}</Text>
-                      </View>
-                    </View>
+                    {id_jenis_bkc === 2 ? (
+                      <View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Merek</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{nama_merk}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Jenis HT</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{jenis_produksi}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Asal Produk</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{asal_produk}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Golongan Pengusaha Pabrik</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{golongan}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Negara Asal</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{negara_asal}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Isi Kemasan</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>
-                          {isi_per_kemasan} {satuan}
-                        </Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Isi Per Kemasan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{isi_per_kemasan}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>HJE (per kemasan)</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>
-                          {hje_per_kemasan && new Intl.NumberFormat().format(hje_per_kemasan)}
-                        </Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Satuan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{satuan}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>HJE (per batang/gram)</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>
-                          {hje_per_kemasan && new Intl.NumberFormat().format(hje_per_satuan)}
-                        </Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Golongan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{golongan}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Bahan Kemasan</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{bahan_kemasan}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Tarif Cukai Per Liter</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{tarif_spesifik}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>Tujuan Pemasaran</Text>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Tarif Cukai Per Kemasan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{tarif_per_kemasan}</Text>
+                          </View>
+                        </View>
                       </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{tujuan_pemasaran}</Text>
-                      </View>
-                    </View>
+                    ) : (
+                      <View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Merek</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{nama_merk}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColSubtitle}>
-                        <Text style={styles.tableCellBold}>Tampilan Kemasan :</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Jenis HT</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{jenis_produksi}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi Depan</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_depan}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Golongan Pengusaha Pabrik</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{golongan}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi belakang</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_belakang}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Isi Kemasan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>
+                              {isi_per_kemasan} {satuan}
+                            </Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi kiri</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_kiri}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>HJE (per kemasan)</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>
+                              {hje_per_kemasan
+                                ? new Intl.NumberFormat().format(hje_per_kemasan)
+                                : hje_per_kemasan}
+                            </Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi kanan</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_kanan}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>HJE (per batang/gram)</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>
+                              {hje_per_kemasan
+                                ? new Intl.NumberFormat().format(hje_per_satuan)
+                                : hje_per_kemasan}
+                            </Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi atas</Text>
-                      </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_atas}</Text>
-                      </View>
-                    </View>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Bahan Kemasan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{bahan_kemasan}</Text>
+                          </View>
+                        </View>
 
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableColGap} />
-                      <View style={styles.tableColKey}>
-                        <Text style={styles.tableCell}>• Sisi bawah</Text>
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>Tujuan Pemasaran</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{tujuan_pemasaran}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColSubtitle}>
+                            <Text style={styles.tableCellBold}>Tampilan Kemasan :</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi Depan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_depan}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi belakang</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_belakang}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi kiri</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_kiri}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi kanan</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_kanan}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi atas</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_atas}</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.tableRow}>
+                          <View style={styles.tableColGap} />
+                          <View style={styles.tableColKey}>
+                            <Text style={styles.tableCell}>• Sisi bawah</Text>
+                          </View>
+                          <View style={styles.tableColColon}>
+                            <Text style={styles.tableCell}>:</Text>
+                          </View>
+                          <View style={styles.tableColValue}>
+                            <Text style={styles.tableCell}>{sisi_bawah}</Text>
+                          </View>
+                        </View>
                       </View>
-                      <View style={styles.tableColColon}>
-                        <Text style={styles.tableCell}>:</Text>
-                      </View>
-                      <View style={styles.tableColValue}>
-                        <Text style={styles.tableCell}>{sisi_bawah}</Text>
-                      </View>
-                    </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -677,17 +801,17 @@ export default class PdfPenetapanTarifTTE extends Component {
               </View>
 
               <View style={styles.viewRow}>
-                <Text style={styles.textSideTitle} />
+                <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>a.</Text>
                 <Text style={styles.textSideContent}>
-                  Pengusaha Pabrik hasil tembakau atau Importir mengajukan permohonan pencabutan
-                  penetapan tarif cukai hasil tembakau;
+                  Pengusaha Pabrik {jenis_bkc?.toLowerCase()} atau Importir mengajukan permohonan
+                  pencabutan penetapan tarif cukai {jenis_bkc?.toLowerCase()};
                 </Text>
               </View>
 
               <View style={styles.viewRow}>
-                <Text style={styles.textSideTitle} />
+                <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>b.</Text>
                 <Text style={styles.textSideContent}>
@@ -696,36 +820,38 @@ export default class PdfPenetapanTarifTTE extends Component {
               </View>
 
               <View style={styles.viewRow}>
-                <Text style={styles.textSideTitle} />
+                <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>c.</Text>
                 <Text style={styles.textSideContent}>
                   desain kemasan yang bersangkutan menyerupai desain kemasan milik Pengusaha Pabrik
-                  hasil tembakau atau Importir lainnya sehingga tidak mudah untuk membedakannya,
-                  yang telah terlebih dahulu dimiliki oleh Pengusaha Pabrik hasil tembakau atau
-                  Importir lainnya dan tercatat pada administrasi Direktorat Jenderal Bea dan Cukai;
+                  {jenis_bkc?.toLowerCase()} atau Importir lainnya sehingga tidak mudah untuk
+                  membedakannya, yang telah terlebih dahulu dimiliki oleh Pengusaha Pabrik hasil
+                  tembakau atau Importir lainnya dan tercatat pada administrasi Direktorat Jenderal
+                  Bea dan Cukai;
                 </Text>
               </View>
 
               <View style={styles.viewRow}>
-                <Text style={styles.textSideTitle} />
+                <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>d.</Text>
                 <Text style={styles.textSideContent}>
                   merek memiliki tulisan atau pelafalan yang sama dengan merek yang telah terlebih
-                  dahulu dimiliki oleh Pengusaha Pabrik hasil tembakau atau Importir lainnya dan
-                  tercatat pada administrasi Direktorat Jenderal Bea dan Cukai;
+                  dahulu dimiliki oleh Pengusaha Pabrik {jenis_bkc?.toLowerCase()} atau Importir
+                  lainnya dan tercatat pada administrasi Direktorat Jenderal Bea dan Cukai;
                 </Text>
               </View>
 
               <View style={styles.viewRow}>
-                <Text style={styles.textSideTitle} />
+                <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>e.</Text>
                 <Text style={styles.textSideContent}>
-                  hasil pengawasan di lapangan ditemukan kemasan hasil tembakau yang bersangkutan
-                  tidak memenuhi persyaratan kemasan barang kena cukai sebagaimana ditetapkan dalam
-                  peraturan Menteri yang mengatur mengenai perdagangan barang kena cukai.
+                  hasil pengawasan di lapangan ditemukan kemasan {jenis_bkc?.toLowerCase()} yang
+                  bersangkutan tidak memenuhi persyaratan kemasan barang kena cukai sebagaimana
+                  ditetapkan dalam peraturan Menteri yang mengatur mengenai perdagangan barang kena
+                  cukai.
                 </Text>
               </View>
             </View>
@@ -760,20 +886,24 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>2.</Text>
-                <Text style={styles.textSideContent}>Kepala {nama_kantor_wilayah}</Text>
+                <Text style={styles.textSideContent}>
+                  {nama_kantor_wilayah ? `Kepala ${nama_kantor_wilayah}` : "-"}
+                </Text>
               </View>
 
               <View style={styles.viewRow}>
                 <Text style={styles.textSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>3.</Text>
-                <Text style={styles.textSideContent}>Pimpinan {nama_perusahaan}</Text>
+                <Text style={styles.textSideContent}>
+                  {nama_perusahaan ? `Pimpinan ${nama_perusahaan}` : "-"}
+                </Text>
               </View>
             </View>
           </View>
 
-          <View style={styles.viewSignContainer} break>
-            <Text style={styles.text}>Ditetapkan di {nama_kota}</Text>
+          <View style={styles.viewSignContainer}>
+            <Text style={styles.text}>Ditetapkan di {capitalize(nama_kota)}</Text>
             <Text style={styles.text}>pada tanggal {waktu_rekam}</Text>
 
             <View style={styles.viewSign}>
@@ -781,9 +911,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 {tte_jabatan ? tte_jabatan : "..................................."}
               </Text>
               <View style={styles.signGap}>
-                {tte_sign ? (
-                  <Image allowDangerousPaths src={tte_sign} style={styles.qrCodeImage} />
-                ) : qr_data_url ? (
+                {qr_data_url ? (
                   <Image allowDangerousPaths src={qr_data_url} style={styles.qrCodeImage} />
                 ) : (
                   <View style={styles.viewQrCode}>

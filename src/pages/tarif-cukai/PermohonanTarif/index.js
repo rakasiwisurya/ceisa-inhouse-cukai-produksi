@@ -71,7 +71,7 @@ class PermohonanTarif extends Component {
                 />
                 <QRCodeCanvas
                   id={record.permohonan_tarif_id}
-                  value={`https://apisdev-gw.beacukai.go.id/download-repo-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.permohonan_tarif_id}.pdf`}
+                  value={`https://apisdev-gw.beacukai.go.id/download-repo-cukai-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.permohonan_tarif_id}.pdf`}
                   level="Q"
                   style={{ display: "none" }}
                   imageSettings={{
@@ -275,6 +275,7 @@ class PermohonanTarif extends Component {
         nama_pengusaha: item.namaPengusaha,
         alamat_pengusaha: item.alamatPengusaha,
         nama_kota: item.namaKota,
+        nomor_permohonan: item.nomorPemohonan,
         nomor_kep: item.nomorSkep,
         tanggal_kep: item.tanggalSkep,
         id_jenis_bkc: item.idJenisBkc,
@@ -297,6 +298,9 @@ class PermohonanTarif extends Component {
         sisi_kanan: item.sisiKanan,
         sisi_atas: item.sisiAtas,
         sisi_bawah: item.sisiBawah,
+        asal_produk: item.asalProduk,
+        negara_asal: item.negaraAsal,
+        tarif_per_kemasan: item.tarifPerKemasan,
         waktu_rekam: item.waktuRekam,
       }));
 
@@ -354,13 +358,14 @@ class PermohonanTarif extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({ page: 1 }, () => this.getPermohonanTarif());
+    this.setState({ page: 1 }, this.getPermohonanTarif);
   };
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, () => {
-      this.getPermohonanTarif();
-    });
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getPermohonanTarif
+    );
   };
 
   handleDetail = (id) => {
@@ -382,6 +387,7 @@ class PermohonanTarif extends Component {
       nama_pengusaha,
       alamat_pengusaha,
       nama_kota,
+      nomor_permohonan,
       nomor_kep,
       tanggal_kep,
       id_jenis_bkc,
@@ -402,14 +408,19 @@ class PermohonanTarif extends Component {
       sisi_kanan,
       sisi_atas,
       sisi_bawah,
+      asal_produk,
+      negara_asal,
+      tarif_per_kemasan,
       waktu_rekam,
     } = rowData;
 
     this.setState({
       pdfContent: {
         permohonan_tarif_id,
+        nomor_permohonan,
         nomor_kep,
         tanggal_kep: tanggal_kep ? moment(tanggal_kep).format("DD MMMM YYYY") : tanggal_kep,
+        id_jenis_bkc,
         jenis_bkc:
           id_jenis_bkc === 3
             ? "HASIL TEMBAKAU"
@@ -440,10 +451,13 @@ class PermohonanTarif extends Component {
         sisi_kanan,
         sisi_atas,
         sisi_bawah,
+        asal_produk,
+        negara_asal,
+        tarif_per_kemasan,
         nama_kantor,
         awal_berlaku: awal_berlaku ? moment(awal_berlaku).format("DD MMMM YYYY") : awal_berlaku,
         nama_kantor_wilayah: nama_kantor_wilayah,
-        waktu_rekam,
+        waktu_rekam: waktu_rekam ? moment(waktu_rekam).format("DD MMMM YYYY") : waktu_rekam,
       },
       isModalPdfVisible: true,
     });
@@ -484,38 +498,6 @@ class PermohonanTarif extends Component {
             this.setState({ detailId: null, isModalPermohonanTarifDetailVisible: false })
           }
         />
-
-        {/* <Modal
-          title={
-            <Row type="flex" justify="space-between" align="middle" style={{ marginRight: 26 }}>
-              <Col>Penetapan Tarif Cukai TTE</Col>
-              <Col>
-                <Button
-                  type="primary"
-                  onClick={() => this.setState({ isModalProcessTTEVisible: true })}
-                >
-                  Process TTE
-                </Button>
-              </Col>
-            </Row>
-          }
-          visible={this.state.isModalPdfVisible}
-          onCancel={() =>
-            this.setState({
-              isModalPdfVisible: false,
-              isModalProcessTTEVisible: false,
-              pdfContent: {},
-            })
-          }
-          footer={null}
-          width="75vw"
-          style={{ marginTop: 20 }}
-          centered
-        >
-          <PDFViewer width="100%" height={500}>
-            <PdfPenetapanTarifTTEPreview {...this.state.pdfContent} />
-          </PDFViewer>
-        </Modal> */}
 
         <ModalPermohonanTarifPdf
           isVisible={this.state.isModalPdfVisible}

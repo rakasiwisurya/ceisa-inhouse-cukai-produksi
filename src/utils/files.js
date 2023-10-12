@@ -1,17 +1,14 @@
 import { notification } from "antd";
 
 export const download = (blob, filename) => {
-  // Create a FileReader to read the Blob content
   const reader = new FileReader();
 
   reader.onload = () => {
     const arrayBuffer = reader.result;
 
-    // Get the first few bytes as a hexadecimal string
     const bytes = new Uint8Array(arrayBuffer).subarray(0, 4);
     const hexString = bytes.reduce((acc, byte) => acc + byte.toString(16).padStart(2, "0"), "");
 
-    // Define common file signatures (magic numbers)
     const fileSignatures = {
       ffd8ffe0: "jpeg",
       "89504e47": "png",
@@ -23,23 +20,19 @@ export const download = (blob, filename) => {
       "00000100": "ico",
       25504446: "pdf",
       "504b0304": "xlsx",
-      // Add more file signatures as needed
     };
 
-    // Check if the hexString matches any known file signature
     const fileExtension = fileSignatures[hexString];
 
     if (fileExtension) {
-      // If a matching file signature is found, set the file name accordingly
       const fileName = `${filename}.${fileExtension}`;
 
-      // Create a temporary link for downloading
       const tempLink = document.createElement("a");
-      tempLink.href = window.URL.createObjectURL(blob);
+      const blobUrl = URL.createObjectURL(blob);
+      tempLink.href = blobUrl;
       tempLink.setAttribute("download", fileName);
-
-      // Simulate a click to trigger the download
       tempLink.click();
+      URL.revokeObjectURL(blobUrl);
     } else {
       console.error("Unknown file type");
       notification.info({ message: "Info", description: "Unknown file type" });
@@ -47,4 +40,14 @@ export const download = (blob, filename) => {
   };
 
   reader.readAsArrayBuffer(blob);
+};
+
+export const downloadFile = (blob, filename) => {
+  const blobUrl = URL.createObjectURL(blob);
+  const downloadLink = document.createElement("a");
+  downloadLink.href = blobUrl;
+  downloadLink.download = filename;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  URL.revokeObjectURL(blobUrl);
 };

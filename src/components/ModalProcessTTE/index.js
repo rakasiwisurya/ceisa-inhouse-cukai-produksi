@@ -4,6 +4,7 @@ import FormLabel from "components/FormLabel";
 import PdfPenetapanTarifTTE from "components/PdfPenetapanTarifTTE";
 import React, { Component } from "react";
 import { base64toBlob } from "utils/converter";
+import { downloadFile } from "utils/files";
 import { requestApi } from "utils/requestApi";
 
 export class ModalProcessTTE extends Component {
@@ -19,7 +20,7 @@ export class ModalProcessTTE extends Component {
 
     e.preventDefault();
     form.validateFieldsAndScroll(async (err, values) => {
-      if (err) console.error(err);
+      if (err) return;
 
       this.setState({ isProcessTteLoading: true });
 
@@ -30,7 +31,7 @@ export class ModalProcessTTE extends Component {
       });
 
       if (responseNikHris) {
-        const qrCodeBlob = await pdf(
+        const BlobUnsignedPdf = await pdf(
           <PdfPenetapanTarifTTE
             {...pdfContent}
             tte_jabatan={responseNikHris.data.data.Jabatan}
@@ -41,7 +42,7 @@ export class ModalProcessTTE extends Component {
 
         const formData = new FormData();
 
-        formData.set("multipartFile", qrCodeBlob);
+        formData.set("multipartFile", BlobUnsignedPdf);
         formData.set("nip", values.nip);
         formData.set("pass", values.password);
 
@@ -54,17 +55,13 @@ export class ModalProcessTTE extends Component {
         });
 
         if (responseUploadUnsignedTte) {
-          const blobTteUnsigned = base64toBlob(
+          const BlobSignedPdf = base64toBlob(
             responseUploadUnsignedTte.data.data.byteOfpdf,
             "application/pdf"
           );
 
           const formData = new FormData();
-          formData.set(
-            "file",
-            blobTteUnsigned,
-            `penetapan_tarif_${pdfContent?.permohonan_tarif_id}`
-          );
+          formData.set("file", BlobSignedPdf, `penetapan_tarif_${pdfContent?.permohonan_tarif_id}`);
           formData.set("s3pathTarget", "produksi");
 
           const responseUploadSignedTte = await requestApi({
@@ -76,13 +73,10 @@ export class ModalProcessTTE extends Component {
           });
 
           if (responseUploadSignedTte) {
-            const blobUrl = URL.createObjectURL(blobTteUnsigned);
-            const downloadLink = document.createElement("a");
-            downloadLink.href = blobUrl;
-            downloadLink.download = `penetapan_tarif_${pdfContent?.nama_perusahaan}.pdf`;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            URL.revokeObjectURL(blobUrl);
+            downloadFile(
+              BlobSignedPdf,
+              `Penetapan_Tarif_${pdfContent?.nama_perusahaan?.split(" ").join("_")}.pdf`
+            );
 
             notification.success({
               message: "Success",
@@ -106,17 +100,20 @@ export class ModalProcessTTE extends Component {
     } = this.props;
 
     return (
-      <Form onSubmit={this.handleProcessTte} layout="vertical">
-        <Modal
-          title="Process TTE"
-          visible={isVisible}
-          onCancel={onCancel}
-          onOk={this.handleProcessTte}
-          okButtonProps={{ loading: this.state.isProcessTteLoading, htmlType: "submit" }}
-          okText="Process"
-          style={{ marginTop: 20 }}
-          centered
-        >
+      <Modal
+        title="Process TTE"
+        visible={isVisible}
+        onCancel={onCancel}
+        okButtonProps={{
+          loading: this.state.isProcessTteLoading,
+          htmlType: "submit",
+          form: "form_process_tte",
+        }}
+        okText="Process"
+        style={{ marginTop: 20 }}
+        centered
+      >
+        <Form id="form_process_tte" onSubmit={this.handleProcessTte} layout="vertical">
           <Form.Item label={<FormLabel>NIP</FormLabel>}>
             {getFieldDecorator("nip", { rules: [{ required: true }] })(<Input name="nip" />)}
           </Form.Item>
@@ -126,8 +123,8 @@ export class ModalProcessTTE extends Component {
               <Input.Password name="password" />
             )}
           </Form.Item>
-        </Modal>
-      </Form>
+        </Form>
+      </Modal>
     );
   }
 }
