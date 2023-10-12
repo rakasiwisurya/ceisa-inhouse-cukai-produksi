@@ -102,7 +102,28 @@ export default class PenelitianCK4 extends Component {
   }
 
   getPenelitianCk4 = async () => {
+    const {
+      nppbkc,
+      nama_perusahaan,
+      jenis_bkc,
+      nomor_pemberitahuan,
+      tanggal_pemberitahuan,
+      jumlah_produksi,
+      status,
+    } = this.state.table;
+
     const payload = { page: this.state.page };
+
+    if (nppbkc) payload.nppbkc = nppbkc;
+    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (jenis_bkc) payload.jenisBkc = jenis_bkc;
+    if (nomor_pemberitahuan) payload.nomorPemberitahuan = nomor_pemberitahuan;
+    if (tanggal_pemberitahuan)
+      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
+    if (jumlah_produksi) payload.jumlahProduksi = jumlah_produksi;
+    if (status) payload.status = status;
 
     const response = await requestApi({
       service: "produksi",
@@ -157,15 +178,18 @@ export default class PenelitianCK4 extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({
+              table: { ...this.state.table, [dataIndex]: e.target.value },
+            })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleColumnSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleColumnSearch(confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -173,7 +197,7 @@ export default class PenelitianCK4 extends Component {
           Search
         </Button>
         <Button
-          onClick={() => this.handleColumnReset(clearFilters)}
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -184,25 +208,25 @@ export default class PenelitianCK4 extends Component {
     filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
       }
     },
   });
-
-  handleColumnSearch = (selectedKeys, confirm, dataIndex) => {
+  handleColumnSearch = (confirm) => {
     confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.setState({ page: 1 }, this.getPenelitianCk4);
   };
-  handleColumnReset = (clearFilters) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: null });
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getPenelitianCk4
+    );
   };
 
   render() {
