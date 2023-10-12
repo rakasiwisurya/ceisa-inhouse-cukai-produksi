@@ -1,5 +1,7 @@
+import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import React, { Component } from "react";
-import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+
+Font.registerHyphenationCallback((word) => [word]);
 
 const styles = StyleSheet.create({
   page: {
@@ -11,7 +13,6 @@ const styles = StyleSheet.create({
   },
   viewPemberitahuan: {
     marginHorizontal: 20,
-    display: "flex",
     alignItems: "flex-start",
   },
   viewBarangKenaCukai: {
@@ -66,11 +67,13 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
     fontSize: 12,
     marginBottom: 10,
+    textAlign: "justify",
   },
   boldText: {
     fontFamily: "Helvetica-Bold",
     fontSize: 12,
     marginBottom: 10,
+    textAlign: "justify",
   },
   colon: {
     marginHorizontal: 8,
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class PdfTandaTerimaCK4Preview extends Component {
+export default class PdfTandaTerimaCK4 extends Component {
   render() {
     const {
       nomor_pemberitahuan,

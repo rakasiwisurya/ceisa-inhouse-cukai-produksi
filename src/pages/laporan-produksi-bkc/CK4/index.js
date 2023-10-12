@@ -1,14 +1,13 @@
 import { Button, Col, Icon, Input, Modal, Row, Table } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import React, { Component } from "react";
 import Header from "components/Header";
 import { pathName } from "configs/constants";
-import { requestApi } from "utils/requestApi";
-import ButtonCustom from "components/Button/ButtonCustom";
 import moment from "moment";
-import { PDFViewer } from "@react-pdf/renderer";
-import PdfTandaTerimaCK4Preview from "./PdfTandaTerimaCK4Preview";
+import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
+import { requestApi } from "utils/requestApi";
+import ModalCK4Pdf from "../ModalCK4Pdf";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -423,7 +422,7 @@ export default class CK4 extends Component {
             </div>
           </div>
 
-          <Modal
+          {/* <Modal
             title={`Tanda Terima ${this.state.pdfContent?.nama_perusahaan || ""}`}
             visible={this.state.isModalPdfVisible}
             onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
@@ -435,7 +434,12 @@ export default class CK4 extends Component {
             <PDFViewer width="100%" height={500}>
               <PdfTandaTerimaCK4Preview {...this.state.pdfContent} />
             </PDFViewer>
-          </Modal>
+          </Modal> */}
+          <ModalCK4Pdf
+            isVisible={this.state.isModalPdfVisible}
+            onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
+            pdfContent={this.state.pdfContent}
+          />
         </Container>
       </>
     );
