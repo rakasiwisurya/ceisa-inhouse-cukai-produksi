@@ -438,12 +438,14 @@ export default class BACKEA extends Component {
   });
   handleColumnSearch67 = (confirm) => {
     confirm();
-    this.getBackEa67();
+    this.setState({ page67: 1 }, this.getBackEa67);
   };
-  handleColumnReset67 = async (clearFilters, dataIndex) => {
+  handleColumnReset67 = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table67: { ...this.state.table67, [dataIndex]: "" } });
-    this.getBackEa67();
+    this.setState(
+      { table67: { ...this.state.table67, [dataIndex]: null }, page67: 1 },
+      this.getBackEa67
+    );
   };
 
   handleEdit67 = (id) => {
@@ -499,12 +501,14 @@ export default class BACKEA extends Component {
   });
   handleColumnSearch89 = (confirm) => {
     confirm();
-    this.getBackEa89();
+    this.setState({ page89: 1 }, this.getBackEa89);
   };
-  handleColumnReset89 = async (clearFilters, dataIndex) => {
+  handleColumnReset89 = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table89: { ...this.state.table89, [dataIndex]: "" } });
-    this.getBackEa89();
+    this.setState(
+      { table89: { ...this.state.table89, [dataIndex]: null }, page89: 1 },
+      this.getBackEa89
+    );
   };
 
   handleEdit89 = (id) => {

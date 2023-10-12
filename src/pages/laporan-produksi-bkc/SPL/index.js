@@ -112,8 +112,7 @@ export default class SPL extends Component {
     if (nppbkc) payload.nppbkc = nppbkc;
     if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
     if (nomor_spl) payload.nomorSpl = nomor_spl;
-    if (tanggal_spl)
-      payload.tanggalSpl = moment(tanggal_spl, "DD-MM-YYYY").format("yyyy-MM-DD HH:mm:ss.SSS");
+    if (tanggal_spl) payload.tanggalSpl = moment(tanggal_spl, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (status) payload.status = status;
 
     const response = await requestApi({
@@ -187,12 +186,11 @@ export default class SPL extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getSpl();
+    this.setState({ page: 1 }, this.getSpl);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getSpl();
+    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getSpl);
   };
 
   handleDetail = (id) => {

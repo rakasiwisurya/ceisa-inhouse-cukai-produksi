@@ -195,59 +195,14 @@ export default class BRCK2 extends Component {
     };
   }
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          value={this.state.table[dataIndex]}
-          onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
-          }
-          onPressEnter={() => this.handleColumnSearch(confirm)}
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleColumnSearch(confirm)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        const timeout = setTimeout(() => {
-          this.searchInput.select();
-          clearTimeout(timeout);
-        });
-      }
-    },
-  });
-  handleColumnSearch = (confirm) => {
-    confirm();
+  componentDidMount() {
     this.getBrck2();
-  };
-  handleColumnReset = async (clearFilters, dataIndex) => {
-    clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getBrck2();
-  };
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.getBrck2();
+    }
+  }
 
   getBrck2 = async () => {
     const {
@@ -322,19 +277,62 @@ export default class BRCK2 extends Component {
     }
   };
 
-  componentDidMount() {
-    this.getBrck2();
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
-      this.getBrck2();
-    }
-  }
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          value={this.state.table[dataIndex]}
+          onChange={(e) =>
+            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+          }
+          onPressEnter={() => this.handleColumnSearch(confirm)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleColumnSearch(confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleColumnReset(clearFilters, dataIndex)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        const timeout = setTimeout(() => {
+          this.searchInput.select();
+          clearTimeout(timeout);
+        });
+      }
+    },
+  });
+  handleColumnSearch = (confirm) => {
+    confirm();
+    this.setState({ page: 1 }, this.getBrck2);
+  };
+  handleColumnReset = (clearFilters, dataIndex) => {
+    clearFilters();
+    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getBrck2);
+  };
 
   handleDetail = (id) => {
     this.props.history.push(`${pathName}/brck-2/detail/${id}`);
   };
-
   handleEdit = (id) => {
     this.props.history.push(`${pathName}/brck-2/perbaikan/${id}`);
   };

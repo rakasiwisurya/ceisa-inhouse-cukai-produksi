@@ -214,7 +214,6 @@ export default class BACKMMEA extends Component {
     });
 
     if (response) {
-      console.log("ini response", response);
       const newData = response.data.data.listData.map((item, index) => ({
         key: `back-mmea-${index}`,
         back_mmea_id: item.idBackMmeaHeader,
@@ -289,12 +288,11 @@ export default class BACKMMEA extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getBackMmea();
+    this.setState({ page: 1 }, this.getBackMmea);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getBackMmea();
+    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getBackMmea);
   };
 
   handleEdit = (id) => {

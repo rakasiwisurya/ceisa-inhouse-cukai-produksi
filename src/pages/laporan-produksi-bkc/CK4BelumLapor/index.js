@@ -265,28 +265,14 @@ export default class CK4BelumLapor extends Component {
 
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getBelumLaporCk4();
+    this.setState({ page: 1 }, this.getBelumLaporCk4);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-
-    if (dataIndex === "tanggal") {
-      await this.setState({ table: { ...this.state.table, tanggal: date.getDate() } });
-      return this.getBelumLaporCk4();
-    }
-
-    if (dataIndex === "bulan") {
-      await this.setState({ table: { ...this.state.table, tanggal: date.getMonth() + 1 } });
-      return this.getBelumLaporCk4();
-    }
-
-    if (dataIndex === "tahun") {
-      await this.setState({ table: { ...this.state.table, tanggal: date.getFullYear() } });
-      return this.getBelumLaporCk4();
-    }
-
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getBelumLaporCk4();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getBelumLaporCk4
+    );
   };
 
   render() {

@@ -16,12 +16,12 @@ export default class ReferensiTarifPitaCukai extends Component {
       totalData: 0,
 
       table: {
-        nomor_surat: "",
+        nomor_surat: null,
         tanggal_surat: null,
         awal_berlaku: null,
         akhir_berlaku: null,
-        jenis_bkc_name: "",
-        jenis_referensi_name: "",
+        jenis_bkc_name: null,
+        jenis_referensi_name: null,
       },
 
       dataSource: [],
@@ -223,12 +223,14 @@ export default class ReferensiTarifPitaCukai extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getReferensiTarifPitaCukai();
+    this.setState({ page: 1 }, this.getReferensiTarifPitaCukai);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getReferensiTarifPitaCukai();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getReferensiTarifPitaCukai
+    );
   };
 
   handleEdit = (referensiSkepId, jenisReferensiid) => {

@@ -284,12 +284,11 @@ export default class CK4 extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getCk4();
+    this.setState({ page: 1 }, this.getCk4);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getCk4();
+    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getCk4);
   };
 
   handleDetail = (id, jenisBkc) => {

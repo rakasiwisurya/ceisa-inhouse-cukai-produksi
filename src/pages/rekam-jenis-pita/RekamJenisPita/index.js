@@ -194,7 +194,7 @@ export default class RekamJenisPita extends Component {
     }
   };
 
-  getColumnSearchProps = (dataIndex, inputType) => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -240,12 +240,14 @@ export default class RekamJenisPita extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getRekamJenisPita();
+    this.setState({ page: 1 }, this.getRekamJenisPita);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getRekamJenisPita();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getRekamJenisPita
+    );
   };
 
   handlePerbaikan = (id) => {

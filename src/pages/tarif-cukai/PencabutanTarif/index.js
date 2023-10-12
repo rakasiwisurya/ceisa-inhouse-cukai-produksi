@@ -149,9 +149,6 @@ export default class PencabutanTarif extends Component {
 
     const payload = { page: this.state.page, status: "AKTIF" };
 
-    console.log("tanggal_skep", tanggal_skep);
-    console.log("tanggal_skep", moment(tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"));
-
     if (kode_kantor) payload.kodeKantor = kode_kantor;
     if (nama_kantor) payload.namaKantor = nama_kantor;
     if (nppbkc) payload.nppbkc = nppbkc;
@@ -251,12 +248,14 @@ export default class PencabutanTarif extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getPencabutanTarif();
+    this.setState({ page: 1 }, this.getPencabutanTarif);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getPencabutanTarif();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getPencabutanTarif
+    );
   };
 
   handlePencabutan = (id) => {
