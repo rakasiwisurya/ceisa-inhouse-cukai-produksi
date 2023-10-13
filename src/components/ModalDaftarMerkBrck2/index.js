@@ -178,12 +178,14 @@ export default class ModalDaftarMerkBrck2 extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarMerkBrck2();
+    this.setState({ page: 1 }, this.getDaftarMerkBrck2);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarMerkBrck2();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarMerkBrck2
+    );
   };
 
   render() {

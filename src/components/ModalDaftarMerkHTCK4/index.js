@@ -150,12 +150,14 @@ export default class ModalDaftarHTCK4 extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarMerkHt();
+    this.setState({ page: 1 }, this.getDaftarMerkHt);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getDaftarMerkHt();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarMerkHt
+    );
   };
 
   render() {

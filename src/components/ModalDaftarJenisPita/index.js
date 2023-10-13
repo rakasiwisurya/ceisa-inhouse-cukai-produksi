@@ -14,13 +14,13 @@ export default class ModalDaftarJenisPita extends Component {
       totalData: 0,
 
       table: {
-        jenis_produksi_code: "",
-        hje: "",
-        isi: "",
-        awal_berlaku: "",
-        tarif: "",
-        warna: "",
-        tahun_pita: "",
+        jenis_produksi_code: null,
+        hje: null,
+        isi: null,
+        awal_berlaku: null,
+        tarif: null,
+        warna: null,
+        tahun_pita: null,
       },
 
       dataSource: [],
@@ -181,12 +181,14 @@ export default class ModalDaftarJenisPita extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarJenisPita();
+    this.setState({ page: 1 }, this.getDaftarJenisPita);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarJenisPita();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarJenisPita
+    );
   };
 
   render() {

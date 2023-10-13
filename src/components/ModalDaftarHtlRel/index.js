@@ -9,8 +9,8 @@ export default class ModalDaftarHtlRel extends Component {
       isDaftarHtlRelLoading: true,
       isMouseEnter: false,
 
-      searchText: "",
-      searchedColumn: "",
+      searchText: null,
+      searchedColumn: null,
       page: 1,
       totalData: 0,
 
@@ -125,7 +125,7 @@ export default class ModalDaftarHtlRel extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   render() {

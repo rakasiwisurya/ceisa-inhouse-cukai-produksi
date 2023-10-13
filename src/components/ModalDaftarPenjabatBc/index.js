@@ -13,8 +13,8 @@ export default class ModalDaftarPenjabatBc extends Component {
       totalData: 0,
 
       table: {
-        penjabat_bc_nip: "",
-        penjabat_bc_name: "",
+        penjabat_bc_nip: null,
+        penjabat_bc_name: null,
       },
 
       dataSource: [],
@@ -121,12 +121,14 @@ export default class ModalDaftarPenjabatBc extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarPenjabatBc();
+    this.setState({ page: 1 }, this.getDaftarPenjabatBc);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarPenjabatBc();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarPenjabatBc
+    );
   };
 
   render() {

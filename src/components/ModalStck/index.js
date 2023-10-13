@@ -16,8 +16,8 @@ export default class ModalStck extends Component {
       totalData: 0,
 
       table: {
-        nomor_stck: "",
-        tanggal_stck: "",
+        nomor_stck: null,
+        tanggal_stck: null,
       },
 
       dataSource: [],
@@ -118,12 +118,14 @@ export default class ModalStck extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarStck();
+    this.setState({ page: 1 }, this.getDaftarStck);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: "" } });
-    this.getDaftarStck();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarStck
+    );
   };
 
   render() {

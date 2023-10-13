@@ -170,12 +170,14 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarMerkMmea();
+    this.setState({ page: 1 }, this.getDaftarMerkMmea);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getDaftarMerkMmea();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarMerkMmea
+    );
   };
 
   render() {

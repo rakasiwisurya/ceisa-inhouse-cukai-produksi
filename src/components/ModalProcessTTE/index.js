@@ -75,7 +75,7 @@ export class ModalProcessTTE extends Component {
           if (responseUploadSignedTte) {
             downloadFile(
               BlobSignedPdf,
-              `Penetapan_Tarif_${pdfContent?.nama_perusahaan?.split(" ").join("_")}.pdf`
+              `Penetapan_Tarif_${pdfContent?.nama_perusahaan?.split(" ")?.join("_")}.pdf`
             );
 
             notification.success({

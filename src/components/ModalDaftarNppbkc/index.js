@@ -150,12 +150,14 @@ export default class ModalDaftarNPPBKC extends Component {
   });
   handleColumnSearch = (confirm) => {
     confirm();
-    this.getDaftarNppbkc();
+    this.setState({ page: 1 }, this.getDaftarNppbkc);
   };
-  handleColumnReset = async (clearFilters, dataIndex) => {
+  handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    await this.setState({ table: { ...this.state.table, [dataIndex]: null } });
-    this.getDaftarNppbkc();
+    this.setState(
+      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      this.getDaftarNppbkc
+    );
   };
 
   render() {
