@@ -138,9 +138,9 @@ export default class PenelitianCK4 extends Component {
         nppbkc: item.nppbkc,
         nama_perusahaan: item.namaPerusahaan,
         jenis_bkc: item.jenisBkc,
-        nomor_pemberitahuan: item.nomorPemberitauhuan,
+        nomor_pemberitahuan: item.nomorPemberitahuan,
         tanggal_pemberitahuan: item.tanggalPemberitahuan,
-        jumlah_produksi: item.jumlahProdukasi,
+        jumlah_produksi: item.jumlahProduksi,
         status: item.status,
       }));
 
