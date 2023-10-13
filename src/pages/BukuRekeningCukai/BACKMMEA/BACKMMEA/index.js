@@ -6,7 +6,7 @@ import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Header from "components/Header";
-import ModalBACKMMEADetail89 from "../../ModalBACKMMEADetail89";
+import ModalBACKMMEADetail89 from "../ModalBACKMMEADetail89";
 
 export default class BACKMMEA extends Component {
   constructor(props) {

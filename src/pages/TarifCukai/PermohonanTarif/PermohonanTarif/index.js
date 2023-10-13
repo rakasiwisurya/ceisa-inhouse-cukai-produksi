@@ -7,8 +7,8 @@ import moment from "moment";
 import { QRCodeCanvas } from "qrcode.react";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
-import ModalPermohonanTarifDetail from "../../ModalPermohonanTarifDetail";
-import ModalPermohonanTarifPdf from "../../ModalPermohonanTarifPdf";
+import ModalPermohonanTarifDetail from "../ModalPermohonanTarifDetail";
+import ModalPermohonanTarifPdf from "../ModalPermohonanTarifPdf";
 
 class PermohonanTarif extends Component {
   constructor(props) {
