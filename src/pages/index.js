@@ -2,63 +2,59 @@ import NotFound from "components/NotFound";
 import { pathName } from "configs/constants";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import BACKEA from "./buku-rekening-cukai/BACKEA";
-import BACKEADetail67 from "./buku-rekening-cukai/BACKEADetail67";
-import BACKEADetail89 from "./buku-rekening-cukai/BACKEADetail89";
-import BACKEAPerbaikan67 from "./buku-rekening-cukai/BACKEAPerbaikan67";
-import BACKEAPerbaikan89 from "./buku-rekening-cukai/BACKEAPerbaikan89";
-import BACKEARekam67 from "./buku-rekening-cukai/BACKEARekam67";
-import BACKEARekam89 from "./buku-rekening-cukai/BACKEARekam89";
-import BACKMMEA from "./buku-rekening-cukai/BACKMMEA";
-import BACKMMEADetail89 from "./buku-rekening-cukai/BACKMMEADetail89";
-import BACKMMEAPerbaikan89 from "./buku-rekening-cukai/BACKMMEAPerbaikan89";
-import BACKMMEARekam89 from "./buku-rekening-cukai/BACKMMEARekam89";
-import BRCK1 from "./buku-rekening-cukai/BRCK1";
-import BRCK1Detail from "./buku-rekening-cukai/BRCK1Detail";
-import BRCK1Perbaikan from "./buku-rekening-cukai/BRCK1Perbaikan";
-import BRCK1Rekam from "./buku-rekening-cukai/BRCK1Rekam";
-import BRCK2 from "./buku-rekening-cukai/BRCK2";
-import BRCK2Detail from "./buku-rekening-cukai/BRCK2Detail";
-import BRCK2Perbaikan from "./buku-rekening-cukai/BRCK2Perbaikan";
-import BRCK2Rekam from "./buku-rekening-cukai/BRCK2Rekam";
-import CK4 from "./laporan-produksi-bkc/CK4";
-import CK4BelumLapor from "./laporan-produksi-bkc/CK4BelumLapor";
-import CK4EA from "./laporan-produksi-bkc/CK4EA";
-import CK4EADetail from "./laporan-produksi-bkc/CK4EADetail";
-import CK4EAPerbaikan from "./laporan-produksi-bkc/CK4EAPerbaikan";
-import CK4EATaskToDo from "./laporan-produksi-bkc/CK4EATaskToDo";
-import CK4HT from "./laporan-produksi-bkc/CK4HT";
-import CK4HTDetail from "./laporan-produksi-bkc/CK4HTDetail";
-import CK4HTPerbaikan from "./laporan-produksi-bkc/CK4HTPerbaikan";
-import CK4HTTaskToDo from "./laporan-produksi-bkc/CK4HTTaskToDo";
-import CK4MMEA from "./laporan-produksi-bkc/CK4MMEA";
-import CK4MMEADetail from "./laporan-produksi-bkc/CK4MMEADetail";
-import CK4MMEAPerbaikan from "./laporan-produksi-bkc/CK4MMEAPerbaikan";
-import CK4MMEATaskTodo from "./laporan-produksi-bkc/CK4MMEATaskTodo";
-import PenelitianCK4 from "./laporan-produksi-bkc/PenelitianCK4";
-import SPL from "./laporan-produksi-bkc/SPL";
-import SPLDetail from "./laporan-produksi-bkc/SPLDetail";
-import SPLPerbaikan from "./laporan-produksi-bkc/SPLPerbaikan";
-import SPLRekam from "./laporan-produksi-bkc/SPLRekam";
-import ReferensiTarifDetail from "./referensi-tarif-pita-cukai/ReferensiTarifDetail";
-import ReferensiTarifEdit from "./referensi-tarif-pita-cukai/ReferensiTarifEdit";
-import ReferensiTarifPitaCukai from "./referensi-tarif-pita-cukai/ReferensiTarifPitaCukai";
-import ReferensiTarifRekam from "./referensi-tarif-pita-cukai/ReferensiTarifRekam";
-import ReferensiWarnaDetail from "./referensi-tarif-pita-cukai/ReferensiWarnaDetail";
-import ReferensiWarnaEdit from "./referensi-tarif-pita-cukai/ReferensiWarnaEdit";
-import ReferensiWarnaRekam from "./referensi-tarif-pita-cukai/ReferensiWarnaRekam";
-import RekamJenisPita from "./rekam-jenis-pita/RekamJenisPita";
-import RekamJenisPitaPerbaikan from "./rekam-jenis-pita/RekamJenisPitaPerbaikan";
-import RekamJenisPitaRekam from "./rekam-jenis-pita/RekamJenisPitaRekam";
-import RekamJenisPitaTaskToDo from "./rekam-jenis-pita/RekamJenisPitaTaskToDo";
-import PencabutanTarif from "./tarif-cukai/PencabutanTarif";
-import PencabutanTarifCabut from "./tarif-cukai/PencabutanTarifCabut";
-import PenetapanKembali from "./tarif-cukai/PenetapanKembali";
-import PermohonanTarif from "./tarif-cukai/PermohonanTarif";
-import PermohonanTarifDetail from "./tarif-cukai/PermohonanTarifDetail";
-import PermohonanTarifPerbaikan from "./tarif-cukai/PermohonanTarifPerbaikan";
-import PermohonanTarifRekam from "./tarif-cukai/PermohonanTarifRekam";
-import PermohonanTarifTaskToDo from "./tarif-cukai/PermohonanTarifTaskToDo";
+import BACKEA from "./BukuRekeningCukai/BACKEA/BACKEA";
+import BACKEAPerbaikan67 from "./BukuRekeningCukai/BACKEA/BACKEAPerbaikan67";
+import BACKEAPerbaikan89 from "./BukuRekeningCukai/BACKEA/BACKEAPerbaikan89";
+import BACKEARekam67 from "./BukuRekeningCukai/BACKEA/BACKEARekam67";
+import BACKEARekam89 from "./BukuRekeningCukai/BACKEA/BACKEARekam89";
+import BACKMMEA from "./BukuRekeningCukai/BACKMMEA/BACKMMEA";
+import BACKMMEADetail89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEADetail89";
+import BACKMMEAPerbaikan89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEAPerbaikan89";
+import BACKMMEARekam89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEARekam89";
+import BRCK1 from "./BukuRekeningCukai/BRCK1/BRCK1";
+import BRCK1Detail from "./BukuRekeningCukai/BRCK1/BRCK1Detail";
+import BRCK1Perbaikan from "./BukuRekeningCukai/BRCK1/BRCK1Perbaikan";
+import BRCK1Rekam from "./BukuRekeningCukai/BRCK1/BRCK1Rekam";
+import BRCK2 from "./BukuRekeningCukai/BRCK2/BRCK2";
+import BRCK2Detail from "./BukuRekeningCukai/BRCK2/BRCK2Detail";
+import BRCK2Perbaikan from "./BukuRekeningCukai/BRCK2/BRCK2Perbaikan";
+import BRCK2Rekam from "./BukuRekeningCukai/BRCK2/BRCK2Rekam";
+import CK4 from "./LaporanProduksiBkc/CK4/CK4";
+import CK4BelumLapor from "./LaporanProduksiBkc/CK4BelumLapor";
+import CK4EA from "./LaporanProduksiBkc/CK4/CK4EA";
+import CK4EADetail from "./LaporanProduksiBkc/CK4/CK4EADetail";
+import CK4EAPerbaikan from "./LaporanProduksiBkc/CK4/CK4EAPerbaikan";
+import CK4EATaskToDo from "./LaporanProduksiBkc/CK4/CK4EATaskToDo";
+import CK4HT from "./LaporanProduksiBkc/CK4/CK4HT";
+import CK4HTDetail from "./LaporanProduksiBkc/CK4/CK4HTDetail";
+import CK4HTPerbaikan from "./LaporanProduksiBkc/CK4/CK4HTPerbaikan";
+import CK4HTTaskToDo from "./LaporanProduksiBkc/CK4/CK4HTTaskToDo";
+import CK4MMEA from "./LaporanProduksiBkc/CK4/CK4MMEA";
+import CK4MMEADetail from "./LaporanProduksiBkc/CK4/CK4MMEADetail";
+import CK4MMEAPerbaikan from "./LaporanProduksiBkc/CK4/CK4MMEAPerbaikan";
+import CK4MMEATaskTodo from "./LaporanProduksiBkc/CK4/CK4MMEATaskTodo";
+import PenelitianCK4 from "./LaporanProduksiBkc/PenelitianCK4";
+import SPL from "./LaporanProduksiBkc/SPL/SPL";
+import SPLPerbaikan from "./LaporanProduksiBkc/SPL/SPLPerbaikan";
+import SPLRekam from "./LaporanProduksiBkc/SPL/SPLRekam";
+import ReferensiTarifDetail from "./ReferensiTarifPitaCukai/ReferensiTarifDetail";
+import ReferensiTarifEdit from "./ReferensiTarifPitaCukai/ReferensiTarifEdit";
+import ReferensiTarifPitaCukai from "./ReferensiTarifPitaCukai/ReferensiTarifPitaCukai";
+import ReferensiTarifRekam from "./ReferensiTarifPitaCukai/ReferensiTarifRekam";
+import ReferensiWarnaDetail from "./ReferensiTarifPitaCukai/ReferensiWarnaDetail";
+import ReferensiWarnaEdit from "./ReferensiTarifPitaCukai/ReferensiWarnaEdit";
+import ReferensiWarnaRekam from "./ReferensiTarifPitaCukai/ReferensiWarnaRekam";
+import RekamJenisPita from "./RekamJenisPita/RekamJenisPita";
+import RekamJenisPitaPerbaikan from "./RekamJenisPita/RekamJenisPitaPerbaikan";
+import RekamJenisPitaRekam from "./RekamJenisPita/RekamJenisPitaRekam";
+import RekamJenisPitaTaskToDo from "./RekamJenisPita/RekamJenisPitaTaskToDo";
+import PencabutanTarif from "./TarifCukai/PencabutanTarif/PencabutanTarif";
+import PencabutanTarifCabut from "./TarifCukai/PencabutanTarif/PencabutanTarifCabut";
+import PenetapanKembali from "./TarifCukai/PenetapanKembali";
+import PermohonanTarif from "./TarifCukai/PermohonanTarif/PermohonanTarif";
+import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
+import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
+import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -111,11 +107,6 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/permohonan-tarif/rekam"}
         render={(props) => <PermohonanTarifRekam {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/permohonan-tarif/detail/:id"}
-        render={(props) => <PermohonanTarifDetail {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -239,11 +230,6 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/spl/detail/:id"}
-        render={(props) => <SPLDetail {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
         path={pathName + "/spl/perbaikan/:id"}
         render={(props) => <SPLPerbaikan {...props} {...propsExtra} />}
         exact={true}
@@ -304,11 +290,6 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/back-ea/detail-6-7/:id"}
-        render={(props) => <BACKEADetail67 {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
         path={pathName + "/back-ea/rekam-8-9"}
         render={(props) => <BACKEARekam89 {...props} {...propsExtra} />}
         exact={true}
@@ -316,11 +297,6 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/back-ea/perbaikan-8-9/:id"}
         render={(props) => <BACKEAPerbaikan89 {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/back-ea/detail-8-9/:id"}
-        render={(props) => <BACKEADetail89 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
