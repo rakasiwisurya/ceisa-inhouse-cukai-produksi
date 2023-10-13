@@ -1,5 +1,4 @@
 import { Button, Col, Icon, Input, Row, Table, notification } from "antd";
-import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import Header from "components/Header";
 import moment from "moment";
@@ -13,6 +12,7 @@ export default class PenelitianCK4 extends Component {
       subtitle1: "Penelitian CK4",
 
       isPenelitianCk4Loading: true,
+      isSimpanLoading: false,
 
       page: 1,
       totalData: 0,
@@ -28,9 +28,7 @@ export default class PenelitianCK4 extends Component {
       },
 
       selectedRowKeys: [],
-      selectedRowKeysSimpan: [],
-
-      dataSourceSimpan: [],
+      dataRows: [],
 
       dataSource: [],
       columns: [
@@ -153,21 +151,20 @@ export default class PenelitianCK4 extends Component {
   };
 
   handleSimpan = async () => {
-    const responses = await Promise.all(
-      this.state.selectedRowKeysSimpan.map(async (item) => {
-        return requestApi({
-          service: "produksi",
-          method: "post",
-          endpoint: "/ck4/penelitian-ck4",
-          body: { idCk4Header: item.idCk4 },
-          setLoading: (bool) => this.setState({ isRekamLoading: bool }),
-        });
-      })
-    );
+    const payload = this.state.dataRows;
 
-    if (responses[0]) {
-      notification.success({ message: "Success", description: responses[0].data.message });
-      window.location.reload();
+    const response = await requestApi({
+      service: "produksi",
+      method: "post",
+      endpoint: "/ck4/penelitian-ck4",
+      body: payload,
+      setLoading: (bool) => this.setState({ isSimpanLoading: bool }),
+    });
+
+    if (response) {
+      notification.success({ message: "Success", description: response.data.message });
+      this.getPenelitianCk4();
+      this.setState({ selectedRowKeys: [], dataRows: [] });
     }
   };
 
@@ -229,20 +226,14 @@ export default class PenelitianCK4 extends Component {
     );
   };
 
-  render() {
-    const rowSelection = {
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: (newSelectedRowKeys, selectedRows) => {
-        this.setState({
-          selectedRowKeys: newSelectedRowKeys,
-          selectedRowKeysSimpan: selectedRows,
-        });
-      },
-      getCheckboxProps: (record) => ({
-        disabled: record.status === "Selesai",
-      }),
-    };
+  handleRowSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      dataRows: selectedRows?.map((selectedRow) => ({ idCk4Header: selectedRow.idCk4 })),
+    });
+  };
 
+  render() {
     return (
       <>
         <Container menuName="Laporan Produksi BKC" contentName="Penelitian CK4" hideContentHeader>
@@ -250,13 +241,16 @@ export default class PenelitianCK4 extends Component {
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div style={{ marginTop: 10 }}>
               <Table
-                rowSelection={rowSelection}
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 loading={this.state.isPenelitianCk4Loading}
                 onChange={(page) => this.setState({ page: page.current })}
                 pagination={{ current: this.state.page, total: this.state.totalData }}
                 scroll={{ x: "max-content" }}
+                rowSelection={{
+                  selectedRowKeys: this.state.selectedRowKeys,
+                  onChange: this.handleRowSelectChange,
+                }}
               />
             </div>
 
@@ -264,14 +258,15 @@ export default class PenelitianCK4 extends Component {
               <Col span={12} offset={18}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <ButtonCustom
-                      variant="info"
+                    <Button
+                      type="primary"
+                      loading={this.state.isSimpanLoading}
                       onClick={this.handleSimpan}
+                      disabled={!this.state.dataRows.length > 0}
                       block
-                      disabled={!this.state.selectedRowKeysSimpan.length > 0}
                     >
                       Simpan Penelitian
-                    </ButtonCustom>
+                    </Button>
                   </Col>
                 </Row>
               </Col>

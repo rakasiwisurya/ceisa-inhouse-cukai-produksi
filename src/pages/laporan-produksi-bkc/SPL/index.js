@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
@@ -50,17 +50,6 @@ export default class SPL extends Component {
               </>
             </div>
           ),
-        },
-        {
-          key: "status",
-          title: "Status",
-          dataIndex: "status",
-          render: (text) => (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              {text ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
-            </div>
-          ),
-          ...this.getColumnSearchProps("status"),
         },
         {
           key: "nppbkc",
