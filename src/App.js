@@ -1,22 +1,21 @@
 /* eslint-disable */
-import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter } from "react-router-dom";
-import HttpRequest from "utils/HttpRequest";
-import jwtDecode from "jwt-decode";
-import LoadingWrapperSkeleton from "./components/LoadingWrapperSkeleton";
-import { DrawerAlatBantu } from "./components/Drawer";
-import { setUser, errorMessage as handleErrorMessage } from "utils/DataUser";
-import ErrorContent from "./components/ErrorContent";
-import { Provider } from "react-redux";
-import store from "./store";
-import PageContent from "./pages";
-import { decrypt } from "utils/Chiper";
 import axios from "axios";
-import { setKeycloak, getKeycloak } from "utils/DataKeycloak";
+import jwtDecode from "jwt-decode";
+import React, { Fragment, useEffect, useState } from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { decrypt } from "utils/Chiper";
+import { getKeycloak, setKeycloak } from "utils/DataKeycloak";
+import { errorMessage as handleErrorMessage, setUser } from "utils/DataUser";
+import HttpRequest from "utils/HttpRequest";
+import ErrorContent from "./components/ErrorContent";
+import LoadingWrapperSkeleton from "./components/LoadingWrapperSkeleton";
+import PageContent from "./pages";
+import store from "./store";
 import "./App.css";
 
 const id = document.getElementById("MainContent-container");
-const { REACT_APP_AMWS, REACT_APP_SCE_WS } = process.env;
+const { REACT_APP_AMWS } = process.env;
 
 const fetchRole = async (nip) => {
   const resourceUrl = {
@@ -145,9 +144,8 @@ function MainRoute(props) {
         }
         setKeycloak(resultKeycloak.item);
         const accessKeycloak = jwtDecode(resultKeycloak.item.access_token);
-        const { nip, email, preferred_username } = accessKeycloak;
+        const { nip } = accessKeycloak;
 
-        /* INI PROFILE UNTUK IN HOUSE */
         if (!nip) {
           setErrorMessage("Data yang diterima tidak memiliki nip, silahkan hubungi admin.");
           setIsError(true);
@@ -163,39 +161,6 @@ function MainRoute(props) {
             setErrorMessage(handleErrorMessage(e));
             setIsError(true);
           });
-
-        /* INI PROFILE UNTUK IN PORTAL */
-        // fetchUserProfilePortal(email, preferred_username).then(async (result) => {
-        //   if (result.flagBlokir !== '0') {
-        //     setErrorMessage('Akun anda terblokir.')
-        //     setIsError(true)
-        //     return;
-        //   }
-        //
-        //   const {data} = await HttpRequest.get({url: `${REACT_APP_SCE_WS}/profil/perusahaan/perusahaan-by-npwp?npwp=${result.identitas}`})
-        //   const {
-        //       nib,
-        //       npwp,
-        //       alamatPerusahaan,
-        //       idPerusahaan,
-        //       namaPerusahaan,
-        //     } = data
-        //     const dataUser = {
-        //       ...result,
-        //       nib,
-        //       npwp,
-        //       alamatPerusahaan,
-        //       idPerusahaan,
-        //       namaPerusahaan,
-        //     }
-        //   setDataUser(dataUser)
-        //   setUser(dataUser)
-        //   setLoading(false)
-        //
-        // }).catch((e) => {
-        //   setErrorMessage(handleErrorMessage(e))
-        //   setIsError(true)
-        // });
       })
       .catch((e) => {
         setErrorMessage(handleErrorMessage(e));
@@ -225,7 +190,6 @@ function MainRoute(props) {
   return (
     <Fragment>
       <PageContent pathName={propsExtra.pathName} propsExtra={propsExtra} />
-      {/* <DrawerAlatBantu /> */}
     </Fragment>
   );
 }
