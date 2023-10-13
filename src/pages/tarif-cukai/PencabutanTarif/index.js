@@ -50,7 +50,7 @@ export default class PencabutanTarif extends Component {
           dataIndex: "status",
           render: (text) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {text ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
+              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
             </div>
           ),
         },
@@ -58,28 +58,28 @@ export default class PencabutanTarif extends Component {
           key: "kode_kantor",
           title: "Kode Kantor",
           dataIndex: "kode_kantor",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("kode_kantor"),
         },
         {
           key: "nama_kantor",
           title: "Nama Kantor",
           dataIndex: "nama_kantor",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_kantor"),
         },
         {
           key: "nppbkc",
           title: "NPPBKC",
           dataIndex: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           key: "nomor_skep",
           title: "Nomor SKEP",
           dataIndex: "nomor_skep",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_skep"),
         },
         {
@@ -88,7 +88,7 @@ export default class PencabutanTarif extends Component {
           dataIndex: "tanggal_skep",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_skep"),
@@ -99,7 +99,7 @@ export default class PencabutanTarif extends Component {
           dataIndex: "awal_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("awal_berlaku"),
@@ -110,7 +110,7 @@ export default class PencabutanTarif extends Component {
           dataIndex: "akhir_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("akhir_berlaku"),

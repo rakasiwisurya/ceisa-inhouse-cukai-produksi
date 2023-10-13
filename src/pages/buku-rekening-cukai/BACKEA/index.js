@@ -83,28 +83,28 @@ export default class BACKEA extends Component {
           key: "kppbc",
           title: "KPPBC",
           dataIndex: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps67("kppbc"),
         },
         {
           key: "nama_perusahaan",
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps67("nama_perusahaan"),
         },
         {
           key: "jenis_back",
           title: "Jenis BACK",
           dataIndex: "jenis_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps67("jenis_back"),
         },
         {
           key: "nomor_back",
           title: "Nomor BACK",
           dataIndex: "nomor_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps67("nomor_back"),
         },
         {
@@ -113,7 +113,7 @@ export default class BACKEA extends Component {
           dataIndex: "tanggal_back",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps67("tanggal_back"),
@@ -122,7 +122,7 @@ export default class BACKEA extends Component {
           key: "jumlah_ea_sebelum_dicampur",
           title: "Jumlah EA Sebelum Dicampur/Dirusak (lt)",
           dataIndex: "jumlah_ea_sebelum_dicampur",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps67("jumlah_ea_sebelum_dicampur"),
         },
         {
@@ -132,21 +132,27 @@ export default class BACKEA extends Component {
               key: "jumlah_bahan_pencampur",
               title: "Jumlah",
               dataIndex: "jumlah_bahan_pencampur",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps67("jumlah_bahan_pencampur"),
             },
             {
               key: "satuan_bahan_pencampur",
               title: "Satuan",
               dataIndex: "satuan_bahan_pencampur",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps67("satuan_bahan_pencampur"),
             },
             {
               key: "jenis_bahan_pencampur",
               title: "Jenis",
               dataIndex: "jenis_bahan_pencampur",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps67("jenis_bahan_pencampur"),
             },
           ],
@@ -158,14 +164,18 @@ export default class BACKEA extends Component {
               key: "jumlah_hasil_akhir_pencampuran",
               title: "Jumlah (LT)",
               dataIndex: "jumlah_hasil_akhir_pencampuran",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps67("jumlah_hasil_akhir_pencampuran"),
             },
             {
               key: "jenis_hasil_akhir_pencampuran",
               title: "Jenis",
               dataIndex: "jenis_hasil_akhir_pencampuran",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps67("jenis_hasil_akhir_pencampuran"),
             },
           ],
@@ -200,28 +210,28 @@ export default class BACKEA extends Component {
           key: "kppbc",
           title: "KPPBC",
           dataIndex: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("kppbc"),
         },
         {
           key: "nama_perusahaan",
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("nama_perusahaan"),
         },
         {
           key: "jenis_back",
           title: "Jenis BACK",
           dataIndex: "jenis_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("jenis_back"),
         },
         {
           key: "nomor_back",
           title: "Nomor BACK",
           dataIndex: "nomor_back",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("nomor_back"),
         },
         {
@@ -230,7 +240,7 @@ export default class BACKEA extends Component {
           dataIndex: "tanggal_back",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps89("tanggal_back"),
@@ -239,21 +249,21 @@ export default class BACKEA extends Component {
           key: "jenis_ea",
           title: "Jenis EA",
           dataIndex: "jenis_ea",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("jenis_ea"),
         },
         {
           key: "jumlah",
           title: "Jumlah (Lt)",
           dataIndex: "jumlah",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("jumlah"),
         },
         {
           key: "keterangan",
           title: "Keterangan",
           dataIndex: "keterangan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps89("keterangan"),
         },
       ],

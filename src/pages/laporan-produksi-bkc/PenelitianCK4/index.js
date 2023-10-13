@@ -36,28 +36,28 @@ export default class PenelitianCK4 extends Component {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Jenis BKC",
           dataIndex: "jenis_bkc",
           key: "jenis_bkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_bkc"),
         },
         {
           title: "Nomor Pemberitahuan",
           dataIndex: "nomor_pemberitahuan",
           key: "nomor_pemberitahuan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_pemberitahuan"),
         },
         {
@@ -66,7 +66,7 @@ export default class PenelitianCK4 extends Component {
           key: "tanggal_pemberitahuan",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_pemberitahuan"),
@@ -75,14 +75,14 @@ export default class PenelitianCK4 extends Component {
           title: "Jumlah Produksi",
           dataIndex: "jumlah_produksi",
           key: "jumlah_produksi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jumlah_produksi"),
         },
         {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("status"),
         },
       ],

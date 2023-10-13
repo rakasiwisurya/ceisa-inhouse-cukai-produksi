@@ -51,27 +51,27 @@ export default class CK4BelumLapor extends Component {
           title: "NPPBKC",
           dataIndex: "nppbkc",
           key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Bulan",
           dataIndex: "bulan",
           key: "bulan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
         },
         {
           title: "Tahun",
           dataIndex: "tahun",
           key: "tahun",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
         },
       ],
     });
@@ -93,28 +93,36 @@ export default class CK4BelumLapor extends Component {
               title: "NPPBKC",
               dataIndex: "nppbkc",
               key: "nppbkc",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("nppbkc"),
             },
             {
               title: "Nama Perusahaan",
               dataIndex: "nama_perusahaan",
               key: "nama_perusahaan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("nama_perusahaan"),
             },
             {
               title: "Bulan",
               dataIndex: "bulan",
               key: "bulan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("bulan"),
             },
             {
               title: "Tahun",
               dataIndex: "tahun",
               key: "tahun",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("tahun"),
             },
           ],
@@ -126,33 +134,43 @@ export default class CK4BelumLapor extends Component {
               title: "NPPBKC",
               dataIndex: "nppbkc",
               key: "nppbkc",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("nppbkc"),
             },
             {
               title: "Nama Perusahaan",
               dataIndex: "nama_perusahaan",
               key: "nama_perusahaan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("nama_perusahaan"),
             },
             {
               title: "Tanggal",
               dataIndex: "tanggal",
               key: "tanggal",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
             },
             {
               title: "Bulan",
               dataIndex: "bulan",
               key: "bulan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
             },
             {
               title: "Tahun",
               dataIndex: "tahun",
               key: "tahun",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
             },
           ],
         });

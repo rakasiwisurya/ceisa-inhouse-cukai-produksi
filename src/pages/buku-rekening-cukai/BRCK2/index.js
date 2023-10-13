@@ -62,39 +62,35 @@ export default class BRCK2 extends Component {
           title: "KPPBC",
           dataIndex: "kppbc",
           key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           title: "Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Merk",
           dataIndex: "merk",
           key: "merk",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("merk"),
         },
         {
           title: "Tarif",
           dataIndex: "tarif",
           key: "tarif",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tarif"),
         },
         {
           title: "Isi",
           dataIndex: "isi",
           key: "isi",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("isi"),
         },
         {
@@ -106,7 +102,7 @@ export default class BRCK2 extends Component {
               key: "tanggal_awal",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>
-                  {text ? moment(text).format("DD-MM-YYYY") : "-"}
+                  {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
                 </div>
               ),
               ...this.getColumnSearchProps("tanggal_awal"),
@@ -117,7 +113,7 @@ export default class BRCK2 extends Component {
               key: "tanggal_akhir",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>
-                  {text ? moment(text).format("DD-MM-YYYY") : "-"}
+                  {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
                 </div>
               ),
               ...this.getColumnSearchProps("tanggal_akhir"),
@@ -132,7 +128,7 @@ export default class BRCK2 extends Component {
               dataIndex: "saldo_awal_liter",
               key: "saldo_awal_liter",
               render: (text) => (
-                <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
               ...this.getColumnSearchProps("saldo_awal_liter"),
             },
@@ -141,7 +137,7 @@ export default class BRCK2 extends Component {
               dataIndex: "saldo_awal_kemasan",
               key: "saldo_awal_kemasan",
               render: (text) => (
-                <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
               ...this.getColumnSearchProps("saldo_awal_kemasan"),
             },
@@ -155,7 +151,7 @@ export default class BRCK2 extends Component {
               dataIndex: "saldo_penutupan_liter",
               key: "saldo_penutupan_liter",
               render: (text) => (
-                <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
               ...this.getColumnSearchProps("saldo_penutupan_liter"),
             },
@@ -163,7 +159,9 @@ export default class BRCK2 extends Component {
               title: "Kemasan",
               dataIndex: "saldo_penutupan_kemasan",
               key: "saldo_penutupan_kemasan",
-              render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+              render: (text) => (
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
+              ),
               ...this.getColumnSearchProps("saldo_penutupan_kemasan"),
             },
           ],
@@ -176,7 +174,7 @@ export default class BRCK2 extends Component {
               dataIndex: "selisih_liter",
               key: "selisih_liter",
               render: (text) => (
-                <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
               ...this.getColumnSearchProps("selisih_liter"),
             },
@@ -185,7 +183,7 @@ export default class BRCK2 extends Component {
               dataIndex: "selisih_kemasan",
               key: "selisih_kemasan",
               render: (text) => (
-                <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
+                <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
               ...this.getColumnSearchProps("selisih_kemasan"),
             },
@@ -198,6 +196,7 @@ export default class BRCK2 extends Component {
   componentDidMount() {
     this.getBrck2();
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.page !== this.state.page) {
       this.getBrck2();

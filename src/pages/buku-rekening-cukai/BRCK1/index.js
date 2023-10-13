@@ -57,21 +57,21 @@ export default class BRCK1 extends Component {
           title: "KPPBC",
           dataIndex: "kppbc",
           key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("kppbc"),
         },
         {
           title: "Perusahaan",
           dataIndex: "nama_perusahaan",
           key: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           title: "Warna",
           dataIndex: "warna",
           key: "warna",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("warna"),
         },
         {
@@ -80,7 +80,7 @@ export default class BRCK1 extends Component {
           key: "tanggal_awal",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_awal"),
@@ -91,7 +91,7 @@ export default class BRCK1 extends Component {
           key: "tanggal_akhir",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_akhir"),

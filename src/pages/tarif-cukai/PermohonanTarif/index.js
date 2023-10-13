@@ -91,7 +91,7 @@ class PermohonanTarif extends Component {
           dataIndex: "status",
           render: (text) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {text ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
+              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("status"),
@@ -100,28 +100,28 @@ class PermohonanTarif extends Component {
           key: "nama_kantor",
           title: "Nama Kantor",
           dataIndex: "nama_kantor",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_kantor"),
         },
         {
           key: "nppbkc",
           title: "NPPBKC",
           dataIndex: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           key: "nama_perusahaan",
           title: "Nama Perusahaan",
           dataIndex: "nama_perusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_perusahaan"),
         },
         {
           key: "nomor_kep",
           title: "Nomor KEP",
           dataIndex: "nomor_kep",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_kep"),
         },
         {
@@ -130,7 +130,7 @@ class PermohonanTarif extends Component {
           dataIndex: "tanggal_kep",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_kep"),
@@ -139,42 +139,42 @@ class PermohonanTarif extends Component {
           key: "nama_merk",
           title: "Nama Merk",
           dataIndex: "nama_merk",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nama_merk"),
         },
         {
           key: "jenis_produksi",
           title: "Jenis Produksi",
           dataIndex: "jenis_produksi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_produksi"),
         },
         {
           key: "hje_per_kemasan",
           title: "HJE",
           dataIndex: "hje_per_kemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("hje_per_kemasan"),
         },
         {
           key: "isi_per_kemasan",
           title: "Isi",
           dataIndex: "isi_per_kemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("isi_per_kemasan"),
         },
         {
           key: "tarif_spesifik",
           title: "Tarif",
           dataIndex: "tarif_spesifik",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tarif_spesifik"),
         },
         {
           key: "tujuan_pemasaran",
           title: "Tujuan",
           dataIndex: "tujuan_pemasaran",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tujuan_pemasaran"),
         },
         {
@@ -183,7 +183,7 @@ class PermohonanTarif extends Component {
           dataIndex: "awal_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("awal_berlaku"),
@@ -194,7 +194,7 @@ class PermohonanTarif extends Component {
           dataIndex: "akhir_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("akhir_berlaku"),

@@ -64,7 +64,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "nomor_surat",
           title: "Nomor Surat",
           dataIndex: "nomor_surat",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomor_surat"),
         },
         {
@@ -73,7 +73,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           dataIndex: "tanggal_surat",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("tanggal_surat"),
@@ -84,7 +84,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           dataIndex: "awal_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("awal_berlaku"),
@@ -95,7 +95,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           dataIndex: "akhir_berlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
-              {text ? moment(text).format("DD-MM-YYYY") : "-"}
+              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("akhir_berlaku"),
@@ -104,14 +104,14 @@ export default class ReferensiTarifPitaCukai extends Component {
           key: "jenis_bkc_name",
           title: "Jenis BKC",
           dataIndex: "jenis_bkc_name",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_bkc_name"),
         },
         {
           key: "jenis_referensi_name",
           title: "Jenis Referensi",
           dataIndex: "jenis_referensi_name",
-          render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenis_referensi_name"),
         },
       ],
