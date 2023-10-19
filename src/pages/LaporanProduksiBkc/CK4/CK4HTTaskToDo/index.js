@@ -361,7 +361,7 @@ export default class CK4HTTaskToDo extends Component {
           satuan_ht: detail.satuanHt,
 
           nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi),
+          tanggal_produksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
           jumlah_kemasan: detail.jumlahKemasan,
           jumlah_produksi: detail.jumlahProduksi,
           jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
@@ -1045,6 +1045,7 @@ export default class CK4HTTaskToDo extends Component {
                       </div>
                       <DatePicker
                         id="tanggal_surat_permohonan_perbaikan"
+                        format="DD-MM-YYYY"
                         onChange={(date) =>
                           this.handleDatepickerChange("tanggal_surat_permohonan_perbaikan", date)
                         }

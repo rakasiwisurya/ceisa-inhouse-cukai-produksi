@@ -318,7 +318,7 @@ export default class CK4MMEATaskTodo extends Component {
           kadar_mmea: detail.kadarMmea,
 
           nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi).format("YYYY-MM-DD"),
+          tanggal_produksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
           jumlah_kemasan: detail.jumlahKemasan,
           jumlah_produksi: detail.jumlahProduksi,
           jumlah_kemasan_dilekati_pita: detail.jumlahKemasanDilekatiPita,
@@ -605,6 +605,7 @@ export default class CK4MMEATaskTodo extends Component {
                         </div>
                         <DatePicker
                           id="tanggal_pemberitahuan"
+                          format="DD-MM-YYYY"
                           value={this.state.tanggal_pemberitahuan}
                           style={{ width: "100%" }}
                           disabled
@@ -833,6 +834,7 @@ export default class CK4MMEATaskTodo extends Component {
                             </div>
                             <DatePicker
                               id="tanggal_produksi"
+                              format="DD-MM-YYYY"
                               value={this.state.tanggal_produksi}
                               style={{ width: "100%" }}
                               disabled
@@ -965,6 +967,7 @@ export default class CK4MMEATaskTodo extends Component {
                       </div>
                       <DatePicker
                         id="tanggal_surat_permohonan_perbaikan"
+                        format="DD-MM-YYYY"
                         onChange={(date) =>
                           this.handleDatepickerChange("tanggal_surat_permohonan_perbaikan", date)
                         }

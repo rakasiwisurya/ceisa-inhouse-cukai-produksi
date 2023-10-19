@@ -55,6 +55,7 @@ import PermohonanTarif from "./TarifCukai/PermohonanTarif/PermohonanTarif";
 import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
 import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
+import CK4TaskToDo from "./LaporanProduksiBkc/CK4/CK4TaskToDo";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -152,6 +153,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/laporan-ck4"}
         render={(props) => <CK4 {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/laporan-ck4/ck4/tasktodo/:id"}
+        render={(props) => <CK4TaskToDo {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

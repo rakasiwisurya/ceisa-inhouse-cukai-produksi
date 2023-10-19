@@ -421,19 +421,6 @@ export default class CK4 extends Component {
             </div>
           </div>
 
-          {/* <Modal
-            title={`Tanda Terima ${this.state.pdfContent?.nama_perusahaan || ""}`}
-            visible={this.state.isModalPdfVisible}
-            onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
-            footer={null}
-            width="75vw"
-            style={{ marginTop: 20 }}
-            centered
-          >
-            <PDFViewer width="100%" height={500}>
-              <PdfTandaTerimaCK4Preview {...this.state.pdfContent} />
-            </PDFViewer>
-          </Modal> */}
           <ModalCK4Pdf
             isVisible={this.state.isModalPdfVisible}
             onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
