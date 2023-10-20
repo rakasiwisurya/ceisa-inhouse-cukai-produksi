@@ -23,7 +23,7 @@ export default class CK4 extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         kppbc: null,
         nppbkc: null,
         nama_perusahaan: null,
@@ -175,7 +175,7 @@ export default class CK4 extends Component {
       jumlah_produksi_btg,
       jumlah_produksi_gram,
       status,
-    } = this.state.table;
+    } = this.state.filter;
     const payload = { page: this.state.page };
 
     if (kppbc) payload.kppbc = kppbc;
@@ -243,10 +243,10 @@ export default class CK4 extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
             this.setState({
-              table: { ...this.state.table, [dataIndex]: e.target.value },
+              filter: { ...this.state.filter, [dataIndex]: e.target.value },
             })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
@@ -288,7 +288,7 @@ export default class CK4 extends Component {
   };
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getCk4);
+    this.setState({ filter: { ...this.state.filter, [dataIndex]: null }, page: 1 }, this.getCk4);
   };
 
   handleDetail = (id, jenisBkc) => {

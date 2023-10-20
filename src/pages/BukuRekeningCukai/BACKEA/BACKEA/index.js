@@ -30,7 +30,7 @@ export default class BACKEA extends Component {
       page89: 1,
       totalData89: 0,
 
-      table67: {
+      filter67: {
         kppbc: null,
         nama_perusahaan: null,
         jenis_back: null,
@@ -44,7 +44,7 @@ export default class BACKEA extends Component {
         jenis_hasil_akhir_pencampuran: null,
       },
 
-      table89: {
+      filter89: {
         kppbc: null,
         nama_perusahaan: null,
         jenis_back: null,
@@ -298,7 +298,7 @@ export default class BACKEA extends Component {
       jenis_bahan_pencampur,
       jumlah_hasil_akhir_pencampuran,
       jenis_hasil_akhir_pencampuran,
-    } = this.state.table67;
+    } = this.state.filter67;
 
     const payload = { page: this.state.page67 };
 
@@ -358,7 +358,7 @@ export default class BACKEA extends Component {
       jenis_ea,
       jumlah,
       keterangan,
-    } = this.state.table89;
+    } = this.state.filter89;
 
     const payload = { page: this.state.page89 };
 
@@ -409,9 +409,9 @@ export default class BACKEA extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table67[dataIndex]}
+          value={this.state.filter67[dataIndex]}
           onChange={(e) =>
-            this.setState({ table67: { ...this.state.table67, [dataIndex]: e.target.value } })
+            this.setState({ filter67: { ...this.state.filter67, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch67(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -453,7 +453,7 @@ export default class BACKEA extends Component {
   handleColumnReset67 = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table67: { ...this.state.table67, [dataIndex]: null }, page67: 1 },
+      { filter67: { ...this.state.filter67, [dataIndex]: null }, page67: 1 },
       this.getBackEa67
     );
   };
@@ -472,9 +472,9 @@ export default class BACKEA extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table89[dataIndex]}
+          value={this.state.filter89[dataIndex]}
           onChange={(e) =>
-            this.setState({ table89: { ...this.state.table89, [dataIndex]: e.target.value } })
+            this.setState({ filter89: { ...this.state.filter89, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch89(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -516,7 +516,7 @@ export default class BACKEA extends Component {
   handleColumnReset89 = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table89: { ...this.state.table89, [dataIndex]: null }, page89: 1 },
+      { filter89: { ...this.state.filter89, [dataIndex]: null }, page89: 1 },
       this.getBackEa89
     );
   };

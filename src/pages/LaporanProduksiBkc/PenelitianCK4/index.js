@@ -17,7 +17,7 @@ export default class PenelitianCK4 extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         nppbkc: null,
         nama_perusahaan: null,
         jenis_bkc: null,
@@ -108,7 +108,7 @@ export default class PenelitianCK4 extends Component {
       tanggal_pemberitahuan,
       jumlah_produksi,
       status,
-    } = this.state.table;
+    } = this.state.filter;
 
     const payload = { page: this.state.page };
 
@@ -175,10 +175,10 @@ export default class PenelitianCK4 extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
             this.setState({
-              table: { ...this.state.table, [dataIndex]: e.target.value },
+              filter: { ...this.state.filter, [dataIndex]: e.target.value },
             })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
@@ -221,7 +221,7 @@ export default class PenelitianCK4 extends Component {
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
       this.getPenelitianCk4
     );
   };

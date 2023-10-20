@@ -15,7 +15,7 @@ export default class RekamJenisPita extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         kode_kantor: null,
         nama_kantor: null,
         nppbkc: null,
@@ -145,7 +145,7 @@ export default class RekamJenisPita extends Component {
       tarif,
       warna,
       tahun_pita,
-    } = this.state.table;
+    } = this.state.filter;
 
     const payload = { page: this.state.page };
 
@@ -201,9 +201,9 @@ export default class RekamJenisPita extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({ filter: { ...this.state.filter, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -245,7 +245,7 @@ export default class RekamJenisPita extends Component {
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
       this.getRekamJenisPita
     );
   };

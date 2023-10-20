@@ -29,7 +29,7 @@ export default class CK4BelumLapor extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         nppbkc: null,
         nama_perusahaan: null,
         tanggal: date.getDate(),
@@ -179,7 +179,7 @@ export default class CK4BelumLapor extends Component {
   }
 
   getBelumLaporCk4 = async () => {
-    const { nppbkc, nama_perusahaan, tanggal, bulan, tahun } = this.state.table;
+    const { nppbkc, nama_perusahaan, tanggal, bulan, tahun } = this.state.filter;
 
     const payload = { page: this.state.page, bulan, tahun };
 
@@ -244,9 +244,9 @@ export default class CK4BelumLapor extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({ filter: { ...this.state.filter, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -288,7 +288,7 @@ export default class CK4BelumLapor extends Component {
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
       this.getBelumLaporCk4
     );
   };

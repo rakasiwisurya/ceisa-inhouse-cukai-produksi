@@ -18,7 +18,7 @@ export default class BRCK1 extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         kppbc: null,
         nama_perusahaan: null,
         warna: null,
@@ -176,7 +176,7 @@ export default class BRCK1 extends Component {
       selisih,
       potongan,
       kekurangan,
-    } = this.state.table;
+    } = this.state.filter;
 
     const payload = { page: this.state.page };
 
@@ -231,10 +231,10 @@ export default class BRCK1 extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
             this.setState({
-              table: { ...this.state.table, [dataIndex]: e.target.value },
+              filter: { ...this.state.filter, [dataIndex]: e.target.value },
             })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
@@ -276,7 +276,7 @@ export default class BRCK1 extends Component {
   };
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getBrck1);
+    this.setState({ filter: { ...this.state.filter, [dataIndex]: null }, page: 1 }, this.getBrck1);
   };
 
   handleDetail = (id) => {

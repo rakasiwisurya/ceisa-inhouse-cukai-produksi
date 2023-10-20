@@ -22,7 +22,7 @@ export default class BACKMMEA extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         kppbc: null,
         nama_perusahaan: null,
         jenis_back: null,
@@ -186,7 +186,7 @@ export default class BACKMMEA extends Component {
       kemasan,
       jumlah_kemasan,
       jumlah_lt,
-    } = this.state.table;
+    } = this.state.filter;
 
     const payload = { page: this.state.page };
 
@@ -247,10 +247,10 @@ export default class BACKMMEA extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
             this.setState({
-              table: { ...this.state.table, [dataIndex]: e.target.value },
+              filter: { ...this.state.filter, [dataIndex]: e.target.value },
             })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
@@ -292,7 +292,10 @@ export default class BACKMMEA extends Component {
   };
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ table: { ...this.state.table, [dataIndex]: null }, page: 1 }, this.getBackMmea);
+    this.setState(
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
+      this.getBackMmea
+    );
   };
 
   handleEdit = (id) => {

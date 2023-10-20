@@ -14,7 +14,7 @@ export default class PencabutanTarif extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
+      filter: {
         status: null,
         kode_kantor: null,
         nama_kantor: null,
@@ -145,7 +145,7 @@ export default class PencabutanTarif extends Component {
       tujuan,
       awal_berlaku,
       akhir_berlaku,
-    } = this.state.table;
+    } = this.state.filter;
 
     const payload = { page: this.state.page, status: "AKTIF" };
 
@@ -209,9 +209,9 @@ export default class PencabutanTarif extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({ filter: { ...this.state.filter, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -253,7 +253,7 @@ export default class PencabutanTarif extends Component {
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
       this.getPencabutanTarif
     );
   };
