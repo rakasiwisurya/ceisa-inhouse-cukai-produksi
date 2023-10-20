@@ -8,6 +8,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
 import ButtonCustom from "components/Button/ButtonCustom";
+import { capitalize } from "utils/formatter";
 
 export default class ReferensiWarnaEdit extends Component {
   constructor(props) {
@@ -26,31 +27,31 @@ export default class ReferensiWarnaEdit extends Component {
       isGolonganLoading: true,
       isTableLoading: false,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      tanggal_awal_berlaku: null,
+      nomorSkep: null,
+      tanggalSkep: null,
+      tanggalAwalBerlaku: null,
 
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
-      kode_warna: null,
+      idJenisBkc: null,
+      namaJenisBkc: null,
+      kodeWarna: null,
       warna: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_produksi_id: null,
-      jenis_produksi_code: null,
-      jenis_produksi_name: null,
-      jenis_usaha_id: null,
-      jenis_usaha_name: null,
-      warna_detail_id: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idJenisProduksiBkc: null,
+      kodeJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisUsaha: null,
+      namaJenisUsaha: null,
+      idWarnaBkcDetail: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_bkc: [],
-      list_golongan: [],
-      list_jenis_produksi: [],
-      list_jenis_usaha: [],
+      listJenisBkc: [],
+      listGolongan: [],
+      listJenisProduksi: [],
+      listJenisUsaha: [],
 
       columns: [],
       dataSource: [],
@@ -64,13 +65,13 @@ export default class ReferensiWarnaEdit extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      if (this.state.jenis_bkc_id) {
+    if (prevState.idJenisBkc !== this.state.idJenisBkc) {
+      if (this.state.idJenisBkc) {
         this.getListGolongan();
         this.getListJenisProduksi();
       }
 
-      if (this.state.jenis_bkc_id === 3) {
+      if (this.state.idJenisBkc === 3) {
         this.setState({
           columns: [
             {
@@ -86,11 +87,11 @@ export default class ReferensiWarnaEdit extends Component {
                     onClick={() => this.handleEdit(record)}
                   />
 
-                  {record.warna_detail_id ? (
+                  {record.idWarnaBkcDetail ? (
                     <Button
                       type="danger"
                       icon="delete"
-                      onClick={() => this.handleDeleteApi(record, record.warna_detail_id)}
+                      onClick={() => this.handleDeleteApi(record, record.idWarnaBkcDetail)}
                     />
                   ) : (
                     <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
@@ -108,10 +109,10 @@ export default class ReferensiWarnaEdit extends Component {
             },
             {
               title: "Kode Warna",
-              dataIndex: "kode_warna",
-              key: "kode_warna",
+              dataIndex: "kodeWarna",
+              key: "kodeWarna",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("kode_warna"),
+              ...this.getColumnSearchProps("kodeWarna"),
             },
             {
               title: "Warna",
@@ -122,23 +123,23 @@ export default class ReferensiWarnaEdit extends Component {
             },
             {
               title: "Golongan",
-              dataIndex: "golongan_name",
-              key: "golongan_name",
+              dataIndex: "namaGolonganBkc",
+              key: "namaGolonganBkc",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("golongan_name"),
+              ...this.getColumnSearchProps("namaGolonganBkc"),
             },
             {
               title: "Jenis Produksi",
-              dataIndex: "jenis_produksi_name",
-              key: "jenis_produksi_name",
+              dataIndex: "namaJenisProduksiBkc",
+              key: "namaJenisProduksiBkc",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_produksi_name"),
+              ...this.getColumnSearchProps("namaJenisProduksiBkc"),
             },
           ],
         });
       }
 
-      if (this.state.jenis_bkc_id === 2) {
+      if (this.state.idJenisBkc === 2) {
         this.setState({
           columns: [
             {
@@ -153,11 +154,11 @@ export default class ReferensiWarnaEdit extends Component {
                     icon="form"
                     onClick={() => this.handleEdit(record)}
                   />
-                  {record.warna_detail_id ? (
+                  {record.idWarnaBkcDetail ? (
                     <Button
                       type="danger"
                       icon="delete"
-                      onClick={() => this.handleDeleteApi(record, record.warna_detail_id)}
+                      onClick={() => this.handleDeleteApi(record, record.idWarnaBkcDetail)}
                     />
                   ) : (
                     <Button type="danger" icon="close" onClick={() => this.handleDelete(record)} />
@@ -175,10 +176,10 @@ export default class ReferensiWarnaEdit extends Component {
             },
             {
               title: "Kode Warna",
-              dataIndex: "kode_warna",
-              key: "kode_warna",
+              dataIndex: "kodeWarna",
+              key: "kodeWarna",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("kode_warna"),
+              ...this.getColumnSearchProps("kodeWarna"),
             },
             {
               title: "Warna",
@@ -189,24 +190,24 @@ export default class ReferensiWarnaEdit extends Component {
             },
             {
               title: "Golongan",
-              dataIndex: "golongan_name",
-              key: "golongan_name",
+              dataIndex: "namaGolonganBkc",
+              key: "namaGolonganBkc",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("golongan_name"),
+              ...this.getColumnSearchProps("namaGolonganBkc"),
             },
             {
               title: "Jenis Produksi",
-              dataIndex: "jenis_produksi_name",
-              key: "jenis_produksi_name",
+              dataIndex: "namaJenisProduksiBkc",
+              key: "namaJenisProduksiBkc",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_produksi_name"),
+              ...this.getColumnSearchProps("namaJenisProduksiBkc"),
             },
             {
               title: "Jenis Usaha",
-              dataIndex: "jenis_usaha_name",
-              key: "jenis_usaha_name",
+              dataIndex: "namaJenisUsaha",
+              key: "namaJenisUsaha",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_usaha_name"),
+              ...this.getColumnSearchProps("namaJenisUsaha"),
             },
           ],
         });
@@ -229,25 +230,25 @@ export default class ReferensiWarnaEdit extends Component {
       const { data } = response.data;
 
       this.setState({
-        nomor_surat: data.nomorSkep,
-        tanggal_surat: moment(data.tanggalSkep),
-        jenis_bkc_id: data.idJenisBkc,
-        jenis_bkc_name: data.namaJenisBkc,
-        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
+        nomorSkep: data.nomorSkep,
+        tanggalSkep: moment(data.tanggalSkep),
+        idJenisBkc: data.idJenisBkc,
+        namaJenisBkc: data.namaJenisBkc,
+        tanggalAwalBerlaku: moment(data.tanggalAwalBerlaku),
         dataSource: data.details.map((detail, index) => ({
           key: `referensi-${index}`,
-          warna_detail_id: detail.idWarnaBkcDetail,
-          jenis_bkc_id: detail.idJenisBkc,
-          jenis_bkc_name: detail.namaJenisBkc,
-          kode_warna: detail.kodeWarna,
+          idWarnaBkcDetail: detail.idWarnaBkcDetail,
+          idJenisBkc: detail.idJenisBkc,
+          namaJenisBkc: detail.namaJenisBkc,
+          kodeWarna: detail.kodeWarna,
           warna: detail.warna,
-          golongan_id: detail.idGolonganBkc,
-          golongan_name: detail.namaGolonganBkc,
-          jenis_produksi_id: detail.idJenisProduksiBkc,
-          jenis_produksi_code: detail.kodeJenisProduksiBkc,
-          jenis_produksi_name: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
-          jenis_usaha_id: detail.idJenisUsaha,
-          jenis_usaha_name: detail.namaJenisUsaha,
+          idGolonganBkc: detail.idGolonganBkc,
+          namaGolonganBkc: detail.namaGolonganBkc,
+          idJenisProduksiBkc: detail.idJenisProduksiBkc,
+          kodeJenisProduksiBkc: detail.kodeJenisProduksiBkc,
+          namaJenisProduksiBkc: `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`,
+          idJenisUsaha: detail.idJenisUsaha,
+          namaJenisUsaha: detail.namaJenisUsaha,
         })),
       });
     }
@@ -263,11 +264,11 @@ export default class ReferensiWarnaEdit extends Component {
     if (response) {
       const newData = response.data.data.map((item) => item);
       newData.splice(0, 1);
-      this.setState({ list_jenis_bkc: newData });
+      this.setState({ listJenisBkc: newData });
     }
   };
   getListGolongan = async () => {
-    const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    const payload = { idJenisBkc: this.state.idJenisBkc };
 
     const response = await requestApi({
       service: "referensi",
@@ -277,10 +278,10 @@ export default class ReferensiWarnaEdit extends Component {
       setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     });
 
-    if (response) this.setState({ list_golongan: response.data.data });
+    if (response) this.setState({ listGolongan: response.data.data });
   };
   getListJenisProduksi = async () => {
-    const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    const payload = { idJenisBkc: this.state.idJenisBkc };
 
     const response = await requestApi({
       service: "referensi",
@@ -290,7 +291,7 @@ export default class ReferensiWarnaEdit extends Component {
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
-    if (response) this.setState({ list_jenis_produksi: response.data.data });
+    if (response) this.setState({ listJenisProduksi: response.data.data });
   };
   getListJenisUsaha = async () => {
     const response = await requestApi({
@@ -300,7 +301,7 @@ export default class ReferensiWarnaEdit extends Component {
       setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
     });
 
-    if (response) this.setState({ list_jenis_usaha: response.data.data });
+    if (response) this.setState({ listJenisUsaha: response.data.data });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -373,33 +374,33 @@ export default class ReferensiWarnaEdit extends Component {
   };
   handleSelectCustomChange = (field, value, option) => {
     this.setState({
-      [`${field}_id`]: value,
-      [`${field}_name`]: option.props.children,
+      [`id${capitalize(field, false)}`]: value,
+      [`nama${capitalize(field, false)}`]: option.props.children,
     });
   };
 
   validationForm = () => {
-    const { nomor_surat, tanggal_surat, tanggal_awal_berlaku, dataSource } = this.state;
+    const { nomorSkep, tanggalSkep, tanggalAwalBerlaku, dataSource } = this.state;
 
-    if (!nomor_surat || !tanggal_surat || !tanggal_awal_berlaku || dataSource.length < 1) {
+    if (!nomorSkep || !tanggalSkep || !tanggalAwalBerlaku || dataSource.length < 1) {
       return false;
     }
 
     return true;
   };
   validationInsert = () => {
-    const { jenis_bkc_id, kode_warna, warna, golongan_id, jenis_produksi_id, jenis_usaha_id } =
+    const { idJenisBkc, kodeWarna, warna, idGolonganBkc, idJenisProduksiBkc, idJenisUsaha } =
       this.state;
 
-    if (!jenis_bkc_id) return false;
+    if (!idJenisBkc) return false;
 
-    if (jenis_bkc_id === 3 && (!kode_warna || !warna || !golongan_id || !jenis_produksi_id)) {
+    if (idJenisBkc === 3 && (!kodeWarna || !warna || !idGolonganBkc || !idJenisProduksiBkc)) {
       return false;
     }
 
     if (
-      jenis_bkc_id === 2 &&
-      (!kode_warna || !warna || !golongan_id || !jenis_produksi_id || !jenis_usaha_id)
+      idJenisBkc === 2 &&
+      (!kodeWarna || !warna || !idGolonganBkc || !idJenisProduksiBkc || !idJenisUsaha)
     ) {
       return false;
     }
@@ -409,16 +410,16 @@ export default class ReferensiWarnaEdit extends Component {
 
   handleSimpan = () => {
     const {
-      jenis_bkc_id,
-      jenis_bkc_name,
-      kode_warna,
+      idJenisBkc,
+      namaJenisBkc,
+      kodeWarna,
       warna,
-      golongan_id,
-      golongan_name,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      jenis_usaha_id,
-      jenis_usaha_name,
+      idGolonganBkc,
+      namaGolonganBkc,
+      idJenisProduksiBkc,
+      namaJenisProduksiBkc,
+      idJenisUsaha,
+      namaJenisUsaha,
     } = this.state;
 
     this.setState({
@@ -426,89 +427,89 @@ export default class ReferensiWarnaEdit extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          jenis_bkc_id,
-          jenis_bkc_name,
-          kode_warna,
+          idJenisBkc,
+          namaJenisBkc,
+          kodeWarna,
           warna,
-          golongan_id,
-          golongan_name,
-          jenis_produksi_id,
-          jenis_produksi_name,
-          jenis_usaha_id,
-          jenis_usaha_name,
+          idGolonganBkc,
+          namaGolonganBkc,
+          idJenisProduksiBkc,
+          namaJenisProduksiBkc,
+          idJenisUsaha,
+          namaJenisUsaha,
         },
       ],
     });
 
     this.setState({
-      kode_warna: null,
+      kodeWarna: null,
       warna: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
-      jenis_usaha_id: null,
-      jenis_usaha_name: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisUsaha: null,
+      namaJenisUsaha: null,
     });
   };
   handleUbah = () => {
     const {
-      jenis_bkc_id,
-      jenis_bkc_name,
-      warna_detail_id,
-      kode_warna,
+      idJenisBkc,
+      namaJenisBkc,
+      idWarnaBkcDetail,
+      kodeWarna,
       warna,
-      golongan_id,
-      golongan_name,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      jenis_usaha_id,
-      jenis_usaha_name,
+      idGolonganBkc,
+      namaGolonganBkc,
+      idJenisProduksiBkc,
+      namaJenisProduksiBkc,
+      idJenisUsaha,
+      namaJenisUsaha,
     } = this.state;
 
     const newDataSource = [...this.state.dataSource];
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndex);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      jenis_bkc_id,
-      jenis_bkc_name,
-      warna_detail_id,
-      kode_warna,
+      idJenisBkc,
+      namaJenisBkc,
+      idWarnaBkcDetail,
+      kodeWarna,
       warna,
-      golongan_id,
-      golongan_name,
-      jenis_produksi_id,
-      jenis_produksi_name,
-      jenis_usaha_id,
-      jenis_usaha_name,
+      idGolonganBkc,
+      namaGolonganBkc,
+      idJenisProduksiBkc,
+      namaJenisProduksiBkc,
+      idJenisUsaha,
+      namaJenisUsaha,
     });
     this.setState({
       isEdit: false,
       editIndex: null,
-      warna_detail_id: null,
-      kode_warna: null,
+      idWarnaBkcDetail: null,
+      kodeWarna: null,
       warna: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
-      jenis_usaha_id: null,
-      jenis_usaha_name: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisUsaha: null,
+      namaJenisUsaha: null,
       dataSource: newDataSource,
     });
   };
   handleBatal = () => {
     this.setState({
       isEdit: false,
-      warna_detail_id: null,
-      kode_warna: null,
+      idWarnaBkcDetail: null,
+      kodeWarna: null,
       warna: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
-      jenis_usaha_id: null,
-      jenis_usaha_name: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisUsaha: null,
+      namaJenisUsaha: null,
     });
   };
 
@@ -516,15 +517,15 @@ export default class ReferensiWarnaEdit extends Component {
     this.setState({
       isEdit: true,
       editIndex: record.key,
-      warna_detail_id: record.warna_detail_id,
-      kode_warna: record.kode_warna,
+      idWarnaBkcDetail: record.idWarnaBkcDetail,
+      kodeWarna: record.kodeWarna,
       warna: record.warna,
-      golongan_id: record.golongan_id,
-      golongan_name: record.golongan_name,
-      jenis_produksi_id: record.jenis_produksi_id,
-      jenis_produksi_name: record.jenis_produksi_name,
-      jenis_usaha_id: record.jenis_usaha_id,
-      jenis_usaha_name: record.jenis_usaha_name,
+      idGolonganBkc: record.idGolonganBkc,
+      namaGolonganBkc: record.namaGolonganBkc,
+      idJenisProduksiBkc: record.idJenisProduksiBkc,
+      namaJenisProduksiBkc: record.namaJenisProduksiBkc,
+      idJenisUsaha: record.idJenisUsaha,
+      namaJenisUsaha: record.namaJenisUsaha,
     });
   };
   handleDelete = (record) => {
@@ -550,24 +551,24 @@ export default class ReferensiWarnaEdit extends Component {
   handleSimpanPerubahan = async () => {
     const details = this.state.dataSource.map((item) => {
       const data = {
-        kodeWarna: item.kode_warna,
+        kodeWarna: item.kodeWarna,
         warna: item.warna,
-        idGolonganBkc: item.golongan_id,
-        idJenisProduksiBkc: item.jenis_produksi_id,
+        idGolonganBkc: item.idGolonganBkc,
+        idJenisProduksiBkc: item.idJenisProduksiBkc,
       };
 
-      if (item.warna_detail_id) data.idWarnaBkcDetail = item.warna_detail_id;
-      if (this.state.jenis_bkc_id === 2) data.idJenisUsaha = item.jenis_usaha_id;
+      if (item.idWarnaBkcDetail) data.idWarnaBkcDetail = item.idWarnaBkcDetail;
+      if (this.state.idJenisBkc === 2) data.idJenisUsaha = item.idJenisUsaha;
 
       return data;
     });
 
     const payload = {
       idSkepHeader: this.props.match.params.id,
-      nomorSkep: this.state.nomor_surat,
-      tanggalSkep: moment(this.state.tanggal_surat).format("YYYY-MM-DD"),
-      tanggalAwalBerlaku: moment(this.state.tanggal_awal_berlaku).format("YYYY-MM-DD"),
-      idJenisBkc: this.state.jenis_bkc_id,
+      nomorSkep: this.state.nomorSkep,
+      tanggalSkep: moment(this.state.tanggalSkep).format("YYYY-MM-DD"),
+      tanggalAwalBerlaku: moment(this.state.tanggalAwalBerlaku).format("YYYY-MM-DD"),
+      idJenisBkc: this.state.idJenisBkc,
       details,
     };
 
@@ -609,9 +610,9 @@ export default class ReferensiWarnaEdit extends Component {
                       <FormLabel>Nomor Surat</FormLabel>
                     </div>
                     <Input
-                      id="nomor_surat"
+                      id="nomorSkep"
                       onChange={this.handleInputChange}
-                      value={this.state.nomor_surat}
+                      value={this.state.nomorSkep}
                     />
                   </Col>
 
@@ -620,10 +621,10 @@ export default class ReferensiWarnaEdit extends Component {
                       <FormLabel>Tanggal Surat</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_surat"
+                      id="tanggalSkep"
                       format="DD-MM-YYYY"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
-                      value={this.state.tanggal_surat}
+                      onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
+                      value={this.state.tanggalSkep}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -633,12 +634,10 @@ export default class ReferensiWarnaEdit extends Component {
                       <FormLabel>Tanggal Awal Berlaku</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_awal_berlaku"
+                      id="tanggalAwalBerlaku"
                       format="DD-MM-YYYY"
-                      onChange={(value) =>
-                        this.handleDatepickerChange("tanggal_awal_berlaku", value)
-                      }
-                      value={this.state.tanggal_awal_berlaku}
+                      onChange={(value) => this.handleDatepickerChange("tanggalAwalBerlaku", value)}
+                      value={this.state.tanggalAwalBerlaku}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -653,28 +652,28 @@ export default class ReferensiWarnaEdit extends Component {
                       <FormLabel>Jenis BKC</FormLabel>
                     </div>
                     <Select
-                      id="jenis_bkc"
+                      id="jenisBkc"
                       onChange={(value, option) => {
                         this.setState({
-                          golongan_id: null,
-                          golongan_name: null,
-                          jenis_produksi_id: null,
-                          jenis_produksi_name: null,
-                          jenis_usaha_id: null,
-                          jenis_usaha_name: null,
-                          list_golongan: [],
-                          list_jenis_produksi: [],
+                          idGolonganBkc: null,
+                          namaGolonganBkc: null,
+                          idJenisProduksiBkc: null,
+                          namaJenisProduksiBkc: null,
+                          idJenisUsaha: null,
+                          namaJenisUsaha: null,
+                          listGolongan: [],
+                          listJenisProduksi: [],
                         });
-                        this.handleSelectCustomChange("jenis_bkc", value, option);
+                        this.handleSelectCustomChange("jenisBkc", value, option);
                       }}
                       style={{ width: "100%" }}
-                      value={this.state.jenis_bkc_id}
+                      value={this.state.idJenisBkc}
                       loading={this.state.isJenisBkcLoading}
                       disabled={this.state.dataSource.length > 0}
                     >
-                      {this.state.list_jenis_bkc.length > 0 &&
-                        this.state.list_jenis_bkc.map((item, index) => (
-                          <Select.Option key={`jenis-bkc-${index}`} value={item.idJenisBkc}>
+                      {this.state.listJenisBkc.length > 0 &&
+                        this.state.listJenisBkc.map((item, index) => (
+                          <Select.Option key={`jenisBkc-${index}`} value={item.idJenisBkc}>
                             {item.namaJenisBkc}
                           </Select.Option>
                         ))}
@@ -688,9 +687,9 @@ export default class ReferensiWarnaEdit extends Component {
                       <FormLabel>Kode Warna</FormLabel>
                     </div>
                     <Input
-                      id="kode_warna"
+                      id="kodeWarna"
                       onChange={this.handleInputChange}
-                      value={this.state.kode_warna}
+                      value={this.state.kodeWarna}
                     />
                   </Col>
 
@@ -701,23 +700,23 @@ export default class ReferensiWarnaEdit extends Component {
                     <Input id="warna" onChange={this.handleInputChange} value={this.state.warna} />
                   </Col>
 
-                  {this.state.jenis_bkc_id && (
+                  {this.state.idJenisBkc && (
                     <Col span={12}>
                       <div style={{ marginBottom: 10 }}>
                         <FormLabel>Golongan</FormLabel>
                       </div>
                       <Select
-                        id="golongan"
+                        id="golonganBkc"
                         onChange={(value, option) =>
-                          this.handleSelectCustomChange("golongan", value, option)
+                          this.handleSelectCustomChange("golonganBkc", value, option)
                         }
-                        value={this.state.golongan_id}
+                        value={this.state.idGolonganBkc}
                         loading={this.state.isGolonganLoading}
                         style={{ width: "100%" }}
                       >
-                        {this.state.list_golongan.length > 0 &&
-                          this.state.list_golongan.map((item, index) => (
-                            <Select.Option key={`golongan-${index}`} value={item.idGolonganBkc}>
+                        {this.state.listGolongan.length > 0 &&
+                          this.state.listGolongan.map((item, index) => (
+                            <Select.Option key={`golonganBkc-${index}`} value={item.idGolonganBkc}>
                               {item.namaGolonganBkc}
                             </Select.Option>
                           ))}
@@ -725,24 +724,24 @@ export default class ReferensiWarnaEdit extends Component {
                     </Col>
                   )}
 
-                  {this.state.jenis_bkc_id && (
+                  {this.state.idJenisBkc && (
                     <Col span={12}>
                       <div style={{ marginBottom: 10 }}>
                         <FormLabel>Jenis Produksi</FormLabel>
                       </div>
                       <Select
-                        id="jenis_produksi"
+                        id="jenisProduksiBkc"
                         onChange={(value, option) =>
-                          this.handleSelectCustomChange("jenis_produksi", value, option)
+                          this.handleSelectCustomChange("jenisProduksiBkc", value, option)
                         }
-                        value={this.state.jenis_produksi_id}
+                        value={this.state.idJenisProduksiBkc}
                         loading={this.state.isJenisProduksiLoading}
                         style={{ width: "100%" }}
                       >
-                        {this.state.list_jenis_produksi.length > 0 &&
-                          this.state.list_jenis_produksi.map((item, index) => (
+                        {this.state.listJenisProduksi.length > 0 &&
+                          this.state.listJenisProduksi.map((item, index) => (
                             <Select.Option
-                              key={`jenis-produksi-${index}`}
+                              key={`jenisProduksiBkc-${index}`}
                               value={item.idJenisProduksi}
                             >
                               {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
@@ -753,23 +752,23 @@ export default class ReferensiWarnaEdit extends Component {
                   )}
 
                   <Col span={12}>
-                    {this.state.jenis_bkc_id === 2 && (
+                    {this.state.idJenisBkc === 2 && (
                       <>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis Usaha</FormLabel>
                         </div>
                         <Select
-                          id="jenis_usaha"
+                          id="jenisUsaha"
                           onChange={(value, option) =>
-                            this.handleSelectCustomChange("jenis_usaha", value, option)
+                            this.handleSelectCustomChange("jenisUsaha", value, option)
                           }
-                          value={this.state.jenis_usaha_id}
+                          value={this.state.idJenisUsaha}
                           loading={this.state.isJenisUsahaLoading}
                           style={{ width: "100%" }}
                         >
-                          {this.state.list_jenis_usaha.length > 0 &&
-                            this.state.list_jenis_usaha.map((item, index) => (
-                              <Select.Option key={`jenis-usaha-${index}`} value={item.idJenisUsaha}>
+                          {this.state.listJenisUsaha.length > 0 &&
+                            this.state.listJenisUsaha.map((item, index) => (
+                              <Select.Option key={`jenisUsaha-${index}`} value={item.idJenisUsaha}>
                                 {item.namaJenisUsaha}
                               </Select.Option>
                             ))}

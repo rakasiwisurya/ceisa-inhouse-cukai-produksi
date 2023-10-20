@@ -15,13 +15,13 @@ export default class ReferensiTarifPitaCukai extends Component {
       page: 1,
       totalData: 0,
 
-      table: {
-        nomor_surat: null,
-        tanggal_surat: null,
-        awal_berlaku: null,
-        akhir_berlaku: null,
-        jenis_bkc_name: null,
-        jenis_referensi_name: null,
+      filter: {
+        nomorSkep: null,
+        tanggalSkep: null,
+        tanggalAwalBerlaku: null,
+        tanggalAkhirBerlaku: null,
+        namaJenisBkc: null,
+        namaJenisReferensi: null,
       },
 
       dataSource: [],
@@ -37,16 +37,12 @@ export default class ReferensiTarifPitaCukai extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() =>
-                    this.handleEdit(record.referensi_skep_id, record.jenis_referensi_id)
-                  }
+                  onClick={() => this.handleEdit(record.idSkepHeader, record.idJenisReferensi)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() =>
-                    this.handleDetail(record.referensi_skep_id, record.jenis_referensi_id)
-                  }
+                  onClick={() => this.handleDetail(record.idSkepHeader, record.idJenisReferensi)}
                 />
               </>
             </div>
@@ -61,58 +57,58 @@ export default class ReferensiTarifPitaCukai extends Component {
           ),
         },
         {
-          key: "nomor_surat",
+          key: "nomorSkep",
           title: "Nomor Surat",
-          dataIndex: "nomor_surat",
+          dataIndex: "nomorSkep",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_surat"),
+          ...this.getColumnSearchProps("nomorSkep"),
         },
         {
-          key: "tanggal_surat",
+          key: "tanggalSkep",
           title: "Tanggal Surat",
-          dataIndex: "tanggal_surat",
+          dataIndex: "tanggalSkep",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_surat"),
+          ...this.getColumnSearchProps("tanggalSkep"),
         },
         {
-          key: "awal_berlaku",
+          key: "tanggalAwalBerlaku",
           title: "Awal Berlaku",
-          dataIndex: "awal_berlaku",
+          dataIndex: "tanggalAwalBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("tanggalAwalBerlaku"),
         },
         {
-          key: "akhir_berlaku",
+          key: "tanggalAkhirBerlaku",
           title: "Akhir Berlaku",
-          dataIndex: "akhir_berlaku",
+          dataIndex: "tanggalAkhirBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("akhir_berlaku"),
+          ...this.getColumnSearchProps("tanggalAkhirBerlaku"),
         },
         {
-          key: "jenis_bkc_name",
+          key: "namaJenisBkc",
           title: "Jenis BKC",
-          dataIndex: "jenis_bkc_name",
+          dataIndex: "namaJenisBkc",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_bkc_name"),
+          ...this.getColumnSearchProps("namaJenisBkc"),
         },
         {
-          key: "jenis_referensi_name",
+          key: "namaJenisReferensi",
           title: "Jenis Referensi",
-          dataIndex: "jenis_referensi_name",
+          dataIndex: "namaJenisReferensi",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_referensi_name"),
+          ...this.getColumnSearchProps("namaJenisReferensi"),
         },
       ],
     };
@@ -130,25 +126,24 @@ export default class ReferensiTarifPitaCukai extends Component {
 
   getReferensiTarifPitaCukai = async () => {
     const {
-      nomor_surat,
-      tanggal_surat,
-      awal_berlaku,
-      akhir_berlaku,
-      jenis_bkc_name,
-      jenis_referensi_name,
-    } = this.state.table;
+      nomorSkep,
+      tanggalSkep,
+      tanggalAwalBerlaku,
+      tanggalAkhirBerlaku,
+      namaJenisBkc,
+      namaJenisReferensi,
+    } = this.state.filter;
 
     const payload = { page: this.state.page };
 
-    if (nomor_surat) payload.nomorSkep = nomor_surat;
-    if (tanggal_surat)
-      payload.tanggalSkep = moment(tanggal_surat, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (awal_berlaku)
-      payload.tanggalAwalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (akhir_berlaku)
-      payload.tanggalAkhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (jenis_bkc_name) payload.namaJenisBkc = jenis_bkc_name;
-    if (jenis_referensi_name) payload.namaJenisReferensi = jenis_referensi_name;
+    if (nomorSkep) payload.nomorSkep = nomorSkep;
+    if (tanggalSkep) payload.tanggalSkep = moment(tanggalSkep, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalAwalBerlaku)
+      payload.tanggalAwalBerlaku = moment(tanggalAwalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalAkhirBerlaku)
+      payload.tanggalAkhirBerlaku = moment(tanggalAkhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaJenisBkc) payload.namaJenisBkc = namaJenisBkc;
+    if (namaJenisReferensi) payload.namaJenisReferensi = namaJenisReferensi;
 
     const response = await requestApi({
       service: "referensi",
@@ -160,16 +155,8 @@ export default class ReferensiTarifPitaCukai extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
+        ...item,
         key: `referensi-${index}`,
-        referensi_skep_id: item.idSkepHeader,
-        nomor_surat: item.nomorSkep,
-        tanggal_surat: item.tanggalSkep,
-        awal_berlaku: item.tanggalAwalBerlaku,
-        akhir_berlaku: item.tanggalAkhirBerlaku,
-        jenis_bkc_id: item.idJenisBkc,
-        jenis_bkc_name: item.namaJenisBkc,
-        jenis_referensi_id: item.idJenisReferensi,
-        jenis_referensi_name: item.namaJenisReferensi,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
@@ -184,9 +171,9 @@ export default class ReferensiTarifPitaCukai extends Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          value={this.state.table[dataIndex]}
+          value={this.state.filter[dataIndex]}
           onChange={(e) =>
-            this.setState({ table: { ...this.state.table, [dataIndex]: e.target.value } })
+            this.setState({ filter: { ...this.state.filter, [dataIndex]: e.target.value } })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -228,117 +215,114 @@ export default class ReferensiTarifPitaCukai extends Component {
   handleColumnReset = (clearFilters, dataIndex) => {
     clearFilters();
     this.setState(
-      { table: { ...this.state.table, [dataIndex]: null }, page: 1 },
+      { filter: { ...this.state.filter, [dataIndex]: null }, page: 1 },
       this.getReferensiTarifPitaCukai
     );
   };
 
-  handleEdit = (referensiSkepId, jenisReferensiid) => {
+  handleEdit = (idSkepHeader, idJenisReferensi) => {
     switch (true) {
-      case jenisReferensiid === 3 || jenisReferensiid === 4:
+      case idJenisReferensi === 3 || idJenisReferensi === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${referensiSkepId}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-edit/${idSkepHeader}`
         );
         break;
-      case jenisReferensiid === 2 ||
-        jenisReferensiid === 5 ||
-        jenisReferensiid === 6 ||
-        jenisReferensiid === 8:
+      case idJenisReferensi === 2 ||
+        idJenisReferensi === 5 ||
+        idJenisReferensi === 6 ||
+        idJenisReferensi === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${referensiSkepId}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${idSkepHeader}`
         );
         break;
       default:
-        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/edit/${referensiSkepId}`;
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/edit/${idSkepHeader}`;
         break;
     }
   };
-  handleDetail = (referensiSkepId, jenisReferensiid) => {
+  handleDetail = (idSkepHeader, idJenisReferensi) => {
     switch (true) {
-      case jenisReferensiid === 3 || jenisReferensiid === 4:
+      case idJenisReferensi === 3 || idJenisReferensi === 4:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${referensiSkepId}`
+          `${pathName}/referensi-tarif-warna/referensi-warna-detail/${idSkepHeader}`
         );
         break;
-      case jenisReferensiid === 2 ||
-        jenisReferensiid === 5 ||
-        jenisReferensiid === 6 ||
-        jenisReferensiid === 8:
+      case idJenisReferensi === 2 ||
+        idJenisReferensi === 5 ||
+        idJenisReferensi === 6 ||
+        idJenisReferensi === 8:
         this.props.history.push(
-          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${referensiSkepId}`
+          `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${idSkepHeader}`
         );
         break;
       default:
-        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/detail/${referensiSkepId}`;
+        window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/detail/${idSkepHeader}`;
         break;
     }
   };
 
   render() {
     return (
-      <>
-        <Container
-          menuName="Referensi Tarif dan Pita Cukai"
-          contentName="Pengelolaan Referensi Tarif dan Pita Cukai"
-        >
-          <Row>
-            <Col span={14}>
-              <Row gutter={[16, 16]}>
-                <Col span={8}>
-                  <ButtonCustom
-                    variant="info"
-                    onClick={() =>
-                      this.props.history.push(
-                        `${pathName}/referensi-tarif-warna/referensi-warna-rekam`
-                      )
-                    }
-                    block
-                  >
-                    + Referensi Warna
-                  </ButtonCustom>
-                </Col>
+      <Container
+        menuName="Referensi Tarif dan Pita Cukai"
+        contentName="Pengelolaan Referensi Tarif dan Pita Cukai"
+      >
+        <Row>
+          <Col span={14}>
+            <Row gutter={[16, 16]}>
+              <Col span={8}>
+                <ButtonCustom
+                  variant="info"
+                  onClick={() =>
+                    this.props.history.push(
+                      `${pathName}/referensi-tarif-warna/referensi-warna-rekam`
+                    )
+                  }
+                  block
+                >
+                  + Referensi Warna
+                </ButtonCustom>
+              </Col>
 
-                <Col span={8}>
-                  <ButtonCustom
-                    variant="warning"
-                    onClick={() =>
-                      this.props.history.push(
-                        `${pathName}/referensi-tarif-warna/referensi-tarif-rekam`
-                      )
-                    }
-                    block
-                  >
-                    + Referensi Tarif
-                  </ButtonCustom>
-                </Col>
+              <Col span={8}>
+                <ButtonCustom
+                  variant="warning"
+                  onClick={() =>
+                    this.props.history.push(
+                      `${pathName}/referensi-tarif-warna/referensi-tarif-rekam`
+                    )
+                  }
+                  block
+                >
+                  + Referensi Tarif
+                </ButtonCustom>
+              </Col>
 
-                <Col span={8}>
-                  <ButtonCustom
-                    variant="danger"
-                    onClick={() => {
-                      window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/rekam`;
-                    }}
-                    block
-                  >
-                    + Referensi Tanggal
-                  </ButtonCustom>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+              <Col span={8}>
+                <ButtonCustom
+                  variant="danger"
+                  onClick={() => {
+                    window.location.href = `${baseUrlCeisaInhouse}/referensi-penyediaan-pita-cukai/rekam`;
+                  }}
+                  block
+                >
+                  + Referensi Tanggal
+                </ButtonCustom>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
 
-          <div style={{ marginTop: 30, marginBottom: 20 }}>
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isReferensiTarifPitaCukaiLoading}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              onChange={(page) => this.setState({ page: page.current })}
-              scroll={{ x: "max-content" }}
-            />
-          </div>
-        </Container>
-      </>
+        <Table
+          dataSource={this.state.dataSource}
+          columns={this.state.columns}
+          loading={this.state.isReferensiTarifPitaCukaiLoading}
+          pagination={{ current: this.state.page, total: this.state.totalData }}
+          onChange={(page) => this.setState({ page: page.current })}
+          scroll={{ x: "max-content" }}
+          style={{ marginTop: 30, marginBottom: 20 }}
+        />
+      </Container>
     );
   }
 }

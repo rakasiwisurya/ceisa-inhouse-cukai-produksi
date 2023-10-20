@@ -1,18 +1,10 @@
 import moment from "moment";
 
-export const capitalize = (string) => {
+export const capitalize = (string, isLowerCaseFirst = true) => {
   if (!string) return string;
-  const words = string.toLowerCase().split(" ");
+  const words = isLowerCaseFirst ? string.toLowerCase().split(" ") : string.split(" ");
   words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
   return words.join(" ");
-};
-
-export const formatNumber = (number) => {
-  return `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-export const unFormatNumber = (number) => {
-  return number.replace(/\$\s?|(,*)/g, "");
 };
 
 export const formatDateFromExcelEpoch = (numericDate) => {

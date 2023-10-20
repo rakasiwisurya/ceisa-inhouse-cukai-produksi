@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Row, Col, Input, DatePicker, Select, InputNumber, Icon, Button, Table } from "antd";
+import { Button, Col, DatePicker, Icon, Input, InputNumber, Row, Select, Table } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import Header from "components/Header";
-import moment from "moment";
-import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import ButtonCustom from "components/Button/ButtonCustom";
+import moment from "moment";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class ReferensiTarifDetail extends Component {
   constructor(props) {
@@ -17,50 +17,50 @@ export default class ReferensiTarifDetail extends Component {
 
       isDetailTarifLoading: true,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      tanggal_awal_berlaku: null,
-      nomor_peraturan: null,
-      tanggal_peraturan: null,
+      nomorSkep: null,
+      tanggalSkep: null,
+      tanggalAwalBerlaku: null,
+      nomorPeraturan: null,
+      tanggalPeraturan: null,
 
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
-      golongan_id: null,
-      golongan_name: null,
-      personal_id: null,
-      personal_name: null,
+      idJenisBkc: null,
+      namaJenisBkc: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idPersonal: null,
+      namaPersonal: null,
       satuan: null,
 
-      jenis_produksi_id: null,
-      jenis_produksi_code: null,
-      jenis_produksi_name: null,
-      jenis_htl_rel_id: null,
-      jenis_htl_rel_code: null,
-      jenis_htl_rel_name: null,
+      idJenisProduksiBkc: null,
+      kodeJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisHtlRel: null,
+      kodeJenisHtlRel: null,
+      namaJenisHtlRel: null,
       tarif: null,
-      batas_produksi1: null,
-      batas_produksi2: null,
+      batasProduksi1: null,
+      batasProduksi2: null,
       hje1: null,
       hje2: null,
       layer: null,
 
-      kadar_atas: null,
-      kadar_bawah: null,
-      tarif_cukai_dalam_negeri: null,
-      tarif_cukai_impor: null,
+      kadarAtas: null,
+      kadarBawah: null,
+      tarifCukaiDalamNegeri: null,
+      tarifCukaiImpor: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_personal: [
+      listPersonal: [
         {
-          personal_id: "Y",
-          personal_name: "YA",
+          idPersonal: "Y",
+          namaPersonal: "YA",
         },
         {
-          personal_id: "N",
-          personal_name: "TIDAK",
+          idPersonal: "N",
+          namaPersonal: "TIDAK",
         },
       ],
 
@@ -74,8 +74,8 @@ export default class ReferensiTarifDetail extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
-      if (this.state.jenis_bkc_id === 3) {
+    if (prevState.idJenisBkc !== this.state.idJenisBkc) {
+      if (this.state.idJenisBkc === 3) {
         this.setState({
           columns: [
             {
@@ -87,25 +87,25 @@ export default class ReferensiTarifDetail extends Component {
               ),
             },
             {
-              key: "golongan_name",
-              dataIndex: "golongan_name",
+              key: "namaGolonganBkc",
+              dataIndex: "namaGolonganBkc",
               title: "Golongan",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("golongan_name"),
+              ...this.getColumnSearchProps("namaGolonganBkc"),
             },
             {
-              key: "jenis_produksi_name",
-              dataIndex: "jenis_produksi_name",
+              key: "namaJenisProduksiBkc",
+              dataIndex: "namaJenisProduksiBkc",
               title: "Jenis Produksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_produksi_name"),
+              ...this.getColumnSearchProps("namaJenisProduksiBkc"),
             },
             {
-              key: "jenis_htl_rel_name",
-              dataIndex: "jenis_htl_rel_name",
+              key: "namaJenisHtlRel",
+              dataIndex: "namaJenisHtlRel",
               title: "Jenis HPTL/REL",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_htl_rel_name"),
+              ...this.getColumnSearchProps("namaJenisHtlRel"),
             },
             {
               key: "hje1",
@@ -136,24 +136,24 @@ export default class ReferensiTarifDetail extends Component {
               ...this.getColumnSearchProps("tarif"),
             },
             {
-              key: "batas_produksi1",
+              key: "batasProduksi1",
               title: "Batas I",
-              dataIndex: "batas_produksi1",
+              dataIndex: "batasProduksi1",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("batas_produksi1"),
+              ...this.getColumnSearchProps("batasProduksi1"),
             },
             {
-              key: "batas_produksi2",
+              key: "batasProduksi2",
               title: "Batas II",
-              dataIndex: "batas_produksi2",
+              dataIndex: "batasProduksi2",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("batas_produksi2"),
+              ...this.getColumnSearchProps("batasProduksi2"),
             },
           ],
         });
       }
 
-      if (this.state.jenis_bkc_id === 2) {
+      if (this.state.idJenisBkc === 2) {
         this.setState({
           columns: [
             {
@@ -166,46 +166,46 @@ export default class ReferensiTarifDetail extends Component {
               ...this.getColumnSearchProps("nomor"),
             },
             {
-              key: "golongan_name",
-              dataIndex: "golongan_name",
+              key: "namaGolonganBkc",
+              dataIndex: "namaGolonganBkc",
               title: "Golongan",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("golongan_name"),
+              ...this.getColumnSearchProps("namaGolonganBkc"),
             },
             {
-              key: "jenis_produksi_name",
-              dataIndex: "jenis_produksi_name",
+              key: "namaJenisProduksiBkc",
+              dataIndex: "namaJenisProduksiBkc",
               title: "Jenis Produksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_produksi_name"),
+              ...this.getColumnSearchProps("namaJenisProduksiBkc"),
             },
             {
-              key: "kadar_atas",
-              dataIndex: "kadar_atas",
+              key: "kadarAtas",
+              dataIndex: "kadarAtas",
               title: "Kadar Atas",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("kadar_atas"),
+              ...this.getColumnSearchProps("kadarAtas"),
             },
             {
-              key: "kadar_bawah",
-              dataIndex: "kadar_bawah",
+              key: "kadarBawah",
+              dataIndex: "kadarBawah",
               title: "Kadar Bawah",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("kadar_bawah"),
+              ...this.getColumnSearchProps("kadarBawah"),
             },
             {
-              key: "tarif_cukai_dalam_negeri",
-              dataIndex: "tarif_cukai_dalam_negeri",
+              key: "tarifCukaiDalamNegeri",
+              dataIndex: "tarifCukaiDalamNegeri",
               title: "Tarif Cukai Dalam Negeri",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tarif_cukai_dalam_negeri"),
+              ...this.getColumnSearchProps("tarifCukaiDalamNegeri"),
             },
             {
-              key: "tarif_cukai_impor",
-              dataIndex: "tarif_cukai_impor",
+              key: "tarifCukaiImpor",
+              dataIndex: "tarifCukaiImpor",
               title: "Tarif Cukai Impor",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tarif_cukai_impor"),
+              ...this.getColumnSearchProps("tarifCukaiImpor"),
             },
           ],
         });
@@ -228,54 +228,54 @@ export default class ReferensiTarifDetail extends Component {
       const { data } = response.data;
 
       this.setState({
-        nomor_surat: data.nomorSkep,
-        tanggal_surat: moment(data.tanggalSkep),
-        tanggal_awal_berlaku: moment(data.tanggalAwalBerlaku),
-        nomor_peraturan: data.nomorPeraturan,
-        tanggal_peraturan: moment(data.tanggalPeraturan),
-        jenis_bkc_id: data.idJenisBkc,
-        jenis_bkc_name: data.namaJenisBkc,
+        nomorSkep: data.nomorSkep,
+        tanggalSkep: moment(data.tanggalSkep),
+        tanggalAwalBerlaku: moment(data.tanggalAwalBerlaku),
+        nomorPeraturan: data.nomorPeraturan,
+        tanggalPeraturan: moment(data.tanggalPeraturan),
+        idJenisBkc: data.idJenisBkc,
+        namaJenisBkc: data.namaJenisBkc,
         dataSource: data.details.map((detail, index) => ({
           key: `referensi-${index}`,
-          tarif_detail_id: detail.idTarifBkcDetail,
-          jenis_bkc_id: detail.idJenisBkc,
-          jenis_bkc_name: detail.namaJenisBkc,
-          golongan_id: detail.idGolonganBkc,
-          golongan_name: detail.namaGolonganBkc,
-          personal_id: detail.flagPersonal,
-          jenis_produksi_id:
+          idTarifBkcDetail: detail.idTarifBkcDetail,
+          idJenisBkc: detail.idJenisBkc,
+          namaJenisBkc: detail.namaJenisBkc,
+          idGolonganBkc: detail.idGolonganBkc,
+          namaGolonganBkc: detail.namaGolonganBkc,
+          idPersonal: detail.flagPersonal,
+          idJenisProduksiBkc:
             detail.idJenisProduksiBkc || detail.satuanJenisProduksiBkc
               ? `${detail.idJenisProduksiBkc} ${detail.satuanJenisProduksiBkc}`
               : null,
-          jenis_produksi_code: detail.kodeJenisProduksiBkc,
-          jenis_produksi_name:
+          kodeJenisProduksiBkc: detail.kodeJenisProduksiBkc,
+          namaJenisProduksiBkc:
             detail.kodeJenisProduksiBkc || detail.namaJenisProduksiBkc
               ? `(${detail.kodeJenisProduksiBkc}) - ${detail.namaJenisProduksiBkc}`
               : null,
-          jenis_produksi_bkc_satuan: detail.satuanJenisProduksiBkc,
-          jenis_htl_rel_satuan: detail.satuanJenisHtlRel,
+          satuanJenisProduksiBkc: detail.satuanJenisProduksiBkc,
+          satuanJenisHtlRel: detail.satuanJenisHtlRel,
 
-          jenis_htl_rel_id:
+          idJenisHtlRel:
             detail.idJenisHtlRel || detail.satuanJenisHtlRel
               ? `${detail.idJenisHtlRel} ${detail.satuanJenisHtlRel}`
               : null,
-          jenis_htl_rel_code: detail.kodeJenisHtlRel,
-          jenis_htl_rel_name:
+          kodeJenisHtlRel: detail.kodeJenisHtlRel,
+          namaJenisHtlRel:
             detail.kodeJenisHtlRel || detail.namaJenisHtlRel
               ? `(${detail.kodeJenisHtlRel}) - ${detail.namaJenisHtlRel}`
               : null,
           tarif: detail.idJenisBkc === 3 ? detail.tarif : null,
-          batas_produksi1: detail.batasProduksi1,
-          batas_produksi2: detail.batasProduksi2,
+          batasProduksi1: detail.batasProduksi1,
+          batasProduksi2: detail.batasProduksi2,
           hje1: detail.hje1,
           hje2: detail.hje2,
           layer: detail.layer,
 
-          kadar_atas: detail.kadarAtas,
-          kadar_bawah: detail.kadarBawah,
-          tarif_cukai_dalam_negeri:
+          kadarAtas: detail.kadarAtas,
+          kadarBawah: detail.kadarBawah,
+          tarifCukaiDalamNegeri:
             detail.idJenisBkc === 2 && detail.idGolonganBkc === 5 ? detail.tarif : null,
-          tarif_cukai_impor:
+          tarifCukaiImpor:
             detail.idJenisBkc === 2 && detail.idGolonganBkc === 4 ? detail.tarif : null,
         })),
       });
@@ -335,10 +335,7 @@ export default class ReferensiTarifDetail extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
-  };
-  handleTableChange = (page) => {
-    this.setState({ page: page.current });
+    this.setState({ searchText: null });
   };
 
   render() {
@@ -364,16 +361,16 @@ export default class ReferensiTarifDetail extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nomor Surat</FormLabel>
                     </div>
-                    <Input id="nomor_surat" value={this.state.nomor_surat} disabled />
+                    <Input id="nomorSkep" value={this.state.nomorSkep} disabled />
                   </Col>
                   <Col span={6}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tanggal Surat</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_surat"
+                      id="tanggalSkep"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_surat}
+                      value={this.state.tanggalSkep}
                       disabled
                     />
                   </Col>
@@ -382,9 +379,9 @@ export default class ReferensiTarifDetail extends Component {
                       <FormLabel>Tanggal Awal Berlaku</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_awal_berlaku"
+                      id="tanggalAwalBerlaku"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_awal_berlaku}
+                      value={this.state.tanggalAwalBerlaku}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -396,17 +393,17 @@ export default class ReferensiTarifDetail extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nomor Peraturan</FormLabel>
                     </div>
-                    <Input id="nomor_peraturan" value={this.state.nomor_peraturan} disabled />
+                    <Input id="nomorPeraturan" value={this.state.nomorPeraturan} disabled />
                   </Col>
                   <Col span={6}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tanggal Peraturan</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_peraturan"
+                      id="tanggalPeraturan"
                       format="DD-MM-YYYY"
                       style={{ width: "100%" }}
-                      value={this.state.tanggal_peraturan}
+                      value={this.state.tanggalPeraturan}
                       disabled
                     />
                   </Col>
@@ -421,20 +418,20 @@ export default class ReferensiTarifDetail extends Component {
                       <FormLabel>Jenis BKC</FormLabel>
                     </div>
                     <Select
-                      id="jenis_bkc"
+                      id="jenisBkc"
                       style={{ width: "100%" }}
-                      value={this.state.jenis_bkc_id}
+                      value={this.state.idJenisBkc}
                       disabled
                     >
-                      <Select.Option value={this.state.jenis_bkc_id}>
-                        {this.state.jenis_bkc_name}
+                      <Select.Option value={this.state.idJenisBkc}>
+                        {this.state.namaJenisBkc}
                       </Select.Option>
                     </Select>
                   </Col>
                 </Row>
 
                 <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
-                  {this.state.jenis_bkc_id && (
+                  {this.state.idJenisBkc && (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
@@ -442,12 +439,12 @@ export default class ReferensiTarifDetail extends Component {
                         </div>
                         <Select
                           id="golongan"
-                          value={this.state.golongan_id}
+                          value={this.state.idGolonganBkc}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.golongan_id}>
-                            {this.state.golongan_name}
+                          <Select.Option value={this.state.idGolonganBkc}>
+                            {this.state.namaGolonganBkc}
                           </Select.Option>
                         </Select>
                       </Col>
@@ -458,25 +455,16 @@ export default class ReferensiTarifDetail extends Component {
                         </div>
                         <Select
                           id="personal"
-                          value={this.state.personal_id}
+                          value={this.state.idPersonal}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select
-                            id="personal"
-                            onChange={(value, option) =>
-                              this.handleSelectCustomChange("personal", value, option)
-                            }
-                            value={this.state.personal_id}
-                            style={{ width: "100%" }}
-                          >
-                            {this.state.list_personal.length > 0 &&
-                              this.state.list_personal.map((item, index) => (
-                                <Select.Option key={`personal-${index}`} value={item.personal_id}>
-                                  {item.personal_name}
-                                </Select.Option>
-                              ))}
-                          </Select>
+                          {this.state.listPersonal.length > 0 &&
+                            this.state.listPersonal.map((item, index) => (
+                              <Select.Option key={`personal-${index}`} value={item.idPersonal}>
+                                {item.namaPersonal}
+                              </Select.Option>
+                            ))}
                         </Select>
                       </Col>
 
@@ -485,35 +473,35 @@ export default class ReferensiTarifDetail extends Component {
                           <FormLabel>Jenis Produksi</FormLabel>
                         </div>
                         <Select
-                          id="jenis_produksi"
-                          value={this.state.jenis_produksi_id}
+                          id="jenisProduksi"
+                          value={this.state.idJenisProduksiBkc}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.jenis_produksi_id}>
-                            {this.state.jenis_produksi_code &&
-                              this.state.jenis_produksi_name &&
-                              `(${this.state.jenis_produksi_code}) - ${this.state.jenis_produksi_name}`}
+                          <Select.Option value={this.state.idJenisProduksiBkc}>
+                            {this.state.kodeJenisProduksiBkc &&
+                              this.state.namaJenisProduksiBkc &&
+                              `(${this.state.kodeJenisProduksiBkc}) - ${this.state.namaJenisProduksiBkc}`}
                           </Select.Option>
                         </Select>
                       </Col>
                     </>
                   )}
 
-                  {this.state.jenis_bkc_id === 3 && (
+                  {this.state.idJenisBkc === 3 && (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis HPTL/REL</FormLabel>
                         </div>
                         <Select
-                          id="jenis_htl_rel"
-                          value={this.state.jenis_htl_rel_id}
+                          id="jenisHtlRel"
+                          value={this.state.idJenisHtlRel}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.jenis_htl_rel_id}>
-                            {this.state.jenis_htl_rel_name}
+                          <Select.Option value={this.state.idJenisHtlRel}>
+                            {this.state.namaJenisHtlRel}
                           </Select.Option>
                         </Select>
                       </Col>
@@ -545,16 +533,16 @@ export default class ReferensiTarifDetail extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="batas_produksi1"
-                            value={this.state.batas_produksi1}
+                            id="batasProduksi1"
+                            value={this.state.batasProduksi1}
                             style={{ flex: 1 }}
                             min={0}
                             disabled
                           />
                           <div>s.d</div>
                           <InputNumber
-                            id="batas_produksi2"
-                            value={this.state.batas_produksi2}
+                            id="batasProduksi2"
+                            value={this.state.batasProduksi2}
                             style={{ flex: 1 }}
                             min={0}
                             disabled
@@ -604,7 +592,7 @@ export default class ReferensiTarifDetail extends Component {
                     </>
                   )}
 
-                  {this.state.jenis_bkc_id === 2 && (
+                  {this.state.idJenisBkc === 2 && (
                     <>
                       <Col span={12}>
                         <Row gutter={[16, 16]}>
@@ -613,8 +601,8 @@ export default class ReferensiTarifDetail extends Component {
                               <FormLabel>Kadar Atas</FormLabel>
                             </div>
                             <InputNumber
-                              id="kadar_atas"
-                              value={this.state.kadar_atas}
+                              id="kadarAtas"
+                              value={this.state.kadarAtas}
                               style={{ width: "100%" }}
                               min={0}
                               disabled
@@ -626,8 +614,8 @@ export default class ReferensiTarifDetail extends Component {
                               <FormLabel>Kadar Bawah</FormLabel>
                             </div>
                             <InputNumber
-                              id="kadar_bawah"
-                              value={this.state.kadar_bawah}
+                              id="kadarBawah"
+                              value={this.state.kadarBawah}
                               style={{ width: "100%" }}
                               min={0}
                               disabled
@@ -641,8 +629,8 @@ export default class ReferensiTarifDetail extends Component {
                           <FormLabel>Tarif Cukai Dalam Negeri</FormLabel>
                         </div>
                         <InputNumber
-                          id="tarif_cukai_dalam_negeri"
-                          value={this.state.tarif_cukai_dalam_negeri}
+                          id="tarifCukaiDalamNegeri"
+                          value={this.state.tarifCukaiDalamNegeri}
                           style={{ width: "100%" }}
                           min={0}
                           disabled
@@ -654,8 +642,8 @@ export default class ReferensiTarifDetail extends Component {
                           <FormLabel>Tarif Cukai Impor</FormLabel>
                         </div>
                         <InputNumber
-                          id="tarif_cukai_impor"
-                          value={this.state.tarif_cukai_impor}
+                          id="tarifCukaiImpor"
+                          value={this.state.tarifCukaiImpor}
                           style={{ width: "100%" }}
                           min={0}
                           disabled
@@ -670,7 +658,7 @@ export default class ReferensiTarifDetail extends Component {
                     dataSource={this.state.dataSource}
                     columns={this.state.columns}
                     scroll={{ x: "max-content" }}
-                    onChange={this.handleTableChange}
+                    onChange={(page) => this.setState({ page: page.current })}
                     pagination={{ current: this.state.page }}
                   />
                 </div>
