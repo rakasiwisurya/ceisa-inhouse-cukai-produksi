@@ -222,15 +222,16 @@ export default class ReferensiTarifPitaCukai extends Component {
 
   handleEdit = (idSkepHeader, idJenisReferensi) => {
     switch (true) {
-      case idJenisReferensi === 3 || idJenisReferensi === 4:
+      case idJenisReferensi === 3:
+      case idJenisReferensi === 4:
         this.props.history.push(
           `${pathName}/referensi-tarif-warna/referensi-warna-edit/${idSkepHeader}`
         );
         break;
-      case idJenisReferensi === 2 ||
-        idJenisReferensi === 5 ||
-        idJenisReferensi === 6 ||
-        idJenisReferensi === 8:
+      case idJenisReferensi === 2:
+      case idJenisReferensi === 5:
+      case idJenisReferensi === 6:
+      case idJenisReferensi === 8:
         this.props.history.push(
           `${pathName}/referensi-tarif-warna/referensi-tarif-edit/${idSkepHeader}`
         );
@@ -242,15 +243,16 @@ export default class ReferensiTarifPitaCukai extends Component {
   };
   handleDetail = (idSkepHeader, idJenisReferensi) => {
     switch (true) {
-      case idJenisReferensi === 3 || idJenisReferensi === 4:
+      case idJenisReferensi === 3:
+      case idJenisReferensi === 4:
         this.props.history.push(
           `${pathName}/referensi-tarif-warna/referensi-warna-detail/${idSkepHeader}`
         );
         break;
-      case idJenisReferensi === 2 ||
-        idJenisReferensi === 5 ||
-        idJenisReferensi === 6 ||
-        idJenisReferensi === 8:
+      case idJenisReferensi === 2:
+      case idJenisReferensi === 5:
+      case idJenisReferensi === 6:
+      case idJenisReferensi === 8:
         this.props.history.push(
           `${pathName}/referensi-tarif-warna/referensi-tarif-detail/${idSkepHeader}`
         );
