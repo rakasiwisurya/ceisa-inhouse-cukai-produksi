@@ -22,9 +22,9 @@ export default class SPL extends Component {
       filter: {
         status: null,
         nppbkc: null,
-        nama_perusahaan: null,
-        nomor_spl: null,
-        tanggal_spl: null,
+        namaPerusahaan: null,
+        nomorSpl: null,
+        tanggalSpl: null,
       },
 
       dataSource: [],
@@ -59,25 +59,25 @@ export default class SPL extends Component {
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
-          key: "nomor_spl",
+          key: "nomorSpl",
           title: "Nomor SPL",
-          dataIndex: "nomor_spl",
+          dataIndex: "nomorSpl",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_spl"),
+          ...this.getColumnSearchProps("nomorSpl"),
         },
         {
-          key: "tanggal_spl",
+          key: "tanggalSpl",
           title: "Tanggal SPL",
-          dataIndex: "tanggal_spl",
+          dataIndex: "tanggalSpl",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tanggal_spl"),
+          ...this.getColumnSearchProps("tanggalSpl"),
         },
       ],
     };
@@ -94,14 +94,14 @@ export default class SPL extends Component {
   }
 
   getSpl = async () => {
-    const { nppbkc, nama_perusahaan, nomor_spl, tanggal_spl, status } = this.state.filter;
+    const { nppbkc, namaPerusahaan, nomorSpl, tanggalSpl, status } = this.state.filter;
 
     const payload = { page: this.state.page };
 
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (nomor_spl) payload.nomorSpl = nomor_spl;
-    if (tanggal_spl) payload.tanggalSpl = moment(tanggal_spl, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (nomorSpl) payload.nomorSpl = nomorSpl;
+    if (tanggalSpl) payload.tanggalSpl = moment(tanggalSpl, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (status) payload.status = status;
 
     const response = await requestApi({
@@ -118,9 +118,9 @@ export default class SPL extends Component {
         key: `spl-${index}`,
         status: item.status,
         nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
-        nomor_spl: item.nomorSpl,
-        tanggal_spl: item.tanggalSpl,
+        namaPerusahaan: item.namaPerusahaan,
+        nomorSpl: item.nomorSpl,
+        tanggalSpl: item.tanggalSpl,
       }));
 
       const page = response.data.data.currentPage;
@@ -205,16 +205,15 @@ export default class SPL extends Component {
             </Col>
           </Row>
 
-          <div style={{ marginTop: 30, marginBottom: 20 }}>
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isSplLoading}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              onChange={(page) => this.setState({ page: page.current })}
-              scroll={{ x: "max-content" }}
-            />
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isSplLoading}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            onChange={(page) => this.setState({ page: page.current })}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30, marginBottom: 20 }}
+          />
         </Container>
 
         <ModalSPLDetail

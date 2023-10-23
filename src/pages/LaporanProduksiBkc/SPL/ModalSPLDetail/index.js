@@ -9,31 +9,31 @@ export default class ModalSPLDetail extends Component {
     super(props);
     this.state = {
       subtitle1: "Surat Pernyataan Libur",
-      card_title_1: "Data Pemohon",
-      card_title_2: "Data Pabrik",
-      card_title_3: "Pernyataan",
+      cardTitle1: "Data Pemohon",
+      cardTitle2: "Data Pabrik",
+      cardTitle3: "Pernyataan",
 
       isUpdateLoading: false,
       isDetailLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarKotaVisible: false,
 
-      nomor_spl: "",
-      tanggal_spl: null,
-      nama_pengusaha: "",
-      jabatan: "",
-      alamat_pemohon: "",
+      nomorSpl: null,
+      tanggalSpl: null,
+      namaPengusaha: null,
+      jabatan: null,
+      alamatPengusaha: null,
 
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      idNppbkc: null,
+      namaNppbkc: null,
+      nppbkc: null,
+      alamatNppbkc: null,
 
-      tanggal_libur_awal: null,
-      tanggal_libur_akhir: null,
-      pernyataan_tanggal: null,
-      pernyataan_kota_id: "",
-      pernyataan_kota_name: "",
+      awalLibur: null,
+      akhirLibur: null,
+      tanggalPernyataan: null,
+      idKotaPernyataan: null,
+      namaKotaPernyataan: null,
     };
   }
 
@@ -58,19 +58,19 @@ export default class ModalSPLDetail extends Component {
       const { data } = response.data;
 
       this.setState({
-        nomor_spl: data.nomorSpl,
-        tanggal_spl: moment(data.tanggalSpl),
-        nama_pengusaha: data.namaPengusaha,
+        nomorSpl: data.nomorSpl,
+        tanggalSpl: moment(data.tanggalSpl),
+        namaPengusaha: data.namaPengusaha,
         jabatan: data.jabatanPengusaha,
-        alamat_pemohon: data.alamatPengusaha,
-        nppbkc_id: data.idNppbkc,
-        nama_nppbkc: data.namaPerusahaan,
+        alamatPengusaha: data.alamatPengusaha,
+        idNppbkc: data.idNppbkc,
+        namaNppbkc: data.namaPerusahaan,
         nppbkc: data.nppbkc,
-        alamat_nppbkc: data.alamatPerusahaan,
-        tanggal_libur_awal: moment(data.awalLibur),
-        tanggal_libur_akhir: moment(data.akhirLibur),
-        pernyataan_tanggal: moment(data.tanggalPernyataan),
-        pernyataan_kota_name: data.tempatPernyataan,
+        alamatNppbkc: data.alamatPerusahaan,
+        awalLibur: moment(data.awalLibur),
+        akhirLibur: moment(data.akhirLibur),
+        tanggalPernyataan: moment(data.tanggalPernyataan),
+        namaKotaPernyataan: data.tempatPernyataan,
       });
     }
   };
@@ -92,12 +92,12 @@ export default class ModalSPLDetail extends Component {
           <>
             <Row gutter={[20, 20]}>
               <Col span={12}>
-                <Card title={this.state.card_title_1} style={{ height: 563 }}>
+                <Card title={this.state.cardTitle1} style={{ height: 563 }}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nomor SPL</FormLabel>
                     </div>
-                    <Input id="nomor_spl" value={this.state.nomor_spl} disabled />
+                    <Input id="nomorSpl" value={this.state.nomorSpl} disabled />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -105,9 +105,9 @@ export default class ModalSPLDetail extends Component {
                       <FormLabel>Tanggal SPL</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_spl"
+                      id="tanggalSpl"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_spl}
+                      value={this.state.tanggalSpl}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -117,7 +117,7 @@ export default class ModalSPLDetail extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Pengusaha</FormLabel>
                     </div>
-                    <Input id="nama_pengusaha" value={this.state.nama_pengusaha} disabled />
+                    <Input id="namaPengusaha" value={this.state.namaPengusaha} disabled />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
@@ -132,8 +132,8 @@ export default class ModalSPLDetail extends Component {
                       <FormLabel>Alamat</FormLabel>
                     </div>
                     <Input.TextArea
-                      id="alamat_pemohon"
-                      value={this.state.alamat_pemohon}
+                      id="alamatPengusaha"
+                      value={this.state.alamatPengusaha}
                       disabled
                     />
                   </div>
@@ -141,13 +141,13 @@ export default class ModalSPLDetail extends Component {
               </Col>
 
               <Col span={12}>
-                <Card title={this.state.card_title_2} style={{ height: 563 }}>
+                <Card title={this.state.cardTitle2} style={{ height: 563 }}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Perusahaan</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                     </div>
                   </div>
 
@@ -162,30 +162,30 @@ export default class ModalSPLDetail extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Alamat</FormLabel>
                     </div>
-                    <Input.TextArea id="alamat_nppbkc" value={this.state.alamat_nppbkc} disabled />
+                    <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
                   </div>
                 </Card>
               </Col>
 
               <Col span={12}>
-                <Card title={this.state.card_title_3}>
+                <Card title={this.state.cardTitle3}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tanggal Libur</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <DatePicker
-                        id="tanggal_libur_awal"
+                        id="awalLibur"
                         format="DD-MM-YYYY"
-                        value={this.state.tanggal_libur_awal}
+                        value={this.state.awalLibur}
                         style={{ width: "100%" }}
                         disabled
                       />
                       <div>s.d</div>
                       <DatePicker
-                        id="tanggal_libur_akhir"
+                        id="akhirLibur"
                         format="DD-MM-YYYY"
-                        value={this.state.tanggal_libur_akhir}
+                        value={this.state.akhirLibur}
                         style={{ width: "100%" }}
                         disabled
                       />
@@ -198,16 +198,16 @@ export default class ModalSPLDetail extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <DatePicker
-                        id="pernyataan_tanggal"
+                        id="tanggalPernyataan"
                         format="DD-MM-YYYY"
-                        value={this.state.pernyataan_tanggal}
+                        value={this.state.tanggalPernyataan}
                         disabled
                       />
                       <div>,</div>
                       <div style={{ display: "flex", gap: 10 }}>
                         <Input
-                          id="pernyataan_kota_name"
-                          value={this.state.pernyataan_kota_name}
+                          id="namaKotaPernyataan"
+                          value={this.state.namaKotaPernyataan}
                           disabled
                         />
                       </div>

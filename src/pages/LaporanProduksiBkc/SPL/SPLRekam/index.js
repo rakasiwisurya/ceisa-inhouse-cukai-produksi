@@ -8,7 +8,6 @@ import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
-import { idMenu } from "utils/idMenu";
 import { requestApi } from "utils/requestApi";
 
 export default class SPLRekam extends Component {
@@ -16,35 +15,35 @@ export default class SPLRekam extends Component {
     super(props);
     this.state = {
       subtitle1: "Surat Pernyataan Libur",
-      card_title_1: "Data Pemohon",
-      card_title_2: "Data Pabrik",
-      card_title_3: "Pernyataan",
+      cardTitle1: "Data Pemohon",
+      cardTitle2: "Data Pabrik",
+      cardTitle3: "Pernyataan",
 
       isRekamLoading: false,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarKotaVisible: false,
 
-      nomor_spl: "",
-      tanggal_spl: null,
-      nama_pengusaha: "",
-      jabatan: "",
-      alamat_pemohon: "",
+      nomorSpl: null,
+      tanggalSpl: null,
+      namaPengusaha: null,
+      jabatan: null,
+      alamatPengusaha: null,
 
-      nppbkc_id: "",
-      nama_nppbkc: "",
-      nppbkc: "",
-      alamat_nppbkc: "",
+      idNppbkc: null,
+      namaNppbkc: null,
+      nppbkc: null,
+      alamatNppbkc: null,
 
-      tanggal_libur_awal: null,
-      tanggal_libur_akhir: null,
-      pernyataan_tanggal: "",
-      pernyataan_kota_id: "",
-      pernyataan_kota_name: "",
+      awalLibur: null,
+      akhirLibur: null,
+      tanggalPernyataan: null,
+      idKotaPernyataan: null,
+      namaKotaPernyataan: null,
     };
   }
 
   handleInputChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
   };
   handleDatepickerChange = (field, value) => {
     this.setState({ [field]: value });
@@ -61,55 +60,54 @@ export default class SPLRekam extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
-      alamat_nppbkc: record.alamat_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
+      alamatNppbkc: record.alamat_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
   handleDataKota = (record) => {
     this.setState({
-      pernyataan_kota_id: record.kota_id,
-      pernyataan_kota_name: record.kota_name,
+      idKotaPernyataan: record.kota_id,
+      namaKotaPernyataan: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
 
   handleRekam = async () => {
     const {
-      nomor_spl,
-      tanggal_spl,
-      nama_pengusaha,
+      nomorSpl,
+      tanggalSpl,
+      namaPengusaha,
       jabatan,
-      alamat_pemohon,
+      alamatPengusaha,
 
-      nppbkc_id,
-      nama_nppbkc,
+      idNppbkc,
+      namaNppbkc,
       nppbkc,
-      alamat_nppbkc,
+      alamatNppbkc,
 
-      tanggal_libur_awal,
-      tanggal_libur_akhir,
-      pernyataan_tanggal,
-      pernyataan_kota_name,
+      awalLibur,
+      akhirLibur,
+      tanggalPernyataan,
+      namaKotaPernyataan,
     } = this.state;
 
     const payload = {
-      nomorSpl: nomor_spl,
-      tanggalSpl: moment(tanggal_spl).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      namaPengusaha: nama_pengusaha,
+      nomorSpl: nomorSpl,
+      tanggalSpl: moment(tanggalSpl).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      namaPengusaha: namaPengusaha,
       jabatanPengusaha: jabatan,
-      alamatPengusaha: alamat_pemohon,
-      idNppbkc: nppbkc_id,
-      namaPerusahaan: nama_nppbkc,
+      alamatPengusaha: alamatPengusaha,
+      idNppbkc: idNppbkc,
+      namaPerusahaan: namaNppbkc,
       nppbkc: nppbkc,
-      alamatPerusahaan: alamat_nppbkc,
-      awalLibur: moment(tanggal_libur_awal).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      akhirLibur: moment(tanggal_libur_akhir).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      tanggalPernyataan: moment(pernyataan_tanggal).format("YYYY-MM-DD HH:mm:ss.SSS"),
-      tempatPernyataan: pernyataan_kota_name,
-      idProses: idMenu("spl"),
+      alamatPerusahaan: alamatNppbkc,
+      awalLibur: moment(awalLibur).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      akhirLibur: moment(akhirLibur).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tanggalPernyataan: moment(tanggalPernyataan).format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tempatPernyataan: namaKotaPernyataan,
     };
 
     const response = await requestApi({
@@ -134,15 +132,15 @@ export default class SPLRekam extends Component {
           <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <Row gutter={[20, 20]}>
               <Col span={12}>
-                <Card title={this.state.card_title_1} style={{ height: 563 }}>
+                <Card title={this.state.cardTitle1} style={{ height: 563 }}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nomor SPL</FormLabel>
                     </div>
                     <Input
-                      id="nomor_spl"
+                      id="nomorSpl"
                       onChange={this.handleInputChange}
-                      value={this.state.nomor_spl}
+                      value={this.state.nomorSpl}
                     />
                   </div>
 
@@ -151,10 +149,10 @@ export default class SPLRekam extends Component {
                       <FormLabel>Tanggal SPL</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_spl"
+                      id="tanggalSpl"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_spl}
-                      onChange={(date) => this.handleDatepickerChange("tanggal_spl", date)}
+                      value={this.state.tanggalSpl}
+                      onChange={(date) => this.handleDatepickerChange("tanggalSpl", date)}
                       style={{ width: "100%" }}
                     />
                   </div>
@@ -164,9 +162,9 @@ export default class SPLRekam extends Component {
                       <FormLabel>Nama Pengusaha</FormLabel>
                     </div>
                     <Input
-                      id="nama_pengusaha"
+                      id="namaPengusaha"
                       onChange={this.handleInputChange}
-                      value={this.state.nama_pengusaha}
+                      value={this.state.namaPengusaha}
                     />
                   </div>
 
@@ -186,22 +184,22 @@ export default class SPLRekam extends Component {
                       <FormLabel>Alamat</FormLabel>
                     </div>
                     <Input.TextArea
-                      id="alamat_pemohon"
+                      id="alamatPengusaha"
                       onChange={this.handleInputChange}
-                      value={this.state.alamat_pemohon}
+                      value={this.state.alamatPengusaha}
                     />
                   </div>
                 </Card>
               </Col>
 
               <Col span={12}>
-                <Card title={this.state.card_title_2} style={{ height: 563 }}>
+                <Card title={this.state.cardTitle2} style={{ height: 563 }}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Perusahaan</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                       <Button
                         type="default"
                         icon="menu"
@@ -221,7 +219,7 @@ export default class SPLRekam extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Alamat</FormLabel>
                     </div>
-                    <Input.TextArea id="alamat_nppbkc" value={this.state.alamat_nppbkc} disabled />
+                    <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
                   </div>
                 </Card>
               </Col>
@@ -229,27 +227,25 @@ export default class SPLRekam extends Component {
 
             <Row gutter={[20, 20]}>
               <Col span={12}>
-                <Card title={this.state.card_title_3}>
+                <Card title={this.state.cardTitle3}>
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Tanggal Libur</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <DatePicker
-                        id="tanggal_libur_awal"
+                        id="awalLibur"
                         format="DD-MM-YYYY"
-                        value={this.state.tanggal_libur_awal}
-                        onChange={(date) => this.handleDatepickerChange("tanggal_libur_awal", date)}
+                        value={this.state.awalLibur}
+                        onChange={(date) => this.handleDatepickerChange("awalLibur", date)}
                         style={{ width: "100%" }}
                       />
                       <div>s.d</div>
                       <DatePicker
-                        id="tanggal_libur_akhir"
+                        id="akhirLibur"
                         format="DD-MM-YYYY"
-                        value={this.state.tanggal_libur_akhir}
-                        onChange={(date) =>
-                          this.handleDatepickerChange("tanggal_libur_akhir", date)
-                        }
+                        value={this.state.akhirLibur}
+                        onChange={(date) => this.handleDatepickerChange("akhirLibur", date)}
                         style={{ width: "100%" }}
                       />
                     </div>
@@ -261,16 +257,16 @@ export default class SPLRekam extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <DatePicker
-                        id="pernyataan_tanggal"
+                        id="tanggalPernyataan"
                         format="DD-MM-YYYY"
-                        value={this.state.pernyataan_tanggal}
-                        onChange={(date) => this.handleDatepickerChange("pernyataan_tanggal", date)}
+                        value={this.state.tanggalPernyataan}
+                        onChange={(date) => this.handleDatepickerChange("tanggalPernyataan", date)}
                       />
                       <div>,</div>
                       <div style={{ display: "flex", gap: 10 }}>
                         <Input
-                          id="pernyataan_kota_name"
-                          value={this.state.pernyataan_kota_name}
+                          id="namaKotaPernyataan"
+                          value={this.state.namaKotaPernyataan}
                           disabled
                         />
                         <Button
