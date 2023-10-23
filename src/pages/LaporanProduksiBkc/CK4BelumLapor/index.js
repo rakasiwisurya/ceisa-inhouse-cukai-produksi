@@ -14,15 +14,15 @@ export default class CK4BelumLapor extends Component {
 
       isCk4BelumLaporLoading: true,
 
-      jenis_laporan: "BULANAN",
-      list_jenis_laporan: [
+      jenisLaporan: "BULANAN",
+      listJenisLaporan: [
         {
-          jenis_laporan_id: "BULANAN",
-          jenis_laporan_name: "BULANAN",
+          idJenisLaporan: "BULANAN",
+          namaJenisLaporan: "BULANAN",
         },
         {
-          jenis_laporan_id: "HARIAN",
-          jenis_laporan_name: "HARIAN",
+          idJenisLaporan: "HARIAN",
+          namaJenisLaporan: "HARIAN",
         },
       ],
 
@@ -31,7 +31,7 @@ export default class CK4BelumLapor extends Component {
 
       filter: {
         nppbkc: null,
-        nama_perusahaan: null,
+        namaPerusahaan: null,
         tanggal: date.getDate(),
         bulan: date.getMonth() + 1,
         tahun: date.getFullYear(),
@@ -56,10 +56,10 @@ export default class CK4BelumLapor extends Component {
         },
         {
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Bulan",
@@ -78,15 +78,12 @@ export default class CK4BelumLapor extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.page !== this.state.page ||
-      prevState.jenis_laporan !== this.state.jenis_laporan
-    ) {
+    if (prevState.page !== this.state.page || prevState.jenisLaporan !== this.state.jenisLaporan) {
       this.getBelumLaporCk4();
     }
 
-    if (prevState.jenis_laporan !== this.state.jenis_laporan) {
-      if (this.state.jenis_laporan === "BULANAN") {
+    if (prevState.jenisLaporan !== this.state.jenisLaporan) {
+      if (this.state.jenisLaporan === "BULANAN") {
         this.setState({
           columns: [
             {
@@ -100,12 +97,12 @@ export default class CK4BelumLapor extends Component {
             },
             {
               title: "Nama Perusahaan",
-              dataIndex: "nama_perusahaan",
-              key: "nama_perusahaan",
+              dataIndex: "namaPerusahaan",
+              key: "namaPerusahaan",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("nama_perusahaan"),
+              ...this.getColumnSearchProps("namaPerusahaan"),
             },
             {
               title: "Bulan",
@@ -141,12 +138,12 @@ export default class CK4BelumLapor extends Component {
             },
             {
               title: "Nama Perusahaan",
-              dataIndex: "nama_perusahaan",
-              key: "nama_perusahaan",
+              dataIndex: "namaPerusahaan",
+              key: "namaPerusahaan",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("nama_perusahaan"),
+              ...this.getColumnSearchProps("namaPerusahaan"),
             },
             {
               title: "Tanggal",
@@ -179,14 +176,14 @@ export default class CK4BelumLapor extends Component {
   }
 
   getBelumLaporCk4 = async () => {
-    const { nppbkc, nama_perusahaan, tanggal, bulan, tahun } = this.state.filter;
+    const { nppbkc, namaPerusahaan, tanggal, bulan, tahun } = this.state.filter;
 
     const payload = { page: this.state.page, bulan, tahun };
 
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
 
-    if (this.state.jenis_laporan === "BULANAN") {
+    if (this.state.jenisLaporan === "BULANAN") {
       const response = await requestApi({
         service: "produksi",
         method: "get",
@@ -198,9 +195,9 @@ export default class CK4BelumLapor extends Component {
       if (response) {
         const newData = response.data.data.listData.map((item, index) => ({
           key: `ck4-belum-lapor-${index}`,
-          nppbkc_id: item.idNppbkc,
+          idNppbkc: item.idNppbkc,
           nppbkc: item.nppbkc,
-          nama_perusahaan: item.namaPerusahaan,
+          namaPerusahaan: item.namaPerusahaan,
           bulan: item.bulan,
           tahun: item.tahun,
         }));
@@ -224,9 +221,9 @@ export default class CK4BelumLapor extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `ck4-belum-lapor-${index}`,
-        nppbkc_id: item.idNppbkc,
+        idNppbkc: item.idNppbkc,
         nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
+        namaPerusahaan: item.namaPerusahaan,
         tanggal: item.tanggal,
         bulan: item.bulan,
         tahun: item.tahun,
@@ -301,15 +298,15 @@ export default class CK4BelumLapor extends Component {
           <Row gutter={[16, 16]}>
             <Col span={6}>
               <Select
-                id="jenis_laporan"
-                value={this.state.jenis_laporan}
-                onChange={(value) => this.setState({ jenis_laporan: value })}
+                id="jenisLaporan"
+                value={this.state.jenisLaporan}
+                onChange={(value) => this.setState({ jenisLaporan: value })}
                 style={{ width: "100%" }}
               >
-                {this.state.list_jenis_laporan.length > 0 &&
-                  this.state.list_jenis_laporan.map((item, index) => (
-                    <Select.Option key={`jenis-laporan-${index}`} value={item.jenis_laporan_id}>
-                      {item.jenis_laporan_name}
+                {this.state.listJenisLaporan.length > 0 &&
+                  this.state.listJenisLaporan.map((item, index) => (
+                    <Select.Option key={`jenisLaporan-${index}`} value={item.idJenisLaporan}>
+                      {item.namaJenisLaporan}
                     </Select.Option>
                   ))}
               </Select>

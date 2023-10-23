@@ -19,11 +19,11 @@ export default class PenelitianCK4 extends Component {
 
       filter: {
         nppbkc: null,
-        nama_perusahaan: null,
-        jenis_bkc: null,
-        nomor_pemberitahuan: null,
-        tanggal_pemberitahuan: null,
-        jumlah_produksi: null,
+        namaPerusahaan: null,
+        jenisBkc: null,
+        nomorPemberitahuan: null,
+        tanggalPemberitahuan: null,
+        jumlahProduksi: null,
         status: null,
       },
 
@@ -41,42 +41,42 @@ export default class PenelitianCK4 extends Component {
         },
         {
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Jenis BKC",
-          dataIndex: "jenis_bkc",
-          key: "jenis_bkc",
+          dataIndex: "jenisBkc",
+          key: "jenisBkc",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_bkc"),
+          ...this.getColumnSearchProps("jenisBkc"),
         },
         {
           title: "Nomor Pemberitahuan",
-          dataIndex: "nomor_pemberitahuan",
-          key: "nomor_pemberitahuan",
+          dataIndex: "nomorPemberitahuan",
+          key: "nomorPemberitahuan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_pemberitahuan"),
+          ...this.getColumnSearchProps("nomorPemberitahuan"),
         },
         {
           title: "Tanggal Pemberitahuan",
-          dataIndex: "tanggal_pemberitahuan",
-          key: "tanggal_pemberitahuan",
+          dataIndex: "tanggalPemberitahuan",
+          key: "tanggalPemberitahuan",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_pemberitahuan"),
+          ...this.getColumnSearchProps("tanggalPemberitahuan"),
         },
         {
           title: "Jumlah Produksi",
-          dataIndex: "jumlah_produksi",
-          key: "jumlah_produksi",
+          dataIndex: "jumlahProduksi",
+          key: "jumlahProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi"),
+          ...this.getColumnSearchProps("jumlahProduksi"),
         },
         {
           title: "Status",
@@ -102,25 +102,25 @@ export default class PenelitianCK4 extends Component {
   getPenelitianCk4 = async () => {
     const {
       nppbkc,
-      nama_perusahaan,
-      jenis_bkc,
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
-      jumlah_produksi,
+      namaPerusahaan,
+      jenisBkc,
+      nomorPemberitahuan,
+      tanggalPemberitahuan,
+      jumlahProduksi,
       status,
     } = this.state.filter;
 
     const payload = { page: this.state.page };
 
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_bkc) payload.jenisBkc = jenis_bkc;
-    if (nomor_pemberitahuan) payload.nomorPemberitahuan = nomor_pemberitahuan;
-    if (tanggal_pemberitahuan)
-      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan, "DD-MM-YYYY").format(
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (jenisBkc) payload.jenisBkc = jenisBkc;
+    if (nomorPemberitahuan) payload.nomorPemberitahuan = nomorPemberitahuan;
+    if (tanggalPemberitahuan)
+      payload.tanggalPemberitahuan = moment(tanggalPemberitahuan, "DD-MM-YYYY").format(
         "YYYY-MM-DD"
       );
-    if (jumlah_produksi) payload.jumlahProduksi = jumlah_produksi;
+    if (jumlahProduksi) payload.jumlahProduksi = jumlahProduksi;
     if (status) payload.status = status;
 
     const response = await requestApi({
@@ -136,11 +136,11 @@ export default class PenelitianCK4 extends Component {
         idCk4: item.idCk4,
         key: `penelitianck4-${index}`,
         nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
-        jenis_bkc: item.jenisBkc,
-        nomor_pemberitahuan: item.nomorPemberitahuan,
-        tanggal_pemberitahuan: item.tanggalPemberitahuan,
-        jumlah_produksi: item.jumlahProduksi,
+        namaPerusahaan: item.namaPerusahaan,
+        jenisBkc: item.jenisBkc,
+        nomorPemberitahuan: item.nomorPemberitahuan,
+        tanggalPemberitahuan: item.tanggalPemberitahuan,
+        jumlahProduksi: item.jumlahProduksi,
         status: item.status,
       }));
 
