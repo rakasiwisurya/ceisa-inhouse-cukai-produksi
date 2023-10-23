@@ -272,8 +272,8 @@ export default class BRCK2Perbaikan extends Component {
       Math.sign(this.state.selisih_lt) !== 0
     ) {
       switch (true) {
-        case Math.sign(this.state.selisih_kemasan) === -1 ||
-          Math.sign(this.state.selisih_lt) === -1:
+        case Math.sign(this.state.selisih_kemasan) === -1:
+        case Math.sign(this.state.selisih_lt) === -1:
           this.setState({
             notif: "Terdapat selisih dengan BACK-5 dan dikenai Sanksi Administrasi",
           });
