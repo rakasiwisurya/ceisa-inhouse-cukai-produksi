@@ -1,25 +1,23 @@
-// eslint-disable-next-line
-"use strict";
+import crypto from "crypto";
 
-const crypto = require("crypto");
-const { REACT_APP_KC_SECRETKEY } = process.env;
-const key = crypto
-  .createHash("sha256")
-  .update(String(REACT_APP_KC_SECRETKEY))
-  .digest("base64")
-  .substr(0, 32);
-const ENCRYPTION_KEY = key;
-const IV_LENGTH = 16;
-
-function encrypt(text) {
-  let iv = crypto.randomBytes(IV_LENGTH);
-  let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(ENCRYPTION_KEY), iv);
-  let encrypted = cipher.update(text);
-
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-
-  return iv.toString("hex") + ":" + encrypted.toString("hex");
+const secretKey = process.env.REACT_APP_KC_SECRETKEY; // Retrieve the secret key from environment variables
+if (!secretKey) {
+  throw new Error("REACT_APP_KC_SECRETKEY is not defined in the environment.");
 }
+
+const ENCRYPTION_KEY = crypto.createHash("sha256").update(secretKey).digest("base64").substr(0, 32);
+
+// const IV_LENGTH = 16;
+
+// function encrypt(text) {
+//   let iv = crypto.randomBytes(IV_LENGTH);
+//   let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(ENCRYPTION_KEY), iv);
+//   let encrypted = cipher.update(text);
+
+//   encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+//   return iv.toString("hex") + ":" + encrypted.toString("hex");
+// }
 
 function decrypt(text) {
   let textParts = text.split(":");
@@ -30,7 +28,12 @@ function decrypt(text) {
 
   decrypted = Buffer.concat([decrypted, decipher.final()]);
 
+  console.log("ENCRYPTION_KEY", ENCRYPTION_KEY);
+
   return decrypted.toString();
 }
 
-export { encrypt, decrypt };
+export {
+  // encrypt,
+  decrypt,
+};
