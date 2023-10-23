@@ -22,37 +22,35 @@ export default class RekamJenisPitaTaskToDo extends Component {
       isWarnaLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_bkc_id: null,
-      personal_nppbkc: null,
+      namaNppbkc: null,
+      idJenisBkc: null,
+      personalNppbkc: null,
 
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
-      satuan_id: null,
-      satuan_name: null,
+      idJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
       hje: null,
-      isi: null,
+      isiKemasan: null,
       tarif: null,
-      awal_berlaku: null,
+      awalBerlaku: null,
       warna: null,
-      kode_warna: null,
-      seri_pita_id: null,
-      seri_pita_name: null,
-      tahun_pita: String(new Date().getFullYear()),
-      tasktodo_status: "SETUJU",
+      kodeWarna: null,
+      idSeriPita: null,
+      namaSeriPita: null,
+      tahunPita: String(new Date().getFullYear()),
+      tasktodoStatus: "SETUJU",
 
-      list_jenis_produksi: [],
-      list_seri_pita: [],
-      list_status: [
+      listJenisProduksiBkc: [],
+      listSeriPita: [],
+      listStatus: [
         {
-          status_id: "SETUJU",
-          status_name: "SETUJU",
+          idStatus: "SETUJU",
+          namaStatus: "SETUJU",
         },
         {
-          status_id: "TOLAK",
-          status_name: "TOLAK",
+          idStatus: "TOLAK",
+          namaStatus: "TOLAK",
         },
       ],
     };
@@ -63,33 +61,33 @@ export default class RekamJenisPitaTaskToDo extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+    if (prevState.idNppbkc !== this.state.idNppbkc) {
       this.getJenisProduksi();
     }
 
-    if (prevState.jenis_bkc_id !== this.state.jenis_bkc_id) {
+    if (prevState.idJenisBkc !== this.state.idJenisBkc) {
       this.getSeripita();
 
-      if (this.state.jenis_bkc_id === 2) {
+      if (this.state.idJenisBkc === 2) {
         this.setState({ hje: 0 });
       }
     }
 
     if (
-      prevState.list_seri_pita?.length !== this.state.list_seri_pita?.length ||
-      prevState.jenis_bkc_id !== this.state.jenis_bkc_id
+      prevState.listSeriPita?.length !== this.state.listSeriPita?.length ||
+      prevState.idJenisBkc !== this.state.idJenisBkc
     ) {
-      if (this.state.jenis_bkc_id === 2 && this.state.list_seri_pita?.length > 0)
+      if (this.state.idJenisBkc === 2 && this.state.listSeriPita?.length > 0)
         this.setState({
-          seri_pita_id: this.state.list_seri_pita[0]?.idSeripita,
-          seri_pita_name: this.state.list_seri_pita[0]?.namaSeripita,
+          idSeriPita: this.state.listSeriPita[0]?.idSeripita,
+          namaSeriPita: this.state.listSeriPita[0]?.namaSeripita,
         });
     }
 
     if (
-      prevState.jenis_produksi_id !== this.state.jenis_produksi_id ||
+      prevState.idJenisProduksiBkc !== this.state.idJenisProduksiBkc ||
       prevState.hje !== this.state.hje ||
-      prevState.isi !== this.state.isi
+      prevState.isiKemasan !== this.state.isiKemasan
     ) {
       this.setState({ tarif: null, warna: null });
     }
@@ -110,26 +108,26 @@ export default class RekamJenisPitaTaskToDo extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_bkc_id: data.idJenisBkc,
-        personal_nppbkc: data.personalisasi,
+        namaNppbkc: data.namaPerusahaan,
+        idJenisBkc: data.idJenisBkc,
+        personalNppbkc: data.personalisasi,
 
-        jenis_produksi_id: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}-${data.kodeSatuan}`,
-        jenis_produksi_name: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
+        idJenisProduksiBkc: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}-${data.kodeSatuan}`,
+        namaJenisProduksiBkc: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
         hje: data.hje || 0,
-        isi: data.isiVolume,
+        isiKemasan: data.isiVolume,
         tarif: data.tarif,
-        awal_berlaku: moment(data.awalBerlaku),
+        awalBerlaku: moment(data.awalBerlaku),
         warna: data.warna,
-        kode_warna: data.kodeWarna,
-        tahun_pita: data.tahunPita,
-        seri_pita_id: data.idSeripita,
-        seri_pita_name: data.namaSeripita,
+        kodeWarna: data.kodeWarna,
+        tahunPita: data.tahunPita,
+        idSeriPita: data.idSeripita,
+        namaSeriPita: data.namaSeripita,
       });
 
-      this.setState({ tarif: data.tarif, warna: data.warna, kode_warna: data.kodeWarna });
+      this.setState({ tarif: data.tarif, warna: data.warna, kodeWarna: data.kodeWarna });
     }
   };
   getJenisProduksi = async () => {
@@ -137,11 +135,11 @@ export default class RekamJenisPitaTaskToDo extends Component {
       service: "referensi",
       method: "get",
       endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
-      params: { idNppbkc: this.state.nppbkc_id },
+      params: { idNppbkc: this.state.idNppbkc },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
-    if (response) this.setState({ list_jenis_produksi: response.data.data });
+    if (response) this.setState({ listJenisProduksiBkc: response.data.data });
   };
   getTarifWarna = () => {
     this.getTarif();
@@ -149,11 +147,11 @@ export default class RekamJenisPitaTaskToDo extends Component {
   };
   getTarif = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
-      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
+      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc.split("-")[0].trim(),
+      idGolonganBkc: this.state.idJenisProduksiBkc.split("-")[1],
     };
 
-    if (this.state.jenis_bkc_id === 3) payload.hje = this.state.hje;
+    if (this.state.idJenisBkc === 3) payload.hje = this.state.hje;
 
     const response = await requestApi({
       service: "referensi",
@@ -169,8 +167,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
   };
   getWarna = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.jenis_produksi_name.split("-")[0].trim(),
-      idGolonganBkc: this.state.jenis_produksi_id.split("-")[1],
+      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc.split("-")[0].trim(),
+      idGolonganBkc: this.state.idJenisProduksiBkc.split("-")[1],
     };
 
     const response = await requestApi({
@@ -182,11 +180,11 @@ export default class RekamJenisPitaTaskToDo extends Component {
     });
 
     if (response) {
-      this.setState({ warna: response.data.data.warna, kode_warna: response.data.data?.kodeWarna });
+      this.setState({ warna: response.data.data.warna, kodeWarna: response.data.data?.kodeWarna });
     }
   };
   getSeripita = async () => {
-    const payload = { idJenisBkc: this.state.jenis_bkc_id };
+    const payload = { idJenisBkc: this.state.idJenisBkc };
 
     const response = await requestApi({
       service: "referensi",
@@ -196,13 +194,13 @@ export default class RekamJenisPitaTaskToDo extends Component {
       setLoading: (bool) => this.setState({ isSeripitaLoading: bool }),
     });
 
-    if (response) this.setState({ list_seri_pita: response.data.data });
+    if (response) this.setState({ listSeriPita: response.data.data });
   };
 
   handleSimpanTaskToDo = async () => {
     const payload = {
       idJenisPita: this.props.match.params.id,
-      status: this.state.tasktodo_status,
+      status: this.state.tasktodoStatus,
     };
 
     const response = await requestApi({
@@ -242,12 +240,12 @@ export default class RekamJenisPitaTaskToDo extends Component {
                       <Button type="primary" disabled>
                         Cari
                       </Button>
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
                 </Row>
 
-                {this.state.nppbkc_id && (
+                {this.state.idNppbkc && (
                   <Row gutter={[16, 16]}>
                     <Col span={12}>
                       <div style={{ marginBottom: 20 }}>
@@ -255,16 +253,16 @@ export default class RekamJenisPitaTaskToDo extends Component {
                           <FormLabel>Jenis Produksi</FormLabel>
                         </div>
                         <Select
-                          id="jenis_produksi"
-                          value={this.state.jenis_produksi_id}
+                          id="jenisProduksiBkc"
+                          value={this.state.idJenisProduksiBkc}
                           loading={this.state.isJenisProduksiLoading}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_jenis_produksi.length > 0 &&
-                            this.state.list_jenis_produksi.map((item, index) => (
+                          {this.state.listJenisProduksiBkc.length > 0 &&
+                            this.state.listJenisProduksiBkc.map((item, index) => (
                               <Select.Option
-                                key={`jenis-produksi-${index}`}
+                                key={`jenisProduksiBkc-${index}`}
                                 value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}-${item.kodeSatuan}`}
                               >
                                 {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
@@ -293,8 +291,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
                             loading={this.state.isTarifLoading || this.state.isWarnaLoading}
                             onClick={this.getTarifWarna}
                             disabled={
-                              !this.state.jenis_produksi_id ||
-                              (this.state.jenis_bkc_id === 3 && !this.state.hje)
+                              !this.state.idJenisProduksiBkc ||
+                              (this.state.idJenisBkc === 3 && !this.state.hje)
                             }
                           />
                         </div>
@@ -308,8 +306,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
                         </div>
 
                         <InputNumber
-                          id="isi"
-                          value={this.state.isi}
+                          id="isiKemasan"
+                          value={this.state.isiKemasan}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -338,7 +336,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
                         <DatePicker
                           id="warna"
                           format="DD-MM-YYYY"
-                          value={this.state.awal_berlaku}
+                          value={this.state.awalBerlaku}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -365,15 +363,15 @@ export default class RekamJenisPitaTaskToDo extends Component {
                           <FormLabel>Seri Pita</FormLabel>
                         </div>
                         <Select
-                          id="seri_pita"
-                          value={this.state.seri_pita_id}
+                          id="seriPita"
+                          value={this.state.idSeriPita}
                           loading={this.state.isSeripitaLoading}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_seri_pita.length > 0 &&
-                            this.state.list_seri_pita.map((item, index) => (
-                              <Select.Option key={`seri-pita-${index}`} value={item.idSeripita}>
+                          {this.state.listSeriPita.length > 0 &&
+                            this.state.listSeriPita.map((item, index) => (
+                              <Select.Option key={`seriPita-${index}`} value={item.idSeripita}>
                                 {item.namaSeripita}
                               </Select.Option>
                             ))}
@@ -387,8 +385,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
                           <FormLabel>Tahun Pita</FormLabel>
                         </div>
                         <Input
-                          id="tahun_pita"
-                          value={this.state.tahun_pita}
+                          id="tahunPita"
+                          value={this.state.tahunPita}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -403,15 +401,15 @@ export default class RekamJenisPitaTaskToDo extends Component {
                       <FormLabel>Persetujuan</FormLabel>
                     </div>
                     <Select
-                      id="tasktodo_status"
-                      onChange={(value) => this.handleSelectChange("tasktodo_status", value)}
-                      value={this.state.tasktodo_status}
+                      id="tasktodoStatus"
+                      onChange={(value) => this.handleSelectChange("tasktodoStatus", value)}
+                      value={this.state.tasktodoStatus}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_status.length > 0 &&
-                        this.state.list_status.map((item, index) => (
-                          <Select.Option key={`tasktodo-status-${index}`} value={item.status_id}>
-                            {item.status_name}
+                      {this.state.listStatus.length > 0 &&
+                        this.state.listStatus.map((item, index) => (
+                          <Select.Option key={`tasktodoStatus-${index}`} value={item.idStatus}>
+                            {item.namaStatus}
                           </Select.Option>
                         ))}
                     </Select>

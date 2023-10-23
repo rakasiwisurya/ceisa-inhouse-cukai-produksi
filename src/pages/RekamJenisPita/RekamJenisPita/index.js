@@ -16,17 +16,17 @@ export default class RekamJenisPita extends Component {
       totalData: 0,
 
       filter: {
-        kode_kantor: null,
-        nama_kantor: null,
+        kodeKantor: null,
+        namaKantor: null,
         nppbkc: null,
-        nama_perusahaan: null,
-        jenis_produksi: null,
+        namaPerusahaan: null,
+        kodeJenisProduksi: null,
         hje: null,
-        isi: null,
-        awal_berlaku: null,
+        isiKemasan: null,
+        awalBerlaku: null,
         tarif: null,
         warna: null,
-        tahun_pita: null,
+        tahunPita: null,
       },
 
       dataSource: [],
@@ -42,18 +42,18 @@ export default class RekamJenisPita extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handlePerbaikan(record.jenis_pita_id)}
+                  onClick={() => this.handlePerbaikan(record.idJenisPita)}
                 />
               </>
             </div>
           ),
         },
         {
-          key: "nama_kantor",
+          key: "namaKantor",
           title: "Nama Kantor",
-          dataIndex: "nama_kantor",
+          dataIndex: "namaKantor",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_kantor"),
+          ...this.getColumnSearchProps("namaKantor"),
         },
         {
           key: "nppbkc",
@@ -63,18 +63,18 @@ export default class RekamJenisPita extends Component {
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
-          key: "jenis_produksi",
+          key: "kodeJenisProduksi",
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi",
+          dataIndex: "kodeJenisProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_produksi"),
+          ...this.getColumnSearchProps("kodeJenisProduksi"),
         },
         {
           key: "hje",
@@ -84,18 +84,18 @@ export default class RekamJenisPita extends Component {
           ...this.getColumnSearchProps("hje"),
         },
         {
-          key: "isi",
+          key: "isiKemasan",
           title: "Isi Kemasan",
-          dataIndex: "isi",
+          dataIndex: "isiKemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("isi"),
+          ...this.getColumnSearchProps("isiKemasan"),
         },
         {
-          key: "awal_berlaku",
+          key: "awalBerlaku",
           title: "Awal Berlaku",
-          dataIndex: "awal_berlaku",
+          dataIndex: "awalBerlaku",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("awalBerlaku"),
         },
         {
           key: "tarif",
@@ -112,11 +112,11 @@ export default class RekamJenisPita extends Component {
           ...this.getColumnSearchProps("warna"),
         },
         {
-          key: "tahun_pita",
+          key: "tahunPita",
           title: "Tahun Pita",
-          dataIndex: "tahun_pita",
+          dataIndex: "tahunPita",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tahun_pita"),
+          ...this.getColumnSearchProps("tahunPita"),
         },
       ],
     };
@@ -134,32 +134,32 @@ export default class RekamJenisPita extends Component {
 
   getRekamJenisPita = async () => {
     const {
-      kode_kantor,
-      nama_kantor,
+      kodeKantor,
+      namaKantor,
       nppbkc,
-      nama_perusahaan,
-      jenis_produksi,
+      namaPerusahaan,
+      kodeJenisProduksi,
       hje,
-      isi,
-      awal_berlaku,
+      isiKemasan,
+      awalBerlaku,
       tarif,
       warna,
-      tahun_pita,
+      tahunPita,
     } = this.state.filter;
 
     const payload = { page: this.state.page };
 
-    if (kode_kantor) payload.kodeKantor = kode_kantor;
-    if (nama_kantor) payload.namaKantor = nama_kantor;
+    if (kodeKantor) payload.kodeKantor = kodeKantor;
+    if (namaKantor) payload.namaKantor = namaKantor;
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_produksi) payload.kodeJenisProduksi = jenis_produksi;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (kodeJenisProduksi) payload.kodeJenisProduksi = kodeJenisProduksi;
     if (hje) payload.hje = hje;
-    if (isi) payload.isiKemasan = isi;
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (isiKemasan) payload.isiKemasan = isiKemasan;
+    if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (tarif) payload.tarif = tarif;
     if (warna) payload.warna = warna;
-    if (tahun_pita) payload.tahunPita = tahun_pita;
+    if (tahunPita) payload.tahunPita = tahunPita;
 
     const response = await requestApi({
       service: "pita_cukai",
@@ -171,19 +171,8 @@ export default class RekamJenisPita extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
+        ...item,
         key: `jenis-pita-${index}`,
-        jenis_pita_id: item.idJenisPita,
-        kode_kantor: item.kodeKantor,
-        nama_kantor: item.namaKantor,
-        nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
-        jenis_produksi: item.kodeJenisProduksi,
-        hje: item.hje,
-        isi: item.isiKemasan,
-        awal_berlaku: item.awalBerlaku,
-        tarif: item.tarif,
-        warna: item.warna,
-        tahun_pita: item.tahunPita,
       }));
 
       this.setState({
