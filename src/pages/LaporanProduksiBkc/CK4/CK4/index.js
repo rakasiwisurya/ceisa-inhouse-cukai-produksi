@@ -26,13 +26,13 @@ export default class CK4 extends Component {
       filter: {
         kppbc: null,
         nppbkc: null,
-        nama_perusahaan: null,
-        tanggal_pemberitahuan: null,
-        tanggal_produksi_awal: null,
-        tanggal_produksi_akhir: null,
-        jumlah_produksi_lt: null,
-        jumlah_produksi_btg: null,
-        jumlah_produksi_gram: null,
+        namaPerusahaan: null,
+        tanggalPemberitahuan: null,
+        tanggalProduksiAwal: null,
+        tanggalProduksiAkhir: null,
+        jumlahProduksiLiter: null,
+        jumlahProduksiBtg: null,
+        jumlahProduksiGram: null,
         status: null,
       },
 
@@ -49,7 +49,7 @@ export default class CK4 extends Component {
                 variant="warning"
                 icon="form"
                 onClick={() => {
-                  if (record.is_alert) return this.handleConfirm();
+                  if (record.isAlert) return this.handleConfirm();
                   this.handleEdit(record.idCk4, record.jenisBkc);
                 }}
                 disabled={record.idBrck2 || record.idBrck1}
@@ -83,64 +83,64 @@ export default class CK4 extends Component {
         },
         {
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Tanggal Pemberitahuan",
-          dataIndex: "tanggal_pemberitahuan",
-          key: "tanggal_pemberitahuan",
+          dataIndex: "tanggalPemberitahuan",
+          key: "tanggalPemberitahuan",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_pemberitahuan"),
+          ...this.getColumnSearchProps("tanggalPemberitahuan"),
         },
         {
           title: "Tanggal Produksi Awal",
-          dataIndex: "tanggal_produksi_awal",
-          key: "tanggal_produksi_awal",
+          dataIndex: "tanggalProduksiAwal",
+          key: "tanggalProduksiAwal",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_produksi_awal"),
+          ...this.getColumnSearchProps("tanggalProduksiAwal"),
         },
         {
           title: "Tanggal Produksi Akhir",
-          dataIndex: "tanggal_produksi_akhir",
-          key: "tanggal_produksi_akhir",
+          dataIndex: "tanggalProduksiAkhir",
+          key: "tanggalProduksiAkhir",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_produksi_akhir"),
+          ...this.getColumnSearchProps("tanggalProduksiAkhir"),
         },
         {
           title: "Jumlah Produksi (lt)",
-          dataIndex: "jumlah_produksi_lt",
-          key: "jumlah_produksi_lt",
+          dataIndex: "jumlahProduksiLiter",
+          key: "jumlahProduksiLiter",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi_lt"),
+          ...this.getColumnSearchProps("jumlahProduksiLiter"),
         },
         {
           title: "Jumlah Produksi (btg)",
-          dataIndex: "jumlah_produksi_btg",
-          key: "jumlah_produksi_btg",
+          dataIndex: "jumlahProduksiBtg",
+          key: "jumlahProduksiBtg",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi_btg"),
+          ...this.getColumnSearchProps("jumlahProduksiBtg"),
         },
         {
           title: "Jumlah Produksi (gram)",
-          dataIndex: "jumlah_produksi_gram",
-          key: "jumlah_produksi_gram",
+          dataIndex: "jumlahProduksiGram",
+          key: "jumlahProduksiGram",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi_gram"),
+          ...this.getColumnSearchProps("jumlahProduksiGram"),
         },
         {
           title: "Status",
@@ -167,35 +167,33 @@ export default class CK4 extends Component {
     const {
       kppbc,
       nppbkc,
-      nama_perusahaan,
-      tanggal_pemberitahuan,
-      tanggal_produksi_awal,
-      tanggal_produksi_akhir,
-      jumlah_produksi_lt,
-      jumlah_produksi_btg,
-      jumlah_produksi_gram,
+      namaPerusahaan,
+      tanggalPemberitahuan,
+      tanggalProduksiAwal,
+      tanggalProduksiAkhir,
+      jumlahProduksiLiter,
+      jumlahProduksiBtg,
+      jumlahProduksiGram,
       status,
     } = this.state.filter;
     const payload = { page: this.state.page };
 
     if (kppbc) payload.kppbc = kppbc;
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (tanggal_pemberitahuan)
-      payload.tanggalPemberitahuan = moment(tanggal_pemberitahuan, "DD-MM-YYYY").format(
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (tanggalPemberitahuan)
+      payload.tanggalPemberitahuan = moment(tanggalPemberitahuan, "DD-MM-YYYY").format(
         "YYYY-MM-DD"
       );
-    if (tanggal_produksi_awal)
-      payload.tanggalProduksiAwal = moment(tanggal_produksi_awal, "DD-MM-YYYY").format(
+    if (tanggalProduksiAwal)
+      payload.tanggalProduksiAwal = moment(tanggalProduksiAwal, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalProduksiAkhir)
+      payload.tanggalProduksiAkhir = moment(tanggalProduksiAkhir, "DD-MM-YYYY").format(
         "YYYY-MM-DD"
       );
-    if (tanggal_produksi_akhir)
-      payload.tanggalProduksiAkhir = moment(tanggal_produksi_akhir, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
-    if (jumlah_produksi_lt) payload.jumlahProduksiLt = jumlah_produksi_lt;
-    if (jumlah_produksi_btg) payload.jumlahProduksiBtg = jumlah_produksi_btg;
-    if (jumlah_produksi_gram) payload.jumlahProduksiGram = jumlah_produksi_gram;
+    if (jumlahProduksiLiter) payload.jumlahProduksiLiter = jumlahProduksiLiter;
+    if (jumlahProduksiBtg) payload.jumlahProduksiBtg = jumlahProduksiBtg;
+    if (jumlahProduksiGram) payload.jumlahProduksiGram = jumlahProduksiGram;
     if (status) payload.status = status;
 
     const response = await requestApi({
@@ -208,26 +206,9 @@ export default class CK4 extends Component {
 
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
+        ...item,
         key: `ck4-${index}`,
-        idCk4: item.idCk4,
-        jenisBkc: item.jenisBkc,
-        jenis_laporan: String(item.jenisLaporan).toUpperCase(),
-        kppbc: item.kppbc,
-        nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
-        alamat_perusahaan: item.alamatPerusahaan,
-        nomor_pemberitahuan: item.nomorPemberitahuan,
-        tanggal_pemberitahuan: item.tanggalPemberitahuan,
-        tanggal_produksi_awal: item.tanggalProduksiAwal,
-        tanggal_produksi_akhir: item.tanggalProduksiAkhir,
-        jumlah_produksi_lt: item.jumlahProduksiLiter,
-        jumlah_produksi_btg: item.jumlahProduksiBtg,
-        jumlah_produksi_gram: item.jumlahProduksiGram,
-        periode_bulan: item.periodeBulan,
-        periode_tahun: item.periodeTahun,
-        status: item.status,
-        waktu_rekam: item.waktuRekam,
-        is_alert: item.isAlert,
+        jenisLaporan: String(item.jenisLaporan).toUpperCase(),
       }));
 
       const page = response.data.data.currentPage;
@@ -319,30 +300,30 @@ export default class CK4 extends Component {
   };
   handleGeneratePdf = (rowData) => {
     const {
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
+      nomorPemberitahuan,
+      tanggalPemberitahuan,
       nppbkc,
-      nama_perusahaan,
-      alamat_perusahaan,
-      jenis_laporan,
-      tanggal_produksi_awal,
-      periode_bulan,
-      periode_tahun,
-      waktu_rekam,
+      namaPerusahaan,
+      alamatPerusahaan,
+      jenisLaporan,
+      tanggalProduksiAwal,
+      periodeBulan,
+      periodeTahun,
+      waktuRekam,
     } = rowData;
 
     this.setState({
       pdfContent: {
-        nomor_pemberitahuan,
-        tanggal_pemberitahuan: moment(tanggal_pemberitahuan).format("DD MMMM YYYY"),
+        nomorPemberitahuan,
+        tanggalPemberitahuan: moment(tanggalPemberitahuan).format("DD MMMM YYYY"),
         nppbkc,
-        nama_perusahaan,
-        alamat_perusahaan,
-        waktu_rekam: moment(waktu_rekam).format("dddd, DD/MM/YYYY, HH:mm"),
-        jenis_laporan,
-        tanggal_produksi: moment(tanggal_produksi_awal).format("DD MMMM YYYY"),
-        periode_bulan: capitalize(periode_bulan),
-        periode_tahun: periode_tahun,
+        namaPerusahaan,
+        alamatPerusahaan,
+        waktuRekam: moment(waktuRekam).format("dddd, DD/MM/YYYY, HH:mm"),
+        jenisLaporan,
+        tanggalProduksi: moment(tanggalProduksiAwal).format("DD MMMM YYYY"),
+        periodeBulan: capitalize(periodeBulan),
+        periodeTahun: periodeTahun,
       },
       isModalPdfVisible: true,
     });
@@ -409,16 +390,15 @@ export default class CK4 extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                loading={this.state.isCk4Loading}
-                onChange={(page) => this.setState({ page: page.current })}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
-                scroll={{ x: "max-content" }}
-              />
-            </div>
+            <Table
+              dataSource={this.state.dataSource}
+              columns={this.state.columns}
+              loading={this.state.isCk4Loading}
+              onChange={(page) => this.setState({ page: page.current })}
+              pagination={{ current: this.state.page, total: this.state.totalData }}
+              scroll={{ x: "max-content" }}
+              style={{ marginTop: 30, marginBottom: 20 }}
+            />
           </div>
 
           <ModalCK4Pdf

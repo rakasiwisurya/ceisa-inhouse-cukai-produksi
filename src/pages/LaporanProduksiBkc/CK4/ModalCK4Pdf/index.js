@@ -9,7 +9,7 @@ export default class ModalCK4Pdf extends Component {
 
     return (
       <Modal
-        title={`Tanda Terima ${pdfContent?.nama_perusahaan || ""}`}
+        title={`Tanda Terima ${pdfContent?.namaPerusahaan || ""}`}
         visible={isVisible}
         onCancel={onCancel}
         footer={null}

@@ -43,85 +43,85 @@ export default class CK4EATaskToDo extends Component {
       isModalDaftarStckVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
-      nama_pemrakarsa: null,
-      id_process_pemrakarsa: null,
-      jabatan_pemrakarsa: null,
-      nip_pemrakarsa: null,
+      namaPemrakarsa: null,
+      idProcessPemrakarsa: null,
+      jabatanPemrakarsa: null,
+      nipPemrakarsa: null,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      alamat_nppbkc: null,
-      npwp_nppbkc: null,
+      namaNppbkc: null,
+      alamatNppbkc: null,
+      npwpNppbkc: null,
 
-      jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "HARIAN",
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-      jenis_barang_kena_cukai: "ETIL ALKOHOL (EA)",
+      idJenisLaporan: "HARIAN",
+      namaJenisLaporan: "HARIAN",
+      nomorPemberitahuan: null,
+      tanggalPemberitahuan: null,
+      jenisBarangKenaCukai: "ETIL ALKOHOL (EA)",
 
-      tanggal_jam_produksi_awal: null,
-      tanggal_jam_produksi_akhir: null,
-      total_jumlah_produksi: 0,
+      tanggalJamProduksiAwal: null,
+      tanggalJamProduksiAkhir: null,
+      totaJumlahProduksi: 0,
 
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
 
       status: "SETUJU",
-      nomor_surat_permohonan_perbaikan: null,
-      tanggal_surat_permohonan_perbaikan: null,
+      nomorSuratPermohonanPerbaikan: null,
+      tanggalSuratPermohonanPerbaikan: null,
       alasan: null,
       previewFile:
         "https://raw.githubusercontent.com/rakasiwisurya/pdf-test/aa52b04cae0e0f857a2d0e21c3a837f3cfb7f5ff/NS_CG_K2R.pdf",
 
-      nomor_stck: null,
-      tanggal_stck: null,
+      nomorStck: null,
+      tanggalStck: null,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      penjabat_bc_nip: null,
-      penjabat_bc_name: null,
-      asal_kesalahan_id: null,
-      asal_kesalahan_name: null,
-      keterangan_perbaikan: null,
+      nomorSurat: null,
+      tanggalSurat: null,
+      nipPenjabatBc: null,
+      namaPenjabatBc: null,
+      idAsalKesalahan: null,
+      namaAsalKesalahan: null,
+      keteranganPerbaikan: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_asal_kesalahan: [
+      listAsalKesalahan: [
         {
-          asal_kesalahan_id: "PENGGUNA JASA",
-          asal_kesalahan_name: "PENGGUNA JASA",
+          idAsalKesalahan: "PENGGUNA JASA",
+          namaAsalKesalahan: "PENGGUNA JASA",
         },
         {
-          asal_kesalahan_id: "PENGAWAS/PETUGAS",
-          asal_kesalahan_name: "PENGAWAS/PETUGAS",
+          idAsalKesalahan: "PENGAWAS/PETUGAS",
+          namaAsalKesalahan: "PENGAWAS/PETUGAS",
         },
         {
-          asal_kesalahan_id: "APLIKASI SAC-2",
-          asal_kesalahan_name: "APLIKASI SAC-2",
+          idAsalKesalahan: "APLIKASI SAC-2",
+          namaAsalKesalahan: "APLIKASI SAC-2",
         },
         {
-          asal_kesalahan_id: "JARINGAN",
-          asal_kesalahan_name: "JARINGAN",
+          idAsalKesalahan: "JARINGAN",
+          namaAsalKesalahan: "JARINGAN",
         },
         {
-          asal_kesalahan_id: "LAINNYA",
-          asal_kesalahan_name: "LAINNYA",
+          idAsalKesalahan: "LAINNYA",
+          namaAsalKesalahan: "LAINNYA",
         },
       ],
-      list_status: [
+      listStatus: [
         {
-          status_id: "SETUJU",
-          status_name: "SETUJU",
+          idStatus: "SETUJU",
+          namaStatus: "SETUJU",
         },
         {
-          status_id: "TOLAK",
-          status_name: "TOLAK",
+          idStatus: "TOLAK",
+          namaStatus: "TOLAK",
         },
       ],
 
@@ -132,33 +132,33 @@ export default class CK4EATaskToDo extends Component {
           children: [
             {
               title: "Nomor",
-              dataIndex: "nomor_produksi",
-              key: "nomor_produksi",
+              dataIndex: "nomorProduksi",
+              key: "nomorProduksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor_produksi"),
+              ...this.getColumnSearchProps("nomorProduksi"),
             },
             {
               title: "Tanggal",
-              dataIndex: "tanggal_produksi",
-              key: "tanggal_produksi",
+              dataIndex: "tanggalProduksi",
+              key: "tanggalProduksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tanggal_produksi"),
+              ...this.getColumnSearchProps("tanggalProduksi"),
             },
           ],
         },
         {
           title: "Nomor / Identitas Tangki",
-          dataIndex: "nomor_tangki",
-          key: "nomor_tangki",
+          dataIndex: "nomorTangki",
+          key: "nomorTangki",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("nomor_tangki"),
+          ...this.getColumnSearchProps("nomorTangki"),
         },
         {
           title: "Jumlah (liter)",
-          dataIndex: "jumlah_produksi",
-          key: "jumlah_produksi",
+          dataIndex: "jumlahProduksi",
+          key: "jumlahProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi"),
+          ...this.getColumnSearchProps("jumlahProduksi"),
         },
         {
           title: "Keterangan",
@@ -178,7 +178,7 @@ export default class CK4EATaskToDo extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
-      this.setState({ total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi") });
+      this.setState({ totaJumlahProduksi: sumArrayOfObject(dataSource, "jumlahProduksi") });
     }
   }
 
@@ -197,29 +197,29 @@ export default class CK4EATaskToDo extends Component {
       const { data } = response.data;
 
       this.setState({
-        nama_pemrakarsa: data.namaPemrakarsa,
-        id_process_pemrakarsa: data.idProcessPemrakarsa,
-        jabatan_pemrakarsa: data.jabatanPemrakarsa,
-        nip_pemrakarsa: data.nipPemrakarsa,
-        nppbkc_id: data.idNppbkc,
+        namaPemrakarsa: data.namaPemrakarsa,
+        idProcessPemrakarsa: data.idProcessPemrakarsa,
+        jabatanPemrakarsa: data.jabatanPemrakarsa,
+        nipPemrakarsa: data.nipPemrakarsa,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaNppbkc,
-        alamat_nppbkc: data.alamatNppbkc,
-        npwp_nppbkc: data.npwp,
-        jenis_laporan_id: data.jenisLaporan,
-        nomor_pemberitahuan: data.nomorPemberitahuan,
-        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
-        tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
-        tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
-        kota_id: data.idKota,
-        kota_name: data.namaKota,
-        nama_pengusaha: data.namaPengusaha,
+        namaNppbkc: data.namaNppbkc,
+        alamatNppbkc: data.alamatNppbkc,
+        npwpNppbkc: data.npwp,
+        idJenisLaporan: data.jenisLaporan,
+        nomorPemberitahuan: data.nomorPemberitahuan,
+        tanggalPemberitahuan: moment(data.tanggalPemberitahuan),
+        tanggalJamProduksiAwal: moment(data.tanggalJamProduksiAwal),
+        tanggalJamProduksiAkhir: moment(data.tanggalJamProduksiAkhir),
+        idKota: data.idKota,
+        namaKota: data.namaKota,
+        namaPengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
-          nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
-          jumlah_produksi: detail.jumlahProduksi,
-          nomor_tangki: detail.nomorTangki,
+          nomorProduksi: detail.nomorProduksi,
+          tanggalProduksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
+          jumlahProduksi: detail.jumlahProduksi,
+          nomorTangki: detail.nomorTangki,
           keterangan: detail.keterangan,
         })),
       });
@@ -306,21 +306,21 @@ export default class CK4EATaskToDo extends Component {
 
   handleDataPenjabatBc = (record) => {
     this.setState({
-      penjabat_bc_nip: record.penjabat_bc_nip,
-      penjabat_bc_name: record.penjabat_bc_name,
+      nipPenjabatBc: record.penjabat_bc_nip,
+      namaPenjabatBc: record.penjabat_bc_name,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
   handleDataStck = (record) => {
     this.setState({
-      nomor_stck: record.nomor_stck,
-      tanggal_stck: moment(record.tanggal_stck),
+      nomorStck: record.nomorStck,
+      tanggalStck: moment(record.tanggalStck),
     });
     this.handleModalClose("isModalDaftarStckVisible");
   };
 
   handleSimpanTasktodo = async () => {
-    const { status, nomor_stck, tanggal_stck, alasan } = this.state;
+    const { status, nomorStck, tanggalStck, alasan } = this.state;
 
     const payload = {
       idCk4Header: this.props.match.params.id,
@@ -329,8 +329,8 @@ export default class CK4EATaskToDo extends Component {
     };
 
     if (status === "SETUJU") {
-      payload.nomorStck = nomor_stck;
-      payload.tanggalStck = moment(tanggal_stck, "DD-MM-YYYY").format("YYYY-MM-DD");
+      payload.nomorStck = nomorStck;
+      payload.tanggalStck = moment(tanggalStck, "DD-MM-YYYY").format("YYYY-MM-DD");
     } else {
       payload.alasan = alasan;
     }
@@ -371,7 +371,7 @@ export default class CK4EATaskToDo extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Pemrakarsa</FormLabel>
                     </div>
-                    <Input id="nama_pemrakarsa" value={this.state.nama_pemrakarsa} disabled />
+                    <Input id="namaPemrakarsa" value={this.state.namaPemrakarsa} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -379,8 +379,8 @@ export default class CK4EATaskToDo extends Component {
                       <FormLabel>ID Proses</FormLabel>
                     </div>
                     <Input
-                      id="id_process_pemrakarsa"
-                      value={this.state.id_process_pemrakarsa}
+                      id="idProcessPemrakarsa"
+                      value={this.state.idProcessPemrakarsa}
                       disabled
                     />
                   </Col>
@@ -389,14 +389,14 @@ export default class CK4EATaskToDo extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jabatan</FormLabel>
                     </div>
-                    <Input id="jabatan_pemrakarsa" value={this.state.jabatan_pemrakarsa} disabled />
+                    <Input id="jabatanPemrakarsa" value={this.state.jabatanPemrakarsa} disabled />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>NIP</FormLabel>
                     </div>
-                    <Input id="nip_pemrakarsa" value={this.state.nip_pemrakarsa} disabled />
+                    <Input id="nipPemrakarsa" value={this.state.nipPemrakarsa} disabled />
                   </Col>
                 </Row>
               </div>
@@ -415,7 +415,7 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Nama</FormLabel>
                         </div>
                         <div style={{ display: "flex", gap: 10 }}>
-                          <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                          <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                         </div>
                       </div>
 
@@ -431,8 +431,8 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Alamat</FormLabel>
                         </div>
                         <Input.TextArea
-                          id="alamat_nppbkc"
-                          value={this.state.alamat_nppbkc}
+                          id="alamatNppbkc"
+                          value={this.state.alamatNppbkc}
                           rows={4}
                           disabled
                         />
@@ -446,13 +446,13 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Jenis Laporan</FormLabel>
                         </div>
                         <Select
-                          id="jenis_laporan"
-                          value={this.state.jenis_laporan_id}
+                          id="jenisLaporan"
+                          value={this.state.idJenisLaporan}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.jenis_laporan_id}>
-                            {this.state.jenis_laporan_name}
+                          <Select.Option value={this.state.idJenisLaporan}>
+                            {this.state.namaJenisLaporan}
                           </Select.Option>
                         </Select>
                       </div>
@@ -462,8 +462,8 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Nomor Pemberitahuan</FormLabel>
                         </div>
                         <Input
-                          id="nomor_pemberitahuan"
-                          value={this.state.nomor_pemberitahuan}
+                          id="nomorPemberitahuan"
+                          value={this.state.nomorPemberitahuan}
                           disabled
                         />
                       </div>
@@ -473,9 +473,9 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal Pemberitahuan</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_pemberitahuan"
+                          id="tanggalPemberitahuan"
                           format="DD-MM-YYYY"
-                          value={this.state.tanggal_pemberitahuan}
+                          value={this.state.tanggalPemberitahuan}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -485,7 +485,7 @@ export default class CK4EATaskToDo extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                         </div>
-                        <Input value={this.state.jenis_barang_kena_cukai} disabled />
+                        <Input value={this.state.jenisBarangKenaCukai} disabled />
                       </div>
                     </Card>
                   </Col>
@@ -500,10 +500,10 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_jam_produksi_awal"
+                          id="tanggalJamProduksiAwal"
                           showTime={{ format: "HH:mm" }}
                           format="DD-MM-YYYY HH:mm"
-                          value={this.state.tanggal_jam_produksi_awal}
+                          value={this.state.tanggalJamProduksiAwal}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -514,10 +514,10 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_jam_produksi_akhir"
+                          id="tanggalJamProduksiAkhir"
                           showTime={{ format: "HH:mm" }}
                           format="DD-MM-YYYY HH:mm"
-                          value={this.state.tanggal_jam_produksi_akhir}
+                          value={this.state.tanggalJamProduksiAkhir}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -529,8 +529,8 @@ export default class CK4EATaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <Input
-                            id="total_jumlah_produksi"
-                            value={this.state.total_jumlah_produksi}
+                            id="totaJumlahProduksi"
+                            value={this.state.totaJumlahProduksi}
                             disabled
                           />
                           <div>Liter</div>
@@ -554,7 +554,7 @@ export default class CK4EATaskToDo extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Nomor</FormLabel>
                         </div>
-                        <Input id="nomor_produksi" value={this.state.nomor_produksi} disabled />
+                        <Input id="nomorProduksi" value={this.state.nomorProduksi} disabled />
                       </div>
 
                       <div>
@@ -562,9 +562,9 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal Produksi</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_produksi"
+                          id="tanggalProduksi"
                           format="DD-MM-YYYY"
-                          value={this.state.tanggal_produksi}
+                          value={this.state.tanggalProduksi}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -580,8 +580,8 @@ export default class CK4EATaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="jumlah_produksi"
-                            value={this.state.jumlah_produksi}
+                            id="jumlahProduksi"
+                            value={this.state.jumlahProduksi}
                             style={{ flex: 1 }}
                             disabled
                           />
@@ -593,7 +593,7 @@ export default class CK4EATaskToDo extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Nomor / Identitas Tangki</FormLabel>
                         </div>
-                        <Input id="nomor_tangki" value={this.state.nomor_tangki} disabled />
+                        <Input id="nomorTangki" value={this.state.nomorTangki} disabled />
                       </div>
 
                       <div>
@@ -630,9 +630,9 @@ export default class CK4EATaskToDo extends Component {
                         <FormLabel>Nomor Surat</FormLabel>
                       </div>
                       <Input
-                        id="nomor_surat_permohonan_perbaikan"
+                        id="nomorSuratPermohonanPerbaikan"
                         onChange={this.handleInputChange}
-                        value={this.state.nomor_surat_permohonan_perbaikan}
+                        value={this.state.nomorSuratPermohonanPerbaikan}
                       />
                     </Col>
 
@@ -641,13 +641,13 @@ export default class CK4EATaskToDo extends Component {
                         <FormLabel>Tanggal Surat</FormLabel>
                       </div>
                       <DatePicker
-                        id="tanggal_surat_permohonan_perbaikan"
+                        id="tanggalSuratPermohonanPerbaikan"
                         format="DD-MM-YYYY"
                         onChange={(date) =>
-                          this.handleDatepickerChange("tanggal_surat_permohonan_perbaikan", date)
+                          this.handleDatepickerChange("tanggalSuratPermohonanPerbaikan", date)
                         }
                         style={{ width: "100%" }}
-                        value={this.state.tanggal_surat_permohonan_perbaikan}
+                        value={this.state.tanggalSuratPermohonanPerbaikan}
                       />
                     </Col>
 
@@ -701,10 +701,10 @@ export default class CK4EATaskToDo extends Component {
                       onChange={(value) => this.handleSelectChange("status", value)}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_status.length > 0 &&
-                        this.state.list_status.map((item, index) => (
-                          <Select.Option key={`status-${index}`} value={item.status_id}>
-                            {item.status_name}
+                      {this.state.listStatus.length > 0 &&
+                        this.state.listStatus.map((item, index) => (
+                          <Select.Option key={`status-${index}`} value={item.idStatus}>
+                            {item.namaStatus}
                           </Select.Option>
                         ))}
                     </Select>
@@ -719,9 +719,9 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Nomor Surat</FormLabel>
                         </div>
                         <Input
-                          id="nomor_surat"
+                          id="nomorSurat"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_surat}
+                          value={this.state.nomorSurat}
                         />
                       </Col>
 
@@ -730,11 +730,11 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal Surat</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_surat"
+                          id="tanggalSurat"
                           format="DD-MM-YYYY"
-                          onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                          onChange={(date) => this.handleDatepickerChange("tanggalSurat", date)}
                           style={{ width: "100%" }}
-                          value={this.state.tanggal_surat}
+                          value={this.state.tanggalSurat}
                         />
                       </Col>
 
@@ -744,9 +744,9 @@ export default class CK4EATaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <Input
-                            id="penjabat_bc_nip"
+                            id="nipPenjabatBc"
                             onChange={this.handleInputChange}
-                            value={this.state.penjabat_bc_nip}
+                            value={this.state.nipPenjabatBc}
                             style={{ flex: 1 }}
                             disabled
                           />
@@ -757,9 +757,9 @@ export default class CK4EATaskToDo extends Component {
                             Cari
                           </Button>
                           <Input
-                            id="penjabat_bc_name"
+                            id="namaPenjabatBc"
                             onChange={this.handleInputChange}
-                            value={this.state.penjabat_bc_name}
+                            value={this.state.namaPenjabatBc}
                             style={{ flex: 2 }}
                             disabled
                           />
@@ -771,18 +771,18 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Asal Kesalahan</FormLabel>
                         </div>
                         <Select
-                          id="asal_kesalahan"
-                          onChange={(value) => this.handleSelectChange("asal_kesalahan_id", value)}
+                          id="asalKesalahan"
+                          onChange={(value) => this.handleSelectChange("idAsalKesalahan", value)}
                           style={{ width: "100%" }}
-                          value={this.state.asal_kesalahan_id}
+                          value={this.state.idAsalKesalahan}
                         >
-                          {this.state.list_asal_kesalahan.length > 0 &&
-                            this.state.list_asal_kesalahan.map((item, index) => (
+                          {this.state.listAsalKesalahan.length > 0 &&
+                            this.state.listAsalKesalahan.map((item, index) => (
                               <Select.Option
-                                key={`asal_kesalahan-${index}`}
-                                value={item.asal_kesalahan_id}
+                                key={`asalKesalahan-${index}`}
+                                value={item.idAsalKesalahan}
                               >
-                                {item.asal_kesalahan_name}
+                                {item.namaAsalKesalahan}
                               </Select.Option>
                             ))}
                         </Select>
@@ -793,9 +793,9 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Keterangan</FormLabel>
                         </div>
                         <Input.TextArea
-                          id="keterangan_perbaikan"
+                          id="keteranganPerbaikan"
                           onChange={this.handleInputChange}
-                          value={this.state.keterangan_perbaikan}
+                          value={this.state.keteranganPerbaikan}
                         />
                       </Col>
                     </>
@@ -825,9 +825,9 @@ export default class CK4EATaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <Input
-                            id="nomor_stck"
+                            id="nomorStck"
                             onChange={this.handleInputChange}
-                            value={this.state.nomor_stck}
+                            value={this.state.nomorStck}
                             disabled
                           />
                           <Button
@@ -843,10 +843,10 @@ export default class CK4EATaskToDo extends Component {
                           <FormLabel>Tanggal STCK</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_stck"
+                          id="tanggalStck"
                           format="DD-MM-YYYY"
-                          onChange={(date) => this.handleDatepickerChange("tanggal_stck", date)}
-                          value={this.state.tanggal_stck}
+                          onChange={(date) => this.handleDatepickerChange("tanggalStck", date)}
+                          value={this.state.tanggalStck}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -886,7 +886,7 @@ export default class CK4EATaskToDo extends Component {
           isVisible={this.state.isModalDaftarStckVisible}
           onCancel={() => this.handleModalClose("isModalDaftarStckVisible")}
           onDataDoubleClick={this.handleDataStck}
-          npwp={this.state.npwp_nppbkc}
+          npwp={this.state.npwpNppbkc}
         />
 
         <ModalDaftarPenjabatBc

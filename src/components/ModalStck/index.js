@@ -16,29 +16,29 @@ export default class ModalStck extends Component {
       totalData: 0,
 
       table: {
-        nomor_stck: null,
-        tanggal_stck: null,
+        nomorStck: null,
+        tanggalStck: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Nomor STCK",
-          dataIndex: "nomor_stck",
-          key: "nomor_stck",
+          dataIndex: "nomorStck",
+          key: "nomorStck",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_stck"),
+          ...this.getColumnSearchProps("nomorStck"),
         },
         {
           title: "Tanggal STCK",
-          dataIndex: "tanggal_stck",
-          key: "tanggal_stck",
+          dataIndex: "tanggalStck",
+          key: "tanggalStck",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_stck"),
+          ...this.getColumnSearchProps("tanggalStck"),
         },
       ],
     };
@@ -64,8 +64,8 @@ export default class ModalStck extends Component {
     if (response) {
       const newData = response.data.data.data.map((item, index) => ({
         key: `stck-${index}`,
-        nomor_stck: item.nomorDokumen,
-        tanggal_stck: moment(item.tanggalDokumen).format("DD-MM-YYYY"),
+        nomorStck: item.nomorDokumen,
+        tanggalStck: moment(item.tanggalDokumen).format("DD-MM-YYYY"),
       }));
 
       this.setState({ dataSource: newData, totalData: response.data.data.totalData });

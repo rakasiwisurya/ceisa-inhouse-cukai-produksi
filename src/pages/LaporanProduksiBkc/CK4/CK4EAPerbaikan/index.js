@@ -44,46 +44,46 @@ export default class CK4EAPerbaikan extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
-      jenis_bkc_id: 1,
+      idJenisBkc: 1,
 
-      nama_pemrakarsa: null,
-      id_process_pemrakarsa: null,
-      jabatan_pemrakarsa: null,
-      nip_pemrakarsa: null,
+      namaPemrakarsa: null,
+      idProcessPemrakarsa: null,
+      jabatanPemrakarsa: null,
+      nipPemrakarsa: null,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      alamat_nppbkc: null,
-      npwp_nppbkc: null,
+      namaNppbkc: null,
+      alamatNppbkc: null,
+      npwpNppbkc: null,
 
-      jenis_laporan_id: "HARIAN",
-      jenis_laporan_name: "HARIAN",
-      nomor_pemberitahuan: null,
-      tanggal_pemberitahuan: null,
-      jenis_barang_kena_cukai: "Etil Alkohol (EA)",
+      idJenisLaporan: "HARIAN",
+      namaJenisLaporan: "HARIAN",
+      nomorPemberitahuan: null,
+      tanggalPemberitahuan: null,
+      jenisBarangKenaCukai: "Etil Alkohol (EA)",
 
-      tanggal_jam_produksi_awal: null,
-      tanggal_jam_produksi_akhir: null,
-      total_jumlah_produksi: 0,
+      tanggalJamProduksiAwal: null,
+      tanggalJamProduksiAkhir: null,
+      totalJumlahProduksi: 0,
 
-      ck4_detail_id: null,
+      idCk4Detail: null,
 
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
 
-      kota_id: null,
-      kota_name: null,
-      nama_pengusaha: null,
+      idKota: null,
+      namaKota: null,
+      namaPengusaha: null,
 
-      nomor_surat: null,
-      tanggal_surat: null,
-      penjabat_bc_nip: null,
-      penjabat_bc_name: null,
-      keterangan_perbaikan: null,
+      nomorSurat: null,
+      tanggalSurat: null,
+      idPenjabatBc: null,
+      namaPenjabatBc: null,
+      keteranganPerbaikan: null,
 
       searchText: null,
       searchedColumn: null,
@@ -120,33 +120,33 @@ export default class CK4EAPerbaikan extends Component {
           children: [
             {
               title: "Nomor",
-              dataIndex: "nomor_produksi",
-              key: "nomor_produksi",
+              dataIndex: "nomorProduksi",
+              key: "nomorProduksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor_produksi"),
+              ...this.getColumnSearchProps("nomorProduksi"),
             },
             {
               title: "Tanggal",
-              dataIndex: "tanggal_produksi",
-              key: "tanggal_produksi",
+              dataIndex: "tanggalProduksi",
+              key: "tanggalProduksi",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tanggal_produksi"),
+              ...this.getColumnSearchProps("tanggalProduksi"),
             },
           ],
         },
         {
           title: "Nomor / Identitas Tangki",
-          dataIndex: "nomor_tangki",
-          key: "nomor_tangki",
+          dataIndex: "nomorTangki",
+          key: "nomorTangki",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("nomor_tangki"),
+          ...this.getColumnSearchProps("nomorTangki"),
         },
         {
           title: "Jumlah (liter)",
-          dataIndex: "jumlah_produksi",
-          key: "jumlah_produksi",
+          dataIndex: "jumlahProduksi",
+          key: "jumlahProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jumlah_produksi"),
+          ...this.getColumnSearchProps("jumlahProduksi"),
         },
         {
           title: "Keterangan",
@@ -166,7 +166,7 @@ export default class CK4EAPerbaikan extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dataSource !== this.state.dataSource) {
       const { dataSource } = this.state;
-      this.setState({ total_jumlah_produksi: sumArrayOfObject(dataSource, "jumlah_produksi") });
+      this.setState({ totalJumlahProduksi: sumArrayOfObject(dataSource, "jumlahProduksi") });
     }
   }
 
@@ -185,30 +185,30 @@ export default class CK4EAPerbaikan extends Component {
       const { data } = response.data;
 
       this.setState({
-        nama_pemrakarsa: data.namaPemrakarsa,
-        id_process_pemrakarsa: data.idProcessPemrakarsa,
-        jabatan_pemrakarsa: data.jabatanPemrakarsa,
-        nip_pemrakarsa: data.nipPemrakarsa,
-        nppbkc_id: data.idNppbkc,
+        namaPemrakarsa: data.namaPemrakarsa,
+        idProcessPemrakarsa: data.idProcessPemrakarsa,
+        jabatanPemrakarsa: data.jabatanPemrakarsa,
+        nipPemrakarsa: data.nipPemrakarsa,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaNppbkc,
-        npwp_nppbkc: data.npwp,
-        alamat_nppbkc: data.alamatNppbkc,
-        jenis_laporan_id: data.jenisLaporan,
-        nomor_pemberitahuan: data.nomorPemberitahuan,
-        tanggal_pemberitahuan: moment(data.tanggalPemberitahuan),
-        tanggal_jam_produksi_awal: moment(data.tanggalJamProduksiAwal),
-        tanggal_jam_produksi_akhir: moment(data.tanggalJamProduksiAkhir),
-        kota_id: data.idKota,
-        kota_name: data.namaKota,
-        nama_pengusaha: data.namaPengusaha,
+        namaNppbkc: data.namaNppbkc,
+        npwpNppbkc: data.npwp,
+        alamatNppbkc: data.alamatNppbkc,
+        idJenisLaporan: data.jenisLaporan,
+        nomorPemberitahuan: data.nomorPemberitahuan,
+        tanggalPemberitahuan: moment(data.tanggalPemberitahuan),
+        tanggalJamProduksiAwal: moment(data.tanggalJamProduksiAwal),
+        tanggalJamProduksiAkhir: moment(data.tanggalJamProduksiAkhir),
+        idKota: data.idKota,
+        namaKota: data.namaKota,
+        namaPengusaha: data.namaPengusaha,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-detail-${index}`,
-          ck4_detail_id: detail.idCk4Detail,
-          nomor_produksi: detail.nomorProduksi,
-          tanggal_produksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
-          jumlah_produksi: detail.jumlahProduksi,
-          nomor_tangki: detail.nomorTangki,
+          idCk4Detail: detail.idCk4Detail,
+          nomorProduksi: detail.nomorProduksi,
+          tanggalProduksi: moment(detail.tanggalProduksi).format("DD-MM-YYYY"),
+          jumlahProduksi: detail.jumlahProduksi,
+          nomorTangki: detail.nomorTangki,
           keterangan: detail.keterangan,
         })),
       });
@@ -295,25 +295,25 @@ export default class CK4EAPerbaikan extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
-      alamat_nppbkc: record.alamat_nppbkc,
-      npwp_nppbkc: record.npwp_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
+      alamatNppbkc: record.alamat_nppbkc,
+      npwpNppbkc: record.npwp_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
   handleDataKota = (record) => {
     this.setState({
-      kota_id: record.kota_id,
-      kota_name: record.kota_name,
+      idKota: record.kota_id,
+      namaKota: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
   handleDataPenjabatBc = (record) => {
     this.setState({
-      penjabat_bc_nip: record.penjabat_bc_nip,
-      penjabat_bc_name: record.penjabat_bc_name,
+      idPenjabatBc: record.penjabat_bc_nip,
+      namaPenjabatBc: record.penjabat_bc_name,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
@@ -333,28 +333,27 @@ export default class CK4EAPerbaikan extends Component {
   };
 
   handleSimpanRincian = () => {
-    const { nomor_produksi, tanggal_produksi, jumlah_produksi, nomor_tangki, keterangan } =
-      this.state;
+    const { nomorProduksi, tanggalProduksi, jumlahProduksi, nomorTangki, keterangan } = this.state;
 
     this.setState({
       dataSource: [
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          nomor_produksi,
-          tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
-          jumlah_produksi,
-          nomor_tangki,
+          nomorProduksi,
+          tanggalProduksi: moment(tanggalProduksi).format("DD-MM-YYYY"),
+          jumlahProduksi,
+          nomorTangki,
           keterangan,
         },
       ],
     });
 
     this.setState({
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
     });
   };
@@ -362,44 +361,38 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: true,
       editIndexRincian: record.key,
-      ck4_detail_id: record.ck4_detail_id,
-      nomor_produksi: record.nomor_produksi,
-      tanggal_produksi: moment(record.tanggal_produksi, "DD-MM-YYYY"),
-      jumlah_produksi: record.jumlah_produksi,
-      nomor_tangki: record.nomor_tangki,
+      idCk4Detail: record.idCk4Detail,
+      nomorProduksi: record.nomorProduksi,
+      tanggalProduksi: moment(record.tanggalProduksi, "DD-MM-YYYY"),
+      jumlahProduksi: record.jumlahProduksi,
+      nomorTangki: record.nomorTangki,
       keterangan: record.keterangan,
     });
   };
   handleUbahRincian = () => {
-    const {
-      ck4_detail_id,
-      nomor_produksi,
-      tanggal_produksi,
-      jumlah_produksi,
-      nomor_tangki,
-      keterangan,
-    } = this.state;
+    const { idCk4Detail, nomorProduksi, tanggalProduksi, jumlahProduksi, nomorTangki, keterangan } =
+      this.state;
 
     const newDataSource = [...this.state.dataSource];
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      ck4_detail_id,
-      nomor_produksi,
-      tanggal_produksi: moment(tanggal_produksi).format("DD-MM-YYYY"),
-      jumlah_produksi,
-      nomor_tangki,
+      idCk4Detail,
+      nomorProduksi,
+      tanggalProduksi: moment(tanggalProduksi).format("DD-MM-YYYY"),
+      jumlahProduksi,
+      nomorTangki,
       keterangan,
     });
 
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      ck4_detail_id: null,
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      idCk4Detail: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
       dataSource: newDataSource,
     });
@@ -412,79 +405,79 @@ export default class CK4EAPerbaikan extends Component {
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
-      ck4_detail_id: null,
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      idCk4Detail: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
     });
   };
   handleReset = () => {
     this.setState({
-      ck4_detail_id: null,
-      nomor_produksi: null,
-      tanggal_produksi: null,
-      jumlah_produksi: null,
-      nomor_tangki: null,
+      idCk4Detail: null,
+      nomorProduksi: null,
+      tanggalProduksi: null,
+      jumlahProduksi: null,
+      nomorTangki: null,
       keterangan: null,
     });
   };
   handleSimpanPerbaikan = async () => {
     const {
-      nppbkc_id,
-      nama_nppbkc,
+      idNppbkc,
+      namaNppbkc,
       nppbkc,
-      alamat_nppbkc,
-      npwp_nppbkc,
-      jenis_laporan_id,
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
-      tanggal_jam_produksi_awal,
-      tanggal_jam_produksi_akhir,
-      total_jumlah_produksi,
+      alamatNppbkc,
+      npwpNppbkc,
+      idJenisLaporan,
+      nomorPemberitahuan,
+      tanggalPemberitahuan,
+      tanggalJamProduksiAwal,
+      tanggalJamProduksiAkhir,
+      totalJumlahProduksi,
 
-      kota_name,
-      nama_pengusaha,
-      nomor_surat,
-      tanggal_surat,
-      penjabat_bc_nip,
-      penjabat_bc_name,
-      keterangan_perbaikan,
+      namaKota,
+      namaPengusaha,
+      nomorSurat,
+      tanggalSurat,
+      idPenjabatBc,
+      namaPenjabatBc,
+      keteranganPerbaikan,
       dataSource,
     } = this.state;
 
     const details = dataSource.map((item) => ({
-      idCk4Detail: item.ck4_detail_id,
-      nomorProduksi: item.nomor_produksi,
-      tanggalProduksi: moment(item.tanggal_produksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      jumlahProduksi: item.jumlah_produksi,
-      nomorTangki: item.nomor_tangki,
+      idCk4Detail: item.idCk4Detail,
+      nomorProduksi: item.nomorProduksi,
+      tanggalProduksi: moment(item.tanggalProduksi, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      jumlahProduksi: item.jumlahProduksi,
+      nomorTangki: item.nomorTangki,
       keterangan: item.keterangan,
     }));
 
     const payload = {
       details,
-      alamatPerusahaan: alamat_nppbkc,
+      alamatPerusahaan: alamatNppbkc,
       idCk4: this.props.match.params.id,
-      idNppbkc: nppbkc_id,
-      jenisLaporan: jenis_laporan_id,
-      keteranganPerbaikan: keterangan_perbaikan,
-      namaKota: kota_name,
-      namaPejabat: penjabat_bc_name,
-      namaPengusaha: nama_pengusaha,
-      namaPerusahaan: nama_nppbkc,
-      nipPenjabatBc: penjabat_bc_nip,
-      nomorPemberitahuan: nomor_pemberitahuan,
-      nomorSurat: nomor_surat,
+      idNppbkc: idNppbkc,
+      jenisLaporan: idJenisLaporan,
+      keteranganPerbaikan: keteranganPerbaikan,
+      namaKota: namaKota,
+      namaPejabat: namaPenjabatBc,
+      namaPengusaha: namaPengusaha,
+      namaPerusahaan: namaNppbkc,
+      nipPenjabatBc: idPenjabatBc,
+      nomorPemberitahuan: nomorPemberitahuan,
+      nomorSurat: nomorSurat,
       nppbkc: nppbkc,
-      npwp: npwp_nppbkc,
+      npwp: npwpNppbkc,
 
-      tanggalJamProduksiAkhir: moment(tanggal_jam_produksi_akhir).toDate(),
-      tanggalJamProduksiAwal: moment(tanggal_jam_produksi_awal).toDate(),
-      tanggalPemberitahuan: moment(tanggal_pemberitahuan).format("YYYY-MM-DD"),
-      tanggalSurat: moment(tanggal_surat).format("YYYY-MM-DD"),
-      totalJumlahProduksi: total_jumlah_produksi,
+      tanggalJamProduksiAkhir: moment(tanggalJamProduksiAkhir).toDate(),
+      tanggalJamProduksiAwal: moment(tanggalJamProduksiAwal).toDate(),
+      tanggalPemberitahuan: moment(tanggalPemberitahuan).format("YYYY-MM-DD"),
+      tanggalSurat: moment(tanggalSurat).format("YYYY-MM-DD"),
+      totalJumlahProduksi: totalJumlahProduksi,
     };
 
     const response = await requestApi({
@@ -520,7 +513,7 @@ export default class CK4EAPerbaikan extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Pemrakarsa</FormLabel>
                     </div>
-                    <Input id="nama_pemrakarsa" value={this.state.nama_pemrakarsa} disabled />
+                    <Input id="namaPemrakarsa" value={this.state.namaPemrakarsa} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -528,8 +521,8 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>ID Proses</FormLabel>
                     </div>
                     <Input
-                      id="id_process_pemrakarsa"
-                      value={this.state.id_process_pemrakarsa}
+                      id="idProcessPemrakarsa"
+                      value={this.state.idProcessPemrakarsa}
                       disabled
                     />
                   </Col>
@@ -538,14 +531,14 @@ export default class CK4EAPerbaikan extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jabatan</FormLabel>
                     </div>
-                    <Input id="jabatan_pemrakarsa" value={this.state.jabatan_pemrakarsa} disabled />
+                    <Input id="jabatanPemrakarsa" value={this.state.jabatanPemrakarsa} disabled />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>NIP</FormLabel>
                     </div>
-                    <Input id="nip_pemrakarsa" value={this.state.nip_pemrakarsa} disabled />
+                    <Input id="nipPemrakarsa" value={this.state.nipPemrakarsa} disabled />
                   </Col>
                 </Row>
               </div>
@@ -564,7 +557,7 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Nama</FormLabel>
                         </div>
                         <div style={{ display: "flex", gap: 10 }}>
-                          <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                          <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                           <Button
                             type="default"
                             icon="menu"
@@ -585,8 +578,8 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Alamat</FormLabel>
                         </div>
                         <Input.TextArea
-                          id="alamat_nppbkc"
-                          value={this.state.alamat_nppbkc}
+                          id="alamatNppbkc"
+                          value={this.state.alamatNppbkc}
                           rows={4}
                           disabled
                         />
@@ -600,13 +593,13 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Jenis Laporan</FormLabel>
                         </div>
                         <Select
-                          id="jenis_laporan"
-                          value={this.state.jenis_laporan_id}
+                          id="jenisLaporan"
+                          value={this.state.idJenisLaporan}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          <Select.Option value={this.state.jenis_laporan_id}>
-                            {this.state.jenis_laporan_name}
+                          <Select.Option value={this.state.idJenisLaporan}>
+                            {this.state.namaJenisLaporan}
                           </Select.Option>
                         </Select>
                       </div>
@@ -616,9 +609,9 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Nomor Pemberitahuan</FormLabel>
                         </div>
                         <Input
-                          id="nomor_pemberitahuan"
+                          id="nomorPemberitahuan"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_pemberitahuan}
+                          value={this.state.nomorPemberitahuan}
                         />
                       </div>
 
@@ -627,12 +620,12 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Tanggal Pemberitahuan</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_pemberitahuan"
+                          id="tanggalPemberitahuan"
                           format="DD-MM-YYYY"
                           onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_pemberitahuan", date)
+                            this.handleDatepickerChange("tanggalPemberitahuan", date)
                           }
-                          value={this.state.tanggal_pemberitahuan}
+                          value={this.state.tanggalPemberitahuan}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -641,7 +634,7 @@ export default class CK4EAPerbaikan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Jenis Barang Kena Cukai</FormLabel>
                         </div>
-                        <Input disabled value={this.state.jenis_barang_kena_cukai} />
+                        <Input disabled value={this.state.jenisBarangKenaCukai} />
                       </div>
                     </Card>
                   </Col>
@@ -656,13 +649,13 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Tanggal Jam Produksi Awal</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_jam_produksi_awal"
+                          id="tanggalJamProduksiAwal"
                           showTime={{ format: "HH:mm" }}
                           format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_jam_produksi_awal", date)
+                            this.handleDatepickerChange("tanggalJamProduksiAwal", date)
                           }
-                          value={this.state.tanggal_jam_produksi_awal}
+                          value={this.state.tanggalJamProduksiAwal}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -672,13 +665,13 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Tanggal Jam Produksi Akhir</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_jam_produksi_akhir"
+                          id="tanggalJamProduksiAkhir"
                           showTime={{ format: "HH:mm" }}
                           format="DD-MM-YYYY HH:mm"
                           onChange={(date) =>
-                            this.handleDatepickerChange("tanggal_jam_produksi_akhir", date)
+                            this.handleDatepickerChange("tanggalJamProduksiAkhir", date)
                           }
-                          value={this.state.tanggal_jam_produksi_akhir}
+                          value={this.state.tanggalJamProduksiAkhir}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -689,8 +682,8 @@ export default class CK4EAPerbaikan extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <Input
-                            id="total_jumlah_produksi"
-                            value={this.state.total_jumlah_produksi}
+                            id="totalJumlahProduksi"
+                            value={this.state.totalJumlahProduksi}
                             disabled
                           />
                           <div>Liter</div>
@@ -715,9 +708,9 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Nomor</FormLabel>
                         </div>
                         <Input
-                          id="nomor_produksi"
+                          id="nomorProduksi"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_produksi}
+                          value={this.state.nomorProduksi}
                         />
                       </div>
 
@@ -726,10 +719,10 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Tanggal Produksi</FormLabel>
                         </div>
                         <DatePicker
-                          id="tanggal_produksi"
+                          id="tanggalProduksi"
                           format="DD-MM-YYYY"
-                          onChange={(date) => this.handleDatepickerChange("tanggal_produksi", date)}
-                          value={this.state.tanggal_produksi}
+                          onChange={(date) => this.handleDatepickerChange("tanggalProduksi", date)}
+                          value={this.state.tanggalProduksi}
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -744,11 +737,11 @@ export default class CK4EAPerbaikan extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="jumlah_produksi"
+                            id="jumlahProduksi"
                             onChange={(value) =>
-                              this.handleInputNumberChange("jumlah_produksi", value)
+                              this.handleInputNumberChange("jumlahProduksi", value)
                             }
-                            value={this.state.jumlah_produksi}
+                            value={this.state.jumlahProduksi}
                             style={{ flex: 1 }}
                           />
                           <div>Liter</div>
@@ -760,9 +753,9 @@ export default class CK4EAPerbaikan extends Component {
                           <FormLabel>Nomor / Identitas Tangki</FormLabel>
                         </div>
                         <Input
-                          id="nomor_tangki"
+                          id="nomorTangki"
                           onChange={this.handleInputChange}
-                          value={this.state.nomor_tangki}
+                          value={this.state.nomorTangki}
                         />
                       </div>
 
@@ -833,7 +826,7 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="kota_name" value={this.state.kota_name} disabled />
+                      <Input id="namaKota" value={this.state.namaKota} disabled />
                       <Button
                         type="default"
                         icon="menu"
@@ -847,9 +840,9 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Nama Pengusaha</FormLabel>
                     </div>
                     <Input
-                      id="nama_pengusaha"
+                      id="namaPengusaha"
                       onChange={this.handleInputChange}
-                      value={this.state.nama_pengusaha}
+                      value={this.state.namaPengusaha}
                     />
                   </Col>
                 </Row>
@@ -863,9 +856,9 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Nomor Surat</FormLabel>
                     </div>
                     <Input
-                      id="nomor_surat"
+                      id="nomorSurat"
                       onChange={this.handleInputChange}
-                      value={this.state.nomor_surat}
+                      value={this.state.nomorSurat}
                     />
                   </Col>
 
@@ -874,11 +867,11 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Tanggal Surat</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_surat"
+                      id="tanggalSurat"
                       format="DD-MM-YYYY"
-                      onChange={(date) => this.handleDatepickerChange("tanggal_surat", date)}
+                      onChange={(date) => this.handleDatepickerChange("tanggalSurat", date)}
                       style={{ width: "100%" }}
-                      value={this.state.tanggal_surat}
+                      value={this.state.tanggalSurat}
                     />
                   </Col>
 
@@ -888,9 +881,9 @@ export default class CK4EAPerbaikan extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Input
-                        id="penjabat_bc_nip"
+                        id="idPenjabatBc"
                         onChange={this.handleInputChange}
-                        value={this.state.penjabat_bc_nip}
+                        value={this.state.idPenjabatBc}
                         style={{ flex: 1 }}
                         disabled
                       />
@@ -901,9 +894,9 @@ export default class CK4EAPerbaikan extends Component {
                         Cari
                       </Button>
                       <Input
-                        id="penjabat_bc_name"
+                        id="namaPenjabatBc"
                         onChange={this.handleInputChange}
-                        value={this.state.penjabat_bc_name}
+                        value={this.state.namaPenjabatBc}
                         style={{ flex: 2 }}
                         disabled
                       />
@@ -915,9 +908,9 @@ export default class CK4EAPerbaikan extends Component {
                       <FormLabel>Keterangan</FormLabel>
                     </div>
                     <Input.TextArea
-                      id="keterangan_perbaikan"
+                      id="keteranganPerbaikan"
                       onChange={this.handleInputChange}
-                      value={this.state.keterangan_perbaikan}
+                      value={this.state.keteranganPerbaikan}
                     />
                   </Col>
                 </Row>
@@ -953,7 +946,7 @@ export default class CK4EAPerbaikan extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
-          idJenisBkc={this.state.jenis_bkc_id}
+          idJenisBkc={this.state.idJenisBkc}
         />
 
         <ModalDaftarKota

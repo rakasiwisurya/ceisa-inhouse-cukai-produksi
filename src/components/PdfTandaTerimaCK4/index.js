@@ -84,20 +84,20 @@ const styles = StyleSheet.create({
 export default class PdfTandaTerimaCK4 extends Component {
   render() {
     const {
-      nomor_pemberitahuan,
-      tanggal_pemberitahuan,
+      nomorPemberitahuan,
+      tanggalPemberitahuan,
       nppbkc,
-      nama_perusahaan,
-      alamat_perusahaan,
-      jenis_laporan,
-      tanggal_produksi,
-      periode_bulan,
-      periode_tahun,
-      waktu_rekam,
+      namaPerusahaan,
+      alamatPerusahaan,
+      jenisLaporan,
+      tanggalProduksi,
+      periodeBulan,
+      periodeTahun,
+      waktuRekam,
     } = this.props;
 
     return (
-      <Document title={`Tanda Terima ${nama_perusahaan || ""}`}>
+      <Document title={`Tanda Terima ${namaPerusahaan || ""}`}>
         <Page size="A4" style={styles.page}>
           <View style={styles.viewTitle}>
             <Text style={styles.title}>RESPON TANDA TERIMA</Text>
@@ -112,26 +112,26 @@ export default class PdfTandaTerimaCK4 extends Component {
               <View style={styles.viewRow}>
                 <Text style={styles.textPemberitahuanKey}>No. Pemberitahuan</Text>
                 <Text style={styles.colon}>:</Text>
-                <Text style={styles.textPemberitahuanValue}>{nomor_pemberitahuan}</Text>
+                <Text style={styles.textPemberitahuanValue}>{nomorPemberitahuan}</Text>
               </View>
               <View style={styles.viewRow}>
                 <Text style={styles.textPemberitahuanKey}>Tgl. Pemberitahuan</Text>
                 <Text style={styles.colon}>:</Text>
-                <Text style={styles.textPemberitahuanValue}>{tanggal_pemberitahuan}</Text>
+                <Text style={styles.textPemberitahuanValue}>{tanggalPemberitahuan}</Text>
               </View>
               <View style={styles.viewRow}>
                 <Text style={styles.textPemberitahuanKey}>Periode Pelaporan</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textPemberitahuanValue}>
-                  {jenis_laporan === "BULANAN"
-                    ? `periode bulan ${periode_bulan} ${periode_tahun}`
-                    : tanggal_produksi}
+                  {jenisLaporan === "BULANAN"
+                    ? `periode bulan ${periodeBulan} ${periodeTahun}`
+                    : tanggalProduksi}
                 </Text>
               </View>
             </View>
             <Text style={styles.text}>
-              Disampaikan pada hari, tanggal/bulan/tahun, {waktu_rekam} waktu setempat oleh
-              pengusaha pabrik:
+              Disampaikan pada hari, tanggal/bulan/tahun, {waktuRekam} waktu setempat oleh pengusaha
+              pabrik:
             </Text>
           </View>
 
@@ -139,12 +139,12 @@ export default class PdfTandaTerimaCK4 extends Component {
             <View style={styles.viewRow}>
               <Text style={styles.textNppbkcKey}>Nama</Text>
               <Text style={styles.colon}>:</Text>
-              <Text style={styles.textNppbkcValue}>{nama_perusahaan}</Text>
+              <Text style={styles.textNppbkcValue}>{namaPerusahaan}</Text>
             </View>
             <View style={styles.viewRow}>
               <Text style={styles.textNppbkcKey}>Alamat</Text>
               <Text style={styles.colon}>:</Text>
-              <Text style={styles.textNppbkcValue}>{alamat_perusahaan}</Text>
+              <Text style={styles.textNppbkcValue}>{alamatPerusahaan}</Text>
             </View>
             <View style={styles.viewRow}>
               <Text style={styles.textNppbkcKey}>NPPBKC</Text>
