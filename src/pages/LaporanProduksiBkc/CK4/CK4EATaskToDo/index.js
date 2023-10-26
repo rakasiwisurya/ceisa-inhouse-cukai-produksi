@@ -44,7 +44,6 @@ export default class CK4EATaskToDo extends Component {
       isModalDaftarPenjabatBcVisible: false,
 
       namaPemrakarsa: null,
-      idProcessPemrakarsa: null,
       jabatanPemrakarsa: null,
       nipPemrakarsa: null,
 
@@ -198,7 +197,6 @@ export default class CK4EATaskToDo extends Component {
 
       this.setState({
         namaPemrakarsa: data.namaPemrakarsa,
-        idProcessPemrakarsa: data.idProcessPemrakarsa,
         jabatanPemrakarsa: data.jabatanPemrakarsa,
         nipPemrakarsa: data.nipPemrakarsa,
         idNppbkc: data.idNppbkc,
@@ -372,17 +370,6 @@ export default class CK4EATaskToDo extends Component {
                       <FormLabel>Nama Pemrakarsa</FormLabel>
                     </div>
                     <Input id="namaPemrakarsa" value={this.state.namaPemrakarsa} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>ID Proses</FormLabel>
-                    </div>
-                    <Input
-                      id="idProcessPemrakarsa"
-                      value={this.state.idProcessPemrakarsa}
-                      disabled
-                    />
                   </Col>
 
                   <Col span={12}>

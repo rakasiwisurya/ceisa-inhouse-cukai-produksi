@@ -52,6 +52,11 @@ export default class CK4HTPerbaikan extends Component {
 
       idJenisBkc: 3,
 
+      namaPemrakarsa: null,
+      idProcessPemrakarsa: null,
+      jabatanPemrakarsa: null,
+      nipPemrakarsa: null,
+
       idNppbkc: null,
       namaNppbkc: null,
       nppbkc: null,

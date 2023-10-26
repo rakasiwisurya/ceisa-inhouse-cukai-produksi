@@ -13,57 +13,57 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
       totalData: 0,
 
       table: {
-        merk_mmea_name: null,
-        golongan_mmea: null,
-        tarif_mmea: null,
-        isi_mmea: null,
-        jenis_kemasan_mmea: null,
-        negara_asal_mmea: null,
+        namaMerkMmea: null,
+        golonganMmea: null,
+        tarifMmea: null,
+        isiMmea: null,
+        jenisKemasanMmea: null,
+        negaraAsalMmea: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Merk MMEA",
-          dataIndex: "merk_mmea_name",
-          key: "merk_mmea_name",
+          dataIndex: "namaMerkMmea",
+          key: "namaMerkMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("merk_mmea_name"),
+          ...this.getColumnSearchProps("namaMerkMmea"),
         },
         {
           title: "Golongan",
-          dataIndex: "golongan_mmea",
-          key: "golongan_mmea",
+          dataIndex: "golonganMmea",
+          key: "golonganMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("golongan_mmea"),
+          ...this.getColumnSearchProps("golonganMmea"),
         },
         {
           title: "Tarif (%)",
-          dataIndex: "tarif_mmea",
-          key: "tarif_mmea",
+          dataIndex: "tarifMmea",
+          key: "tarifMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tarif_mmea"),
+          ...this.getColumnSearchProps("tarifMmea"),
         },
         {
           title: "Isi (ml)",
-          dataIndex: "isi_mmea",
-          key: "isi_mmea",
+          dataIndex: "isiMmea",
+          key: "isiMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("isi_mmea"),
+          ...this.getColumnSearchProps("isiMmea"),
         },
         {
           title: "Kemasan",
-          dataIndex: "jenis_kemasan_mmea",
-          key: "jenis_kemasan_mmea",
+          dataIndex: "jenisKemasanMmea",
+          key: "jenisKemasanMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_kemasan_mmea"),
+          ...this.getColumnSearchProps("jenisKemasanMmea"),
         },
         {
           title: "Negara Asal",
-          dataIndex: "negara_asal_mmea",
-          key: "negara_asal_mmea",
+          dataIndex: "negaraAsalMmea",
+          key: "negaraAsalMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("negara_asal_mmea"),
+          ...this.getColumnSearchProps("negaraAsalMmea"),
         },
       ],
     };
@@ -80,23 +80,17 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
   }
 
   getDaftarMerkMmea = async () => {
-    const {
-      merk_mmea_name,
-      golongan_mmea,
-      tarif_mmea,
-      isi_mmea,
-      jenis_kemasan_mmea,
-      negara_asal_mmea,
-    } = this.state.table;
+    const { namaMerkMmea, golonganMmea, tarifMmea, isiMmea, jenisKemasanMmea, negaraAsalMmea } =
+      this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (merk_mmea_name) payload.namaMerkMmea = merk_mmea_name;
-    if (golongan_mmea) payload.golonganMmea = golongan_mmea;
-    if (tarif_mmea) payload.tarifMmea = tarif_mmea;
-    if (isi_mmea) payload.isiMmea = isi_mmea;
-    if (jenis_kemasan_mmea) payload.jenisKemasanMmea = jenis_kemasan_mmea;
-    if (negara_asal_mmea) payload.negaraAsalMmea = negara_asal_mmea;
+    if (namaMerkMmea) payload.namaMerkMmea = namaMerkMmea;
+    if (golonganMmea) payload.golonganMmea = golonganMmea;
+    if (tarifMmea) payload.tarifMmea = tarifMmea;
+    if (isiMmea) payload.isiMmea = isiMmea;
+    if (jenisKemasanMmea) payload.jenisKemasanMmea = jenisKemasanMmea;
+    if (negaraAsalMmea) payload.negaraAsalMmea = negaraAsalMmea;
 
     const response = await requestApi({
       service: "produksi",
@@ -109,14 +103,14 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `merk-mmea-${index}`,
-        merk_detail_id: item.idMerkDetail,
-        merk_mmea_id: item.idMerkMmea,
-        merk_mmea_name: item.namaMerkMmea,
-        golongan_mmea: item.golonganMmea,
-        tarif_mmea: item.tarifMmea,
-        isi_mmea: item.isiMmea,
-        jenis_kemasan_mmea: item.jenisKemasanMmea,
-        negara_asal_mmea: item.negaraAsalMmea,
+        idMerkDetail: item.idMerkDetail,
+        idMerkMmea: item.idMerkMmea,
+        namaMerkMmea: item.namaMerkMmea,
+        golonganMmea: item.golonganMmea,
+        tarifMmea: item.tarifMmea,
+        isiMmea: item.isiMmea,
+        jenisKemasanMmea: item.jenisKemasanMmea,
+        negaraAsalMmea: item.negaraAsalMmea,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;

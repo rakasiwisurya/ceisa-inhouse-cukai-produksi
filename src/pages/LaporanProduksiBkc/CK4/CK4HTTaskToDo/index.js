@@ -44,6 +44,10 @@ export default class CK4HTTaskToDo extends Component {
       isModalDaftarStckVisible: false,
       isModalDaftarPenjabatBcVisible: false,
 
+      namaPemrakarsa: null,
+      jabatanPemrakarsa: null,
+      nipPemrakarsa: null,
+
       idNppbkc: null,
       namaNppbkc: null,
       nppbkc: null,
@@ -297,7 +301,6 @@ export default class CK4HTTaskToDo extends Component {
 
       this.setState({
         namaPemrakarsa: data.namaPemrakarsa,
-        idProcessPemrakarsa: data.idProsesPemrakarsa,
         jabatanPemrakarsa: data.jabatanPemrakarsa,
         nipPemrakarsa: data.nipPemrakarsa,
 
@@ -508,17 +511,6 @@ export default class CK4HTTaskToDo extends Component {
                       <FormLabel>Nama Pemrakarsa</FormLabel>
                     </div>
                     <Input id="namaPemrakarsa" value={this.state.namaPemrakarsa} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>ID Proses</FormLabel>
-                    </div>
-                    <Input
-                      id="idProcessPemrakarsa"
-                      value={this.state.idProcessPemrakarsa}
-                      disabled
-                    />
                   </Col>
 
                   <Col span={12}>
