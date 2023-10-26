@@ -6,7 +6,7 @@ export const years = ((startYear = 1980) => {
     allYears.unshift(String(i));
   }
 
-  const newAllYears = allYears.map((year) => ({ year_code: year, year_name: year }));
+  const newAllYears = allYears.map((year) => ({ yearCode: year, yearName: year }));
 
   return newAllYears;
 })();
@@ -28,8 +28,8 @@ export const months = (() => {
   };
 
   const newAllMonths = Object.keys(allMonths).map((key) => ({
-    month_code: key.padStart(2, "0"),
-    month_name: allMonths[key],
+    monthCode: key.padStart(2, "0"),
+    monthName: allMonths[key],
   }));
 
   return newAllMonths;

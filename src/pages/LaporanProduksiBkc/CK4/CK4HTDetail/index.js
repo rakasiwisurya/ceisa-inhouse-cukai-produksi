@@ -258,7 +258,7 @@ export default class CK4HTDetail extends Component {
         nomorPemberitahuan: data.nomorPemberitahuan,
         tanggalPemberitahuan: moment(data.tanggalPemberitahuan),
 
-        periodeBulan: months.find((month) => data.periodeBulan === month.month_name)?.month_code,
+        periodeBulan: data.periodeBulan,
         periodeTahun: data.periodeTahun,
         tanggalProduksiAwal: moment(data.tanggalProduksiAwal),
         tanggalProduksiAkhir: moment(data.tanggalProduksiAkhir),
@@ -503,8 +503,8 @@ export default class CK4HTDetail extends Component {
                             disabled
                           >
                             {months.map((item, index) => (
-                              <Select.Option key={`periode-bulan-${index}`} value={item.month_code}>
-                                {item.month_name}
+                              <Select.Option key={`periodeBulan-${index}`} value={item.monthCode}>
+                                {item.monthName}
                               </Select.Option>
                             ))}
                           </Select>
@@ -516,8 +516,8 @@ export default class CK4HTDetail extends Component {
                             disabled
                           >
                             {years.map((item, index) => (
-                              <Select.Option key={`periode-tahun-${index}`} value={item.year_code}>
-                                {item.year_name}
+                              <Select.Option key={`periodeTahun-${index}`} value={item.yearCode}>
+                                {item.yearName}
                               </Select.Option>
                             ))}
                           </Select>

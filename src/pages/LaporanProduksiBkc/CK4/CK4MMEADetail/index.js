@@ -497,11 +497,8 @@ export default class CK4MMEADetail extends Component {
                               disabled
                             >
                               {months.map((item, index) => (
-                                <Select.Option
-                                  key={`periode-bulan-${index}`}
-                                  value={item.month_code}
-                                >
-                                  {item.month_name}
+                                <Select.Option key={`periodeBulan-${index}`} value={item.monthCode}>
+                                  {item.monthName}
                                 </Select.Option>
                               ))}
                             </Select>
@@ -513,11 +510,8 @@ export default class CK4MMEADetail extends Component {
                               disabled
                             >
                               {years.map((item, index) => (
-                                <Select.Option
-                                  key={`periode-tahun-${index}`}
-                                  value={item.year_code}
-                                >
-                                  {item.year_name}
+                                <Select.Option key={`periodeTahun-${index}`} value={item.yearCode}>
+                                  {item.yearName}
                                 </Select.Option>
                               ))}
                             </Select>
