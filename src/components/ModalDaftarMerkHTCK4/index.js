@@ -13,50 +13,50 @@ export default class ModalDaftarHTCK4 extends Component {
       totalData: 0,
 
       table: {
-        merk_ht_name: null,
-        isi_ht: null,
-        hje_ht: null,
-        tarif_ht: null,
-        bahan_ht: null,
-        jenis_produksi_ht: null,
+        namaMerkHt: null,
+        isiHt: null,
+        hjeHt: null,
+        tarifHt: null,
+        bahanHt: null,
+        jenisProduksiHt: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Merk ht",
-          dataIndex: "merk_ht_name",
-          key: "merk_ht_name",
+          dataIndex: "namaMerkHt",
+          key: "namaMerkHt",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("merk_ht_name"),
+          ...this.getColumnSearchProps("namaMerkHt"),
         },
         {
           title: "Isi",
-          dataIndex: "isi_ht",
-          key: "isi_ht",
+          dataIndex: "isiHt",
+          key: "isiHt",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("isi_ht"),
+          ...this.getColumnSearchProps("isiHt"),
         },
         {
           title: "HJE",
-          dataIndex: "hje_ht",
-          key: "hje_ht",
+          dataIndex: "hjeHt",
+          key: "hjeHt",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("hje_ht"),
+          ...this.getColumnSearchProps("hjeHt"),
         },
         {
           title: "Tarif Spesifik",
-          dataIndex: "tarif_ht",
-          key: "tarif_ht",
+          dataIndex: "tarifHt",
+          key: "tarifHt",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tarif_ht"),
+          ...this.getColumnSearchProps("tarifHt"),
         },
         {
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_ht",
-          key: "jenis_produksi_ht",
+          dataIndex: "jenisProduksiHt",
+          key: "jenisProduksiHt",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_produksi_ht"),
+          ...this.getColumnSearchProps("jenisProduksiHt"),
         },
       ],
     };
@@ -67,15 +67,15 @@ export default class ModalDaftarHTCK4 extends Component {
   }
 
   getDaftarMerkHt = async () => {
-    const { merk_ht_name, isi_ht, hje_ht, tarif_ht, jenis_produksi_ht } = this.state.table;
+    const { namaMerkHt, isiHt, hjeHt, tarifHt, jenisProduksiHt } = this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (merk_ht_name) payload.namaMerkht = merk_ht_name;
-    if (isi_ht) payload.isiHt = isi_ht;
-    if (hje_ht) payload.hjeHt = hje_ht;
-    if (tarif_ht) payload.tarifHt = tarif_ht;
-    if (jenis_produksi_ht) payload.jenisProduksiHt = jenis_produksi_ht;
+    if (namaMerkHt) payload.namaMerkht = namaMerkHt;
+    if (isiHt) payload.isiHt = isiHt;
+    if (hjeHt) payload.hjeHt = hjeHt;
+    if (tarifHt) payload.tarifHt = tarifHt;
+    if (jenisProduksiHt) payload.jenisProduksiHt = jenisProduksiHt;
 
     const response = await requestApi({
       service: "produksi",
@@ -88,15 +88,15 @@ export default class ModalDaftarHTCK4 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `merk-ht-${index}`,
-        merk_ht_id: item.idMerkHt,
-        merk_ht_name: item.namaMerkHt,
-        jenis_ht: item.jenisHt,
-        isi_ht: item.isiHt,
-        hje_ht: item.hjeHt,
-        tarif_ht: item.tarifHt,
-        satuan_ht: item.satuanHt,
-        bahan_ht: item.bahanHt,
-        jenis_produksi_ht: item.jenisProduksiHt,
+        idMerkHt: item.idMerkHt,
+        namaMerkHt: item.namaMerkHt,
+        jenisHt: item.jenisHt,
+        isiHt: item.isiHt,
+        hjeHt: item.hjeHt,
+        tarifHt: item.tarifHt,
+        satuanHt: item.satuanHt,
+        bahanHt: item.bahanHt,
+        jenisProduksiHt: item.jenisProduksiHt,
       }));
       const page = response.data.currentPage;
       const totalData = response.data.totalData;
