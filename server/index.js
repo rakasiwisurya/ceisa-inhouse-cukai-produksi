@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
-const app = express();
+
+const server = express();
 
 const allowedOrigins = [
   "https://ceisa40.customs.go.id", //delete this when project for portal
@@ -9,7 +10,7 @@ const allowedOrigins = [
   "https://portal.beacukai.go.id", //delete this when project for inhouse
   "https://portal-dev.beacukai.go.id", //delete this when project for inhouse
 ];
-app.use(
+server.use(
   cors({
     origin: function (origin, callback) {
       // allow requests with no origin
@@ -25,9 +26,9 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "../build")));
+server.use(express.static(path.join(__dirname, "../build")));
 
-app.get("/*", function (req, res) {
+server.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
-app.listen(4000);
+server.listen(4000);
