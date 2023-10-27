@@ -282,11 +282,10 @@ export default class PenetapanKembali extends Component {
     }
 
     if (
-      prevState.tanggalSkep !== this.state.tanggalSkep ||
       prevState.idNppbkc !== this.state.idNppbkc ||
       prevState.idJenisProduksi !== this.state.idJenisProduksi
     ) {
-      if (this.state.tanggalSkep && this.state.idNppbkc) {
+      if (this.state.idNppbkc) {
         this.getDetailMerk();
       }
     }
@@ -731,7 +730,7 @@ export default class PenetapanKembali extends Component {
               </Col>
             </Row>
 
-            {this.state.idNppbkc && this.state.tanggalSkep && (
+            {this.state.idNppbkc && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table

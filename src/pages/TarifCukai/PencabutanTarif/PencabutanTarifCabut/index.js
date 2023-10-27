@@ -8,6 +8,7 @@ import ModalDaftarKota from "components/ModalDaftarKota";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
+import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 
 export default class PencabutanTarifCabut extends Component {
@@ -23,44 +24,43 @@ export default class PencabutanTarifCabut extends Component {
 
       isModalDaftarKotaVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      npwp_nppbkc: null,
-      alamat_nppbkc: null,
+      namaNppbkc: null,
+      npwpNppbkc: null,
+      alamatNppbkc: null,
 
-      id_merk: null,
-      nama_merk: null,
-      nomor_kep: null,
-      tanggal_kep: null,
-      jenis_produksi: null,
-      seri_pita: null,
+      idMerk: null,
+      namaMerk: null,
+      nomorKep: null,
+      tanggalKep: null,
+      jenisProduksi: null,
+      seriPita: null,
       tarif: null,
       hje: null,
       isi: null,
       berat: null,
-      awal_berlaku: null,
-      tanggal_pesan_akhir: null,
+      awalBerlaku: null,
+      tanggalPesanAkhir: null,
 
-      nomor_permohonan: null,
-      tanggal_permohonan: null,
-      kota_id: null,
-      kota_name: null,
-      tanggal_kep_pencabutan: null,
-      akhir_berlaku: null,
-      keterangan_pencabutan: null,
-      asal_merk_id: null,
-      asal_merk_name: null,
+      nomorPermohonan: null,
+      tanggalPermohonan: null,
+      idKota: null,
+      namaKota: null,
+      tanggalKepPencabutan: null,
+      akhirBerlaku: null,
+      keteranganPencabutan: null,
+      idAsalMerk: null,
+      namaAsalMerk: null,
 
-      list_kota: [],
-      list_asal_merk: [
+      listAsalMerk: [
         {
-          asal_merk_id: "PENETAPAN TARIF CUKAI HASIL TEMBAKAU UNTUK MERK BARU",
-          asal_merk_name: "Penetapan Tarif Cukai Hasil Tembakau Untuk Merk Baru",
+          idAsalMerk: "PENETAPAN TARIF CUKAI HASIL TEMBAKAU UNTUK MERK BARU",
+          namaAsalMerk: "PENETAPAN TARIF CUKAI HASIL TEMBAKAU UNTUK MERK BARU",
         },
         {
-          asal_merk_id: "PENETAPAN PENYESUAIAN TARIF CUKAI HASIL TEMBAKAU",
-          asal_merk_name: "Penetapan Penyesuaian Tarif Cukai Hasil Tembakau",
+          idAsalMerk: "PENETAPAN PENYESUAIAN TARIF CUKAI HASIL TEMBAKAU",
+          namaAsalMerk: "PENETAPAN PENYESUAIAN TARIF CUKAI HASIL TEMBAKAU",
         },
       ],
     };
@@ -85,24 +85,24 @@ export default class PencabutanTarifCabut extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        npwp_nppbkc: data.npwp,
-        alamat_nppbkc: data.alamatPerusahaan,
+        namaNppbkc: data.namaPerusahaan,
+        npwpNppbkc: data.npwp,
+        alamatNppbkc: data.alamatPerusahaan,
 
-        id_merk: data.idMerk,
-        nama_merk: data.namaMerk,
-        nomor_kep: data.nomorSkep,
-        tanggal_kep: moment(data.tanggalSkep),
-        jenis_produksi: data.namaJenisProduksiBkc,
-        seri_pita: data.seriPita,
+        idMerk: data.idMerk,
+        namaMerk: data.namaMerk,
+        nomorKep: data.nomorSkep,
+        tanggalKep: moment(data.tanggalSkep),
+        jenisProduksi: data.namaJenisProduksiBkc,
+        seriPita: data.seriPita,
         tarif: data.tarifSpesifik,
         hje: data.hje,
         isi: data.isiKemasan,
         berat: data.beratVolume,
-        awal_berlaku: moment(data.awalBerlaku),
-        tanggal_pesan_akhir: moment(data.tanggalPesanAkhir),
+        awalBerlaku: moment(data.awalBerlaku),
+        tanggalPesanAkhir: moment(data.tanggalPesanAkhir),
       });
     }
   };
@@ -121,8 +121,8 @@ export default class PencabutanTarifCabut extends Component {
   };
   handleSelectCustomChange = (field, value, option) => {
     this.setState({
-      [`${field}_id`]: value,
-      [`${field}_name`]: option.props.children,
+      [`id${capitalize(field, false)}`]: value,
+      [`nama${capitalize(field, false)}`]: option.props.children,
     });
   };
 
@@ -135,30 +135,30 @@ export default class PencabutanTarifCabut extends Component {
 
   handleDataKota = (record) => {
     this.setState({
-      kota_id: record.kota_id,
-      kota_name: record.kota_name,
+      idKota: record.kota_id,
+      namaKota: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
 
   handleCabut = async () => {
     const {
-      nomor_permohonan,
-      tanggal_permohonan,
-      kota_name,
-      tanggal_kep_pencabutan,
-      akhir_berlaku,
-      keterangan_pencabutan,
+      nomorPermohonan,
+      tanggalPermohonan,
+      namaKota,
+      tanggalKepPencabutan,
+      akhirBerlaku,
+      keteranganPencabutan,
     } = this.state;
 
     const payload = {
       idTarifMerkHeader: this.props.match.params.id,
-      nomorPermohonanCabut: nomor_permohonan,
-      tanggalPermohonanCabut: tanggal_permohonan,
-      kotaPermohonanCabut: kota_name,
-      tanggalSkepCabut: tanggal_kep_pencabutan,
-      akhirBerlaku: akhir_berlaku,
-      keteranganCabut: keterangan_pencabutan,
+      nomorPermohonanCabut: nomorPermohonan,
+      tanggalPermohonanCabut: tanggalPermohonan,
+      kotaPermohonanCabut: namaKota,
+      tanggalSkepCabut: tanggalKepPencabutan,
+      akhirBerlaku: akhirBerlaku,
+      keteranganCabut: keteranganPencabutan,
     };
 
     const response = await requestApi({
@@ -196,7 +196,7 @@ export default class PencabutanTarifCabut extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -204,14 +204,14 @@ export default class PencabutanTarifCabut extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>NPWP</FormLabel>
                     </div>
-                    <Input id="npwp_nppbkc" value={this.state.npwp_nppbkc} disabled />
+                    <Input id="npwpNppbkc" value={this.state.npwpNppbkc} disabled />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Alamat</FormLabel>
                     </div>
-                    <Input.TextArea id="alamat_nppbkc" value={this.state.alamat_nppbkc} disabled />
+                    <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
                   </Col>
                 </Row>
               </div>
@@ -227,7 +227,7 @@ export default class PencabutanTarifCabut extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nama Merk</FormLabel>
                     </div>
-                    <Input id="nama_merk" value={this.state.nama_merk} disabled />
+                    <Input id="namaMerk" value={this.state.namaMerk} disabled />
                   </Col>
                 </Row>
 
@@ -236,7 +236,7 @@ export default class PencabutanTarifCabut extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Nomor KEP</FormLabel>
                     </div>
-                    <Input id="nomor_kep" value={this.state.nomor_kep} disabled />
+                    <Input id="nomorKep" value={this.state.nomorKep} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -244,9 +244,9 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Tanggal KEP</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_kep"
+                      id="tanggalKep"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_kep}
+                      value={this.state.tanggalKep}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -256,7 +256,7 @@ export default class PencabutanTarifCabut extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Jenis Produksi</FormLabel>
                     </div>
-                    <Input id="jenis_produksi" value={this.state.jenis_produksi} disabled />
+                    <Input id="jenisProduksi" value={this.state.jenisProduksi} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -264,8 +264,8 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Seri Pita</FormLabel>
                     </div>
                     <InputNumber
-                      id="seri_pita"
-                      value={this.state.seri_pita}
+                      id="seriPita"
+                      value={this.state.seriPita}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -324,9 +324,9 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Awal Berlaku</FormLabel>
                     </div>
                     <DatePicker
-                      id="awal_berlaku"
+                      id="awalBerlaku"
                       format="DD-MM-YYYY"
-                      value={this.state.awal_berlaku}
+                      value={this.state.awalBerlaku}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -337,9 +337,9 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Tanggal Pesan Akhir</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_pesan_akhir"
+                      id="tanggalPesanAkhir"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_pesan_akhir}
+                      value={this.state.tanggalPesanAkhir}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -355,9 +355,9 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Nomor Permohonan</FormLabel>
                     </div>
                     <Input
-                      id="nomor_permohonan"
+                      id="nomorPermohonan"
                       onChange={this.handleInputChange}
-                      value={this.state.nomor_permohonan}
+                      value={this.state.nomorPermohonan}
                     />
                   </Col>
 
@@ -366,10 +366,10 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Tanggal Permohonan</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_permohonan"
+                      id="tanggalPermohonan"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_permohonan}
-                      onChange={(date) => this.handleDatepickerChange("tanggal_permohonan", date)}
+                      value={this.state.tanggalPermohonan}
+                      onChange={(date) => this.handleDatepickerChange("tanggalPermohonan", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -379,7 +379,7 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Lokasi Pencabutan</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="kota_name" value={this.state.kota_name} disabled />
+                      <Input id="namaKota" value={this.state.namaKota} disabled />
                       <Button
                         type="default"
                         icon="menu"
@@ -393,12 +393,10 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Tanggal KEP Pencabutan</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_kep_pencabutan"
+                      id="tanggalKepPencabutan"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_kep_pencabutan}
-                      onChange={(date) =>
-                        this.handleDatepickerChange("tanggal_kep_pencabutan", date)
-                      }
+                      value={this.state.tanggalKepPencabutan}
+                      onChange={(date) => this.handleDatepickerChange("tanggalKepPencabutan", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -408,10 +406,10 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Akhir Berlaku</FormLabel>
                     </div>
                     <DatePicker
-                      id="akhir_berlaku"
+                      id="akhirBerlaku"
                       format="DD-MM-YYYY"
-                      value={this.state.akhir_berlaku}
-                      onChange={(date) => this.handleDatepickerChange("akhir_berlaku", date)}
+                      value={this.state.akhirBerlaku}
+                      onChange={(date) => this.handleDatepickerChange("akhirBerlaku", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -421,17 +419,17 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Asal Merk</FormLabel>
                     </div>
                     <Select
-                      id="asal_merk"
-                      value={this.state.asal_merk_id}
+                      id="asalMerk"
+                      value={this.state.idAsalMerk}
                       onChange={(value, option) => {
-                        this.handleSelectCustomChange("asal_merk", value, option);
+                        this.handleSelectCustomChange("asalMerk", value, option);
                       }}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_asal_merk.length > 0 &&
-                        this.state.list_asal_merk.map((item, index) => (
-                          <Select.Option key={`asal-merk-${index}`} value={item.asal_merk_id}>
-                            {item.asal_merk_name}
+                      {this.state.listAsalMerk.length > 0 &&
+                        this.state.listAsalMerk.map((item, index) => (
+                          <Select.Option key={`asalMerk-${index}`} value={item.idAsalMerk}>
+                            {item.namaAsalMerk}
                           </Select.Option>
                         ))}
                     </Select>
@@ -442,9 +440,9 @@ export default class PencabutanTarifCabut extends Component {
                       <FormLabel>Keterangan Pencabutan</FormLabel>
                     </div>
                     <Input.TextArea
-                      id="keterangan_pencabutan"
+                      id="keteranganPencabutan"
                       onChange={this.handleInputChange}
-                      value={this.state.keterangan_pencabutan}
+                      value={this.state.keteranganPencabutan}
                     />
                   </Col>
                 </Row>

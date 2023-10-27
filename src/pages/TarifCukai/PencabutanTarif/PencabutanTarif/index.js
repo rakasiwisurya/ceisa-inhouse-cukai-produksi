@@ -16,13 +16,13 @@ export default class PencabutanTarif extends Component {
 
       filter: {
         status: null,
-        kode_kantor: null,
-        nama_kantor: null,
+        kodeKantor: null,
+        namaKantor: null,
         nppbkc: null,
-        nomor_skep: null,
-        tanggal_skep: null,
-        awal_berlaku: null,
-        akhir_berlaku: null,
+        nomorSkep: null,
+        tanggalSkep: null,
+        awalBerlaku: null,
+        akhirBerlaku: null,
       },
 
       dataSource: [],
@@ -38,7 +38,7 @@ export default class PencabutanTarif extends Component {
                 <Button
                   icon="to-top"
                   type="danger"
-                  onClick={() => this.handlePencabutan(record.permohonan_tarif_id)}
+                  onClick={() => this.handlePencabutan(record.idTarifMerkHeader)}
                 />
               </>
             </div>
@@ -55,18 +55,18 @@ export default class PencabutanTarif extends Component {
           ),
         },
         {
-          key: "kode_kantor",
+          key: "kodeKantor",
           title: "Kode Kantor",
-          dataIndex: "kode_kantor",
+          dataIndex: "kodeKantor",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("kode_kantor"),
+          ...this.getColumnSearchProps("kodeKantor"),
         },
         {
-          key: "nama_kantor",
+          key: "namaKantor",
           title: "Nama Kantor",
-          dataIndex: "nama_kantor",
+          dataIndex: "namaKantor",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_kantor"),
+          ...this.getColumnSearchProps("namaKantor"),
         },
         {
           key: "nppbkc",
@@ -76,44 +76,44 @@ export default class PencabutanTarif extends Component {
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
-          key: "nomor_skep",
+          key: "nomorSkep",
           title: "Nomor SKEP",
-          dataIndex: "nomor_skep",
+          dataIndex: "nomorSkep",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_skep"),
+          ...this.getColumnSearchProps("nomorSkep"),
         },
         {
-          key: "tanggal_skep",
+          key: "tanggalSkep",
           title: "Tanggal SKEP",
-          dataIndex: "tanggal_skep",
+          dataIndex: "tanggalSkep",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_skep"),
+          ...this.getColumnSearchProps("tanggalSkep"),
         },
         {
-          key: "awal_berlaku",
+          key: "awalBerlaku",
           title: "Awal Berlaku",
-          dataIndex: "awal_berlaku",
+          dataIndex: "awalBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("awalBerlaku"),
         },
         {
-          key: "akhir_berlaku",
+          key: "akhirBerlaku",
           title: "Akhir Berlaku",
-          dataIndex: "akhir_berlaku",
+          dataIndex: "akhirBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("akhir_berlaku"),
+          ...this.getColumnSearchProps("akhirBerlaku"),
         },
       ],
     };
@@ -131,39 +131,39 @@ export default class PencabutanTarif extends Component {
 
   getPencabutanTarif = async () => {
     const {
-      kode_kantor,
-      nama_kantor,
+      kodeKantor,
+      namaKantor,
       nppbkc,
-      nama_perusahaan,
-      nomor_skep,
-      tanggal_skep,
-      nama_merk,
-      jenis_produksi,
+      namaPerusahaan,
+      nomorSkep,
+      tanggalSkep,
+      namaMerk,
+      jenisProduksi,
       hje,
       isi,
       tarif,
       tujuan,
-      awal_berlaku,
-      akhir_berlaku,
+      awalBerlaku,
+      akhirBerlaku,
     } = this.state.filter;
 
     const payload = { page: this.state.page, status: "AKTIF" };
 
-    if (kode_kantor) payload.kodeKantor = kode_kantor;
-    if (nama_kantor) payload.namaKantor = nama_kantor;
+    if (kodeKantor) payload.kodeKantor = kodeKantor;
+    if (namaKantor) payload.namaKantor = namaKantor;
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (nomor_skep) payload.nomorSkep = nomor_skep;
-    if (tanggal_skep) payload.tanggalSkep = moment(tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (nama_merk) payload.namaMerk = nama_merk;
-    if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (nomorSkep) payload.nomorSkep = nomorSkep;
+    if (tanggalSkep) payload.tanggalSkep = moment(tanggalSkep, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaMerk) payload.namaMerk = namaMerk;
+    if (jenisProduksi) payload.namaJenisProduksiBkc = jenisProduksi;
     if (hje) payload.hjePerKemasan = hje;
     if (isi) payload.isiPerKemasan = isi;
     if (tarif) payload.tarifSpesifik = tarif;
     if (tujuan) payload.tujuanPemasaran = tujuan;
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (akhir_berlaku)
-      payload.akhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (akhirBerlaku)
+      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
 
     const response = await requestApi({
       service: "produksi",
@@ -176,22 +176,22 @@ export default class PencabutanTarif extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `pencabutan-tarif-${index}`,
-        permohonan_tarif_id: item.idTarifMerkHeader,
+        idTarifMerkHeader: item.idTarifMerkHeader,
         status: item.status,
-        kode_kantor: item.kodeKantor,
-        nama_kantor: item.namaKantor,
+        kodeKantor: item.kodeKantor,
+        namaKantor: item.namaKantor,
         nppbkc: item.nppbkc,
-        nama_perusahaan: item.namaPerusahaan,
-        nomor_skep: item.nomorSkep,
-        tanggal_skep: item.tanggalSkep,
-        nama_merk: item.namaMerk,
-        jenis_produksi: item.namaJenisProduksiBkc,
+        namaPerusahaan: item.namaPerusahaan,
+        nomorSkep: item.nomorSkep,
+        tanggalSkep: item.tanggalSkep,
+        namaMerk: item.namaMerk,
+        jenisProduksi: item.namaJenisProduksiBkc,
         hje: item.hjePerKemasan,
         isi: item.isiPerKemasan,
         tarif: item.tarifSpesifik,
         tujuan: item.tujuanPemasaran,
-        awal_berlaku: item.awalBerlaku,
-        akhir_berlaku: item.akhirBerlaku,
+        awalBerlaku: item.awalBerlaku,
+        akhirBerlaku: item.akhirBerlaku,
       }));
 
       this.setState({
