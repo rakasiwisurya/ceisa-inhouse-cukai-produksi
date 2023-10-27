@@ -13,6 +13,11 @@ const allowedOrigins = [
 ];
 
 // app.use(helmet());
+app.use((req, res, next) => {
+  res.removeHeader("X-Powered-By"); // Remove the 'X-Powered-By' header
+  res.setHeader("Server", "Custom"); // Set a custom 'Server' header
+  next();
+});
 
 app.use(
   cors({
