@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
-// const helmet = require("helmet");
 
 const app = express();
 
@@ -13,8 +12,6 @@ const allowedOrigins = [
   "https://portal.beacukai.go.id", //delete this when project for inhouse
   "https://portal-dev.beacukai.go.id", //delete this when project for inhouse
 ];
-
-// app.use(helmet());
 
 app.use(
   cors({

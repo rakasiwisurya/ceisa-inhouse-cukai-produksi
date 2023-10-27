@@ -13,25 +13,25 @@ export default class ModalDaftarPenjabatBc extends Component {
       totalData: 0,
 
       table: {
-        penjabat_bc_nip: null,
-        penjabat_bc_name: null,
+        nipPenjabatBc: null,
+        namaPenjabatBc: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "NIP",
-          dataIndex: "penjabat_bc_nip",
-          key: "penjabat_bc_nip",
+          dataIndex: "nipPenjabatBc",
+          key: "nipPenjabatBc",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("penjabat_bc_nip"),
+          ...this.getColumnSearchProps("nipPenjabatBc"),
         },
         {
           title: "Nama Pegawai",
-          dataIndex: "penjabat_bc_name",
-          key: "penjabat_bc_name",
+          dataIndex: "namaPenjabatBc",
+          key: "namaPenjabatBc",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("penjabat_bc_name"),
+          ...this.getColumnSearchProps("namaPenjabatBc"),
         },
       ],
     };
@@ -48,12 +48,12 @@ export default class ModalDaftarPenjabatBc extends Component {
   }
 
   getDaftarPenjabatBc = async () => {
-    const { penjabat_bc_nip, penjabat_bc_name } = this.state.table;
+    const { nipPenjabatBc, namaPenjabatBc } = this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (penjabat_bc_nip) payload.nipPenjabatBc = penjabat_bc_nip;
-    if (penjabat_bc_name) payload.namaPenjabatBc = penjabat_bc_name;
+    if (nipPenjabatBc) payload.nipPenjabatBc = nipPenjabatBc;
+    if (namaPenjabatBc) payload.namaPenjabatBc = namaPenjabatBc;
 
     const response = await requestApi({
       service: "referensi",
@@ -66,8 +66,8 @@ export default class ModalDaftarPenjabatBc extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `penjabat-bc-${index}`,
-        penjabat_bc_nip: item.nipPegawai,
-        penjabat_bc_name: item.namaPegawai,
+        nipPenjabatBc: item.nipPegawai,
+        namaPenjabatBc: item.namaPegawai,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;

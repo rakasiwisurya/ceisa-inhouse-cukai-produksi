@@ -312,8 +312,8 @@ export default class CK4EAPerbaikan extends Component {
   };
   handleDataPenjabatBc = (record) => {
     this.setState({
-      idPenjabatBc: record.penjabat_bc_nip,
-      namaPenjabatBc: record.penjabat_bc_name,
+      idPenjabatBc: record.idPenjabatBc,
+      namaPenjabatBc: record.namaPenjabatBc,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
