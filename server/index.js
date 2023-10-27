@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const app = express();
 
+app.disable("x-powered-by");
+
 const allowedOrigins = [
   "https://ceisa40.customs.go.id", //delete this when project for portal
   "https://ceisa40-dev.customs.go.id", //delete this when project for portal
@@ -13,11 +15,6 @@ const allowedOrigins = [
 ];
 
 // app.use(helmet());
-app.use((req, res, next) => {
-  res.removeHeader("X-Powered-By"); // Remove the 'X-Powered-By' header
-  res.setHeader("Server", "Custom"); // Set a custom 'Server' header
-  next();
-});
 
 app.use(
   cors({
