@@ -7,6 +7,7 @@ import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import moment from "moment";
 import React, { Component } from "react";
+import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 
 export default class PenetapanKembali extends Component {
@@ -22,18 +23,17 @@ export default class PenetapanKembali extends Component {
       isModalDaftarKotaVisible: false,
       isModalDaftarNppbkcVisible: false,
 
-      kota_id: null,
-      kota_name: null,
-      tanggal_skep: null,
-      nppbkc_id: null,
+      idKota: null,
+      namaKota: null,
+      tanggalSkep: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
+      namaNppbkc: null,
 
-      jenis_produksi_id: null,
-      jenis_produksi_name: null,
+      idJenisProduksi: null,
+      namaJenisProduksi: null,
 
-      list_kota: [],
-      list_jenis_produksi: [],
+      listJenisProduksi: [],
 
       searchTextTop: null,
       searchedColumnTop: null,
@@ -54,239 +54,239 @@ export default class PenetapanKembali extends Component {
       columnTop: [
         {
           title: "Nama",
-          dataIndex: "nama_merk",
-          key: "nama_merk",
+          dataIndex: "namaMerk",
+          key: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("nama_merk"),
+          ...this.getColumnSearchPropsTop("namaMerk"),
         },
         {
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_merk",
-          key: "jenis_produksi_merk",
+          dataIndex: "jenisProduksiMerk",
+          key: "jenisProduksiMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("jenis_produksi_merk"),
+          ...this.getColumnSearchPropsTop("jenisProduksiMerk"),
         },
         {
           title: "Isi Kemasan",
-          dataIndex: "isi_merk",
-          key: "isi_merk",
+          dataIndex: "isiMerk",
+          key: "isiMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("isi_merk"),
+          ...this.getColumnSearchPropsTop("isiMerk"),
         },
         {
           title: "Volume",
-          dataIndex: "volume_merk",
-          key: "volume_merk",
+          dataIndex: "volumeMerk",
+          key: "volumeMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("volume_merk"),
+          ...this.getColumnSearchPropsTop("volumeMerk"),
         },
         {
           title: "Nomor Kep",
-          dataIndex: "nomor_kep_merk",
-          key: "nomor_kep_merk",
+          dataIndex: "nomorKepMerk",
+          key: "nomorKepMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("nomor_kep_merk"),
+          ...this.getColumnSearchPropsTop("nomorKepMerk"),
         },
         {
           title: "Tanggal Kep",
-          dataIndex: "tanggal_kep_merk",
-          key: "tanggal_kep_merk",
+          dataIndex: "tanggalKepMerk",
+          key: "tanggalKepMerk",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchPropsTop("tanggal_kep_merk"),
+          ...this.getColumnSearchPropsTop("tanggalKepMerk"),
         },
         {
           title: "Golongan Pabrik",
-          dataIndex: "golongan_merk",
-          key: "golongan_merk",
+          dataIndex: "golonganMerk",
+          key: "golonganMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("golongan_merk"),
+          ...this.getColumnSearchPropsTop("golonganMerk"),
         },
         {
           title: "HJE Lama",
-          dataIndex: "hje_lama_merk",
-          key: "hje_lama_merk",
+          dataIndex: "hjeLamaMerk",
+          key: "hjeLamaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("hje_lama_merk"),
+          ...this.getColumnSearchPropsTop("hjeLamaMerk"),
         },
         {
           title: "HJE Baru",
-          dataIndex: "hje_baru_merk",
-          key: "hje_baru_merk",
+          dataIndex: "hjeBaruMerk",
+          key: "hjeBaruMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("hje_baru_merk"),
+          ...this.getColumnSearchPropsTop("hjeBaruMerk"),
         },
         {
           title: "HJE/Satuan Lama",
-          dataIndex: "hje_satuan_lama_merk",
-          key: "hje_satuan_lama_merk",
+          dataIndex: "hjeSatuanLamaMerk",
+          key: "hjeSatuanLamaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("hje_satuan_lama_merk"),
+          ...this.getColumnSearchPropsTop("hjeSatuanLamaMerk"),
         },
         {
           title: "HJE/Satuan Baru",
-          dataIndex: "hje_satuan_baru_merk",
-          key: "hje_satuan_baru_merk",
+          dataIndex: "hjeSatuanBaruMerk",
+          key: "hjeSatuanBaruMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("hje_satuan_baru_merk"),
+          ...this.getColumnSearchPropsTop("hjeSatuanBaruMerk"),
         },
         {
           title: "Tarif Lama",
-          dataIndex: "tarif_lama",
-          key: "tarif_lama",
+          dataIndex: "tarifLama",
+          key: "tarifLama",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("tarif_lama"),
+          ...this.getColumnSearchPropsTop("tarifLama"),
         },
         {
           title: "Tarif Baru",
-          dataIndex: "tarif_baru",
-          key: "tarif_baru",
+          dataIndex: "tarifBaru",
+          key: "tarifBaru",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("tarif_baru"),
+          ...this.getColumnSearchPropsTop("tarifBaru"),
         },
         {
           title: "Seri Pita",
-          dataIndex: "seri_pita",
-          key: "seri_pita",
+          dataIndex: "seriPita",
+          key: "seriPita",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("seri_pita"),
+          ...this.getColumnSearchPropsTop("seriPita"),
         },
         {
           title: "Warna Dasar",
-          dataIndex: "warna_dasar",
-          key: "warna_dasar",
+          dataIndex: "warnaDasar",
+          key: "warnaDasar",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsTop("warna_dasar"),
+          ...this.getColumnSearchPropsTop("warnaDasar"),
         },
       ],
       columnBottom: [
         {
           title: "Nama",
-          dataIndex: "nama_merk",
-          key: "nama_merk",
+          dataIndex: "namaMerk",
+          key: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("nama_merk"),
+          ...this.getColumnSearchPropsBottom("namaMerk"),
         },
         {
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_merk",
-          key: "jenis_produksi_merk",
+          dataIndex: "jenisProduksiMerk",
+          key: "jenisProduksiMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("jenis_produksi_merk"),
+          ...this.getColumnSearchPropsBottom("jenisProduksiMerk"),
         },
         {
           title: "Isi Kemasan",
-          dataIndex: "isi_merk",
-          key: "isi_merk",
+          dataIndex: "isiMerk",
+          key: "isiMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("isi_merk"),
+          ...this.getColumnSearchPropsBottom("isiMerk"),
         },
         {
           title: "Volume",
-          dataIndex: "volume_merk",
-          key: "volume_merk",
+          dataIndex: "volumeMerk",
+          key: "volumeMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("volume_merk"),
+          ...this.getColumnSearchPropsBottom("volumeMerk"),
         },
         {
           title: "Nomor Kep",
-          dataIndex: "nomor_kep_merk",
-          key: "nomor_kep_merk",
+          dataIndex: "nomorKepMerk",
+          key: "nomorKepMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("nomor_kep_merk"),
+          ...this.getColumnSearchPropsBottom("nomorKepMerk"),
         },
         {
           title: "Tanggal Kep",
-          dataIndex: "tanggal_kep_merk",
-          key: "tanggal_kep_merk",
+          dataIndex: "tanggalKepMerk",
+          key: "tanggalKepMerk",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchPropsBottom("tanggal_kep_merk"),
+          ...this.getColumnSearchPropsBottom("tanggalKepMerk"),
         },
         {
           title: "Golongan Pabrik",
-          dataIndex: "golongan_merk",
-          key: "golongan_merk",
+          dataIndex: "golonganMerk",
+          key: "golonganMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("golongan_merk"),
+          ...this.getColumnSearchPropsBottom("golonganMerk"),
         },
         {
           title: "HJE Lama",
-          dataIndex: "hje_lama_merk",
-          key: "hje_lama_merk",
+          dataIndex: "hjeLamaMerk",
+          key: "hjeLamaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("hje_lama_merk"),
+          ...this.getColumnSearchPropsBottom("hjeLamaMerk"),
         },
         {
           title: "HJE Baru",
-          dataIndex: "hje_baru_merk",
-          key: "hje_baru_merk",
+          dataIndex: "hjeBaruMerk",
+          key: "hjeBaruMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("hje_baru_merk"),
+          ...this.getColumnSearchPropsBottom("hjeBaruMerk"),
         },
         {
           title: "HJE/Satuan Lama",
-          dataIndex: "hje_satuan_lama_merk",
-          key: "hje_satuan_lama_merk",
+          dataIndex: "hjeSatuanLamaMerk",
+          key: "hjeSatuanLamaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("hje_satuan_lama_merk"),
+          ...this.getColumnSearchPropsBottom("hjeSatuanLamaMerk"),
         },
         {
           title: "HJE/Satuan Baru",
-          dataIndex: "hje_satuan_baru_merk",
-          key: "hje_satuan_baru_merk",
+          dataIndex: "hjeSatuanBaruMerk",
+          key: "hjeSatuanBaruMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("hje_satuan_baru_merk"),
+          ...this.getColumnSearchPropsBottom("hjeSatuanBaruMerk"),
         },
         {
           title: "Tarif Lama",
-          dataIndex: "tarif_lama",
-          key: "tarif_lama",
+          dataIndex: "tarifLama",
+          key: "tarifLama",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("tarif_lama"),
+          ...this.getColumnSearchPropsBottom("tarifLama"),
         },
         {
           title: "Tarif Baru",
-          dataIndex: "tarif_baru",
-          key: "tarif_baru",
+          dataIndex: "tarifBaru",
+          key: "tarifBaru",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("tarif_baru"),
+          ...this.getColumnSearchPropsBottom("tarifBaru"),
         },
         {
           title: "Seri Pita",
-          dataIndex: "seri_pita",
-          key: "seri_pita",
+          dataIndex: "seriPita",
+          key: "seriPita",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("seri_pita"),
+          ...this.getColumnSearchPropsBottom("seriPita"),
         },
         {
           title: "Warna Dasar",
-          dataIndex: "warna_dasar",
-          key: "warna_dasar",
+          dataIndex: "warnaDasar",
+          key: "warnaDasar",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchPropsBottom("warna_dasar"),
+          ...this.getColumnSearchPropsBottom("warnaDasar"),
         },
       ],
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.nppbkc_id !== this.state.nppbkc_id) {
+    if (prevState.idNppbkc !== this.state.idNppbkc) {
       this.getJenisProduksi();
     }
 
     if (
-      prevState.tanggal_skep !== this.state.tanggal_skep ||
-      prevState.nppbkc_id !== this.state.nppbkc_id ||
-      prevState.jenis_produksi_id !== this.state.jenis_produksi_id
+      prevState.tanggalSkep !== this.state.tanggalSkep ||
+      prevState.idNppbkc !== this.state.idNppbkc ||
+      prevState.idJenisProduksi !== this.state.idJenisProduksi
     ) {
-      if (this.state.tanggal_skep && this.state.nppbkc_id) {
+      if (this.state.tanggalSkep && this.state.idNppbkc) {
         this.getDetailMerk();
       }
     }
@@ -297,13 +297,13 @@ export default class PenetapanKembali extends Component {
       service: "referensi",
       method: "get",
       endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
-      params: { idNppbkc: this.state.nppbkc_id },
+      params: { idNppbkc: this.state.idNppbkc },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
 
     if (response)
       this.setState({
-        list_jenis_produksi: [
+        listJenisProduksi: [
           ...response.data.data,
           {
             idJenisProduksiBkc: null,
@@ -317,10 +317,10 @@ export default class PenetapanKembali extends Component {
       });
   };
   getDetailMerk = async () => {
-    const payload = { idNppbkc: this.state.nppbkc_id };
+    const payload = { idNppbkc: this.state.idNppbkc };
 
-    if (this.state.jenis_produksi_id) {
-      const splitNamaJenisProduksi = this.state.jenis_produksi_name
+    if (this.state.idJenisProduksi) {
+      const splitNamaJenisProduksi = this.state.namaJenisProduksi
         .split("-")
         .map((item) => item.trim());
       payload.jenisProduksi = splitNamaJenisProduksi[0];
@@ -337,44 +337,44 @@ export default class PenetapanKembali extends Component {
     if (response) {
       const newData = response.data.data.map((item, index) => ({
         key: `detail-merk-${index}`,
-        tarif_merk_id: item.idTarifMerkHeader,
-        merk_id: item.idMerk,
-        nama_merk: item.namaMerk,
-        kode_kantor: item.kodeKantor,
-        nppbkc_id: item.idNppbkc,
-        jenis_produksi_merk: item.jenisProduksiBkc,
-        jenis_htl_rel: item.jenisHtlRel,
-        jenis_htl_rel_id: item.idJenisHtlRel,
-        isi_merk: item.isiPerkemasan,
-        volume_merk: item.beratVolume,
-        nomor_kep_merk: item.nomorSkep,
-        tanggal_kep_merk: item.tanggalSkep,
-        golongan_merk_id: item.idGolonganBkc,
-        golongan_merk: item.namaGolonganBkc,
-        hje_lama_merk: item.hjeLama,
-        hje_baru_merk: item.hjeBaru,
-        hje_satuan_lama_merk: item.hjeBtgLama,
-        hje_satuan_baru_merk: item.hjeBtgBaru,
-        kode_satuan: item.kodeSatuan,
-        kode_satuan_rel: item.kodeSatuanRel,
-        tarif_lama: item.tarifSpesifik,
-        tarif_baru: item.tarifBaru,
-        seri_pita: item.seriPita,
-        warna_dasar: item.warnaDasar,
-        tampak_depan: item.tampakDepan,
-        tampak_belakang: item.tampakBelakang,
-        tampak_atas: item.tampakAtas,
-        tampak_bawah: item.tampakBawah,
-        tampak_kiri: item.tampakKiri,
-        tampak_kanan: item.tampakKanan,
-        asal_produksi: item.asalProduksi,
-        nomor_lisensi: item.nomorLisensi,
-        tanggal_lisensi: item.tanggalLisensi,
-        awal_berlaku: item.awalBerlaku,
-        akhir_berlaku: item.akhirBerlaku,
-        bahan_kemasan: item.bahanKemasan,
-        tujuan_pemasaran: item.tujuanPemasaran,
-        kode_foto: item.kodeFoto,
+        idTarifMerkHeader: item.idTarifMerkHeader,
+        idMerk: item.idMerk,
+        namaMerk: item.namaMerk,
+        kodeKantor: item.kodeKantor,
+        idNppbkc: item.idNppbkc,
+        jenisProduksiMerk: item.jenisProduksiBkc,
+        jenisHtlRel: item.jenisHtlRel,
+        idJenisHtlRel: item.idJenisHtlRel,
+        isiMerk: item.isiPerkemasan,
+        volumeMerk: item.beratVolume,
+        nomorKepMerk: item.nomorSkep,
+        tanggalKepMerk: item.tanggalSkep,
+        idGolonganMerk: item.idGolonganBkc,
+        golonganMerk: item.namaGolonganBkc,
+        hjeLamaMerk: item.hjeLama,
+        hjeBaruMerk: item.hjeBaru,
+        hjeSatuanLamaMerk: item.hjeBtgLama,
+        hjeSatuanBaruMerk: item.hjeBtgBaru,
+        kodeSatuan: item.kodeSatuan,
+        kodeSatuanRel: item.kodeSatuanRel,
+        tarifLama: item.tarifSpesifik,
+        tarifBaru: item.tarifBaru,
+        seriPita: item.seriPita,
+        warnaDasar: item.warnaDasar,
+        tampakDepan: item.tampakDepan,
+        tampakBelakang: item.tampakBelakang,
+        tampakAtas: item.tampakAtas,
+        tampakBawah: item.tampakBawah,
+        tampakKkiri: item.tampakKiri,
+        tampakKanan: item.tampakKanan,
+        asalProduksi: item.asalProduksi,
+        nomorLisensi: item.nomorLisensi,
+        tanggalLisensi: item.tanggalLisensi,
+        awalBerlaku: item.awalBerlaku,
+        akhirBerlaku: item.akhirBerlaku,
+        bahanKemasan: item.bahanKemasan,
+        tujuanPemasaran: item.tujuanPemasaran,
+        kodeFoto: item.kodeFoto,
       }));
 
       this.setState({ dataSourceTop: newData });
@@ -519,8 +519,8 @@ export default class PenetapanKembali extends Component {
   };
   handleSelectCustomChange = (field, value, option) => {
     this.setState({
-      [`${field}_id`]: value,
-      [`${field}_name`]: option.props.children,
+      [`id${capitalize(field, false)}`]: value,
+      [`nama${capitalize(field, false)}`]: option.props.children,
     });
   };
   handleModalShow = (visibleState) => {
@@ -532,16 +532,16 @@ export default class PenetapanKembali extends Component {
 
   handleDataKota = (record) => {
     this.setState({
-      kota_id: record.kota_id,
-      kota_name: record.kota_name,
+      idKota: record.kota_id,
+      namaKota: record.kota_name,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
@@ -581,46 +581,46 @@ export default class PenetapanKembali extends Component {
     }
 
     const details = this.state.dataSourceBottom.map((item) => ({
-      kodeKantor: item.kode_kantor,
-      idNppbkc: item.nppbkc_id,
-      idMerk: item.merk_id,
-      namaMerk: item.nama_merk,
-      bahanKemasan: item.bahan_kemasan,
-      kodeSatuan: item.kode_satuan,
-      tarifSpesifik: item.tarif_baru,
-      idGolonganBkc: item.golongan_merk_id,
-      isiPerkemasan: item.isi_merk,
-      beratVolume: item.volume_merk,
-      tujuanPemasaran: item.tujuan_pemasaran,
-      awalBerlaku: item.awal_berlaku,
-      tanggalSkep: item.tanggal_kep_merk,
-      nomorSkep: item.nomor_kep_merk,
-      asalProduksi: item.asal_produksi,
-      seriPita: item.seri_pita,
-      nomorLisensi: item.nomor_lisensi,
-      akhirBerlaku: item.akhir_berlaku,
-      tanggalLisensi: item.tanggal_lisensi,
-      tampakAtas: item.tampak_atas,
-      tampakBelakang: item.tampak_belakang,
-      tampakBawah: item.tampak_bawah,
-      idJenisHtlRel: item.jenis_htl_rel_id,
-      jenisHtlRel: item.jenis_htl_rel,
-      tampakDepan: item.tampak_atas,
-      tampakKiri: item.tampak_kiri,
-      kodeFoto: item.kode_foto,
-      tampakKanan: item.tampak_kanan,
-      kodeSatuanRel: item.kode_satuan_rel,
-      idTarifMerkHeader: item.tarif_merk_id,
-      jenisProduksiBkc: item.jenis_produksi_merk,
-      hje: item.hje_baru_merk,
-      tarif: item.tarif_baru,
-      hjeBtg: item.hje_satuan_baru_merk,
-      warnaDasar: item.warna_dasar,
+      kodeKantor: item.kodeKantor,
+      idNppbkc: item.idNppbkc,
+      idMerk: item.idMerk,
+      namaMerk: item.namaMerk,
+      bahanKemasan: item.bahanKemasan,
+      kodeSatuan: item.kodeSatuan,
+      tarifSpesifik: item.tarifLama,
+      idGolonganBkc: item.idGolonganMerk,
+      isiPerkemasan: item.isiMerk,
+      beratVolume: item.volumeMerk,
+      tujuanPemasaran: item.tujuanPemasaran,
+      awalBerlaku: item.awalBerlaku,
+      tanggalSkep: item.tanggalKepMerk,
+      nomorSkep: item.nomorKepMerk,
+      asalProduksi: item.asalProduksi,
+      seriPita: item.seriPita,
+      nomorLisensi: item.nomorLisensi,
+      akhirBerlaku: item.akhirBerlaku,
+      tanggalLisensi: item.tanggalLisensi,
+      tampakAtas: item.tampakAtas,
+      tampakBelakang: item.tampakBelakang,
+      tampakBawah: item.tampakBawah,
+      idJenisHtlRel: item.idJenisHtlRel,
+      jenisHtlRel: item.jenisHtlRel,
+      tampakDepan: item.tampakDepan,
+      tampakKiri: item.tampakKkiri,
+      kodeFoto: item.kodeFoto,
+      tampakKanan: item.tampakKanan,
+      kodeSatuanRel: item.kodeSatuanRel,
+      idTarifMerkHeader: item.idTarifMerkHeader,
+      jenisProduksiBkc: item.jenisProduksiMerk,
+      hje: item.hjeBaruMerk,
+      tarif: item.tarifBaru,
+      hjeBtg: item.hjeSatuanBaruMerk,
+      warnaDasar: item.warnaDasar,
     }));
 
     const payload = {
-      lokasiPenetapanKembali: this.state.kota_name,
-      tanggalSkep: moment(this.state.tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      lokasiPenetapanKembali: this.state.namaKota,
+      tanggalSkep: moment(this.state.tanggalSkep, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details,
     };
 
@@ -651,7 +651,7 @@ export default class PenetapanKembali extends Component {
                   <FormLabel>Lokasi Penetapan</FormLabel>
                 </div>
                 <div style={{ display: "flex", gap: 10 }}>
-                  <Input id="kota_name" value={this.state.kota_name} disabled />
+                  <Input id="namaKota" value={this.state.namaKota} disabled />
                   <Button
                     type="default"
                     icon="menu"
@@ -666,10 +666,10 @@ export default class PenetapanKembali extends Component {
                     <FormLabel>Tanggal SKEP</FormLabel>
                   </div>
                   <DatePicker
-                    id="tanggal_skep"
+                    id="tanggalSkep"
                     format="DD-MM-YYYY"
-                    value={this.state.tanggal_skep}
-                    onChange={(date) => this.handleDatepickerChange("tanggal_skep", date)}
+                    value={this.state.tanggalSkep}
+                    onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
                     style={{ width: "100%" }}
                   />
                 </div>
@@ -687,7 +687,7 @@ export default class PenetapanKembali extends Component {
                   >
                     Cari
                   </Button>
-                  <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                  <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
             </Row>
@@ -702,19 +702,19 @@ export default class PenetapanKembali extends Component {
                     <FormLabel>Jenis Produksi</FormLabel>
                   </div>
                   <Select
-                    id="jenis_produksi"
-                    value={this.state.jenis_produksi_id}
+                    id="jenisProduksi"
+                    value={this.state.idJenisProduksi}
                     loading={this.state.isJenisProduksiLoading}
                     onChange={(value, option) => {
-                      this.handleSelectCustomChange("jenis_produksi", value, option);
+                      this.handleSelectCustomChange("jenisProduksi", value, option);
                     }}
                     style={{ width: "100%" }}
-                    disabled={!this.state.nppbkc_id}
+                    disabled={!this.state.idNppbkc}
                   >
-                    {this.state.list_jenis_produksi.length > 0 &&
-                      this.state.list_jenis_produksi.map((item, index) => (
+                    {this.state.listJenisProduksi.length > 0 &&
+                      this.state.listJenisProduksi.map((item, index) => (
                         <Select.Option
-                          key={`jenis-produksi-${index}`}
+                          key={`jenisProduksi-${index}`}
                           value={
                             item.idJenisProduksiBkc && item.idGolonganBkc
                               ? `${item.idJenisProduksiBkc}-${item.idGolonganBkc}`
@@ -731,7 +731,7 @@ export default class PenetapanKembali extends Component {
               </Col>
             </Row>
 
-            {this.state.nppbkc_id && this.state.tanggal_skep && (
+            {this.state.idNppbkc && this.state.tanggalSkep && (
               <>
                 <div style={{ marginTop: 30, marginBottom: 20 }}>
                   <Table
