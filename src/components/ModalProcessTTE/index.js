@@ -36,7 +36,7 @@ export class ModalProcessTTE extends Component {
             {...pdfContent}
             tte_jabatan={responseNikHris.data.data.Jabatan}
             tte_nama={responseNikHris.data.data.Nama}
-            qr_data_url={document.getElementById(pdfContent?.permohonan_tarif_id)?.toDataURL()}
+            qr_data_url={document.getElementById(pdfContent?.idTarifMerkHeader)?.toDataURL()}
           />
         ).toBlob();
 
@@ -61,7 +61,7 @@ export class ModalProcessTTE extends Component {
           );
 
           const formData = new FormData();
-          formData.set("file", BlobSignedPdf, `penetapan_tarif_${pdfContent?.permohonan_tarif_id}`);
+          formData.set("file", BlobSignedPdf, `penetapan_tarif_${pdfContent?.idTarifMerkHeader}`);
           formData.set("s3pathTarget", "produksi");
 
           const responseUploadSignedTte = await requestApi({

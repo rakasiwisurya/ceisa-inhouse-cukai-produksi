@@ -256,49 +256,49 @@ const styles = StyleSheet.create({
 export default class PdfPenetapanTarifTTE extends Component {
   render() {
     const {
-      nomor_permohonan,
-      nomor_kep,
-      tanggal_kep,
-      id_jenis_bkc,
-      jenis_bkc,
-      nama_perusahaan,
+      nomorPermohonan,
+      nomorKep,
+      tanggalKep,
+      idJenisBkc,
+      jenisBkc,
+      namaPerusahaan,
       nppbkc,
-      nama_pengusaha,
+      namaPengusaha,
       npwp,
-      alamat_pengusaha,
-      nama_kota,
-      nomor_pkp,
-      alamat_perusahaan,
-      nama_merk,
-      jenis_produksi,
+      alamatPengusaha,
+      namaKota,
+      nomorPkp,
+      alamatPerusahaan,
+      namaMerk,
+      jenisProduksi,
       golongan,
-      isi_per_kemasan,
-      tarif_spesifik,
+      isiPerKemasan,
+      tarifSpesifik,
       satuan,
-      hje_per_kemasan,
-      hje_per_satuan,
-      bahan_kemasan,
-      tujuan_pemasaran,
-      sisi_depan,
-      sisi_belakang,
-      sisi_kiri,
-      sisi_kanan,
-      sisi_atas,
-      sisi_bawah,
-      asal_produk,
-      negara_asal,
-      tarif_per_kemasan,
-      awal_berlaku,
-      nama_kantor,
-      nama_kantor_wilayah,
-      waktu_rekam,
-      tte_jabatan,
-      tte_nama,
-      qr_data_url,
+      hjePerKemasan,
+      hjePerSatuan,
+      bahanKemasan,
+      tujuanPemasaran,
+      sisiDepan,
+      sisiBelakang,
+      sisiKiri,
+      sisiKanan,
+      sisiAtas,
+      sisiBawah,
+      asalProduk,
+      negaraAsal,
+      tarifPerKemasan,
+      awalBerlaku,
+      namaKantor,
+      namaKantorWilayah,
+      waktuRekam,
+      tteJabatan,
+      tteNama,
+      qrDataUrl,
     } = this.props;
 
     return (
-      <Document title={`penetapan_tarif_${nama_perusahaan}`}>
+      <Document title={`penetapan_tarif_${namaPerusahaan}`}>
         <Page size="FOLIO" style={styles.page}>
           <View style={styles.viewIntroduction}>
             <View>
@@ -307,8 +307,8 @@ export default class PdfPenetapanTarifTTE extends Component {
             </View>
             <View style={styles.gap} />
             <View>
-              <Text style={styles.textTitle}>KEPUTUSAN KEPALA {nama_kantor?.toUpperCase()}</Text>
-              <Text style={styles.textTitle}>NOMOR {nomor_permohonan}</Text>
+              <Text style={styles.textTitle}>KEPUTUSAN KEPALA {namaKantor?.toUpperCase()}</Text>
+              <Text style={styles.textTitle}>NOMOR {nomorPermohonan}</Text>
             </View>
             <View style={styles.gap} />
             <View>
@@ -317,13 +317,13 @@ export default class PdfPenetapanTarifTTE extends Component {
             <View style={styles.gap} />
             <View>
               <Text style={styles.textTitle}>
-                PENETAPAN TARIF CUKAI {jenis_bkc?.toUpperCase()} UNTUK MEREK BARU
+                PENETAPAN TARIF CUKAI {jenisBkc?.toUpperCase()} UNTUK MEREK BARU
               </Text>
-              <Text style={styles.textTitle}>ATAS NAMA {nama_perusahaan?.toUpperCase()}</Text>
+              <Text style={styles.textTitle}>ATAS NAMA {namaPerusahaan?.toUpperCase()}</Text>
             </View>
             <View style={styles.gap} />
             <View>
-              <Text style={styles.textTitle}>KEPALA {nama_kantor?.toUpperCase()} </Text>
+              <Text style={styles.textTitle}>KEPALA {namaKantor?.toUpperCase()} </Text>
             </View>
           </View>
 
@@ -334,9 +334,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.list}>a.</Text>
                 <Text style={styles.textSideContent}>
-                  bahwa {nama_perusahaan} telah mengajukan Surat Permohonan Nomor {nomor_permohonan}{" "}
-                  tanggal {tanggal_kep} untuk memperoleh penetapan tarif cukai{" "}
-                  {jenis_bkc?.toLowerCase()} untuk merek baru;
+                  bahwa {namaPerusahaan} telah mengajukan Surat Permohonan Nomor {nomorPermohonan}{" "}
+                  tanggal {tanggalKep} untuk memperoleh penetapan tarif cukai{" "}
+                  {jenisBkc?.toLowerCase()} untuk merek baru;
                 </Text>
               </View>
 
@@ -347,9 +347,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textSideContent}>
                   bahwa berdasarkan pertimbangan sebagaimana dimaksud pada huruf a dan berdasarkan
                   ketentuan dalam Peraturan Direktur Jenderal Bea dan Cukai Nomor 16/BC/2022, perlu
-                  menetapkan Keputusan Kepala {nama_kantor} tentang Penetapan Tarif Cukai Hasil
-                  Tembakau Untuk Merek Baru Atas Nama {nama_perusahaan} NPPBKC {nppbkc} Di{" "}
-                  {capitalize(nama_kota)};
+                  menetapkan Keputusan Kepala {namaKantor} tentang Penetapan Tarif Cukai Hasil
+                  Tembakau Untuk Merek Baru Atas Nama {namaPerusahaan} NPPBKC {nppbkc} Di{" "}
+                  {capitalize(namaKota)};
                 </Text>
               </View>
             </View>
@@ -374,8 +374,8 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>2.</Text>
                 <Text style={styles.textSideContent}>
-                  Peraturan Menteri Keuangan Nomor {nomor_kep} tentang Tarif Cukai{" "}
-                  {capitalize(jenis_bkc)} Berupa Sigaret, Cerutu, Rokok Daun atau Klobot, dan
+                  Peraturan Menteri Keuangan Nomor {nomorKep} tentang Tarif Cukai{" "}
+                  {capitalize(jenisBkc)} Berupa Sigaret, Cerutu, Rokok Daun atau Klobot, dan
                   Tembakau Iris;
                 </Text>
               </View>
@@ -386,7 +386,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.list}>3.</Text>
                 <Text style={styles.textSideContent}>
                   Peraturan Direktur Jenderal Bea dan Cukai Nomor 16/BC/2022 tentang Tata Cara
-                  Penetapan Tarif Cukai {capitalize(jenis_bkc)};
+                  Penetapan Tarif Cukai {capitalize(jenisBkc)};
                 </Text>
               </View>
             </View>
@@ -397,9 +397,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textSideTitle}>Menetapkan</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textSideContent}>
-                  KEPUTUSAN KEPALA {nama_kantor?.toUpperCase()} TENTANG PENETAPAN TARIF CUKAI HASIL
-                  TEMBAKAU UNTUK MEREK BARU ATAS NAMA {nama_perusahaan?.toUpperCase()} DI{" "}
-                  {nama_kota?.toUpperCase()}.
+                  KEPUTUSAN KEPALA {namaKantor?.toUpperCase()} TENTANG PENETAPAN TARIF CUKAI HASIL
+                  TEMBAKAU UNTUK MEREK BARU ATAS NAMA {namaPerusahaan?.toUpperCase()} DI{" "}
+                  {namaKota?.toUpperCase()}.
                 </Text>
               </View>
             </View>
@@ -411,7 +411,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textBoldSideTitle}>PERTAMA</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textSideContent}>
-                  Memberikan Penetapan Tarif Cukai {capitalize(jenis_bkc)} kepada:
+                  Memberikan Penetapan Tarif Cukai {capitalize(jenisBkc)} kepada:
                 </Text>
               </View>
 
@@ -423,23 +423,21 @@ export default class PdfPenetapanTarifTTE extends Component {
                     <View style={styles.viewRow}>
                       <Text style={styles.textKey}>Nama Pengusaha Pabrik/Importir*)</Text>
                       <Text style={styles.colon}>:</Text>
-                      <Text style={styles.textValue}>{nama_pengusaha ? nama_pengusaha : "-"}</Text>
+                      <Text style={styles.textValue}>{namaPengusaha ? namaPengusaha : "-"}</Text>
                     </View>
 
                     <View style={styles.viewRow}>
                       <Text style={styles.textKey}>Alamat Pengusaha Pabrik/Importir*)</Text>
                       <Text style={styles.colon}>:</Text>
                       <Text style={styles.textValue}>
-                        {alamat_pengusaha ? alamat_pengusaha : "-"}
+                        {alamatPengusaha ? alamatPengusaha : "-"}
                       </Text>
                     </View>
 
                     <View style={styles.viewRow}>
                       <Text style={styles.textKey}>Nama Pabrik/Importir*)</Text>
                       <Text style={styles.colon}>:</Text>
-                      <Text style={styles.textValue}>
-                        {nama_perusahaan ? nama_perusahaan : "-"}
-                      </Text>
+                      <Text style={styles.textValue}>{namaPerusahaan ? namaPerusahaan : "-"}</Text>
                     </View>
 
                     <View style={styles.viewRow}>
@@ -457,14 +455,14 @@ export default class PdfPenetapanTarifTTE extends Component {
                     <View style={styles.viewRow}>
                       <Text style={styles.textKey}>Nomor PKP</Text>
                       <Text style={styles.colon}>:</Text>
-                      <Text style={styles.textValue}>{nomor_pkp ? nomor_pkp : "-"}</Text>
+                      <Text style={styles.textValue}>{nomorPkp ? nomorPkp : "-"}</Text>
                     </View>
 
                     <View style={styles.viewRow}>
                       <Text style={styles.textKey}>Alamat Pabrik/Importir*)</Text>
                       <Text style={styles.colon}>:</Text>
                       <Text style={styles.textValue}>
-                        {alamat_perusahaan ? alamat_perusahaan : "-"}
+                        {alamatPerusahaan ? alamatPerusahaan : "-"}
                       </Text>
                     </View>
 
@@ -474,11 +472,11 @@ export default class PdfPenetapanTarifTTE extends Component {
                   <View style={styles.table}>
                     <View style={styles.tableRow}>
                       <View style={styles.tableColTitle}>
-                        <Text style={styles.tableCellBold}>1. Tarif Cukai {tarif_spesifik}</Text>
+                        <Text style={styles.tableCellBold}>1. Tarif Cukai {tarifSpesifik}</Text>
                       </View>
                     </View>
 
-                    {id_jenis_bkc === 2 ? (
+                    {idJenisBkc === 2 ? (
                       <View>
                         <View style={styles.tableRow}>
                           <View style={styles.tableColGap} />
@@ -489,7 +487,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{nama_merk}</Text>
+                            <Text style={styles.tableCell}>{namaMerk}</Text>
                           </View>
                         </View>
 
@@ -502,7 +500,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{asal_produk}</Text>
+                            <Text style={styles.tableCell}>{asalProduk}</Text>
                           </View>
                         </View>
 
@@ -515,7 +513,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{negara_asal}</Text>
+                            <Text style={styles.tableCell}>{negaraAsal}</Text>
                           </View>
                         </View>
 
@@ -528,7 +526,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{isi_per_kemasan}</Text>
+                            <Text style={styles.tableCell}>{isiPerKemasan}</Text>
                           </View>
                         </View>
 
@@ -567,7 +565,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{tarif_spesifik}</Text>
+                            <Text style={styles.tableCell}>{tarifSpesifik}</Text>
                           </View>
                         </View>
 
@@ -580,7 +578,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{tarif_per_kemasan}</Text>
+                            <Text style={styles.tableCell}>{tarifPerKemasan}</Text>
                           </View>
                         </View>
                       </View>
@@ -595,7 +593,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{nama_merk}</Text>
+                            <Text style={styles.tableCell}>{namaMerk}</Text>
                           </View>
                         </View>
 
@@ -608,7 +606,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{jenis_produksi}</Text>
+                            <Text style={styles.tableCell}>{jenisProduksi}</Text>
                           </View>
                         </View>
 
@@ -635,7 +633,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                           </View>
                           <View style={styles.tableColValue}>
                             <Text style={styles.tableCell}>
-                              {isi_per_kemasan} {satuan}
+                              {isiPerKemasan} {satuan}
                             </Text>
                           </View>
                         </View>
@@ -650,9 +648,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                           </View>
                           <View style={styles.tableColValue}>
                             <Text style={styles.tableCell}>
-                              {hje_per_kemasan
-                                ? new Intl.NumberFormat().format(hje_per_kemasan)
-                                : hje_per_kemasan}
+                              {hjePerKemasan
+                                ? new Intl.NumberFormat().format(hjePerKemasan)
+                                : hjePerKemasan}
                             </Text>
                           </View>
                         </View>
@@ -667,9 +665,9 @@ export default class PdfPenetapanTarifTTE extends Component {
                           </View>
                           <View style={styles.tableColValue}>
                             <Text style={styles.tableCell}>
-                              {hje_per_kemasan
-                                ? new Intl.NumberFormat().format(hje_per_satuan)
-                                : hje_per_kemasan}
+                              {hjePerKemasan
+                                ? new Intl.NumberFormat().format(hjePerSatuan)
+                                : hjePerKemasan}
                             </Text>
                           </View>
                         </View>
@@ -683,7 +681,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{bahan_kemasan}</Text>
+                            <Text style={styles.tableCell}>{bahanKemasan}</Text>
                           </View>
                         </View>
 
@@ -696,7 +694,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{tujuan_pemasaran}</Text>
+                            <Text style={styles.tableCell}>{tujuanPemasaran}</Text>
                           </View>
                         </View>
 
@@ -716,7 +714,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_depan}</Text>
+                            <Text style={styles.tableCell}>{sisiDepan}</Text>
                           </View>
                         </View>
 
@@ -729,7 +727,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_belakang}</Text>
+                            <Text style={styles.tableCell}>{sisiBelakang}</Text>
                           </View>
                         </View>
 
@@ -742,7 +740,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_kiri}</Text>
+                            <Text style={styles.tableCell}>{sisiKiri}</Text>
                           </View>
                         </View>
 
@@ -755,7 +753,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_kanan}</Text>
+                            <Text style={styles.tableCell}>{sisiKanan}</Text>
                           </View>
                         </View>
 
@@ -768,7 +766,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_atas}</Text>
+                            <Text style={styles.tableCell}>{sisiAtas}</Text>
                           </View>
                         </View>
 
@@ -781,7 +779,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                             <Text style={styles.tableCell}>:</Text>
                           </View>
                           <View style={styles.tableColValue}>
-                            <Text style={styles.tableCell}>{sisi_bawah}</Text>
+                            <Text style={styles.tableCell}>{sisiBawah}</Text>
                           </View>
                         </View>
                       </View>
@@ -796,7 +794,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textBoldSideTitle}>KEDUA</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textSideContent}>
-                  Keputusan Kepala {nama_kantor} ini dapat dicabut dalam hal:
+                  Keputusan Kepala {namaKantor} ini dapat dicabut dalam hal:
                 </Text>
               </View>
 
@@ -805,8 +803,8 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>a.</Text>
                 <Text style={styles.textSideContent}>
-                  Pengusaha Pabrik {jenis_bkc?.toLowerCase()} atau Importir mengajukan permohonan
-                  pencabutan penetapan tarif cukai {jenis_bkc?.toLowerCase()};
+                  Pengusaha Pabrik {jenisBkc?.toLowerCase()} atau Importir mengajukan permohonan
+                  pencabutan penetapan tarif cukai {jenisBkc?.toLowerCase()};
                 </Text>
               </View>
 
@@ -825,7 +823,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.list}>c.</Text>
                 <Text style={styles.textSideContent}>
                   desain kemasan yang bersangkutan menyerupai desain kemasan milik Pengusaha Pabrik
-                  {jenis_bkc?.toLowerCase()} atau Importir lainnya sehingga tidak mudah untuk
+                  {jenisBkc?.toLowerCase()} atau Importir lainnya sehingga tidak mudah untuk
                   membedakannya, yang telah terlebih dahulu dimiliki oleh Pengusaha Pabrik hasil
                   tembakau atau Importir lainnya dan tercatat pada administrasi Direktorat Jenderal
                   Bea dan Cukai;
@@ -838,7 +836,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.list}>d.</Text>
                 <Text style={styles.textSideContent}>
                   merek memiliki tulisan atau pelafalan yang sama dengan merek yang telah terlebih
-                  dahulu dimiliki oleh Pengusaha Pabrik {jenis_bkc?.toLowerCase()} atau Importir
+                  dahulu dimiliki oleh Pengusaha Pabrik {jenisBkc?.toLowerCase()} atau Importir
                   lainnya dan tercatat pada administrasi Direktorat Jenderal Bea dan Cukai;
                 </Text>
               </View>
@@ -848,7 +846,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>e.</Text>
                 <Text style={styles.textSideContent}>
-                  hasil pengawasan di lapangan ditemukan kemasan {jenis_bkc?.toLowerCase()} yang
+                  hasil pengawasan di lapangan ditemukan kemasan {jenisBkc?.toLowerCase()} yang
                   bersangkutan tidak memenuhi persyaratan kemasan barang kena cukai sebagaimana
                   ditetapkan dalam peraturan Menteri yang mengatur mengenai perdagangan barang kena
                   cukai.
@@ -861,7 +859,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textBoldSideTitle}>KETIGA</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.textSideContent}>
-                  Keputusan Kepala {nama_kantor} ini mulai berlaku pada {awal_berlaku}, dengan
+                  Keputusan Kepala {namaKantor} ini mulai berlaku pada {awalBerlaku}, dengan
                   ketentuan apabila dikemudian hari terdapat kekeliruan akan diadakan perbaikan
                   sebagaimana mestinya.
                 </Text>
@@ -871,7 +869,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.textBoldSideTitle} />
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.textSideContent}>
-                  Salinan Keputusan {nama_kantor} ini disampaikan kepada:
+                  Salinan Keputusan {namaKantor} ini disampaikan kepada:
                 </Text>
               </View>
 
@@ -887,7 +885,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>2.</Text>
                 <Text style={styles.textSideContent}>
-                  {nama_kantor_wilayah ? `Kepala ${nama_kantor_wilayah}` : "-"}
+                  {namaKantorWilayah ? `Kepala ${namaKantorWilayah}` : "-"}
                 </Text>
               </View>
 
@@ -896,23 +894,23 @@ export default class PdfPenetapanTarifTTE extends Component {
                 <Text style={styles.colon}> </Text>
                 <Text style={styles.list}>3.</Text>
                 <Text style={styles.textSideContent}>
-                  {nama_perusahaan ? `Pimpinan ${nama_perusahaan}` : "-"}
+                  {namaPerusahaan ? `Pimpinan ${namaPerusahaan}` : "-"}
                 </Text>
               </View>
             </View>
           </View>
 
           <View style={styles.viewSignContainer}>
-            <Text style={styles.text}>Ditetapkan di {capitalize(nama_kota)}</Text>
-            <Text style={styles.text}>pada tanggal {waktu_rekam}</Text>
+            <Text style={styles.text}>Ditetapkan di {capitalize(namaKota)}</Text>
+            <Text style={styles.text}>pada tanggal {waktuRekam}</Text>
 
             <View style={styles.viewSign}>
               <Text style={styles.text}>
-                {tte_jabatan ? tte_jabatan : "..................................."}
+                {tteJabatan ? tteJabatan : "..................................."}
               </Text>
               <View style={styles.signGap}>
-                {qr_data_url ? (
-                  <Image allowDangerousPaths src={qr_data_url} style={styles.qrCodeImage} />
+                {qrDataUrl ? (
+                  <Image allowDangerousPaths src={qrDataUrl} style={styles.qrCodeImage} />
                 ) : (
                   <View style={styles.viewQrCode}>
                     <Text style={styles.textQrCode}>QR CODE</Text>
@@ -920,7 +918,7 @@ export default class PdfPenetapanTarifTTE extends Component {
                 )}
               </View>
               <Text style={styles.text}>
-                {tte_nama ? tte_nama : "..................................."}
+                {tteNama ? tteNama : "..................................."}
               </Text>
             </View>
           </View>

@@ -17,17 +17,17 @@ export default class ModalDaftarNegara extends Component {
       columns: [
         {
           title: "Kode Negara",
-          dataIndex: "negara_id",
-          key: "negara_id",
+          dataIndex: "idNegara",
+          key: "idNegara",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("negara_id"),
+          ...this.getColumnSearchProps("idNegara"),
         },
         {
           title: "Nama Negara",
-          dataIndex: "negara_name",
-          key: "negara_name",
+          dataIndex: "namaNegara",
+          key: "namaNegara",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("negara_name"),
+          ...this.getColumnSearchProps("namaNegara"),
         },
       ],
     };
@@ -48,8 +48,8 @@ export default class ModalDaftarNegara extends Component {
     if (response) {
       const newData = response.data.data.map((item, index) => ({
         key: `negara-${index}`,
-        negara_id: item.kodeNegara,
-        negara_name: item.namaNegara,
+        idNegara: item.kodeNegara,
+        namaNegara: item.namaNegara,
       }));
 
       this.setState({ dataSource: newData });

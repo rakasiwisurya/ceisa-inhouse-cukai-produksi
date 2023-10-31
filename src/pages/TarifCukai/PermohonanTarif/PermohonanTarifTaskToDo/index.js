@@ -24,137 +24,137 @@ export default class PermohonanTarifTaskToDo extends Component {
       isDownloadLoading: false,
       isSimpanTasktodoLoading: false,
 
-      jenis_bkc_id: null,
-      jenis_bkc_name: null,
-      nomor_permohonan: null,
-      tanggal_permohonan: null,
-      lokasi_perekaman_id: null,
-      lokasi_perekaman_name: null,
-      tanggal_kep: null,
-      awal_berlaku: null,
+      idJenisBkc: null,
+      namaJenisBkc: null,
+      nomorPermohonan: null,
+      tanggalPermohonan: null,
+      idLokasiPerekaman: null,
+      namaLokasiPerekaman: null,
+      tanggalKep: null,
+      awalBerlaku: null,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      npwp_nppbkc: null,
-      alamat_nppbkc: null,
+      namaNppbkc: null,
+      npwpNppbkc: null,
+      alamatNppbkc: null,
 
-      jenis_pita_id: null,
+      idJenisPita: null,
 
-      merk_ht_id: null,
-      merk_ht: null,
-      jenis_produksi_ht_id: null,
-      jenis_produksi_ht_code: null,
-      golongan_id: null,
-      golongan_name: null,
-      jenis_htl_rel_ht_id: null,
-      jenis_htl_rel_ht_name: null,
-      jenis_htl_rel_ht_satuan: null,
-      isi_ht: null,
-      berat_ht: null,
-      hje_perkemasan_ht: null,
-      hje_persatuan_ht: null,
-      tarif_ht: null,
-      bahan_kemasan_ht: null,
-      asal_produk_ht_id: null,
-      asal_produk_ht_name: null,
-      tujuan_pemasaran_ht: null,
+      idMerkHt: null,
+      merkHt: null,
+      idJenisProduksiHt: null,
+      kodeJenisProduksiHt: null,
+      idGolongan: null,
+      namaGolongan: null,
+      idJenisHtlRelHt: null,
+      namaJenisHtlRelHt: null,
+      satuanJenisHtlRelHt: null,
+      isiHt: null,
+      beratHt: null,
+      hjePerkemasanHt: null,
+      hjePersatuanHt: null,
+      tarifHt: null,
+      bahanKemasanHt: null,
+      idAsalProdukHt: null,
+      namaAsalProdukHt: null,
+      tujuanPemasaranHt: null,
 
-      merk_mmea_id: null,
-      merk_mmea: null,
-      negara_asal_mmea_id: null,
-      negara_asal_mmea_name: null,
-      isi_mmea: null,
-      tarif_cukai_per_liter: null,
-      tarif_cukai_per_kemasan: null,
-      asal_produk_mmea_id: null,
-      asal_produk_mmea_name: null,
+      idMerkMmea: null,
+      merkMmea: null,
+      idNegaraAsalMmea: null,
+      namaNegaraAsalMmea: null,
+      isiMmea: null,
+      tarifCukaiPerLiter: null,
+      tarifCukaiPerKemasan: null,
+      idAsalProdukMmea: null,
+      namaAsalProdukMmea: null,
 
       personal: null,
-      seri_pita: null,
+      seriPita: null,
 
-      nomor_surat_lisensi: null,
-      tanggal_surat_lisensi: null,
+      nomorSuratLisensi: null,
+      tanggalSuratLisensi: null,
 
-      sisi_depan: null,
-      sisi_belakang: null,
-      sisi_kiri: null,
-      sisi_kanan: null,
-      sisi_atas: null,
-      sisi_bawah: null,
-      kode_foto: null,
-      file_gambar_etiket: null,
-      preview_gambar_etiket: null,
+      sisiDepan: null,
+      sisiBelakang: null,
+      sisiKiri: null,
+      sisiKanan: null,
+      sisiAtas: null,
+      sisiBawah: null,
+      kodeFoto: null,
+      fileGambarEtiket: null,
+      previewGambarEtiket: null,
 
-      tasktodo_status: "SETUJU",
-      tasktodo_awal_berlaku: null,
-      tasktodo_tanggal_skep: null,
-      tasktodo_alasan: null,
+      tasktodoStatus: "SETUJU",
+      tasktodoAwalBerlaku: null,
+      tasktodoTanggalSkep: null,
+      tasktodoAlasan: null,
 
-      list_jenis_bkc: [],
-      list_bahan_kemasan: [
+      listJenisBkc: [],
+      listBahanKemasan: [
         {
-          bahan_kemasan_id: "KERTAS DAN SEJENISNYA",
-          bahan_kemasan_name: "KERTAS DAN SEJENISNYA",
-          seri_pita: "III DP",
+          idBahanKemasan: "KERTAS DAN SEJENISNYA",
+          namaBahanKemasan: "KERTAS DAN SEJENISNYA",
+          seriPita: "III DP",
         },
         {
-          bahan_kemasan_id: "BOTOL DAN SEJENISNYA",
-          bahan_kemasan_name: "BOTOL DAN SEJENISNYA",
-          seri_pita: "III TP",
+          idBahanKemasan: "BOTOL DAN SEJENISNYA",
+          namaBahanKemasan: "BOTOL DAN SEJENISNYA",
+          seriPita: "III TP",
         },
         {
-          bahan_kemasan_id: "LAINNYA",
-          bahan_kemasan_name: "LAINNYA",
-          seri_pita: "III DP",
+          idBahanKemasan: "LAINNYA",
+          namaBahanKemasan: "LAINNYA",
+          seriPita: "III DP",
         },
       ],
-      list_asal_produk_ht: [
+      listAsalProdukHt: [
         {
-          asal_produk_ht_id: "DN",
-          asal_produk_ht_name: "IMPOR",
+          idAsalProdukHt: "DN",
+          namaAsalProdukHt: "IMPOR",
         },
         {
-          asal_produk_ht_id: "",
-          asal_produk_ht_name: "NON IMPOR",
-        },
-      ],
-      list_asal_produk_mmea: [
-        {
-          asal_produk_mmea_id: "DALAM_NEGERI",
-          asal_produk_mmea_name: "DALAM NEGERI",
-        },
-        {
-          asal_produk_mmea_id: "LUAR_NEGERI",
-          asal_produk_mmea_name: "LUAR NEGERI / IMPOR",
+          idAsalProdukHt: "",
+          namaAsalProdukHt: "NON IMPOR",
         },
       ],
-      list_tujuan_pemasaran: [
+      listAsalProdukMmea: [
         {
-          tujuan_pemasaran_id: "DALAM NEGERI",
-          tujuan_pemasaran_name: "DALAM NEGERI",
+          idAsalProdukMmea: "DALAM_NEGERI",
+          namaAsalProdukMmea: "DALAM NEGERI",
         },
         {
-          tujuan_pemasaran_id: "EKSPOR",
-          tujuan_pemasaran_name: "EKSPOR",
-        },
-        {
-          tujuan_pemasaran_id: "BAHAN BAKU",
-          tujuan_pemasaran_name: "BAHAN BAKU",
-        },
-        {
-          tujuan_pemasaran_id: "LABORATORIUM",
-          tujuan_pemasaran_name: "LABORATORIUM",
+          idAsalProdukMmea: "LUAR_NEGERI",
+          namaAsalProdukMmea: "LUAR NEGERI / IMPOR",
         },
       ],
-      list_status: [
+      listTujuanPemasaran: [
         {
-          status_id: "SETUJU",
-          status_name: "SETUJU",
+          idTujuanPemasaran: "DALAM NEGERI",
+          namaTujuanPemasaran: "DALAM NEGERI",
         },
         {
-          status_id: "TOLAK",
-          status_name: "TOLAK",
+          idTujuanPemasaran: "EKSPOR",
+          namaTujuanPemasaran: "EKSPOR",
+        },
+        {
+          idTujuanPemasaran: "BAHAN BAKU",
+          namaTujuanPemasaran: "BAHAN BAKU",
+        },
+        {
+          idTujuanPemasaran: "LABORATORIUM",
+          namaTujuanPemasaran: "LABORATORIUM",
+        },
+      ],
+      listStatus: [
+        {
+          idStatus: "SETUJU",
+          namaStatus: "SETUJU",
+        },
+        {
+          idStatus: "TOLAK",
+          namaStatus: "TOLAK",
         },
       ],
     };
@@ -165,8 +165,8 @@ export default class PermohonanTarifTaskToDo extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.jenis_produksi_ht_id !== this.state.jenis_produksi_ht_id) {
-      this.setState({ hje_persatuan_ht: this.state.isi_ht / this.state.hje_perkemasan_ht });
+    if (prevState.idJenisProduksiHt !== this.state.idJenisProduksiHt) {
+      this.setState({ hjePersatuanHt: this.state.isiHt / this.state.hjePerkemasanHt });
     }
   }
 
@@ -185,69 +185,68 @@ export default class PermohonanTarifTaskToDo extends Component {
       const { data } = response.data;
 
       this.setState({
-        jenis_bkc_id: data.idJenisBkc,
-        jenis_bkc_name: data.namaJenisBkc,
-        nomor_permohonan: data.nomorPermohonan,
-        tanggal_permohonan: moment(data.tanggalPermohonan),
-        lokasi_perekaman_name: data.kotaPermohonan,
-        tanggal_kep: moment(data.tanggalSkep),
-        awal_berlaku: moment(data.awalBerlaku),
+        idJenisBkc: data.idJenisBkc,
+        namaJenisBkc: data.namaJenisBkc,
+        nomorPermohonan: data.nomorPermohonan,
+        tanggalPermohonan: moment(data.tanggalPermohonan),
+        namaLokasiPerekaman: data.kotaPermohonan,
+        tanggalKep: moment(data.tanggalSkep),
+        awalBerlaku: moment(data.awalBerlaku),
 
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        npwp_nppbkc: data.npwp,
-        alamat_nppbkc: data.alamatPerusahaan,
+        namaNppbkc: data.namaPerusahaan,
+        npwpNppbkc: data.npwp,
+        alamatNppbkc: data.alamatPerusahaan,
 
-        jenis_pita_id: data.idJenisPitaCukai,
+        idJenisPita: data.idJenisPitaCukai,
 
-        merk_ht_id: data.idJenisBkc === 3 ? data.idMerk : null,
-        merk_ht: data.idJenisBkc === 3 ? data.namaMerk : null,
-        jenis_produksi_ht_id: data.idJenisProduksiBkc,
-        jenis_produksi_ht_code: data.jenisProduksiBkc,
-        golongan_id: data.idGolongan,
-        golongan_name: data.namaGolongan,
-        jenis_htl_rel_ht_id: data.idJenisHtlRel,
-        jenis_htl_rel_ht_name: data.jenisHtlRel,
-        jenis_htl_rel_ht_satuan: data.kodeSatuanRel,
-        isi_ht: data.idJenisBkc === 3 ? data.isiPerkemasan : null,
-        berat_ht: data.beratVolume,
-        hje_perkemasan_ht: data.hjePerKemasan,
-        hje_persatuan_ht: data.hjePerBatang,
-        tarif_ht: data.idJenisBkc === 3 ? data.tarifSpesifik : null,
-        bahan_kemasan_ht: data.bahanKemasan,
-        asal_produk_ht_id:
-          data.idJenisBkc === 3 ? (data.asalProduksi === "IMPOR" ? "DN" : "") : null,
-        asal_produk_ht_name: data.idJenisBkc === 3 ? data.asalProduksi : null,
-        tujuan_pemasaran_ht: data.tujuanPemasaran,
+        idMerkHt: data.idJenisBkc === 3 ? data.idMerk : null,
+        merkHt: data.idJenisBkc === 3 ? data.namaMerk : null,
+        idJenisProduksiHt: data.idJenisProduksiBkc,
+        kodeJenisProduksiHt: data.jenisProduksiBkc,
+        idGolongan: data.idGolongan,
+        namaGolongan: data.namaGolongan,
+        idJenisHtlRelHt: data.idJenisHtlRel,
+        namaJenisHtlRelHt: data.jenisHtlRel,
+        satuanJenisHtlRelHt: data.kodeSatuanRel,
+        isiHt: data.idJenisBkc === 3 ? data.isiPerkemasan : null,
+        beratHt: data.beratVolume,
+        hjePerkemasanHt: data.hjePerKemasan,
+        hjePersatuanHt: data.hjePerBatang,
+        tarifHt: data.idJenisBkc === 3 ? data.tarifSpesifik : null,
+        bahanKemasanHt: data.bahanKemasan,
+        idAsalProdukHt: data.idJenisBkc === 3 ? (data.asalProduksi === "IMPOR" ? "DN" : "") : null,
+        namaAsalProdukHt: data.idJenisBkc === 3 ? data.asalProduksi : null,
+        tujuanPemasaranHt: data.tujuanPemasaran,
 
-        merk_mmea_id: data.idJenisBkc === 3 ? data.idMerk : null,
-        merk_mmea: data.idJenisBkc === 2 ? data.namaMerk : null,
-        negara_asal_mmea_name: data.negaraAsal,
-        isi_mmea: data.idJenisBkc === 2 ? data.isiPerkemasan : null,
-        tarif_cukai_per_liter: data.idJenisBkc === 2 ? data.tarifSpesifik : null,
-        tarif_cukai_per_kemasan: data.tarifPerKemasan,
-        asal_produk_mmea_id:
+        idMerkMmea: data.idJenisBkc === 3 ? data.idMerk : null,
+        merkMmea: data.idJenisBkc === 2 ? data.namaMerk : null,
+        namaNegaraAsalMmea: data.negaraAsal,
+        isiMmea: data.idJenisBkc === 2 ? data.isiPerkemasan : null,
+        tarifCukaiPerLiter: data.idJenisBkc === 2 ? data.tarifSpesifik : null,
+        tarifCukaiPerKemasan: data.tarifPerKemasan,
+        idAsalProdukMmea:
           data.idJenisBkc === 2
             ? data.asalProduksi === "DALAM NEGERI"
               ? "DALAM_NEGERI"
               : "LUAR_NEGERI"
             : null,
-        asal_produk_mmea_name: data.idJenisBkc === 2 ? data.asalProduksi : null,
+        namaAsalProdukMmea: data.idJenisBkc === 2 ? data.asalProduksi : null,
 
         personal: data.personalisasi,
-        seri_pita: data.seriPita,
+        seriPita: data.seriPita,
 
-        nomor_surat_lisensi: data.nomorLisensi,
-        tanggal_surat_lisensi: moment(data.tanggalLisensi),
+        nomorSuratLisensi: data.nomorLisensi,
+        tanggalSuratLisensi: moment(data.tanggalLisensi),
 
-        sisi_depan: data.sisiDepan,
-        sisi_belakang: data.sisiBelakang,
-        sisi_kiri: data.sisiKiri,
-        sisi_kanan: data.sisiKanan,
-        sisi_atas: data.sisiAtas,
-        sisi_bawah: data.sisiBawah,
-        kode_foto: data.kodeFoto,
+        sisiDepan: data.sisiDepan,
+        sisiBelakang: data.sisiBelakang,
+        sisiKiri: data.sisiKiri,
+        sisiKanan: data.sisiKanan,
+        sisiAtas: data.sisiAtas,
+        sisiBawah: data.sisiBawah,
+        kodeFoto: data.kodeFoto,
       });
     }
   };
@@ -269,7 +268,7 @@ export default class PermohonanTarifTaskToDo extends Component {
     const response = await requestApi({
       service: "s3",
       method: "get",
-      endpoint: `/downloadFile/${this.state.kode_foto}`,
+      endpoint: `/downloadFile/${this.state.kodeFoto}`,
       setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
       config: { responseType: "blob" },
     });
@@ -278,16 +277,15 @@ export default class PermohonanTarifTaskToDo extends Component {
   };
 
   handleSimpanTasktodo = async () => {
-    const { tasktodo_status, tasktodo_awal_berlaku, tasktodo_tanggal_skep, tasktodo_alasan } =
-      this.state;
+    const { tasktodoStatus, tasktodoAwalBerlaku, tasktodoTanggalSkep, tasktodoAlasan } = this.state;
 
-    const payload = { idTarifMerkHeader: this.props.match.params.id, status: tasktodo_status };
+    const payload = { idTarifMerkHeader: this.props.match.params.id, status: tasktodoStatus };
 
-    if (tasktodo_status === "SETUJU") {
-      payload.awalBerlaku = moment(tasktodo_awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
-      payload.tanggalSkep = moment(tasktodo_tanggal_skep, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tasktodoStatus === "SETUJU") {
+      payload.awalBerlaku = moment(tasktodoAwalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+      payload.tanggalSkep = moment(tasktodoTanggalSkep, "DD-MM-YYYY").format("YYYY-MM-DD");
     } else {
-      payload.alasan = tasktodo_alasan;
+      payload.alasan = tasktodoAlasan;
     }
 
     const response = await requestApi({
@@ -327,13 +325,13 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Jenis BKC</FormLabel>
                     </div>
                     <Select
-                      id="jenis_bkc"
-                      value={this.state.jenis_bkc_id}
+                      id="jenisBkc"
+                      value={this.state.idJenisBkc}
                       style={{ width: "100%" }}
                       disabled
                     >
-                      <Select.Option value={this.state.jenis_bkc_id}>
-                        {this.state.jenis_bkc_name}
+                      <Select.Option value={this.state.idJenisBkc}>
+                        {this.state.namaJenisBkc}
                       </Select.Option>
                     </Select>
                   </Col>
@@ -342,7 +340,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>No. Permohonan</FormLabel>
                     </div>
-                    <Input id="nomor_permohonan" value={this.state.nomor_permohonan} disabled />
+                    <Input id="nomorPermohonan" value={this.state.nomorPermohonan} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -350,9 +348,9 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Tanggal Permohonan</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_permohonan"
+                      id="tanggalPermohonan"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_permohonan}
+                      value={this.state.tanggalPermohonan}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -363,11 +361,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Lokasi Perekaman</FormLabel>
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <Input
-                        id="lokasi_perekaman"
-                        value={this.state.lokasi_perekaman_name}
-                        disabled
-                      />
+                      <Input id="lokasiPerekaman" value={this.state.namaLokasiPerekaman} disabled />
                     </div>
                   </Col>
 
@@ -376,9 +370,9 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Tanggal KEP</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_kep"
+                      id="tanggalKep"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_kep}
+                      value={this.state.tanggalKep}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -389,9 +383,9 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Awal Berlaku</FormLabel>
                     </div>
                     <DatePicker
-                      id="awal_berlaku"
+                      id="awalBerlaku"
                       format="DD-MM-YYYY"
-                      value={this.state.awal_berlaku}
+                      value={this.state.awalBerlaku}
                       style={{ width: "100%" }}
                       disabled
                     />
@@ -412,7 +406,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -420,14 +414,14 @@ export default class PermohonanTarifTaskToDo extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>NPWP</FormLabel>
                     </div>
-                    <Input id="npwp_nppbkc" value={this.state.npwp_nppbkc} disabled />
+                    <Input id="npwpNppbkc" value={this.state.npwpNppbkc} disabled />
                   </Col>
 
                   <Col span={12}>
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Alamat</FormLabel>
                     </div>
-                    <Input id="alamat_nppbkc" value={this.state.alamat_nppbkc} disabled />
+                    <Input id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
                   </Col>
                 </Row>
               </div>
@@ -445,12 +439,12 @@ export default class PermohonanTarifTaskToDo extends Component {
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
                       <Input
-                        id="jenis_pita"
+                        id="jenisPita"
                         value={`${[
                           this.state.personal,
-                          this.state.isi_ht || this.state.isi_mmea,
-                          this.state.seri_pita,
-                          this.state.tarif_ht || this.state.tarif_cukai_per_liter,
+                          this.state.isiHt || this.state.isiMmea,
+                          this.state.seriPita,
+                          this.state.tarifHt || this.state.tarifCukaiPerLiter,
                         ]
                           .filter((str) => str !== null)
                           .join("_")}`}
@@ -459,34 +453,33 @@ export default class PermohonanTarifTaskToDo extends Component {
                     </div>
                   </Col>
 
-                  {this.state.jenis_bkc_id === 3 && (
+                  {this.state.idJenisBkc === 3 && (
                     <Col span={12}>
                       <div style={{ marginBottom: 10 }}>
                         <FormLabel>Merk HT</FormLabel>
                       </div>
-                      {this.state.jenis_produksi_ht_id === 2 ||
-                      this.state.jenis_produksi_ht_id === 5 ? (
+                      {this.state.idJenisProduksiHt === 2 || this.state.idJenisProduksiHt === 5 ? (
                         <Input
-                          id="merk_ht"
+                          id="merkHt"
                           value={`${[
                             this.state.personal,
-                            this.state.isi_ht,
-                            this.state.hje_perkemasan_ht,
-                            this.state.asal_produk_ht_id,
-                            this.state.seri_pita,
-                            this.state.tarif_ht,
+                            this.state.isiHt,
+                            this.state.hjePerkemasanHt,
+                            this.state.idAsalProdukHt,
+                            this.state.seriPita,
+                            this.state.tarifHt,
                           ]
                             .filter((str) => str !== null)
                             .join("_")}`}
                           disabled
                         />
                       ) : (
-                        <Input id="merk_ht" value={this.state.merk_ht} disabled />
+                        <Input id="merkHt" value={this.state.merkHt} disabled />
                       )}
                     </Col>
                   )}
 
-                  {this.state.jenis_bkc_id === 3 && (
+                  {this.state.idJenisBkc === 3 && (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
@@ -494,20 +487,20 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", gap: 10 }}>
                           <Input
-                            id="jenis_produksi_ht"
+                            id="jenisProduksiHt"
                             value={
-                              this.state.jenis_produksi_ht_code && this.state.golongan_name
-                                ? `${this.state.jenis_produksi_ht_code} - ${this.state.golongan_name}`
-                                : this.state.jenis_produksi_ht_code
+                              this.state.kodeJenisProduksiHt && this.state.namaGolongan
+                                ? `${this.state.kodeJenisProduksiHt} - ${this.state.namaGolongan}`
+                                : this.state.kodeJenisProduksiHt
                             }
                             disabled
                           />
-                          {(this.state.jenis_produksi_ht_id === 2 ||
-                            this.state.jenis_produksi_ht_id === 5) && (
+                          {(this.state.idJenisProduksiHt === 2 ||
+                            this.state.idJenisProduksiHt === 5) && (
                             <>
                               <Input
-                                id="jenis_htl_rel_ht_name"
-                                value={this.state.jenis_htl_rel_ht_name}
+                                id="namaJenisHtlRelHt"
+                                value={this.state.namaJenisHtlRelHt}
                                 disabled
                               />
                             </>
@@ -521,14 +514,14 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="isi_ht"
-                            value={this.state.isi_ht}
+                            id="isiHt"
+                            value={this.state.isiHt}
                             style={{ width: "100%" }}
                             disabled
                           />
 
-                          {this.state.jenis_htl_rel_ht_satuan && (
-                            <div>{this.state.jenis_htl_rel_ht_satuan}</div>
+                          {this.state.satuanJenisHtlRelHt && (
+                            <div>{this.state.satuanJenisHtlRelHt}</div>
                           )}
                         </div>
                       </Col>
@@ -539,15 +532,15 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <InputNumber
-                            id="berat_ht"
-                            value={this.state.berat_ht}
+                            id="beratHt"
+                            value={this.state.beratHt}
                             style={{ width: "100%" }}
                             disabled
                           />
 
-                          {(this.state.jenis_htl_rel_ht_id === 4 ||
-                            this.state.jenis_htl_rel_ht_id === 6) && (
-                            <div>{this.state.jenis_htl_rel_ht_satuan}</div>
+                          {(this.state.idJenisHtlRelHt === 4 ||
+                            this.state.idJenisHtlRelHt === 6) && (
+                            <div>{this.state.satuanJenisHtlRelHt}</div>
                           )}
                         </div>
                       </Col>
@@ -557,8 +550,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>HJE per kemasan</FormLabel>
                         </div>
                         <InputNumber
-                          id="hje_perkemasan_ht"
-                          value={this.state.hje_perkemasan_ht}
+                          id="hjePerkemasanHt"
+                          value={this.state.hjePerkemasanHt}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -569,8 +562,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>HJE / satuan</FormLabel>
                         </div>
                         <InputNumber
-                          id="hje_persatuan_ht"
-                          value={this.state.hje_persatuan_ht}
+                          id="hjePersatuanHt"
+                          value={this.state.hjePersatuanHt}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -581,8 +574,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Tarif Spesifik</FormLabel>
                         </div>
                         <InputNumber
-                          id="tarif_ht"
-                          value={this.state.tarif_ht}
+                          id="tarifHt"
+                          value={this.state.tarifHt}
                           style={{ width: "100%" }}
                           disabled
                         />
@@ -593,18 +586,18 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Bahan Kemasan</FormLabel>
                         </div>
                         <Select
-                          id="bahan_kemasan_ht"
-                          value={this.state.bahan_kemasan_ht}
+                          id="bahanKemasanHt"
+                          value={this.state.bahanKemasanHt}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_bahan_kemasan.length > 0 &&
-                            this.state.list_bahan_kemasan.map((item, index) => (
+                          {this.state.listBahanKemasan.length > 0 &&
+                            this.state.listBahanKemasan.map((item, index) => (
                               <Select.Option
                                 key={`bahan-kemasan-${index}`}
-                                value={`${item.bahan_kemasan_id}-${item.seri_pita}`}
+                                value={`${item.idBahanKemasan}-${item.seriPita}`}
                               >
-                                {item.bahan_kemasan_name}
+                                {item.namaBahanKemasan}
                               </Select.Option>
                             ))}
                         </Select>
@@ -615,18 +608,18 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Asal Produk</FormLabel>
                         </div>
                         <Select
-                          id="asal_produk_ht"
-                          value={this.state.asal_produk_ht_id}
+                          id="asalProdukHt"
+                          value={this.state.idAsalProdukHt}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_asal_produk_ht.length > 0 &&
-                            this.state.list_asal_produk_ht.map((item, index) => (
+                          {this.state.listAsalProdukHt.length > 0 &&
+                            this.state.listAsalProdukHt.map((item, index) => (
                               <Select.Option
                                 key={`asal-produk-ht-${index}`}
-                                value={item.asal_produk_ht_id}
+                                value={item.idAsalProdukHt}
                               >
-                                {item.asal_produk_ht_name}
+                                {item.namaAsalProdukHt}
                               </Select.Option>
                             ))}
                         </Select>
@@ -637,32 +630,32 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Tujuan Pemasaran</FormLabel>
                         </div>
                         <Select
-                          id="tujuan_pemasaran_ht"
-                          value={this.state.tujuan_pemasaran_ht}
+                          id="tujuanPemasaranHt"
+                          value={this.state.tujuanPemasaranHt}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_tujuan_pemasaran.length > 0 &&
-                            this.state.list_tujuan_pemasaran.map((item, index) => (
+                          {this.state.listTujuanPemasaran.length > 0 &&
+                            this.state.listTujuanPemasaran.map((item, index) => (
                               <Select.Option
                                 key={`tujuan-pemasaran-${index}`}
-                                value={item.tujuan_pemasaran_id}
+                                value={item.idTujuanPemasaran}
                               >
-                                {item.tujuan_pemasaran_name}
+                                {item.namaTujuanPemasaran}
                               </Select.Option>
                             ))}
                         </Select>
                       </Col>
 
-                      {this.state.asal_produk_ht_id === "DN" && (
+                      {this.state.idAsalProdukHt === "DN" && (
                         <>
                           <Col span={12}>
                             <div style={{ marginBottom: 10 }}>
                               <FormLabel>Nomor Surat Lisensi Pemegang Merk</FormLabel>
                             </div>
                             <Input
-                              id="nomor_surat_lisensi"
-                              value={this.state.nomor_surat_lisensi}
+                              id="nomorSuratLisensi"
+                              value={this.state.nomorSuratLisensi}
                               disabled
                             />
                           </Col>
@@ -672,9 +665,9 @@ export default class PermohonanTarifTaskToDo extends Component {
                               <FormLabel>Tanggal Surat Lisensi</FormLabel>
                             </div>
                             <DatePicker
-                              id="tanggal_surat_lisensi"
+                              id="tanggalSuratLisensi"
                               format="DD-MM-YYYY"
-                              value={this.state.tanggal_surat_lisensi}
+                              value={this.state.tanggalSuratLisensi}
                               style={{ width: "100%" }}
                               disabled
                             />
@@ -684,13 +677,13 @@ export default class PermohonanTarifTaskToDo extends Component {
                     </>
                   )}
 
-                  {this.state.jenis_bkc_id === 2 && (
+                  {this.state.idJenisBkc === 2 && (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Merk MMEA</FormLabel>
                         </div>
-                        <Input id="merk_mmea" value={this.state.merk_mmea} disabled />
+                        <Input id="merkMmea" value={this.state.merkMmea} disabled />
                       </Col>
 
                       <Col span={12}>
@@ -698,32 +691,32 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Asal Produk</FormLabel>
                         </div>
                         <Select
-                          id="asal_produk_mmea"
-                          value={this.state.asal_produk_mmea_id}
+                          id="asalProdukMmea"
+                          value={this.state.idAsalProdukMmea}
                           style={{ width: "100%" }}
                           disabled
                         >
-                          {this.state.list_asal_produk_mmea.length > 0 &&
-                            this.state.list_asal_produk_mmea.map((item, index) => (
+                          {this.state.listAsalProdukMmea.length > 0 &&
+                            this.state.listAsalProdukMmea.map((item, index) => (
                               <Select.Option
                                 key={`asal-produk-mmea-${index}`}
-                                value={item.asal_produk_mmea_id}
+                                value={item.idAsalProdukMmea}
                               >
-                                {item.asal_produk_mmea_name}
+                                {item.namaAsalProdukMmea}
                               </Select.Option>
                             ))}
                         </Select>
                       </Col>
 
-                      {this.state.asal_produk_mmea_id === "LUAR_NEGERI" && (
+                      {this.state.idAsalProdukMmea === "LUAR_NEGERI" && (
                         <Col span={12}>
                           <div style={{ marginBottom: 10 }}>
                             <FormLabel>Negara Asal</FormLabel>
                           </div>
                           <div style={{ display: "flex", gap: 10 }}>
                             <Input
-                              id="negara_asal_mmea_name"
-                              value={this.state.negara_asal_mmea_name}
+                              id="namaNegaraAsalMmea"
+                              value={this.state.namaNegaraAsalMmea}
                               disabled
                             />
                           </div>
@@ -736,8 +729,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                           <InputNumber
-                            id="isi_mmea"
-                            value={this.state.isi_mmea}
+                            id="isiMmea"
+                            value={this.state.isiMmea}
                             style={{ width: "100%" }}
                             disabled
                           />
@@ -749,7 +742,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Golongan</FormLabel>
                         </div>
-                        <Input id="golongan_name" value={this.state.golongan_name} disabled />
+                        <Input id="namaGolongan" value={this.state.namaGolongan} disabled />
                       </Col>
 
                       <Col span={12}>
@@ -758,8 +751,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                           <InputNumber
-                            id="tarif_cukai_per_liter"
-                            value={this.state.tarif_cukai_per_liter}
+                            id="tarifCukaiPerLiter"
+                            value={this.state.tarifCukaiPerLiter}
                             style={{ width: "100%" }}
                             disabled
                           />
@@ -773,8 +766,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                         </div>
                         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                           <InputNumber
-                            id="tarif_cukai_per_kemasan"
-                            value={this.state.tarif_cukai_per_kemasan}
+                            id="tarifCukaiPerKemasan"
+                            value={this.state.tarifCukaiPerKemasan}
                             style={{ width: "100%" }}
                             disabled
                           />
@@ -786,10 +779,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                 </Row>
               </div>
 
-              {this.state.jenis_bkc_id === 3 &&
-                !(
-                  this.state.jenis_produksi_ht_id === 2 || this.state.jenis_produksi_ht_id === 5
-                ) && (
+              {this.state.idJenisBkc === 3 &&
+                !(this.state.idJenisProduksiHt === 2 || this.state.idJenisProduksiHt === 5) && (
                   <>
                     <Header>{this.state.subtitle4}</Header>
                     <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
@@ -801,8 +792,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                                 <FormLabel>Sisi Depan</FormLabel>
                               </div>
                               <Input.TextArea
-                                id="sisi_depan"
-                                value={this.state.sisi_depan}
+                                id="sisiDepan"
+                                value={this.state.sisiDepan}
                                 disabled
                               />
                             </Col>
@@ -812,8 +803,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                                 <FormLabel>Sisi Belakang</FormLabel>
                               </div>
                               <Input.TextArea
-                                id="sisi_belakang"
-                                value={this.state.sisi_belakang}
+                                id="sisiBelakang"
+                                value={this.state.sisiBelakang}
                                 disabled
                               />
                             </Col>
@@ -822,11 +813,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                               <div style={{ marginBottom: 10 }}>
                                 <FormLabel>Sisi Kiri</FormLabel>
                               </div>
-                              <Input.TextArea
-                                id="sisi_kiri"
-                                value={this.state.sisi_kiri}
-                                disabled
-                              />
+                              <Input.TextArea id="sisiKiri" value={this.state.sisiKiri} disabled />
                             </Col>
 
                             <Col span={24}>
@@ -834,8 +821,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                                 <FormLabel>Sisi Kanan</FormLabel>
                               </div>
                               <Input.TextArea
-                                id="sisi_kanan"
-                                value={this.state.sisi_kanan}
+                                id="sisiKanan"
+                                value={this.state.sisiKanan}
                                 disabled
                               />
                             </Col>
@@ -844,11 +831,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                               <div style={{ marginBottom: 10 }}>
                                 <FormLabel>Sisi Atas</FormLabel>
                               </div>
-                              <Input.TextArea
-                                id="sisi_atas"
-                                value={this.state.sisi_atas}
-                                disabled
-                              />
+                              <Input.TextArea id="sisiAtas" value={this.state.sisiAtas} disabled />
                             </Col>
 
                             <Col span={24}>
@@ -856,8 +839,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                                 <FormLabel>Sisi Bawah</FormLabel>
                               </div>
                               <Input.TextArea
-                                id="sisi_bawah"
-                                value={this.state.sisi_bawah}
+                                id="sisiBawah"
+                                value={this.state.sisiBawah}
                                 disabled
                               />
                             </Col>
@@ -872,7 +855,7 @@ export default class PermohonanTarifTaskToDo extends Component {
                             type="primary"
                             loading={this.state.isDownloadLoading}
                             onClick={this.handleDownload}
-                            disabled={!this.state.kode_foto}
+                            disabled={!this.state.kodeFoto}
                           >
                             Download
                           </Button>
@@ -890,15 +873,15 @@ export default class PermohonanTarifTaskToDo extends Component {
                       <FormLabel>Persetujuan</FormLabel>
                     </div>
                     <Select
-                      id="tasktodo_status"
-                      onChange={(value) => this.handleSelectChange("tasktodo_status", value)}
-                      value={this.state.tasktodo_status}
+                      id="tasktodoStatus"
+                      onChange={(value) => this.handleSelectChange("tasktodoStatus", value)}
+                      value={this.state.tasktodoStatus}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_status.length > 0 &&
-                        this.state.list_status.map((item, index) => (
-                          <Select.Option key={`tasktodo-status-${index}`} value={item.status_id}>
-                            {item.status_name}
+                      {this.state.listStatus.length > 0 &&
+                        this.state.listStatus.map((item, index) => (
+                          <Select.Option key={`tasktodo-status-${index}`} value={item.idStatus}>
+                            {item.namaStatus}
                           </Select.Option>
                         ))}
                     </Select>
@@ -906,19 +889,19 @@ export default class PermohonanTarifTaskToDo extends Component {
                 </Row>
 
                 <Row gutter={[16, 16]}>
-                  {this.state.tasktodo_status === "SETUJU" ? (
+                  {this.state.tasktodoStatus === "SETUJU" ? (
                     <>
                       <Col span={12}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Awal Berlaku</FormLabel>
                         </div>
                         <DatePicker
-                          id="tasktodo_awal_berlaku"
+                          id="tasktodoAwalBerlaku"
                           format="DD-MM-YYYY"
                           onChange={(date) =>
-                            this.handleDatepickerChange("tasktodo_awal_berlaku", date)
+                            this.handleDatepickerChange("tasktodoAwalBerlaku", date)
                           }
-                          value={this.state.tasktodo_awal_berlaku}
+                          value={this.state.tasktodoAwalBerlaku}
                           style={{ width: "100%" }}
                         />
                       </Col>
@@ -928,12 +911,12 @@ export default class PermohonanTarifTaskToDo extends Component {
                           <FormLabel>Tanggal SKEP</FormLabel>
                         </div>
                         <DatePicker
-                          id="tasktodo_tanggal_skep"
+                          id="tasktodoTanggalSkep"
                           format="DD-MM-YYYY"
                           onChange={(date) =>
-                            this.handleDatepickerChange("tasktodo_tanggal_skep", date)
+                            this.handleDatepickerChange("tasktodoTanggalSkep", date)
                           }
-                          value={this.state.tasktodo_tanggal_skep}
+                          value={this.state.tasktodoTanggalSkep}
                           style={{ width: "100%" }}
                         />
                       </Col>
@@ -944,8 +927,8 @@ export default class PermohonanTarifTaskToDo extends Component {
                         <FormLabel>Alasan</FormLabel>
                       </div>
                       <Input.TextArea
-                        id="tasktodo_alasan"
-                        value={this.state.tasktodo_alasan}
+                        id="tasktodoAlasan"
+                        value={this.state.tasktodoAlasan}
                         onChange={this.handleInputChange}
                       />
                     </Col>

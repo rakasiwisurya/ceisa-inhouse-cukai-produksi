@@ -28,20 +28,20 @@ class PermohonanTarif extends Component {
 
       filter: {
         status: null,
-        kode_kantor: null,
-        nama_kantor: null,
+        kodeKantor: null,
+        namaKantor: null,
         nppbkc: null,
-        nama_perusahaan: null,
-        nomor_kep: null,
-        tanggal_kep: null,
-        nama_merk: null,
-        jenis_produksi: null,
-        hje_per_kemasan: null,
-        isi_per_kemasan: null,
-        tarif_spesifik: null,
-        tujuan_pemasaran: null,
-        awal_berlaku: null,
-        akhir_berlaku: null,
+        namaPerusahaan: null,
+        nomorKep: null,
+        tanggalKep: null,
+        namaMerk: null,
+        jenisProduksi: null,
+        hjePerKemasan: null,
+        isiPerKemasan: null,
+        tarifSpesifik: null,
+        tujuanPemasaran: null,
+        awalBerlaku: null,
+        akhirBerlaku: null,
       },
 
       dataSource: [],
@@ -57,12 +57,12 @@ class PermohonanTarif extends Component {
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail(record.permohonan_tarif_id)}
+                  onClick={() => this.handleDetail(record.idTarifMerkHeader)}
                 />
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handlePerbaikan(record.permohonan_tarif_id)}
+                  onClick={() => this.handlePerbaikan(record.idTarifMerkHeader)}
                 />
                 <ButtonCustom
                   variant="danger"
@@ -70,8 +70,8 @@ class PermohonanTarif extends Component {
                   onClick={() => this.handleGeneratePdf(record)}
                 />
                 <QRCodeCanvas
-                  id={record.permohonan_tarif_id}
-                  value={`https://apisdev-gw.beacukai.go.id/download-repo-cukai-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.permohonan_tarif_id}.pdf`}
+                  id={record.idTarifMerkHeader}
+                  value={`https://apisdev-gw.beacukai.go.id/download-repo-cukai-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.idTarifMerkHeader}.pdf`}
                   level="Q"
                   style={{ display: "none" }}
                   imageSettings={{
@@ -97,11 +97,11 @@ class PermohonanTarif extends Component {
           ...this.getColumnSearchProps("status"),
         },
         {
-          key: "nama_kantor",
+          key: "namaKantor",
           title: "Nama Kantor",
-          dataIndex: "nama_kantor",
+          dataIndex: "namaKantor",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_kantor"),
+          ...this.getColumnSearchProps("namaKantor"),
         },
         {
           key: "nppbkc",
@@ -111,93 +111,93 @@ class PermohonanTarif extends Component {
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
-          key: "nomor_kep",
+          key: "nomorKep",
           title: "Nomor KEP",
-          dataIndex: "nomor_kep",
+          dataIndex: "nomorKep",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_kep"),
+          ...this.getColumnSearchProps("nomorKep"),
         },
         {
-          key: "tanggal_kep",
+          key: "tanggalKep",
           title: "Tanggal KEP",
-          dataIndex: "tanggal_kep",
+          dataIndex: "tanggalKep",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_kep"),
+          ...this.getColumnSearchProps("tanggalKep"),
         },
         {
-          key: "nama_merk",
+          key: "namaMerk",
           title: "Nama Merk",
-          dataIndex: "nama_merk",
+          dataIndex: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_merk"),
+          ...this.getColumnSearchProps("namaMerk"),
         },
         {
-          key: "jenis_produksi",
+          key: "jenisProduksi",
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi",
+          dataIndex: "jenisProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_produksi"),
+          ...this.getColumnSearchProps("jenisProduksi"),
         },
         {
-          key: "hje_per_kemasan",
+          key: "hjePerKemasan",
           title: "HJE",
-          dataIndex: "hje_per_kemasan",
+          dataIndex: "hjePerKemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("hje_per_kemasan"),
+          ...this.getColumnSearchProps("hjePerKemasan"),
         },
         {
-          key: "isi_per_kemasan",
+          key: "isiPerKemasan",
           title: "Isi",
-          dataIndex: "isi_per_kemasan",
+          dataIndex: "isiPerKemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("isi_per_kemasan"),
+          ...this.getColumnSearchProps("isiPerKemasan"),
         },
         {
-          key: "tarif_spesifik",
+          key: "tarifSpesifik",
           title: "Tarif",
-          dataIndex: "tarif_spesifik",
+          dataIndex: "tarifSpesifik",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tarif_spesifik"),
+          ...this.getColumnSearchProps("tarifSpesifik"),
         },
         {
-          key: "tujuan_pemasaran",
+          key: "tujuanPemasaran",
           title: "Tujuan",
-          dataIndex: "tujuan_pemasaran",
+          dataIndex: "tujuanPemasaran",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tujuan_pemasaran"),
+          ...this.getColumnSearchProps("tujuanPemasaran"),
         },
         {
-          key: "awal_berlaku",
+          key: "awalBerlaku",
           title: "Awal Berlaku",
-          dataIndex: "awal_berlaku",
+          dataIndex: "awalBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("awalBerlaku"),
         },
         {
-          key: "akhir_berlaku",
+          key: "akhirBerlaku",
           title: "Akhir Berlaku",
-          dataIndex: "akhir_berlaku",
+          dataIndex: "akhirBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("akhir_berlaku"),
+          ...this.getColumnSearchProps("akhirBerlaku"),
         },
       ],
     };
@@ -216,40 +216,40 @@ class PermohonanTarif extends Component {
   getPermohonanTarif = async () => {
     const {
       status,
-      kode_kantor,
-      nama_kantor,
+      kodeKantor,
+      namaKantor,
       nppbkc,
-      nama_perusahaan,
-      nomor_kep,
-      tanggal_kep,
-      nama_merk,
-      jenis_produksi,
-      hje_per_kemasan,
-      isi_per_kemasan,
-      tarif_spesifik,
-      tujuan_pemasaran,
-      awal_berlaku,
-      akhir_berlaku,
+      namaPerusahaan,
+      nomorKep,
+      tanggalKep,
+      namaMerk,
+      jenisProduksi,
+      hjePerKemasan,
+      isiPerKemasan,
+      tarifSpesifik,
+      tujuanPemasaran,
+      awalBerlaku,
+      akhirBerlaku,
     } = this.state.filter;
 
     const payload = { page: this.state.page };
 
     if (status) payload.status = status;
-    if (kode_kantor) payload.kodeKantor = kode_kantor;
-    if (nama_kantor) payload.namaKantor = nama_kantor;
+    if (kodeKantor) payload.kodeKantor = kodeKantor;
+    if (namaKantor) payload.namaKantor = namaKantor;
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (nomor_kep) payload.nomorSkep = nomor_kep;
-    if (tanggal_kep) payload.tanggalSkep = moment(tanggal_kep, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (nama_merk) payload.namaMerk = nama_merk;
-    if (jenis_produksi) payload.namaJenisProduksiBkc = jenis_produksi;
-    if (hje_per_kemasan) payload.hjePerKemasan = hje_per_kemasan;
-    if (isi_per_kemasan) payload.isiPerKemasan = isi_per_kemasan;
-    if (tarif_spesifik) payload.tarifSpesifik = tarif_spesifik;
-    if (tujuan_pemasaran) payload.tujuanPemasaran = tujuan_pemasaran;
-    if (awal_berlaku) payload.awalBerlaku = moment(awal_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (akhir_berlaku)
-      payload.akhirBerlaku = moment(akhir_berlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (nomorKep) payload.nomorSkep = nomorKep;
+    if (tanggalKep) payload.tanggalSkep = moment(tanggalKep, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaMerk) payload.namaMerk = namaMerk;
+    if (jenisProduksi) payload.namaJenisProduksiBkc = jenisProduksi;
+    if (hjePerKemasan) payload.hjePerKemasan = hjePerKemasan;
+    if (isiPerKemasan) payload.isiPerKemasan = isiPerKemasan;
+    if (tarifSpesifik) payload.tarifSpesifik = tarifSpesifik;
+    if (tujuanPemasaran) payload.tujuanPemasaran = tujuanPemasaran;
+    if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (akhirBerlaku)
+      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
 
     const response = await requestApi({
       service: "produksi",
@@ -262,46 +262,46 @@ class PermohonanTarif extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `permohonan-tarif-${index}`,
-        permohonan_tarif_id: item.idTarifMerkHeader,
+        idTarifMerkHeader: item.idTarifMerkHeader,
         status: item.status,
-        kode_kantor: item.kodeKantor,
-        nama_kantor: item.namaKantor,
-        nama_kantor_wilayah: item.namaKantorWilayah,
+        kodeKantor: item.kodeKantor,
+        namaKantor: item.namaKantor,
+        namaKantorWilayah: item.namaKantorWilayah,
         nppbkc: item.nppbkc,
-        nomor_pkp: item.nomorPkp,
-        nama_perusahaan: item.namaPerusahaan,
-        alamat_perusahaan: item.alamatPerusahaan,
+        nomorPkp: item.nomorPkp,
+        namaPerusahaan: item.namaPerusahaan,
+        alamatPerusahaan: item.alamatPerusahaan,
         npwp: item.npwp,
-        nama_pengusaha: item.namaPengusaha,
-        alamat_pengusaha: item.alamatPengusaha,
-        nama_kota: item.namaKota,
-        nomor_permohonan: item.nomorPemohonan,
-        nomor_kep: item.nomorSkep,
-        tanggal_kep: item.tanggalSkep,
-        id_jenis_bkc: item.idJenisBkc,
-        nama_jenis_bkc: item.jenisBkc,
-        nama_merk: item.namaMerk,
-        jenis_produksi: item.namaJenisProduksiBkc,
+        namaPengusaha: item.namaPengusaha,
+        alamatPengusaha: item.alamatPengusaha,
+        namaKota: item.namaKota,
+        nomorPermohonan: item.nomorPemohonan,
+        nomorKep: item.nomorSkep,
+        tanggalKep: item.tanggalSkep,
+        idJenisBkc: item.idJenisBkc,
+        namaJenisBkc: item.jenisBkc,
+        namaMerk: item.namaMerk,
+        jenisProduksi: item.namaJenisProduksiBkc,
         golongan: item.golongan,
-        hje_per_kemasan: item.hjePerKemasan,
-        hje_per_satuan: item.hjePerSatuan,
-        isi_per_kemasan: item.isiPerKemasan,
-        tarif_spesifik: item.tarifSpesifik,
+        hjePerKemasan: item.hjePerKemasan,
+        hjePerSatuan: item.hjePerSatuan,
+        isiPerKemasan: item.isiPerKemasan,
+        tarifSpesifik: item.tarifSpesifik,
         satuan: item.satuan,
-        tujuan_pemasaran: item.tujuanPemasaran,
-        bahan_kemasan: item.bahanKemasan,
-        awal_berlaku: item.awalBerlaku,
-        akhir_berlaku: item.akhirBerlaku,
-        sisi_depan: item.sisiDepan,
-        sisi_belakang: item.sisiBelakang,
-        sisi_kiri: item.sisiKiri,
-        sisi_kanan: item.sisiKanan,
-        sisi_atas: item.sisiAtas,
-        sisi_bawah: item.sisiBawah,
-        asal_produk: item.asalProduk,
-        negara_asal: item.negaraAsal,
-        tarif_per_kemasan: item.tarifPerKemasan,
-        waktu_rekam: item.waktuRekam,
+        tujuanPemasaran: item.tujuanPemasaran,
+        bahanKemasan: item.bahanKemasan,
+        awalBerlaku: item.awalBerlaku,
+        akhirBerlaku: item.akhirBerlaku,
+        sisiDepan: item.sisiDepan,
+        sisiBelakang: item.sisiBelakang,
+        sisiKiri: item.sisiKiri,
+        sisiKanan: item.sisiKanan,
+        sisiAtas: item.sisiAtas,
+        sisiBawah: item.sisiBawah,
+        asalProduk: item.asalProduk,
+        negaraAsal: item.negaraAsal,
+        tarifPerKemasan: item.tarifPerKemasan,
+        waktuRekam: item.waktuRekam,
       }));
 
       this.setState({
@@ -376,88 +376,88 @@ class PermohonanTarif extends Component {
   };
   handleGeneratePdf = async (rowData) => {
     const {
-      permohonan_tarif_id,
-      nama_kantor,
-      nama_kantor_wilayah,
+      idTarifMerkHeader,
+      namaKantor,
+      namaKantorWilayah,
       nppbkc,
-      nomor_pkp,
-      nama_perusahaan,
-      alamat_perusahaan,
+      nomorPkp,
+      namaPerusahaan,
+      alamatPerusahaan,
       npwp,
-      nama_pengusaha,
-      alamat_pengusaha,
-      nama_kota,
-      nomor_permohonan,
-      nomor_kep,
-      tanggal_kep,
-      id_jenis_bkc,
-      nama_merk,
-      jenis_produksi,
+      namaPengusaha,
+      alamatPengusaha,
+      namaKota,
+      nomorPermohonan,
+      nomorKep,
+      tanggalKep,
+      idJenisBkc,
+      namaMerk,
+      jenisProduksi,
       golongan,
-      hje_per_kemasan,
-      hje_per_satuan,
-      isi_per_kemasan,
-      tarif_spesifik,
+      hjePerKemasan,
+      hjePerSatuan,
+      isiPerKemasan,
+      tarifSpesifik,
       satuan,
-      tujuan_pemasaran,
-      bahan_kemasan,
-      awal_berlaku,
-      sisi_depan,
-      sisi_belakang,
-      sisi_kiri,
-      sisi_kanan,
-      sisi_atas,
-      sisi_bawah,
-      asal_produk,
-      negara_asal,
-      tarif_per_kemasan,
-      waktu_rekam,
+      tujuanPemasaran,
+      bahanKemasan,
+      awalBerlaku,
+      sisiDepan,
+      sisiBelakang,
+      sisiKiri,
+      sisiKanan,
+      sisiAtas,
+      sisiBawah,
+      asalProduk,
+      negaraAsal,
+      tarifPerKemasan,
+      waktuRekam,
     } = rowData;
 
     this.setState({
       pdfContent: {
-        permohonan_tarif_id,
-        nomor_permohonan,
-        nomor_kep,
-        tanggal_kep: tanggal_kep ? moment(tanggal_kep).format("DD MMMM YYYY") : tanggal_kep,
-        id_jenis_bkc,
-        jenis_bkc:
-          id_jenis_bkc === 3
+        idTarifMerkHeader,
+        nomorPermohonan,
+        nomorKep,
+        tanggalKep: tanggalKep ? moment(tanggalKep).format("DD MMMM YYYY") : tanggalKep,
+        idJenisBkc,
+        jenisBkc:
+          idJenisBkc === 3
             ? "HASIL TEMBAKAU"
-            : id_jenis_bkc === 2
+            : idJenisBkc === 2
             ? "MINUMAN MENGANDUNG ETIL ALKOHOL"
             : null,
-        nama_perusahaan,
+        namaPerusahaan,
         nppbkc,
-        nama_pengusaha,
+        namaPengusaha,
         npwp,
-        alamat_pengusaha,
-        nama_kota,
-        nomor_pkp,
-        alamat_perusahaan,
-        nama_merk,
-        jenis_produksi,
+        alamatPengusaha,
+        namaKota,
+        nomorPkp,
+        alamatPerusahaan,
+        namaMerk,
+        jenisProduksi,
         golongan,
-        isi_per_kemasan,
-        tarif_spesifik,
+        isiPerKemasan,
+        tarifSpesifik,
         satuan,
-        hje_per_kemasan,
-        hje_per_satuan,
-        bahan_kemasan,
-        tujuan_pemasaran,
-        sisi_depan,
-        sisi_belakang,
-        sisi_kiri,
-        sisi_kanan,
-        sisi_atas,
-        sisi_bawah,
-        asal_produk,
-        negara_asal,
-        tarif_per_kemasan,
-        nama_kantor,
-        awal_berlaku: awal_berlaku ? moment(awal_berlaku).format("DD MMMM YYYY") : awal_berlaku,
-        nama_kantor_wilayah: nama_kantor_wilayah,
-        waktu_rekam: waktu_rekam ? moment(waktu_rekam).format("DD MMMM YYYY") : waktu_rekam,
+        hjePerKemasan,
+        hjePerSatuan,
+        bahanKemasan,
+        tujuanPemasaran,
+        sisiDepan,
+        sisiBelakang,
+        sisiKiri,
+        sisiKanan,
+        sisiAtas,
+        sisiBawah,
+        asalProduk,
+        negaraAsal,
+        tarifPerKemasan,
+        namaKantor,
+        awalBerlaku: awalBerlaku ? moment(awalBerlaku).format("DD MMMM YYYY") : awalBerlaku,
+        namaKantorWilayah: namaKantorWilayah,
+        waktuRekam: waktuRekam ? moment(waktuRekam).format("DD MMMM YYYY") : waktuRekam,
       },
       isModalPdfVisible: true,
     });

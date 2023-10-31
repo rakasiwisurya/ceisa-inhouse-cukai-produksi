@@ -3,7 +3,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
-export default class ModalDaftarJenisPita extends Component {
+export default class qModalDaftarJenisPita extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,23 +14,23 @@ export default class ModalDaftarJenisPita extends Component {
       totalData: 0,
 
       table: {
-        jenis_produksi_code: null,
+        kodeJenisProduksi: null,
         hje: null,
         isi: null,
-        awal_berlaku: null,
+        awalBerlaku: null,
         tarif: null,
         warna: null,
-        tahun_pita: null,
+        tahunPita: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Jenis Produksi",
-          dataIndex: "jenis_produksi_code",
-          key: "jenis_produksi_code",
+          dataIndex: "kodeJenisProduksi",
+          key: "kodeJenisProduksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_produksi_code"),
+          ...this.getColumnSearchProps("kodeJenisProduksi"),
         },
         {
           title: "HJE",
@@ -41,14 +41,14 @@ export default class ModalDaftarJenisPita extends Component {
         },
         {
           title: "Awal Berlaku",
-          dataIndex: "awal_berlaku",
-          key: "awal_berlaku",
+          dataIndex: "awalBerlaku",
+          key: "awalBerlaku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("awal_berlaku"),
+          ...this.getColumnSearchProps("awalBerlaku"),
         },
         {
           title: "Tarif",
@@ -66,10 +66,10 @@ export default class ModalDaftarJenisPita extends Component {
         },
         {
           title: "Tahun Pita",
-          dataIndex: "tahun_pita",
-          key: "tahun_pita",
+          dataIndex: "tahunPita",
+          key: "tahunPita",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("tahun_pita"),
+          ...this.getColumnSearchProps("tahunPita"),
         },
       ],
     };
@@ -87,20 +87,19 @@ export default class ModalDaftarJenisPita extends Component {
 
   getDaftarJenisPita = async () => {
     const { idJenisBkc } = this.props;
-    const { jenis_produksi_code, hje, isi, awal_berlaku, tarif, warna, tahun_pita } =
-      this.state.table;
+    const { kodeJenisProduksi, hje, isi, awalBerlaku, tarif, warna, tahunPita } = this.state.table;
 
     const payload = { page: this.state.page };
 
     if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
 
-    if (jenis_produksi_code) payload.kodeJenisProduksi = jenis_produksi_code;
+    if (kodeJenisProduksi) payload.kodeJenisProduksi = kodeJenisProduksi;
     if (hje) payload.hje = hje;
     if (isi) payload.isiKemasan = isi;
-    if (awal_berlaku) payload.awalBerlaku = awal_berlaku;
+    if (awalBerlaku) payload.awalBerlaku = awalBerlaku;
     if (tarif) payload.tarif = tarif;
     if (warna) payload.warna = warna;
-    if (tahun_pita) payload.tahunPita = tahun_pita;
+    if (tahunPita) payload.tahunPita = tahunPita;
 
     const response = await requestApi({
       service: "pita_cukai",
@@ -113,17 +112,17 @@ export default class ModalDaftarJenisPita extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `daftar-jenis-pita-${index}`,
-        jenis_pita_id: item.idJenisPita,
-        jenis_produksi_id: item.idJenisProduksi,
-        jenis_produksi_code: item.kodeJenisProduksi,
-        golongan_id: item.idGolongan,
-        golongan_name: item.namaGolongan,
+        idJenisPita: item.idJenisPita,
+        idJenisProduksi: item.idJenisProduksi,
+        kodeJenisProduksi: item.kodeJenisProduksi,
+        idGolongan: item.idGolongan,
+        namaGolongan: item.namaGolongan,
         hje: item.hje,
         isi: item.isiKemasan,
-        awal_berlaku: item.awalBerlaku,
+        awalBerlaku: item.awalBerlaku,
         tarif: item.tarif,
         warna: item.warna,
-        tahun_pita: item.tahunPita,
+        tahunPita: item.tahunPita,
         personal: item.personal,
       }));
 

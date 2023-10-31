@@ -18,24 +18,24 @@ export default class ModalDaftarHtlRel extends Component {
       columns: [
         {
           title: "Jenis HTL/REL",
-          dataIndex: "jenis_htl_rel_code",
-          key: "jenis_htl_rel_code",
+          dataIndex: "kodeJenisHtlRel",
+          key: "kodeJenisHtlRel",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_htl_rel_code"),
+          ...this.getColumnSearchProps("kodeJenisHtlRel"),
         },
         {
           title: "Keterangan",
-          dataIndex: "jenis_htl_rel_name",
-          key: "jenis_htl_rel_name",
+          dataIndex: "namaJenisHtlRel",
+          key: "namaJenisHtlRel",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_htl_rel_name"),
+          ...this.getColumnSearchProps("namaJenisHtlRel"),
         },
         {
           title: "Satuan",
-          dataIndex: "jenis_htl_rel_satuan",
-          key: "jenis_htl_rel_satuan",
+          dataIndex: "satuanJenisHtlRel",
+          key: "satuanJenisHtlRel",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("jenis_htl_rel_satuan"),
+          ...this.getColumnSearchProps("satuanJenisHtlRel"),
         },
       ],
     };
@@ -61,12 +61,11 @@ export default class ModalDaftarHtlRel extends Component {
     if (response) {
       const newData = response.data.data.map((item, index) => ({
         key: `jenis-htl-rel-${index}`,
-        jenis_produksi_id: item.idJenisHtlRel,
-        jenis_produksi_code: item.kodeJenisProduksiBkc,
-        jenis_htl_rel_id: item.idJenisHtlRel,
-        jenis_htl_rel_code: item.kodeHtlRel,
-        jenis_htl_rel_name: item.namaJenisHtlRel,
-        jenis_htl_rel_satuan: item.satuan,
+        kodeJenisProduksiBkc: item.kodeJenisProduksiBkc,
+        idJenisHtlRel: item.idJenisHtlRel,
+        kodeJenisHtlRel: item.kodeHtlRel,
+        namaJenisHtlRel: item.namaJenisHtlRel,
+        satuanJenisHtlRel: item.satuan,
       }));
       this.setState({ dataSource: newData });
     }
