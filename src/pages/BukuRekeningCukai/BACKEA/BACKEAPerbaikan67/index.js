@@ -36,67 +36,67 @@ export default class BACKEAPerbaikan67 extends Component {
       isTableLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      back_ea_detail_id: null,
+      idBackEaDetail: null,
 
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
+      jumlahEaYangAkanDicampur: null,
+      jumlahBahanPencampur: null,
       satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
+      jenisBahan: null,
+      jumlahSetelahDicampur: null,
+      hasilAkhir: null,
       alasan: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-6",
-          jenis_back_name: "BACK-6",
+          idJenisBack: "BACK-6",
+          namaJenisBack: "BACK-6",
         },
         {
-          jenis_back_id: "BACK-7",
-          jenis_back_name: "BACK-7",
-        },
-      ],
-      list_satuan: [
-        {
-          satuan_id: "lt",
-          satuan_name: "lt",
-        },
-        {
-          satuan_id: "gr",
-          satuan_name: "gr",
-        },
-        {
-          satuan_id: "cc",
-          satuan_name: "cc",
+          idJenisBack: "BACK-7",
+          namaJenisBack: "BACK-7",
         },
       ],
-      list_jenis_bahan: [
+      listSatuan: [
         {
-          jenis_bahan_id: "BIT-SDA BIT 6",
-          jenis_bahan_name: "BIRTEX",
+          idSatuan: "lt",
+          namaSatuan: "lt",
         },
         {
-          jenis_bahan_id: "IPA-SDA IPA 5",
-          jenis_bahan_name: "ISOPROPIL ALCOHOL",
+          idSatuan: "gr",
+          namaSatuan: "gr",
         },
         {
-          jenis_bahan_id: "EAC-SDA EAC 2",
-          jenis_bahan_name: "ETIL ACETAT",
+          idSatuan: "cc",
+          namaSatuan: "cc",
+        },
+      ],
+      listJenisBahan: [
+        {
+          idJenisBahan: "BIT-SDA BIT 6",
+          namaJenisBahan: "BIRTEX",
         },
         {
-          jenis_bahan_id: "BPE-SPIRTUS BAKAR",
-          jenis_bahan_name: "BAHAN PERUSAK EA",
+          idJenisBahan: "IPA-SDA IPA 5",
+          namaJenisBahan: "ISOPROPIL ALCOHOL",
+        },
+        {
+          idJenisBahan: "EAC-SDA EAC 2",
+          namaJenisBahan: "ETIL ACETAT",
+        },
+        {
+          idJenisBahan: "BPE-SPIRTUS BAKAR",
+          namaJenisBahan: "BAHAN PERUSAK EA",
         },
       ],
 
@@ -114,7 +114,7 @@ export default class BACKEAPerbaikan67 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record)}
               />
-              {!record.back_ea_detail_id && (
+              {!record.idBackEaDetail && (
                 <Button
                   type="danger"
                   icon="close"
@@ -126,20 +126,20 @@ export default class BACKEAPerbaikan67 extends Component {
         },
         {
           title: "Jumlah EA Sebelum Dicampur/Dirusak (lt)",
-          dataIndex: "jumlah_ea_yang_akan_dicampur",
-          key: "jumlah_ea_yang_akan_dicampur",
+          dataIndex: "jumlahEaYangAkanDicampur",
+          key: "jumlahEaYangAkanDicampur",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_ea_yang_akan_dicampur"),
+          ...this.getColumnSearchProps("jumlahEaYangAkanDicampur"),
         },
         {
           title: "Bahan Pencampur/Perusak",
           children: [
             {
               title: "Jumlah",
-              dataIndex: "jumlah_bahan_pencampur",
-              key: "jumlah_bahan_pencampur",
+              dataIndex: "jumlahBahanPencampur",
+              key: "jumlahBahanPencampur",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_bahan_pencampur"),
+              ...this.getColumnSearchProps("jumlahBahanPencampur"),
             },
             {
               title: "Satuan",
@@ -150,10 +150,10 @@ export default class BACKEAPerbaikan67 extends Component {
             },
             {
               title: "Jenis",
-              dataIndex: "jenis_bahan",
-              key: "jenis_bahan",
+              dataIndex: "jenisBahan",
+              key: "jenisBahan",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_bahan"),
+              ...this.getColumnSearchProps("jenisBahan"),
             },
           ],
         },
@@ -162,17 +162,17 @@ export default class BACKEAPerbaikan67 extends Component {
           children: [
             {
               title: "Jumlah (Lt)",
-              dataIndex: "jumlah_setelah_dicampur",
-              key: "jumlah_setelah_dicampur",
+              dataIndex: "jumlahSetelahDicampur",
+              key: "jumlahSetelahDicampur",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_setelah_dicampur"),
+              ...this.getColumnSearchProps("jumlahSetelahDicampur"),
             },
             {
               title: "Jenis",
-              dataIndex: "hasil_akhir",
-              key: "hasil_akhir",
+              dataIndex: "hasilAkhir",
+              key: "hasilAkhir",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("hasil_akhir"),
+              ...this.getColumnSearchProps("hasilAkhir"),
             },
           ],
         },
@@ -199,22 +199,22 @@ export default class BACKEAPerbaikan67 extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_back: data.jenisBackEa,
-        nomor_back: data.nomorBackEa,
-        tanggal_back: moment(data.tanggalBackEa),
+        namaNppbkc: data.namaPerusahaan,
+        jenisBack: data.jenisBackEa,
+        nomorBack: data.nomorBackEa,
+        tanggalBack: moment(data.tanggalBackEa),
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-${index}`,
-          back_ea_detail_id: detail.idBackEaDetail,
-          jumlah_ea_yang_akan_dicampur: detail.jumlah,
-          jumlah_bahan_pencampur: detail.jumlahPencampur,
+          idBackEaDetail: detail.idBackEaDetail,
+          jumlahEaYangAkanDicampur: detail.jumlah,
+          jumlahBahanPencampur: detail.jumlahPencampur,
           satuan: detail.kodeSatuanPencampur,
-          jenis_bahan: detail.jenisBahanPencampur,
-          jumlah_setelah_dicampur: detail.jumlahSetelah,
-          hasil_akhir: detail.hasilAkhir,
+          jenisBahan: detail.jenisBahanPencampur,
+          jumlahSetelahDicampur: detail.jumlahSetelah,
+          hasilAkhir: detail.hasilAkhir,
         })),
       });
     }
@@ -297,31 +297,31 @@ export default class BACKEAPerbaikan67 extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
   handleSimpanRincian = () => {
     const {
-      jumlah_ea_yang_akan_dicampur,
-      jumlah_bahan_pencampur,
+      jumlahEaYangAkanDicampur,
+      jumlahBahanPencampur,
       satuan,
-      jenis_bahan,
-      jumlah_setelah_dicampur,
-      hasil_akhir,
+      jenisBahan,
+      jumlahSetelahDicampur,
+      hasilAkhir,
       alasan,
     } = this.state;
 
     if (
-      !jumlah_ea_yang_akan_dicampur ||
-      !jumlah_bahan_pencampur ||
+      !jumlahEaYangAkanDicampur ||
+      !jumlahBahanPencampur ||
       !satuan ||
-      !jenis_bahan ||
-      !jumlah_setelah_dicampur ||
-      !hasil_akhir ||
+      !jenisBahan ||
+      !jumlahSetelahDicampur ||
+      !hasilAkhir ||
       !alasan
     ) {
       return notification.info({
@@ -335,24 +335,24 @@ export default class BACKEAPerbaikan67 extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          jumlah_ea_yang_akan_dicampur,
-          jumlah_bahan_pencampur,
+          jumlahEaYangAkanDicampur,
+          jumlahBahanPencampur,
           satuan,
-          jenis_bahan,
-          jumlah_setelah_dicampur,
-          hasil_akhir,
+          jenisBahan,
+          jumlahSetelahDicampur,
+          hasilAkhir,
           alasan,
         },
       ],
     });
 
     this.setState({
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
+      jumlahEaYangAkanDicampur: null,
+      jumlahBahanPencampur: null,
       satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
+      jenisBahan: null,
+      jumlahSetelahDicampur: null,
+      hasilAkhir: null,
       alasan: null,
     });
   };
@@ -361,25 +361,25 @@ export default class BACKEAPerbaikan67 extends Component {
       isEditRincian: true,
       editIndexRincian: record.key,
 
-      back_ea_detail_id: record.back_ea_detail_id,
-      jumlah_ea_yang_akan_dicampur: record.jumlah_ea_yang_akan_dicampur,
-      jumlah_bahan_pencampur: record.jumlah_bahan_pencampur,
+      idBackEaDetail: record.idBackEaDetail,
+      jumlahEaYangAkanDicampur: record.jumlahEaYangAkanDicampur,
+      jumlahBahanPencampur: record.jumlahBahanPencampur,
       satuan: record.satuan,
-      jenis_bahan: record.jenis_bahan,
-      jumlah_setelah_dicampur: record.jumlah_setelah_dicampur,
-      hasil_akhir: record.hasil_akhir,
+      jenisBahan: record.jenisBahan,
+      jumlahSetelahDicampur: record.jumlahSetelahDicampur,
+      hasilAkhir: record.hasilAkhir,
       alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
     const {
-      back_ea_detail_id,
-      jumlah_ea_yang_akan_dicampur,
-      jumlah_bahan_pencampur,
+      idBackEaDetail,
+      jumlahEaYangAkanDicampur,
+      jumlahBahanPencampur,
       satuan,
-      jenis_bahan,
-      jumlah_setelah_dicampur,
-      hasil_akhir,
+      jenisBahan,
+      jumlahSetelahDicampur,
+      hasilAkhir,
       alasan,
     } = this.state;
 
@@ -387,13 +387,13 @@ export default class BACKEAPerbaikan67 extends Component {
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      back_ea_detail_id,
-      jumlah_ea_yang_akan_dicampur,
-      jumlah_bahan_pencampur,
+      idBackEaDetail,
+      jumlahEaYangAkanDicampur,
+      jumlahBahanPencampur,
       satuan,
-      jenis_bahan,
-      jumlah_setelah_dicampur,
-      hasil_akhir,
+      jenisBahan,
+      jumlahSetelahDicampur,
+      hasilAkhir,
       alasan,
     });
 
@@ -401,13 +401,13 @@ export default class BACKEAPerbaikan67 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_ea_detail_id: null,
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
+      idBackEaDetail: null,
+      jumlahEaYangAkanDicampur: null,
+      jumlahBahanPencampur: null,
       satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
+      jenisBahan: null,
+      jumlahSetelahDicampur: null,
+      hasilAkhir: null,
       alasan: null,
 
       dataSource: newDataSource,
@@ -422,35 +422,35 @@ export default class BACKEAPerbaikan67 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_ea_detail_id: null,
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
+      idBackEaDetail: null,
+      jumlahEaYangAkanDicampur: null,
+      jumlahBahanPencampur: null,
       satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
+      jenisBahan: null,
+      jumlahSetelahDicampur: null,
+      hasilAkhir: null,
       alasan: null,
     });
   };
   handleUpdate = async () => {
-    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+    const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
 
     const payload = {
       idBackEaHeader: this.props.match.params.id,
-      idNppbkc: nppbkc_id,
-      jenisBackEa: jenis_back,
-      namaPerusahaan: nama_nppbkc,
-      nomorBackEa: nomor_back,
+      idNppbkc: idNppbkc,
+      jenisBackEa: jenisBack,
+      namaPerusahaan: namaNppbkc,
+      nomorBackEa: nomorBack,
       nppbkc: nppbkc,
-      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalBackEa: moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        idBackEaDetail: item.back_ea_detail_id,
-        hasilAkhir: item.hasil_akhir,
-        jenisBahanPencampur: item.jenis_bahan,
-        jumlah: item.jumlah_ea_yang_akan_dicampur,
-        jumlahPencampur: item.jumlah_bahan_pencampur,
-        jumlahSetelah: item.jumlah_setelah_dicampur,
+        idBackEaDetail: item.idBackEaDetail,
+        hasilAkhir: item.hasilAkhir,
+        jenisBahanPencampur: item.jenisBahan,
+        jumlah: item.jumlahEaYangAkanDicampur,
+        jumlahPencampur: item.jumlahBahanPencampur,
+        jumlahSetelah: item.jumlahSetelahDicampur,
         kodeSatuanPencampur: item.satuan,
         alasan: item.alasan,
       })),
@@ -501,7 +501,7 @@ export default class BACKEAPerbaikan67 extends Component {
                       >
                         Cari
                       </Button>
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -510,15 +510,15 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Jenis BACK</FormLabel>
                     </div>
                     <Select
-                      id="jenis_back"
-                      value={this.state.jenis_back}
-                      onChange={(value) => this.handleSelectChange("jenis_back", value)}
+                      id="jenisBack"
+                      value={this.state.jenisBack}
+                      onChange={(value) => this.handleSelectChange("jenisBack", value)}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_jenis_back.length > 0 &&
-                        this.state.list_jenis_back.map((item, index) => (
-                          <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                            {item.jenis_back_name}
+                      {this.state.listJenisBack.length > 0 &&
+                        this.state.listJenisBack.map((item, index) => (
+                          <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                            {item.namaJenisBack}
                           </Select.Option>
                         ))}
                     </Select>
@@ -529,8 +529,8 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Nomor BACK</FormLabel>
                     </div>
                     <Input
-                      id="nomor_back"
-                      value={this.state.nomor_back}
+                      id="nomorBack"
+                      value={this.state.nomorBack}
                       onChange={this.handleInputChange}
                     />
                   </Col>
@@ -540,10 +540,10 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Tanggal BACK</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_back"
+                      id="tanggalBack"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_back}
-                      onChange={(date) => this.handleDatepickerChange("tanggal_back", date)}
+                      value={this.state.tanggalBack}
+                      onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -557,10 +557,10 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Jumlah EA Yang Akan Dicampur/Dirusak</FormLabel>
                     </div>
                     <InputNumber
-                      id="jumlah_ea_yang_akan_dicampur"
-                      value={this.state.jumlah_ea_yang_akan_dicampur}
+                      id="jumlahEaYangAkanDicampur"
+                      value={this.state.jumlahEaYangAkanDicampur}
                       onChange={(value) =>
-                        this.handleInputNumberChange("jumlah_ea_yang_akan_dicampur", value)
+                        this.handleInputNumberChange("jumlahEaYangAkanDicampur", value)
                       }
                       style={{ width: "100%" }}
                     />
@@ -572,10 +572,10 @@ export default class BACKEAPerbaikan67 extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <InputNumber
-                        id="jumlah_bahan_pencampur"
-                        value={this.state.jumlah_bahan_pencampur}
+                        id="jumlahBahanPencampur"
+                        value={this.state.jumlahBahanPencampur}
                         onChange={(value) =>
-                          this.handleInputNumberChange("jumlah_bahan_pencampur", value)
+                          this.handleInputNumberChange("jumlahBahanPencampur", value)
                         }
                         style={{ width: "100%" }}
                       />
@@ -585,10 +585,10 @@ export default class BACKEAPerbaikan67 extends Component {
                         onChange={(value) => this.handleSelectChange("satuan", value)}
                         style={{ width: 100 }}
                       >
-                        {this.state.list_satuan.length > 0 &&
-                          this.state.list_satuan.map((item, index) => (
-                            <Select.Option key={`satuan-${index}`} value={item.satuan_id}>
-                              {item.satuan_name}
+                        {this.state.listSatuan.length > 0 &&
+                          this.state.listSatuan.map((item, index) => (
+                            <Select.Option key={`satuan-${index}`} value={item.idSatuan}>
+                              {item.namaSatuan}
                             </Select.Option>
                           ))}
                       </Select>
@@ -600,23 +600,23 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Jenis Bahan</FormLabel>
                     </div>
                     <Select
-                      id="jenis_bahan"
+                      id="jenisBahan"
                       value={
-                        this.state.jenis_bahan && this.state.hasil_akhir
-                          ? `${this.state.jenis_bahan}-${this.state.hasil_akhir}`
+                        this.state.jenisBahan && this.state.hasilAkhir
+                          ? `${this.state.jenisBahan}-${this.state.hasilAkhir}`
                           : null
                       }
                       onChange={(value) => {
                         const splitValue = value.split("-");
-                        this.handleSelectChange("jenis_bahan", splitValue[0]);
-                        this.handleSelectChange("hasil_akhir", splitValue[1]);
+                        this.handleSelectChange("jenisBahan", splitValue[0]);
+                        this.handleSelectChange("hasilAkhir", splitValue[1]);
                       }}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_jenis_bahan.length > 0 &&
-                        this.state.list_jenis_bahan.map((item, index) => (
-                          <Select.Option key={`jenis-bahan-${index}`} value={item.jenis_bahan_id}>
-                            {item.jenis_bahan_name}
+                      {this.state.listJenisBahan.length > 0 &&
+                        this.state.listJenisBahan.map((item, index) => (
+                          <Select.Option key={`jenis-bahan-${index}`} value={item.idJenisBahan}>
+                            {item.namaJenisBahan}
                           </Select.Option>
                         ))}
                     </Select>
@@ -627,10 +627,10 @@ export default class BACKEAPerbaikan67 extends Component {
                       <FormLabel>Jumlah Setelah Dicampur/Dirusak</FormLabel>
                     </div>
                     <InputNumber
-                      id="jumlah_setelah_dicampur"
-                      value={this.state.jumlah_setelah_dicampur}
+                      id="jumlahSetelahDicampur"
+                      value={this.state.jumlahSetelahDicampur}
                       onChange={(value) =>
-                        this.handleInputNumberChange("jumlah_setelah_dicampur", value)
+                        this.handleInputNumberChange("jumlahSetelahDicampur", value)
                       }
                       style={{ width: "100%" }}
                     />
@@ -640,7 +640,7 @@ export default class BACKEAPerbaikan67 extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Hasil Akhir</FormLabel>
                     </div>
-                    <Input id="hasil_akhir" value={this.state.hasil_akhir} disabled />
+                    <Input id="hasilAkhir" value={this.state.hasilAkhir} disabled />
                   </Col>
 
                   <Col span={12}>

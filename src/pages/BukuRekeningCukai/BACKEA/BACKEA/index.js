@@ -32,25 +32,25 @@ export default class BACKEA extends Component {
 
       filter67: {
         kppbc: null,
-        nama_perusahaan: null,
-        jenis_back: null,
-        nomor_back: null,
-        tanggal_back: null,
-        jumlah_ea_sebelum_dicampur: null,
-        jumlah_bahan_pencampur: null,
-        satuan_bahan_pencampur: null,
-        jenis_bahan_pencampur: null,
-        jumlah_hasil_akhir_pencampuran: null,
-        jenis_hasil_akhir_pencampuran: null,
+        namaPerusahaan: null,
+        jenisBack: null,
+        nomorBack: null,
+        tanggalBack: null,
+        jumlahEaSebelumDicampur: null,
+        jumlahBahanPencampur: null,
+        satuanBahanPencampur: null,
+        jenisBahanPencampur: null,
+        jumlahHasilAkhirPencampuran: null,
+        jenisHasilAkhirPencampuran: null,
       },
 
       filter89: {
         kppbc: null,
-        nama_perusahaan: null,
-        jenis_back: null,
-        nomor_back: null,
-        tanggal_back: null,
-        jenis_ea: null,
+        namaPerusahaan: null,
+        jenisBack: null,
+        nomorBack: null,
+        tanggalBack: null,
+        jenisEa: null,
         jumlah: null,
         keterangan: null,
       },
@@ -68,12 +68,12 @@ export default class BACKEA extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit67(record.back_ea_67_id)}
+                  onClick={() => this.handleEdit67(record.idBackEa67Header)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail67(record.back_ea_67_id)}
+                  onClick={() => this.handleDetail67(record.idBackEa67Header)}
                 />
               </>
             </div>
@@ -87,73 +87,73 @@ export default class BACKEA extends Component {
           ...this.getColumnSearchProps67("kppbc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps67("nama_perusahaan"),
+          ...this.getColumnSearchProps67("namaPerusahaan"),
         },
         {
-          key: "jenis_back",
+          key: "jenisBack",
           title: "Jenis BACK",
-          dataIndex: "jenis_back",
+          dataIndex: "jenisBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps67("jenis_back"),
+          ...this.getColumnSearchProps67("jenisBack"),
         },
         {
-          key: "nomor_back",
+          key: "nomorBack",
           title: "Nomor BACK",
-          dataIndex: "nomor_back",
+          dataIndex: "nomorBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps67("nomor_back"),
+          ...this.getColumnSearchProps67("nomorBack"),
         },
         {
-          key: "tanggal_back",
+          key: "tanggalBack",
           title: "Tanggal BACK",
-          dataIndex: "tanggal_back",
+          dataIndex: "tanggalBack",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps67("tanggal_back"),
+          ...this.getColumnSearchProps67("tanggalBack"),
         },
         {
-          key: "jumlah_ea_sebelum_dicampur",
+          key: "jumlahEaSebelumDicampur",
           title: "Jumlah EA Sebelum Dicampur/Dirusak (lt)",
-          dataIndex: "jumlah_ea_sebelum_dicampur",
+          dataIndex: "jumlahEaSebelumDicampur",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps67("jumlah_ea_sebelum_dicampur"),
+          ...this.getColumnSearchProps67("jumlahEaSebelumDicampur"),
         },
         {
           title: "Bahan Pencampur/Perusak",
           children: [
             {
-              key: "jumlah_bahan_pencampur",
+              key: "jumlahBahanPencampur",
               title: "Jumlah",
-              dataIndex: "jumlah_bahan_pencampur",
+              dataIndex: "jumlahBahanPencampur",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps67("jumlah_bahan_pencampur"),
+              ...this.getColumnSearchProps67("jumlahBahanPencampur"),
             },
             {
-              key: "satuan_bahan_pencampur",
+              key: "satuanBahanPencampur",
               title: "Satuan",
-              dataIndex: "satuan_bahan_pencampur",
+              dataIndex: "satuanBahanPencampur",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps67("satuan_bahan_pencampur"),
+              ...this.getColumnSearchProps67("satuanBahanPencampur"),
             },
             {
-              key: "jenis_bahan_pencampur",
+              key: "jenisBahanPencampur",
               title: "Jenis",
-              dataIndex: "jenis_bahan_pencampur",
+              dataIndex: "jenisBahanPencampur",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps67("jenis_bahan_pencampur"),
+              ...this.getColumnSearchProps67("jenisBahanPencampur"),
             },
           ],
         },
@@ -161,22 +161,22 @@ export default class BACKEA extends Component {
           title: "Hasil Akhir Pencampuran/Perusakan EA",
           children: [
             {
-              key: "jumlah_hasil_akhir_pencampuran",
+              key: "jumlahHasilAkhirPencampuran",
               title: "Jumlah (LT)",
-              dataIndex: "jumlah_hasil_akhir_pencampuran",
+              dataIndex: "jumlahHasilAkhirPencampuran",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps67("jumlah_hasil_akhir_pencampuran"),
+              ...this.getColumnSearchProps67("jumlahHasilAkhirPencampuran"),
             },
             {
-              key: "jenis_hasil_akhir_pencampuran",
+              key: "jenisHasilAkhirPencampuran",
               title: "Jenis",
-              dataIndex: "jenis_hasil_akhir_pencampuran",
+              dataIndex: "jenisHasilAkhirPencampuran",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps67("jenis_hasil_akhir_pencampuran"),
+              ...this.getColumnSearchProps67("jenisHasilAkhirPencampuran"),
             },
           ],
         },
@@ -195,12 +195,12 @@ export default class BACKEA extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit89(record.back_ea_89_id)}
+                  onClick={() => this.handleEdit89(record.idBackEa89Header)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail89(record.back_ea_89_id)}
+                  onClick={() => this.handleDetail89(record.idBackEa89Header)}
                 />
               </>
             </div>
@@ -214,43 +214,43 @@ export default class BACKEA extends Component {
           ...this.getColumnSearchProps89("kppbc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps89("nama_perusahaan"),
+          ...this.getColumnSearchProps89("namaPerusahaan"),
         },
         {
-          key: "jenis_back",
+          key: "jenisBack",
           title: "Jenis BACK",
-          dataIndex: "jenis_back",
+          dataIndex: "jenisBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps89("jenis_back"),
+          ...this.getColumnSearchProps89("jenisBack"),
         },
         {
-          key: "nomor_back",
+          key: "nomorBack",
           title: "Nomor BACK",
-          dataIndex: "nomor_back",
+          dataIndex: "nomorBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps89("nomor_back"),
+          ...this.getColumnSearchProps89("nomorBack"),
         },
         {
-          key: "tanggal_back",
+          key: "tanggalBack",
           title: "Tanggal BACK",
-          dataIndex: "tanggal_back",
+          dataIndex: "tanggalBack",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps89("tanggal_back"),
+          ...this.getColumnSearchProps89("tanggalBack"),
         },
         {
-          key: "jenis_ea",
+          key: "jenisEa",
           title: "Jenis EA",
-          dataIndex: "jenis_ea",
+          dataIndex: "jenisEa",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps89("jenis_ea"),
+          ...this.getColumnSearchProps89("jenisEa"),
         },
         {
           key: "jumlah",
@@ -288,32 +288,31 @@ export default class BACKEA extends Component {
   getBackEa67 = async () => {
     const {
       kppbc,
-      nama_perusahaan,
-      jenis_back,
-      nomor_back,
-      tanggal_back,
-      jumlah_ea_sebelum_dicampur,
-      jumlah_bahan_pencampur,
-      satuan_bahan_pencampur,
-      jenis_bahan_pencampur,
-      jumlah_hasil_akhir_pencampuran,
-      jenis_hasil_akhir_pencampuran,
+      namaPerusahaan,
+      jenisBack,
+      nomorBack,
+      tanggalBack,
+      jumlahEaSebelumDicampur,
+      jumlahBahanPencampur,
+      satuanBahanPencampur,
+      jenisBahanPencampur,
+      jumlahHasilAkhirPencampuran,
+      jenisHasilAkhirPencampuran,
     } = this.state.filter67;
 
     const payload = { page: this.state.page67 };
 
     if (kppbc) payload.namaKantor = kppbc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_back) payload.jenisBackEa = jenis_back;
-    if (nomor_back) payload.nomorBackEa = nomor_back;
-    if (tanggal_back)
-      payload.tanggalBackEa = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (jumlah_ea_sebelum_dicampur) payload.jumlah = jumlah_ea_sebelum_dicampur;
-    if (jumlah_bahan_pencampur) payload.jumlahPencampur = jumlah_bahan_pencampur;
-    if (satuan_bahan_pencampur) payload.kodeSatuanPencampur = satuan_bahan_pencampur;
-    if (jenis_bahan_pencampur) payload.jenisBahanPencampur = jenis_bahan_pencampur;
-    if (jumlah_hasil_akhir_pencampuran) payload.jumlahSetelah = jumlah_hasil_akhir_pencampuran;
-    if (jenis_hasil_akhir_pencampuran) payload.hasilAkhir = jenis_hasil_akhir_pencampuran;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (jenisBack) payload.jenisBackEa = jenisBack;
+    if (nomorBack) payload.nomorBackEa = nomorBack;
+    if (tanggalBack) payload.tanggalBackEa = moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jumlahEaSebelumDicampur) payload.jumlah = jumlahEaSebelumDicampur;
+    if (jumlahBahanPencampur) payload.jumlahPencampur = jumlahBahanPencampur;
+    if (satuanBahanPencampur) payload.kodeSatuanPencampur = satuanBahanPencampur;
+    if (jenisBahanPencampur) payload.jenisBahanPencampur = jenisBahanPencampur;
+    if (jumlahHasilAkhirPencampuran) payload.jumlahSetelah = jumlahHasilAkhirPencampuran;
+    if (jenisHasilAkhirPencampuran) payload.hasilAkhir = jenisHasilAkhirPencampuran;
 
     const response = await requestApi({
       service: "produksi",
@@ -326,18 +325,18 @@ export default class BACKEA extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `back-6-7-${index}`,
-        back_ea_67_id: item.idBackEaHeader,
+        idBackEa67Header: item.idBackEaHeader,
         kppbc: item.namaKantor,
-        nama_perusahaan: item.namaPerusahaan,
-        jenis_back: item.jenisBackEa,
-        nomor_back: item.nomorBackEa,
-        tanggal_back: item.tanggalBackEa,
-        jumlah_ea_sebelum_dicampur: item.jumlah,
-        jumlah_bahan_pencampur: item.jumlahPencampur,
-        satuan_bahan_pencampur: item.kodeSatuanPencampur,
-        jenis_bahan_pencampur: item.jenisBahanPencampur,
-        jumlah_hasil_akhir_pencampuran: item.jumlahSetelah,
-        jenis_hasil_akhir_pencampuran: item.hasilAkhir,
+        namaPerusahaan: item.namaPerusahaan,
+        jenisBack: item.jenisBackEa,
+        nomorBack: item.nomorBackEa,
+        tanggalBack: item.tanggalBackEa,
+        jumlahEaSebelumDicampur: item.jumlah,
+        jumlahBahanPencampur: item.jumlahPencampur,
+        satuanBahanPencampur: item.kodeSatuanPencampur,
+        jenisBahanPencampur: item.jenisBahanPencampur,
+        jumlahHasilAkhirPencampuran: item.jumlahSetelah,
+        jenisHasilAkhirPencampuran: item.hasilAkhir,
       }));
 
       this.setState({
@@ -351,11 +350,11 @@ export default class BACKEA extends Component {
   getBackEa89 = async () => {
     const {
       kppbc,
-      nama_perusahaan,
-      jenis_back,
-      nomor_back,
-      tanggal_back,
-      jenis_ea,
+      namaPerusahaan,
+      jenisBack,
+      nomorBack,
+      tanggalBack,
+      jenisEa,
       jumlah,
       keterangan,
     } = this.state.filter89;
@@ -363,12 +362,11 @@ export default class BACKEA extends Component {
     const payload = { page: this.state.page89 };
 
     if (kppbc) payload.namaKantor = kppbc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_back) payload.jenisBackEa = jenis_back;
-    if (nomor_back) payload.nomorBackEa = nomor_back;
-    if (tanggal_back)
-      payload.tanggalBackEa = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (jenis_ea) payload.jenisBkc = jenis_ea;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (jenisBack) payload.jenisBackEa = jenisBack;
+    if (nomorBack) payload.nomorBackEa = nomorBack;
+    if (tanggalBack) payload.tanggalBackEa = moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (jenisEa) payload.jenisBkc = jenisEa;
     if (jumlah) payload.jumlah = jumlah;
     if (keterangan) payload.keterangan = keterangan;
 
@@ -383,13 +381,13 @@ export default class BACKEA extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `back-8-9-${index}`,
-        back_ea_89_id: item.idBackEaHeader,
+        idBackEa89Header: item.idBackEaHeader,
         kppbc: item.namaKantor,
-        nama_perusahaan: item.namaPerusahaan,
-        jenis_back: item.jenisBackEa,
-        nomor_back: item.nomorBackEa,
-        tanggal_back: item.tanggalBackEa,
-        jenis_ea: item.jenisBkc,
+        namaPerusahaan: item.namaPerusahaan,
+        jenisBack: item.jenisBackEa,
+        nomorBack: item.nomorBackEa,
+        tanggalBack: item.tanggalBackEa,
+        jenisEa: item.jenisBkc,
         jumlah: item.jumlah,
         keterangan: item.keterangan,
       }));

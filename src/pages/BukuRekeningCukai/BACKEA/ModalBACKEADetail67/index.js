@@ -25,64 +25,64 @@ export default class ModalBACKEADetail67 extends Component {
 
       isDetailLoading: true,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      jumlah_ea_yang_akan_dicampur: null,
-      jumlah_bahan_pencampur: null,
+      jumlahEaYangAkanDicampur: null,
+      jumlahBahanPencampur: null,
       satuan: null,
-      jenis_bahan: null,
-      jumlah_setelah_dicampur: null,
-      hasil_akhir: null,
+      jenisBahan: null,
+      jumlahSetelahDicampur: null,
+      hasilAkhir: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-6",
-          jenis_back_name: "BACK-6",
+          idJenisBack: "BACK-6",
+          namaJenisBack: "BACK-6",
         },
         {
-          jenis_back_id: "BACK-7",
-          jenis_back_name: "BACK-7",
-        },
-      ],
-      list_satuan: [
-        {
-          satuan_id: "lt",
-          satuan_name: "lt",
-        },
-        {
-          satuan_id: "gr",
-          satuan_name: "gr",
-        },
-        {
-          satuan_id: "cc",
-          satuan_name: "cc",
+          idJenisBack: "BACK-7",
+          namaJenisBack: "BACK-7",
         },
       ],
-      list_jenis_bahan: [
+      listSatuan: [
         {
-          jenis_bahan_id: "BIT-SDA BIT 6",
-          jenis_bahan_name: "Birtex",
+          idSatuan: "lt",
+          namaSatuan: "lt",
         },
         {
-          jenis_bahan_id: "IPA-SDA IPA 5",
-          jenis_bahan_name: "Isopropil Alcohol",
+          idSatuan: "gr",
+          namaSatuan: "gr",
         },
         {
-          jenis_bahan_id: "EAC-SDA EAC 2",
-          jenis_bahan_name: "Etil Acetat",
+          idSatuan: "cc",
+          namaSatuan: "cc",
+        },
+      ],
+      listJenisBahan: [
+        {
+          idJenisBahan: "BIT-SDA BIT 6",
+          namaJenisBahan: "Birtex",
         },
         {
-          jenis_bahan_id: "BPE-SPIRTUS BAKAR",
-          jenis_bahan_name: "Bahan Perusak EA",
+          idJenisBahan: "IPA-SDA IPA 5",
+          namaJenisBahan: "Isopropil Alcohol",
+        },
+        {
+          idJenisBahan: "EAC-SDA EAC 2",
+          namaJenisBahan: "Etil Acetat",
+        },
+        {
+          idJenisBahan: "BPE-SPIRTUS BAKAR",
+          namaJenisBahan: "Bahan Perusak EA",
         },
       ],
 
@@ -90,20 +90,20 @@ export default class ModalBACKEADetail67 extends Component {
       columns: [
         {
           title: "Jumlah EA Sebelum Dicampur/Dirusak (lt)",
-          dataIndex: "jumlah_ea_yang_akan_dicampur",
-          key: "jumlah_ea_yang_akan_dicampur",
+          dataIndex: "jumlahEaYangAkanDicampur",
+          key: "jumlahEaYangAkanDicampur",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_ea_yang_akan_dicampur"),
+          ...this.getColumnSearchProps("jumlahEaYangAkanDicampur"),
         },
         {
           title: "Bahan Pencampur/Perusak",
           children: [
             {
               title: "Jumlah",
-              dataIndex: "jumlah_bahan_pencampur",
-              key: "jumlah_bahan_pencampur",
+              dataIndex: "jumlahBahanPencampur",
+              key: "jumlahBahanPencampur",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_bahan_pencampur"),
+              ...this.getColumnSearchProps("jumlahBahanPencampur"),
             },
             {
               title: "Satuan",
@@ -114,10 +114,10 @@ export default class ModalBACKEADetail67 extends Component {
             },
             {
               title: "Jenis",
-              dataIndex: "jenis_bahan",
-              key: "jenis_bahan",
+              dataIndex: "jenisBahan",
+              key: "jenisBahan",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_bahan"),
+              ...this.getColumnSearchProps("jenisBahan"),
             },
           ],
         },
@@ -126,17 +126,17 @@ export default class ModalBACKEADetail67 extends Component {
           children: [
             {
               title: "Jumlah (Lt)",
-              dataIndex: "jumlah_setelah_dicampur",
-              key: "jumlah_setelah_dicampur",
+              dataIndex: "jumlahSetelahDicampur",
+              key: "jumlahSetelahDicampur",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_setelah_dicampur"),
+              ...this.getColumnSearchProps("jumlahSetelahDicampur"),
             },
             {
               title: "Jenis",
-              dataIndex: "hasil_akhir",
-              key: "hasil_akhir",
+              dataIndex: "hasilAkhir",
+              key: "hasilAkhir",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("hasil_akhir"),
+              ...this.getColumnSearchProps("hasilAkhir"),
             },
           ],
         },
@@ -165,22 +165,22 @@ export default class ModalBACKEADetail67 extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_back: data.jenisBackEa,
-        nomor_back: data.nomorBackEa,
-        tanggal_back: moment(data.tanggalBackEa),
+        namaNppbkc: data.namaPerusahaan,
+        jenisBack: data.jenisBackEa,
+        nomorBack: data.nomorBackEa,
+        tanggalBack: moment(data.tanggalBackEa),
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-6-7-${index}`,
-          back_ea_detail_id: detail.idBackEaDetail,
-          jumlah_ea_yang_akan_dicampur: detail.jumlah,
-          jumlah_bahan_pencampur: detail.jumlahPencampur,
+          idBackEaDetail: detail.idBackEaDetail,
+          jumlahEaYangAkanDicampur: detail.jumlah,
+          jumlahBahanPencampur: detail.jumlahPencampur,
           satuan: detail.kodeSatuanPencampur,
-          jenis_bahan: detail.jenisBahanPencampur,
-          jumlah_setelah_dicampur: detail.jumlahSetelah,
-          hasil_akhir: detail.hasilAkhir,
+          jenisBahan: detail.jenisBahanPencampur,
+          jumlahSetelahDicampur: detail.jumlahSetelah,
+          hasilAkhir: detail.hasilAkhir,
         })),
       });
     }
@@ -265,7 +265,7 @@ export default class ModalBACKEADetail67 extends Component {
                   </div>
                   <div style={{ display: "flex", gap: 10 }}>
                     <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                    <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                    <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                   </div>
                 </Col>
 
@@ -274,15 +274,15 @@ export default class ModalBACKEADetail67 extends Component {
                     <FormLabel>Jenis BACK</FormLabel>
                   </div>
                   <Select
-                    id="jenis_back"
-                    value={this.state.jenis_back}
+                    id="jenisBack"
+                    value={this.state.jenisBack}
                     style={{ width: "100%" }}
                     disabled
                   >
-                    {this.state.list_jenis_back.length > 0 &&
-                      this.state.list_jenis_back.map((item, index) => (
-                        <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                          {item.jenis_back_name}
+                    {this.state.listJenisBack.length > 0 &&
+                      this.state.listJenisBack.map((item, index) => (
+                        <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                          {item.namaJenisBack}
                         </Select.Option>
                       ))}
                   </Select>
@@ -292,7 +292,7 @@ export default class ModalBACKEADetail67 extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Nomor BACK</FormLabel>
                   </div>
-                  <Input id="nomor_back" value={this.state.nomor_back} disabled />
+                  <Input id="nomorBack" value={this.state.nomorBack} disabled />
                 </Col>
 
                 <Col span={12}>
@@ -300,9 +300,9 @@ export default class ModalBACKEADetail67 extends Component {
                     <FormLabel>Tanggal BACK</FormLabel>
                   </div>
                   <DatePicker
-                    id="tanggal_back"
+                    id="tanggalBack"
                     format="DD-MM-YYYY"
-                    value={this.state.tanggal_back}
+                    value={this.state.tanggalBack}
                     style={{ width: "100%" }}
                     disabled
                   />
