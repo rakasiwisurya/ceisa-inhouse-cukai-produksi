@@ -20,13 +20,13 @@ export default class BRCK1 extends Component {
 
       filter: {
         kppbc: null,
-        nama_perusahaan: null,
+        namaPerusahaan: null,
         warna: null,
-        tanggal_awal: null,
-        tanggal_akhir: null,
-        saldo_awal: null,
-        saldo_buku: null,
-        saldo_penutupan_brck: null,
+        tanggalAwal: null,
+        tanggalAkhir: null,
+        saldoAwal: null,
+        saldoBuku: null,
+        saldoPenutupanBrck: null,
         selisih: null,
         potongan: null,
         kekurangan: null,
@@ -43,12 +43,12 @@ export default class BRCK1 extends Component {
               <ButtonCustom
                 icon="form"
                 variant="warning"
-                onClick={() => this.handleEdit(record.brck1_id)}
+                onClick={() => this.handleEdit(record.idBrck1)}
               />
               <ButtonCustom
                 icon="eye"
                 variant="info"
-                onClick={() => this.handleDetail(record.brck1_id)}
+                onClick={() => this.handleDetail(record.idBrck1)}
               />
             </div>
           ),
@@ -62,10 +62,10 @@ export default class BRCK1 extends Component {
         },
         {
           title: "Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Warna",
@@ -76,52 +76,52 @@ export default class BRCK1 extends Component {
         },
         {
           title: "Tanggal Awal",
-          dataIndex: "tanggal_awal",
-          key: "tanggal_awal",
+          dataIndex: "tanggalAwal",
+          key: "tanggalAwal",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_awal"),
+          ...this.getColumnSearchProps("tanggalAwal"),
         },
         {
           title: "Tanggal Akhir",
-          dataIndex: "tanggal_akhir",
-          key: "tanggal_akhir",
+          dataIndex: "tanggalAkhir",
+          key: "tanggalAkhir",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_akhir"),
+          ...this.getColumnSearchProps("tanggalAkhir"),
         },
         {
           title: "Saldo Awal",
-          dataIndex: "saldo_awal",
-          key: "saldo_awal",
+          dataIndex: "saldoAwal",
+          key: "saldoAwal",
           render: (text) => (
             <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
           ),
-          ...this.getColumnSearchProps("saldo_awal"),
+          ...this.getColumnSearchProps("saldoAwal"),
         },
         {
           title: "Saldo Buku",
-          dataIndex: "saldo_buku",
-          key: "saldo_buku",
+          dataIndex: "saldoBuku",
+          key: "saldoBuku",
           render: (text) => (
             <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
           ),
-          ...this.getColumnSearchProps("saldo_buku"),
+          ...this.getColumnSearchProps("saldoBuku"),
         },
         {
           title: "Saldo Penutupan BRCK",
-          dataIndex: "saldo_penutupan_brck",
-          key: "saldo_penutupan_brck",
+          dataIndex: "saldoPenutupanBrck",
+          key: "saldoPenutupanBrck",
           render: (text) => (
             <div style={{ textAlign: "center" }}>{text || text === 0 ? text : "-"}</div>
           ),
-          ...this.getColumnSearchProps("saldo_penutupan_brck"),
+          ...this.getColumnSearchProps("saldoPenutupanBrck"),
         },
         {
           title: "Selisih",
@@ -166,13 +166,13 @@ export default class BRCK1 extends Component {
   getBrck1 = async () => {
     const {
       kppbc,
-      nama_perusahaan,
+      namaPerusahaan,
       warna,
-      tanggal_awal,
-      tanggal_akhir,
-      saldo_awal,
-      saldo_buku,
-      saldo_penutupan_brck,
+      tanggalAwal,
+      tanggalAkhir,
+      saldoAwal,
+      saldoBuku,
+      saldoPenutupanBrck,
       selisih,
       potongan,
       kekurangan,
@@ -181,14 +181,14 @@ export default class BRCK1 extends Component {
     const payload = { page: this.state.page };
 
     if (kppbc) payload.kppbc = kppbc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
     if (warna) payload.warna = warna;
-    if (tanggal_awal) payload.tanggalAwal = moment(tanggal_awal, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (tanggal_akhir)
-      payload.tanggalAkhir = moment(tanggal_akhir, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (saldo_awal) payload.saldoAwal = saldo_awal;
-    if (saldo_buku) payload.saldoBuku = saldo_buku;
-    if (saldo_penutupan_brck) payload.saldoPenutupanBrck = saldo_penutupan_brck;
+    if (tanggalAwal) payload.tanggalAwal = moment(tanggalAwal, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalAkhir)
+      payload.tanggalAkhir = moment(tanggalAkhir, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (saldoAwal) payload.saldoAwal = saldoAwal;
+    if (saldoBuku) payload.saldoBuku = saldoBuku;
+    if (saldoPenutupanBrck) payload.saldoPenutupanBrck = saldoPenutupanBrck;
     if (selisih) payload.selisih = selisih;
     if (potongan) payload.potongan = potongan;
     if (kekurangan) payload.kekurangan = kekurangan;
@@ -204,15 +204,15 @@ export default class BRCK1 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `brck1-${index}`,
-        brck1_id: item.idBrck1,
+        idBrck1: item.idBrck1,
         kppbc: item.kppbc,
-        nama_perusahaan: item.namaPerusahaan,
+        namaPerusahaan: item.namaPerusahaan,
         warna: item.warna,
-        tanggal_awal: item.tanggalAwal,
-        tanggal_akhir: item.tanggalAkhir,
-        saldo_awal: item.saldoAwal,
-        saldo_buku: item.saldoBuku,
-        saldo_penutupan_brck: item.saldoPenutupanBrck,
+        tanggalAwal: item.tanggalAwal,
+        tanggalAkhir: item.tanggalAkhir,
+        saldoAwal: item.saldoAwal,
+        saldoBuku: item.saldoBuku,
+        saldoPenutupanBrck: item.saldoPenutupanBrck,
         selisih: item.selisih,
         potongan: item.potongan,
         kekurangan: item.kekurangan,
