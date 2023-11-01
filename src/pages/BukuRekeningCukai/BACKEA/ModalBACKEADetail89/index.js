@@ -26,29 +26,29 @@ export default class ModalBACKEADetail89 extends Component {
 
       isDetailLoading: true,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-8",
-          jenis_back_name: "BACK-8",
+          idJenisBack: "BACK-8",
+          namaJenisBack: "BACK-8",
         },
         {
-          jenis_back_id: "BACK-9",
-          jenis_back_name: "BACK-9",
+          idJenisBack: "BACK-9",
+          namaJenisBack: "BACK-9",
         },
       ],
 
@@ -59,17 +59,17 @@ export default class ModalBACKEADetail89 extends Component {
           children: [
             {
               title: "Jenis",
-              dataIndex: "jenis_barang_kena_cukai_rusak",
-              key: "jenis_barang_kena_cukai_rusak",
+              dataIndex: "jenisBarangKenaCukaiRusak",
+              key: "jenisBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jenisBarangKenaCukaiRusak"),
             },
             {
               title: "Jumlah (lt)",
-              dataIndex: "jumlah_barang_kena_cukai_rusak",
-              key: "jumlah_barang_kena_cukai_rusak",
+              dataIndex: "jumlahBarangKenaCukaiRusak",
+              key: "jumlahBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jumlahBarangKenaCukaiRusak"),
             },
           ],
         },
@@ -105,18 +105,18 @@ export default class ModalBACKEADetail89 extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_back: data.jenisBackEa,
-        nomor_back: data.nomorBackEa,
-        tanggal_back: moment(data.tanggalBackEa),
+        namaNppbkc: data.namaPerusahaan,
+        jenisBack: data.jenisBackEa,
+        nomorBack: data.nomorBackEa,
+        tanggalBack: moment(data.tanggalBackEa),
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-8-9-${index}`,
-          back_ea_detail_id: detail.idBackEaDetail,
-          jenis_barang_kena_cukai_rusak: detail.jenisBkc,
-          jumlah_barang_kena_cukai_rusak: detail.jumlah,
+          idBackEaDetail: detail.idBackEaDetail,
+          jenisBarangKenaCukaiRusak: detail.jenisBkc,
+          jumlahBarangKenaCukaiRusak: detail.jumlah,
           catatan: detail.keterangan,
         })),
       });
@@ -202,7 +202,7 @@ export default class ModalBACKEADetail89 extends Component {
                   </div>
                   <div style={{ display: "flex", gap: 10 }}>
                     <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                    <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                    <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                   </div>
                 </Col>
 
@@ -211,15 +211,15 @@ export default class ModalBACKEADetail89 extends Component {
                     <FormLabel>Jenis BACK</FormLabel>
                   </div>
                   <Select
-                    id="jenis_back"
-                    value={this.state.jenis_back}
+                    id="jenisBack"
+                    value={this.state.jenisBack}
                     style={{ width: "100%" }}
                     disabled
                   >
-                    {this.state.list_jenis_back.length > 0 &&
-                      this.state.list_jenis_back.map((item, index) => (
-                        <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                          {item.jenis_back_name}
+                    {this.state.listJenisBack.length > 0 &&
+                      this.state.listJenisBack.map((item, index) => (
+                        <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                          {item.namaJenisBack}
                         </Select.Option>
                       ))}
                   </Select>
@@ -229,7 +229,7 @@ export default class ModalBACKEADetail89 extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Nomor BACK</FormLabel>
                   </div>
-                  <Input id="nomor_back" value={this.state.nomor_back} disabled />
+                  <Input id="nomorBack" value={this.state.nomorBack} disabled />
                 </Col>
 
                 <Col span={12}>
@@ -237,9 +237,9 @@ export default class ModalBACKEADetail89 extends Component {
                     <FormLabel>Tanggal BACK</FormLabel>
                   </div>
                   <DatePicker
-                    id="tanggal_back"
+                    id="tanggalBack"
                     format="DD-MM-YYYY"
-                    value={this.state.tanggal_back}
+                    value={this.state.tanggalBack}
                     style={{ width: "100%" }}
                     disabled
                   />
@@ -266,9 +266,9 @@ export default class ModalBACKEADetail89 extends Component {
                         dataIndex: "title",
                       },
                       {
-                        key: "total_barang_kena_cukai_rusak",
+                        key: "totalBarangKenaCukaiRusak",
                         title: "Total Barang Kena Cukai Rusak",
-                        dataIndex: "total_barang_kena_cukai_rusak",
+                        dataIndex: "totalBarangKenaCukaiRusak",
                         width: 120,
                         fixed: "right",
                         render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -278,9 +278,9 @@ export default class ModalBACKEADetail89 extends Component {
                       {
                         key: "1",
                         title: "Total",
-                        total_barang_kena_cukai_rusak: sumArrayOfObject(
+                        totalBarangKenaCukaiRusak: sumArrayOfObject(
                           this.state.dataSource,
-                          "jumlah_barang_kena_cukai_rusak"
+                          "jumlahBarangKenaCukaiRusak"
                         ),
                       },
                     ]}

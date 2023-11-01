@@ -37,17 +37,17 @@ export default class BACKEAPerbaikan89 extends Component {
       isTableLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      back_ea_detail_id: null,
+      idBackEaDetail: null,
 
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
       alasan: null,
 
@@ -55,14 +55,14 @@ export default class BACKEAPerbaikan89 extends Component {
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-8",
-          jenis_back_name: "BACK-8",
+          idJenisBack: "BACK-8",
+          namaJenisBack: "BACK-8",
         },
         {
-          jenis_back_id: "BACK-9",
-          jenis_back_name: "BACK-9",
+          idJenisBack: "BACK-9",
+          namaJenisBack: "BACK-9",
         },
       ],
 
@@ -80,7 +80,7 @@ export default class BACKEAPerbaikan89 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record)}
               />
-              {!record.back_ea_detail_id && (
+              {!record.idBackEaDetail && (
                 <Button
                   type="danger"
                   icon="close"
@@ -95,17 +95,17 @@ export default class BACKEAPerbaikan89 extends Component {
           children: [
             {
               title: "Jenis",
-              dataIndex: "jenis_barang_kena_cukai_rusak",
-              key: "jenis_barang_kena_cukai_rusak",
+              dataIndex: "jenisBarangKenaCukaiRusak",
+              key: "jenisBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jenisBarangKenaCukaiRusak"),
             },
             {
               title: "Jumlah (lt)",
-              dataIndex: "jumlah_barang_kena_cukai_rusak",
-              key: "jumlah_barang_kena_cukai_rusak",
+              dataIndex: "jumlahBarangKenaCukaiRusak",
+              key: "jumlahBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jumlahBarangKenaCukaiRusak"),
             },
           ],
         },
@@ -139,18 +139,18 @@ export default class BACKEAPerbaikan89 extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_back: data.jenisBackEa,
-        nomor_back: data.nomorBackEa,
-        tanggal_back: moment(data.tanggalBackEa),
+        namaNppbkc: data.namaPerusahaan,
+        jenisBack: data.jenisBackEa,
+        nomorBack: data.nomorBackEa,
+        tanggalBack: moment(data.tanggalBackEa),
 
         dataSource: data.details.map((detail, index) => ({
           key: `back-ea-${index}`,
-          back_ea_detail_id: detail.idBackEaDetail,
-          jenis_barang_kena_cukai_rusak: detail.jenisBkc,
-          jumlah_barang_kena_cukai_rusak: detail.jumlah,
+          idBackEaDetail: detail.idBackEaDetail,
+          jenisBarangKenaCukaiRusak: detail.jenisBkc,
+          jumlahBarangKenaCukaiRusak: detail.jumlah,
           catatan: detail.keterangan,
         })),
       });
@@ -210,7 +210,7 @@ export default class BACKEAPerbaikan89 extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   handleInputChange = (e) => {
@@ -234,18 +234,17 @@ export default class BACKEAPerbaikan89 extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
   handleSimpanRincian = () => {
-    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan, alasan } =
-      this.state;
+    const { jenisBarangKenaCukaiRusak, jumlahBarangKenaCukaiRusak, catatan, alasan } = this.state;
 
-    if (!jenis_barang_kena_cukai_rusak || !jumlah_barang_kena_cukai_rusak || !catatan || !alasan) {
+    if (!jenisBarangKenaCukaiRusak || !jumlahBarangKenaCukaiRusak || !catatan || !alasan) {
       return notification.info({
         message: "Info",
         description: "Data rincian tidak boleh kosong",
@@ -257,8 +256,8 @@ export default class BACKEAPerbaikan89 extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          jenis_barang_kena_cukai_rusak,
-          jumlah_barang_kena_cukai_rusak,
+          jenisBarangKenaCukaiRusak,
+          jumlahBarangKenaCukaiRusak,
           catatan,
           alasan,
         },
@@ -266,8 +265,8 @@ export default class BACKEAPerbaikan89 extends Component {
     });
 
     this.setState({
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
       alasan: null,
     });
@@ -277,18 +276,18 @@ export default class BACKEAPerbaikan89 extends Component {
       isEditRincian: true,
       editIndexRincian: record.key,
 
-      back_ea_detail_id: record.back_ea_detail_id,
-      jenis_barang_kena_cukai_rusak: record.jenis_barang_kena_cukai_rusak,
-      jumlah_barang_kena_cukai_rusak: record.jumlah_barang_kena_cukai_rusak,
+      idBackEaDetail: record.idBackEaDetail,
+      jenisBarangKenaCukaiRusak: record.jenisBarangKenaCukaiRusak,
+      jumlahBarangKenaCukaiRusak: record.jumlahBarangKenaCukaiRusak,
       catatan: record.catatan,
       alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
     const {
-      back_ea_detail_id,
-      jenis_barang_kena_cukai_rusak,
-      jumlah_barang_kena_cukai_rusak,
+      idBackEaDetail,
+      jenisBarangKenaCukaiRusak,
+      jumlahBarangKenaCukaiRusak,
       catatan,
       alasan,
     } = this.state;
@@ -297,9 +296,9 @@ export default class BACKEAPerbaikan89 extends Component {
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      back_ea_detail_id,
-      jenis_barang_kena_cukai_rusak,
-      jumlah_barang_kena_cukai_rusak,
+      idBackEaDetail,
+      jenisBarangKenaCukaiRusak,
+      jumlahBarangKenaCukaiRusak,
       catatan,
       alasan,
     });
@@ -308,9 +307,9 @@ export default class BACKEAPerbaikan89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_ea_detail_id: null,
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      idBackEaDetail: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
       alasan: null,
 
@@ -326,29 +325,29 @@ export default class BACKEAPerbaikan89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_ea_detail_id: null,
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      idBackEaDetail: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
       alasan: null,
     });
   };
   handleUpdate = async () => {
-    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+    const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
 
     const payload = {
       idBackEaHeader: this.props.match.params.id,
-      idNppbkc: nppbkc_id,
-      jenisBackEa: jenis_back,
-      namaPerusahaan: nama_nppbkc,
-      nomorBackEa: nomor_back,
+      idNppbkc: idNppbkc,
+      jenisBackEa: jenisBack,
+      namaPerusahaan: namaNppbkc,
+      nomorBackEa: nomorBack,
       nppbkc: nppbkc,
-      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalBackEa: moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        idBackEaDetail: item.back_ea_detail_id,
-        jenisBkc: item.jenis_barang_kena_cukai_rusak,
-        jumlah: item.jumlah_barang_kena_cukai_rusak,
+        idBackEaDetail: item.idBackEaDetail,
+        jenisBkc: item.jenisBarangKenaCukaiRusak,
+        jumlah: item.jumlahBarangKenaCukaiRusak,
         keterangan: item.catatan,
         alasan: item.alasan,
       })),
@@ -399,7 +398,7 @@ export default class BACKEAPerbaikan89 extends Component {
                       >
                         Cari
                       </Button>
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -408,15 +407,15 @@ export default class BACKEAPerbaikan89 extends Component {
                       <FormLabel>Jenis BACK</FormLabel>
                     </div>
                     <Select
-                      id="jenis_back"
-                      value={this.state.jenis_back}
-                      onChange={(value) => this.handleSelectChange("jenis_back", value)}
+                      id="jenisBack"
+                      value={this.state.jenisBack}
+                      onChange={(value) => this.handleSelectChange("jenisBack", value)}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_jenis_back.length > 0 &&
-                        this.state.list_jenis_back.map((item, index) => (
-                          <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                            {item.jenis_back_name}
+                      {this.state.listJenisBack.length > 0 &&
+                        this.state.listJenisBack.map((item, index) => (
+                          <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                            {item.namaJenisBack}
                           </Select.Option>
                         ))}
                     </Select>
@@ -427,8 +426,8 @@ export default class BACKEAPerbaikan89 extends Component {
                       <FormLabel>Nomor BACK</FormLabel>
                     </div>
                     <Input
-                      id="nomor_back"
-                      value={this.state.nomor_back}
+                      id="nomorBack"
+                      value={this.state.nomorBack}
                       onChange={this.handleInputChange}
                     />
                   </Col>
@@ -438,10 +437,10 @@ export default class BACKEAPerbaikan89 extends Component {
                       <FormLabel>Tanggal BACK</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_back"
+                      id="tanggalBack"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_back}
-                      onChange={(date) => this.handleDatepickerChange("tanggal_back", date)}
+                      value={this.state.tanggalBack}
+                      onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -456,8 +455,8 @@ export default class BACKEAPerbaikan89 extends Component {
                       <FormLabel>Jenis BKC</FormLabel>
                     </div>
                     <Input
-                      id="jenis_barang_kena_cukai_rusak"
-                      value={this.state.jenis_barang_kena_cukai_rusak}
+                      id="jenisBarangKenaCukaiRusak"
+                      value={this.state.jenisBarangKenaCukaiRusak}
                       onChange={this.handleInputChange}
                     />
                   </Col>
@@ -467,10 +466,10 @@ export default class BACKEAPerbaikan89 extends Component {
                       <FormLabel>Jumlah (LT)</FormLabel>
                     </div>
                     <InputNumber
-                      id="jumlah_barang_kena_cukai_rusak"
-                      value={this.state.jumlah_barang_kena_cukai_rusak}
+                      id="jumlahBarangKenaCukaiRusak"
+                      value={this.state.jumlahBarangKenaCukaiRusak}
                       onChange={(value) =>
-                        this.handleInputNumberChange("jumlah_barang_kena_cukai_rusak", value)
+                        this.handleInputNumberChange("jumlahBarangKenaCukaiRusak", value)
                       }
                       style={{ width: "100%" }}
                     />
@@ -545,9 +544,9 @@ export default class BACKEAPerbaikan89 extends Component {
                             dataIndex: "title",
                           },
                           {
-                            key: "total_barang_kena_cukai_rusak",
+                            key: "totalBarangKenaCukaiRusak",
                             title: "Total Barang Kena Cukai Rusak",
-                            dataIndex: "total_barang_kena_cukai_rusak",
+                            dataIndex: "totalBarangKenaCukaiRusak",
                             width: 120,
                             fixed: "right",
                             render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -557,9 +556,9 @@ export default class BACKEAPerbaikan89 extends Component {
                           {
                             key: "1",
                             title: "Total",
-                            total_barang_kena_cukai_rusak: sumArrayOfObject(
+                            totalBarangKenaCukaiRusak: sumArrayOfObject(
                               this.state.dataSource,
-                              "jumlah_barang_kena_cukai_rusak"
+                              "jumlahBarangKenaCukaiRusak"
                             ),
                           },
                         ]}

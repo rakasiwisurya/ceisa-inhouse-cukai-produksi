@@ -34,29 +34,29 @@ export default class BACKEARekam89 extends Component {
       isRekamLoading: false,
       isModalDaftarNppbkcVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-8",
-          jenis_back_name: "BACK-8",
+          idJenisBack: "BACK-8",
+          namaJenisBack: "BACK-8",
         },
         {
-          jenis_back_id: "BACK-9",
-          jenis_back_name: "BACK-9",
+          idJenisBack: "BACK-9",
+          namaJenisBack: "BACK-9",
         },
       ],
 
@@ -83,17 +83,17 @@ export default class BACKEARekam89 extends Component {
           children: [
             {
               title: "Jenis",
-              dataIndex: "jenis_barang_kena_cukai_rusak",
-              key: "jenis_barang_kena_cukai_rusak",
+              dataIndex: "jenisBarangKenaCukaiRusak",
+              key: "jenisBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jenis_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jenisBarangKenaCukaiRusak"),
             },
             {
               title: "Jumlah (lt)",
-              dataIndex: "jumlah_barang_kena_cukai_rusak",
-              key: "jumlah_barang_kena_cukai_rusak",
+              dataIndex: "jumlahBarangKenaCukaiRusak",
+              key: "jumlahBarangKenaCukaiRusak",
               render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-              ...this.getColumnSearchProps("jumlah_barang_kena_cukai_rusak"),
+              ...this.getColumnSearchProps("jumlahBarangKenaCukaiRusak"),
             },
           ],
         },
@@ -161,7 +161,7 @@ export default class BACKEARekam89 extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   handleInputChange = (e) => {
@@ -185,16 +185,16 @@ export default class BACKEARekam89 extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
   handleSimpanRincian = () => {
-    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan } = this.state;
-    if (!jenis_barang_kena_cukai_rusak || !jumlah_barang_kena_cukai_rusak || !catatan) {
+    const { jenisBarangKenaCukaiRusak, jumlahBarangKenaCukaiRusak, catatan } = this.state;
+    if (!jenisBarangKenaCukaiRusak || !jumlahBarangKenaCukaiRusak || !catatan) {
       return notification.info({
         message: "Info",
         description: "Data rincian tidak boleh kosong",
@@ -206,16 +206,16 @@ export default class BACKEARekam89 extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          jenis_barang_kena_cukai_rusak,
-          jumlah_barang_kena_cukai_rusak,
+          jenisBarangKenaCukaiRusak,
+          jumlahBarangKenaCukaiRusak,
           catatan,
         },
       ],
     });
 
     this.setState({
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
     });
   };
@@ -224,20 +224,20 @@ export default class BACKEARekam89 extends Component {
       isEditRincian: true,
       editIndexRincian: record.key,
 
-      jenis_barang_kena_cukai_rusak: record.jenis_barang_kena_cukai_rusak,
-      jumlah_barang_kena_cukai_rusak: record.jumlah_barang_kena_cukai_rusak,
+      jenisBarangKenaCukaiRusak: record.jenisBarangKenaCukaiRusak,
+      jumlahBarangKenaCukaiRusak: record.jumlahBarangKenaCukaiRusak,
       catatan: record.catatan,
     });
   };
   handleUbahRincian = () => {
-    const { jenis_barang_kena_cukai_rusak, jumlah_barang_kena_cukai_rusak, catatan } = this.state;
+    const { jenisBarangKenaCukaiRusak, jumlahBarangKenaCukaiRusak, catatan } = this.state;
 
     const newDataSource = [...this.state.dataSource];
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      jenis_barang_kena_cukai_rusak,
-      jumlah_barang_kena_cukai_rusak,
+      jenisBarangKenaCukaiRusak,
+      jumlahBarangKenaCukaiRusak,
       catatan,
     });
 
@@ -245,8 +245,8 @@ export default class BACKEARekam89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
 
       dataSource: newDataSource,
@@ -261,32 +261,32 @@ export default class BACKEARekam89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
     });
   };
   handleReset = () => {
     this.setState({
-      jenis_barang_kena_cukai_rusak: null,
-      jumlah_barang_kena_cukai_rusak: null,
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
       catatan: null,
     });
   };
   handleRekam = async () => {
-    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+    const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
 
     const payload = {
-      idNppbkc: nppbkc_id,
-      jenisBackEa: jenis_back,
-      namaPerusahaan: nama_nppbkc,
-      nomorBackEa: nomor_back,
+      idNppbkc: idNppbkc,
+      jenisBackEa: jenisBack,
+      namaPerusahaan: namaNppbkc,
+      nomorBackEa: nomorBack,
       nppbkc: nppbkc,
-      tanggalBackEa: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalBackEa: moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        jenisBkc: item.jenis_barang_kena_cukai_rusak,
-        jumlah: item.jumlah_barang_kena_cukai_rusak,
+        jenisBkc: item.jenisBarangKenaCukaiRusak,
+        jumlah: item.jumlahBarangKenaCukaiRusak,
         keterangan: item.catatan,
       })),
     };
@@ -332,7 +332,7 @@ export default class BACKEARekam89 extends Component {
                   >
                     Cari
                   </Button>
-                  <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                  <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
 
@@ -341,15 +341,15 @@ export default class BACKEARekam89 extends Component {
                   <FormLabel>Jenis BACK</FormLabel>
                 </div>
                 <Select
-                  id="jenis_back"
-                  value={this.state.jenis_back}
-                  onChange={(value) => this.handleSelectChange("jenis_back", value)}
+                  id="jenisBack"
+                  value={this.state.jenisBack}
+                  onChange={(value) => this.handleSelectChange("jenisBack", value)}
                   style={{ width: "100%" }}
                 >
-                  {this.state.list_jenis_back.length > 0 &&
-                    this.state.list_jenis_back.map((item, index) => (
-                      <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                        {item.jenis_back_name}
+                  {this.state.listJenisBack.length > 0 &&
+                    this.state.listJenisBack.map((item, index) => (
+                      <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                        {item.namaJenisBack}
                       </Select.Option>
                     ))}
                 </Select>
@@ -360,8 +360,8 @@ export default class BACKEARekam89 extends Component {
                   <FormLabel>Nomor BACK</FormLabel>
                 </div>
                 <Input
-                  id="nomor_back"
-                  value={this.state.nomor_back}
+                  id="nomorBack"
+                  value={this.state.nomorBack}
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -371,10 +371,10 @@ export default class BACKEARekam89 extends Component {
                   <FormLabel>Tanggal BACK</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggal_back"
+                  id="tanggalBack"
                   format="DD-MM-YYYY"
-                  value={this.state.tanggal_back}
-                  onChange={(date) => this.handleDatepickerChange("tanggal_back", date)}
+                  value={this.state.tanggalBack}
+                  onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -389,8 +389,8 @@ export default class BACKEARekam89 extends Component {
                   <FormLabel>Jenis BKC</FormLabel>
                 </div>
                 <Input
-                  id="jenis_barang_kena_cukai_rusak"
-                  value={this.state.jenis_barang_kena_cukai_rusak}
+                  id="jenisBarangKenaCukaiRusak"
+                  value={this.state.jenisBarangKenaCukaiRusak}
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -400,10 +400,10 @@ export default class BACKEARekam89 extends Component {
                   <FormLabel>Jumlah (LT)</FormLabel>
                 </div>
                 <InputNumber
-                  id="jumlah_barang_kena_cukai_rusak"
-                  value={this.state.jumlah_barang_kena_cukai_rusak}
+                  id="jumlahBarangKenaCukaiRusak"
+                  value={this.state.jumlahBarangKenaCukaiRusak}
                   onChange={(value) =>
-                    this.handleInputNumberChange("jumlah_barang_kena_cukai_rusak", value)
+                    this.handleInputNumberChange("jumlahBarangKenaCukaiRusak", value)
                   }
                   style={{ width: "100%" }}
                 />
@@ -470,9 +470,9 @@ export default class BACKEARekam89 extends Component {
                         dataIndex: "title",
                       },
                       {
-                        key: "total_barang_kena_cukai_rusak",
+                        key: "totalBarangKenaCukaiRusak",
                         title: "Total Barang Kena Cukai Rusak",
-                        dataIndex: "total_barang_kena_cukai_rusak",
+                        dataIndex: "totalBarangKenaCukaiRusak",
                         width: 120,
                         fixed: "right",
                         render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -482,9 +482,9 @@ export default class BACKEARekam89 extends Component {
                       {
                         key: "1",
                         title: "Total",
-                        total_barang_kena_cukai_rusak: sumArrayOfObject(
+                        totalBarangKenaCukaiRusak: sumArrayOfObject(
                           this.state.dataSource,
-                          "jumlah_barang_kena_cukai_rusak"
+                          "jumlahBarangKenaCukaiRusak"
                         ),
                       },
                     ]}
