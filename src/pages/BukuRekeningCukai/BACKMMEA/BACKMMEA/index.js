@@ -24,18 +24,18 @@ export default class BACKMMEA extends Component {
 
       filter: {
         kppbc: null,
-        nama_perusahaan: null,
-        jenis_back: null,
-        nomor_back: null,
-        tanggal_back: null,
+        namaPerusahaan: null,
+        jenisBack: null,
+        nomorBack: null,
+        tanggalBack: null,
         merk: null,
         golongan: null,
         kadar: null,
         tarif: null,
         isi: null,
         kemasan: null,
-        jumlah_kemasan: null,
-        jumlah_lt: null,
+        jumlahKemasan: null,
+        jumlahLt: null,
       },
 
       dataSource: [],
@@ -51,12 +51,12 @@ export default class BACKMMEA extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit(record.back_mmea_id)}
+                  onClick={() => this.handleEdit(record.idBackMmeaHeader)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail(record.back_mmea_id)}
+                  onClick={() => this.handleDetail(record.idBackMmeaHeader)}
                 />
               </>
             </div>
@@ -70,36 +70,36 @@ export default class BACKMMEA extends Component {
           ...this.getColumnSearchProps("kppbc"),
         },
         {
-          key: "nama_perusahaan",
+          key: "namaPerusahaan",
           title: "Nama Perusahaan",
-          dataIndex: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
-          key: "jenis_back",
+          key: "jenisBack",
           title: "Jenis BACK",
-          dataIndex: "jenis_back",
+          dataIndex: "jenisBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jenis_back"),
+          ...this.getColumnSearchProps("jenisBack"),
         },
         {
-          key: "nomor_back",
+          key: "nomorBack",
           title: "Nomor BACK",
-          dataIndex: "nomor_back",
+          dataIndex: "nomorBack",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nomor_back"),
+          ...this.getColumnSearchProps("nomorBack"),
         },
         {
-          key: "tanggal_back",
+          key: "tanggalBack",
           title: "Tanggal BACK",
-          dataIndex: "tanggal_back",
+          dataIndex: "tanggalBack",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_back"),
+          ...this.getColumnSearchProps("tanggalBack"),
         },
         {
           key: "merk",
@@ -144,18 +144,18 @@ export default class BACKMMEA extends Component {
           ...this.getColumnSearchProps("kemasan"),
         },
         {
-          key: "jumlah_kemasan",
+          key: "jumlahKemasan",
           title: "Jumlah Kemasan",
-          dataIndex: "jumlah_kemasan",
+          dataIndex: "jumlahKemasan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_kemasan"),
+          ...this.getColumnSearchProps("jumlahKemasan"),
         },
         {
-          key: "jumlah_lt",
+          key: "jumlahLt",
           title: "Jumlah Liter",
-          dataIndex: "jumlah_lt",
+          dataIndex: "jumlahLt",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_lt"),
+          ...this.getColumnSearchProps("jumlahLt"),
         },
       ],
     };
@@ -174,36 +174,36 @@ export default class BACKMMEA extends Component {
   getBackMmea = async () => {
     const {
       kppbc,
-      nama_perusahaan,
-      jenis_back,
-      nomor_back,
-      tanggal_back,
+      namaPerusahaan,
+      jenisBack,
+      nomorBack,
+      tanggalBack,
       merk,
       golongan,
       kadar,
       tarif,
       isi,
       kemasan,
-      jumlah_kemasan,
-      jumlah_lt,
+      jumlahKemasan,
+      jumlahLt,
     } = this.state.filter;
 
     const payload = { page: this.state.page };
 
     if (kppbc) payload.namaKantor = kppbc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
-    if (jenis_back) payload.jenisBackMmea = jenis_back;
-    if (nomor_back) payload.nomorBackMmea = nomor_back;
-    if (tanggal_back)
-      payload.tanggalBackMmea = moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
+    if (jenisBack) payload.jenisBackMmea = jenisBack;
+    if (nomorBack) payload.nomorBackMmea = nomorBack;
+    if (tanggalBack)
+      payload.tanggalBackMmea = moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (merk) payload.namaMerk = merk;
     if (golongan) payload.namaGolongan = golongan;
     if (kadar) payload.kadarEa = kadar;
     if (tarif) payload.tarifSpesifik = tarif;
     if (isi) payload.isiPerkemasan = isi;
     if (kemasan) payload.namaJenisKemasan = kemasan;
-    if (jumlah_kemasan) payload.jumlahKemasan = jumlah_kemasan;
-    if (jumlah_lt) payload.jumlah = jumlah_lt;
+    if (jumlahKemasan) payload.jumlahKemasan = jumlahKemasan;
+    if (jumlahLt) payload.jumlah = jumlahLt;
 
     const response = await requestApi({
       service: "produksi",
@@ -216,20 +216,20 @@ export default class BACKMMEA extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `back-mmea-${index}`,
-        back_mmea_id: item.idBackMmeaHeader,
+        idBackMmeaHeader: item.idBackMmeaHeader,
         kppbc: item.namaKantor,
-        nama_perusahaan: item.namaPerusahaan,
-        jenis_back: item.jenisBackMmea,
-        nomor_back: item.nomorBackMmea,
-        tanggal_back: item.tanggalBackMmea,
+        namaPerusahaan: item.namaPerusahaan,
+        jenisBack: item.jenisBackMmea,
+        nomorBack: item.nomorBackMmea,
+        tanggalBack: item.tanggalBackMmea,
         merk: item.namaMerk,
         golongan: item.namaGolongan,
         kadar: item.kadarEa,
         tarif: item.tarifSpesifik,
         isi: item.isiPerkemasan,
         kemasan: item.namaJenisKemasan,
-        jumlah_kemasan: item.jumlahKemasan,
-        jumlah_lt: item.jumlah,
+        jumlahKemasan: item.jumlahKemasan,
+        jumlahLt: item.jumlah,
       }));
 
       this.setState({

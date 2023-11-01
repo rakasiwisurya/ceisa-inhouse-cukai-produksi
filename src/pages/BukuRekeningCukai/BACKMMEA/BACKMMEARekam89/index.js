@@ -36,33 +36,33 @@ export default class BACKMMEARekam89 extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-8",
-          jenis_back_name: "BACK-8",
+          idJenisBack: "BACK-8",
+          namaJenisBack: "BACK-8",
         },
         {
-          jenis_back_id: "BACK-9",
-          jenis_back_name: "BACK-9",
+          idJenisBack: "BACK-9",
+          namaJenisBack: "BACK-9",
         },
       ],
 
@@ -86,10 +86,10 @@ export default class BACKMMEARekam89 extends Component {
         },
         {
           title: "Merk",
-          dataIndex: "merk_name",
-          key: "merk_name",
+          dataIndex: "namaMerk",
+          key: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk_name"),
+          ...this.getColumnSearchProps("namaMerk"),
         },
         {
           title: "Kadar",
@@ -114,21 +114,21 @@ export default class BACKMMEARekam89 extends Component {
         },
         {
           title: "Jumlah Kemasan",
-          dataIndex: "jumlah_kemasan",
-          key: "jumlah_kemasan",
+          dataIndex: "jumlahKemasan",
+          key: "jumlahKemasan",
           fixed: "right",
           width: 120,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_kemasan"),
+          ...this.getColumnSearchProps("jumlahKemasan"),
         },
         {
           title: "Jumlah Liter",
-          dataIndex: "jumlah_lt",
-          key: "jumlah_lt",
+          dataIndex: "jumlahLt",
+          key: "jumlahLt",
           fixed: "right",
           width: 120,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_lt"),
+          ...this.getColumnSearchProps("jumlahLt"),
         },
       ],
     };
@@ -211,16 +211,16 @@ export default class BACKMMEARekam89 extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
   handleDataMerkMmea = (record) => {
     this.setState({
-      merk_id: record.merk_id,
-      merk_name: record.merk_name,
+      idMerk: record.idMerk,
+      namaMerk: record.namaMerk,
       kadar: record.kadar,
       tarif: record.tarif,
       isi: record.isi,
@@ -229,9 +229,9 @@ export default class BACKMMEARekam89 extends Component {
   };
 
   handleSimpanRincian = () => {
-    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
+    const { idMerk, namaMerk, tarif, isi, kadar, jumlahKemasan, jumlahLt } = this.state;
 
-    if (!merk_id || !merk_name || !tarif || !isi || !kadar || !jumlah_kemasan || !jumlah_lt) {
+    if (!idMerk || !namaMerk || !tarif || !isi || !kadar || !jumlahKemasan || !jumlahLt) {
       return notification.info({
         message: "Info",
         description: "Data rincian tidak boleh kosong",
@@ -243,25 +243,25 @@ export default class BACKMMEARekam89 extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          merk_id,
-          merk_name,
+          idMerk,
+          namaMerk,
           tarif,
           isi,
           kadar,
-          jumlah_kemasan,
-          jumlah_lt,
+          jumlahKemasan,
+          jumlahLt,
         },
       ],
     });
 
     this.setState({
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
     });
   };
   handleEditRincian = (record) => {
@@ -269,42 +269,42 @@ export default class BACKMMEARekam89 extends Component {
       isEditRincian: true,
       editIndexRincian: record.key,
 
-      merk_id: record.merk_id,
-      merk_name: record.merk_name,
+      idMerk: record.idMerk,
+      namaMerk: record.namaMerk,
       tarif: record.tarif,
       isi: record.isi,
       kadar: record.kadar,
-      jumlah_kemasan: record.jumlah_kemasan,
-      jumlah_lt: record.jumlah_lt,
+      jumlahKemasan: record.jumlahKemasan,
+      jumlahLt: record.jumlahLt,
     });
   };
   handleUbahRincian = () => {
-    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt } = this.state;
+    const { idMerk, namaMerk, tarif, isi, kadar, jumlahKemasan, jumlahLt } = this.state;
 
     const newDataSource = [...this.state.dataSource];
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      merk_id,
-      merk_name,
+      idMerk,
+      namaMerk,
       tarif,
       isi,
       kadar,
-      jumlah_kemasan,
-      jumlah_lt,
+      jumlahKemasan,
+      jumlahLt,
     });
 
     this.setState({
       isEditRincian: false,
       editIndexRincian: null,
 
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
 
       dataSource: newDataSource,
     });
@@ -318,44 +318,44 @@ export default class BACKMMEARekam89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
     });
   };
   handleReset = () => {
     this.setState({
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
     });
   };
   handleRekam = async () => {
-    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+    const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
 
     const payload = {
-      idNppbkc: nppbkc_id,
-      jenisBackMmea: jenis_back,
-      namaPerusahaan: nama_nppbkc,
-      nomorBackMmea: nomor_back,
+      idNppbkc: idNppbkc,
+      jenisBackMmea: jenisBack,
+      namaPerusahaan: namaNppbkc,
+      nomorBackMmea: nomorBack,
       nppbkc: nppbkc,
-      tanggalBackMmea: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalBackMmea: moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        idMerk: item.merk_id,
+        idMerk: item.idMerk,
         isiPerKemasan: item.isi,
-        jumlah: item.jumlah_lt,
-        jumlahKemasan: item.jumlah_kemasan,
+        jumlah: item.jumlahLt,
+        jumlahKemasan: item.jumlahKemasan,
         kadarEa: item.kadar,
-        namaMerk: item.merk_name,
+        namaMerk: item.namaMerk,
         tarifSpesifik: item.tarif,
       })),
     };
@@ -401,7 +401,7 @@ export default class BACKMMEARekam89 extends Component {
                   >
                     Cari
                   </Button>
-                  <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                  <Input id="nama_perusahaan" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
 
@@ -410,15 +410,15 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Jenis BACK</FormLabel>
                 </div>
                 <Select
-                  id="jenis_back"
-                  value={this.state.jenis_back}
-                  onChange={(value) => this.handleSelectChange("jenis_back", value)}
+                  id="jenisBack"
+                  value={this.state.jenisBack}
+                  onChange={(value) => this.handleSelectChange("jenisBack", value)}
                   style={{ width: "100%" }}
                 >
-                  {this.state.list_jenis_back.length > 0 &&
-                    this.state.list_jenis_back.map((item, index) => (
-                      <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                        {item.jenis_back_name}
+                  {this.state.listJenisBack.length > 0 &&
+                    this.state.listJenisBack.map((item, index) => (
+                      <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                        {item.namaJenisBack}
                       </Select.Option>
                     ))}
                 </Select>
@@ -429,8 +429,8 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Nomor BACK</FormLabel>
                 </div>
                 <Input
-                  id="nomor_back"
-                  value={this.state.nomor_back}
+                  id="nomorBack"
+                  value={this.state.nomorBack}
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -440,10 +440,10 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Tanggal BACK</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggal_back"
+                  id="tanggalBack"
                   format="DD-MM-YYYY"
-                  value={this.state.tanggal_back}
-                  onChange={(date) => this.handleDatepickerChange("tanggal_back", date)}
+                  value={this.state.tanggalBack}
+                  onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -459,8 +459,8 @@ export default class BACKMMEARekam89 extends Component {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Input
-                    id="merk_name"
-                    value={this.state.merk_name}
+                    id="namaMerk"
+                    value={this.state.namaMerk}
                     onChange={this.handleInputChange}
                     disabled
                   />
@@ -517,9 +517,9 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Jumlah Kemasan</FormLabel>
                 </div>
                 <InputNumber
-                  id="jumlah_kemasan"
-                  value={this.state.jumlah_kemasan}
-                  onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
+                  id="jumlahKemasan"
+                  value={this.state.jumlahKemasan}
+                  onChange={(value) => this.handleInputNumberChange("jumlahKemasan", value)}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -529,9 +529,9 @@ export default class BACKMMEARekam89 extends Component {
                   <FormLabel>Jumlah (lt)</FormLabel>
                 </div>
                 <InputNumber
-                  id="jumlah_lt"
-                  value={this.state.jumlah_lt}
-                  onChange={(value) => this.handleInputNumberChange("jumlah_lt", value)}
+                  id="jumlahLt"
+                  value={this.state.jumlahLt}
+                  onChange={(value) => this.handleInputNumberChange("jumlahLt", value)}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -606,8 +606,8 @@ export default class BACKMMEARekam89 extends Component {
                       {
                         key: "1",
                         title: "Total",
-                        total_kemasan: sumArrayOfObject(this.state.dataSource, "jumlah_kemasan"),
-                        total_lt: sumArrayOfObject(this.state.dataSource, "jumlah_lt"),
+                        total_kemasan: sumArrayOfObject(this.state.dataSource, "jumlahKemasan"),
+                        total_lt: sumArrayOfObject(this.state.dataSource, "jumlahLt"),
                       },
                     ]}
                   />

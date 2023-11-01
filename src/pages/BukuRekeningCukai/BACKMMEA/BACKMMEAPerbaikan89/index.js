@@ -38,36 +38,36 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkMmeaVisible: false,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      jenis_back: null,
-      nomor_back: null,
-      tanggal_back: null,
+      namaNppbkc: null,
+      jenisBack: null,
+      nomorBack: null,
+      tanggalBack: null,
 
-      back_mmea_detail_id: null,
+      idBackMmeaDetail: null,
 
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
       alasan: null,
 
       searchText: null,
       searchedColumn: null,
       page: 1,
 
-      list_jenis_back: [
+      listJenisBack: [
         {
-          jenis_back_id: "BACK-8",
-          jenis_back_name: "BACK-8",
+          idJenisBack: "BACK-8",
+          namaJenisBack: "BACK-8",
         },
         {
-          jenis_back_id: "BACK-9",
-          jenis_back_name: "BACK-9",
+          idJenisBack: "BACK-9",
+          namaJenisBack: "BACK-9",
         },
       ],
 
@@ -85,7 +85,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
                 icon="form"
                 onClick={() => this.handleEditRincian(record)}
               />
-              {!record.back_mmea_detail_id && (
+              {!record.idBackMmeaDetail && (
                 <Button
                   type="danger"
                   icon="close"
@@ -97,10 +97,10 @@ export default class BACKMMEAPerbaikan89 extends Component {
         },
         {
           title: "Merk",
-          dataIndex: "merk_name",
-          key: "merk_name",
+          dataIndex: "namaMerk",
+          key: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk_name"),
+          ...this.getColumnSearchProps("namaMerk"),
         },
         {
           title: "Kadar",
@@ -125,21 +125,21 @@ export default class BACKMMEAPerbaikan89 extends Component {
         },
         {
           title: "Jumlah Kemasan",
-          dataIndex: "jumlah_kemasan",
-          key: "jumlah_kemasan",
+          dataIndex: "jumlahKemasan",
+          key: "jumlahKemasan",
           fixed: "right",
           width: 120,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_kemasan"),
+          ...this.getColumnSearchProps("jumlahKemasan"),
         },
         {
           title: "Jumlah Liter",
-          dataIndex: "jumlah_lt",
-          key: "jumlah_lt",
+          dataIndex: "jumlahLt",
+          key: "jumlahLt",
           fixed: "right",
           width: 120,
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlah_lt"),
+          ...this.getColumnSearchProps("jumlahLt"),
         },
       ],
     };
@@ -164,22 +164,22 @@ export default class BACKMMEAPerbaikan89 extends Component {
       const { data } = response.data;
 
       this.setState({
-        nppbkc_id: data.idNppbkc,
+        idNppbkc: data.idNppbkc,
         nppbkc: data.nppbkc,
-        nama_nppbkc: data.namaPerusahaan,
-        jenis_back: data.jenisBackMmea,
-        nomor_back: data.nomorBackMmea,
-        tanggal_back: moment(data.tanggalBackMmea),
+        namaNppbkc: data.namaPerusahaan,
+        jenisBack: data.jenisBackMmea,
+        nomorBack: data.nomorBackMmea,
+        tanggalBack: moment(data.tanggalBackMmea),
         dataSource: data.details.map((item, index) => ({
           key: `back-mmea-${index}`,
-          back_mmea_detail_id: item.idBackMmeaDetail,
-          merk_id: item.idMerk,
-          merk_name: item.namaMerk,
+          idBackMmeaDetail: item.idBackMmeaDetail,
+          idMerk: item.idMerk,
+          namaMerk: item.namaMerk,
           tarif: item.tarifSpesifik,
           isi: item.isiPerKemasan,
           kadar: item.kadarEa,
-          jumlah_kemasan: item.jumlahKemasan,
-          jumlah_lt: item.jumlah,
+          jumlahKemasan: item.jumlahKemasan,
+          jumlahLt: item.jumlah,
         })),
       });
     }
@@ -262,16 +262,16 @@ export default class BACKMMEAPerbaikan89 extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.idNppbkc,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.namaNppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
   handleDataMerkMmea = (record) => {
     this.setState({
-      merk_id: record.merk_id,
-      merk_name: record.merk_name,
+      idMerk: record.idMerk,
+      namaMerk: record.namaMerk,
       kadar: record.kadar,
       tarif: record.tarif,
       isi: record.isi,
@@ -280,16 +280,16 @@ export default class BACKMMEAPerbaikan89 extends Component {
   };
 
   handleSimpanRincian = () => {
-    const { merk_id, merk_name, tarif, isi, kadar, jumlah_kemasan, jumlah_lt, alasan } = this.state;
+    const { idMerk, namaMerk, tarif, isi, kadar, jumlahKemasan, jumlahLt, alasan } = this.state;
 
     if (
-      !merk_id ||
-      !merk_name ||
+      !idMerk ||
+      !namaMerk ||
       !tarif ||
       !isi ||
       !kadar ||
-      !jumlah_kemasan ||
-      !jumlah_lt ||
+      !jumlahKemasan ||
+      !jumlahLt ||
       !alasan
     ) {
       return notification.info({
@@ -303,26 +303,26 @@ export default class BACKMMEAPerbaikan89 extends Component {
         ...this.state.dataSource,
         {
           key: new Date().getTime(),
-          merk_id,
-          merk_name,
+          idMerk,
+          namaMerk,
           tarif,
           isi,
           kadar,
-          jumlah_kemasan,
-          jumlah_lt,
+          jumlahKemasan,
+          jumlahLt,
           alasan,
         },
       ],
     });
 
     this.setState({
-      merk_id: null,
-      merk_name: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
       alasan: null,
     });
   };
@@ -331,27 +331,27 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isEditRincian: true,
       editIndexRincian: record.key,
 
-      back_mmea_detail_id: record.back_mmea_detail_id,
-      merk_id: record.merk_id,
-      merk_name: record.merk_name,
+      idBackMmeaDetail: record.idBackMmeaDetail,
+      idMerk: record.idMerk,
+      namaMerk: record.namaMerk,
       tarif: record.tarif,
       isi: record.isi,
       kadar: record.kadar,
-      jumlah_kemasan: record.jumlah_kemasan,
-      jumlah_lt: record.jumlah_lt,
+      jumlahKemasan: record.jumlahKemasan,
+      jumlahLt: record.jumlahLt,
       alasan: record.alasan,
     });
   };
   handleUbahRincian = () => {
     const {
-      back_mmea_detail_id,
-      merk_id,
-      merk_name,
+      idBackMmeaDetail,
+      idMerk,
+      namaMerk,
       tarif,
       isi,
       kadar,
-      jumlah_kemasan,
-      jumlah_lt,
+      jumlahKemasan,
+      jumlahLt,
       alasan,
     } = this.state;
 
@@ -359,14 +359,14 @@ export default class BACKMMEAPerbaikan89 extends Component {
     const index = newDataSource.findIndex((item) => item.key === this.state.editIndexRincian);
     newDataSource.splice(index, 1, {
       key: new Date().getTime(),
-      back_mmea_detail_id,
-      merk_id,
-      merk_name,
+      idBackMmeaDetail,
+      idMerk,
+      namaMerk,
       tarif,
       isi,
       kadar,
-      jumlah_kemasan,
-      jumlah_lt,
+      jumlahKemasan,
+      jumlahLt,
       alasan,
     });
 
@@ -374,14 +374,14 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_mmea_detail_id: null,
-      merk_id: null,
-      merk_name: null,
+      idBackMmeaDetail: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
       alasan: null,
 
       dataSource: newDataSource,
@@ -396,37 +396,37 @@ export default class BACKMMEAPerbaikan89 extends Component {
       isEditRincian: false,
       editIndexRincian: null,
 
-      back_mmea_detail_id: null,
-      merk_id: null,
-      merk_name: null,
+      idBackMmeaDetail: null,
+      idMerk: null,
+      namaMerk: null,
       tarif: null,
       isi: null,
       kadar: null,
-      jumlah_kemasan: null,
-      jumlah_lt: null,
+      jumlahKemasan: null,
+      jumlahLt: null,
       alasan: null,
     });
   };
   handleUpdate = async () => {
-    const { nppbkc_id, nppbkc, nama_nppbkc, jenis_back, nomor_back, tanggal_back, dataSource } =
+    const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
 
     const payload = {
       idBackMmeaHeader: this.props.match.params.id,
-      idNppbkc: nppbkc_id,
-      jenisBackMmea: jenis_back,
-      namaPerusahaan: nama_nppbkc,
-      nomorBackMmea: nomor_back,
+      idNppbkc: idNppbkc,
+      jenisBackMmea: jenisBack,
+      namaPerusahaan: namaNppbkc,
+      nomorBackMmea: nomorBack,
       nppbkc: nppbkc,
-      tanggalBackMmea: moment(tanggal_back, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      tanggalBackMmea: moment(tanggalBack, "DD-MM-YYYY").format("YYYY-MM-DD"),
       details: dataSource.map((item) => ({
-        idBackMmeaDetail: item.back_mmea_detail_id,
-        idMerk: item.merk_id,
+        idBackMmeaDetail: item.idBackMmeaDetail,
+        idMerk: item.idMerk,
         isiPerKemasan: item.isi,
-        jumlah: item.jumlah_lt,
-        jumlahKemasan: item.jumlah_kemasan,
+        jumlah: item.jumlahLt,
+        jumlahKemasan: item.jumlahKemasan,
         kadarEa: item.kadar,
-        namaMerk: item.merk_name,
+        namaMerk: item.namaMerk,
         tarifSpesifik: item.tarif,
         alasan: item.alasan,
       })),
@@ -477,7 +477,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       >
                         Cari
                       </Button>
-                      <Input id="nama_perusahaan" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -486,15 +486,15 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Jenis BACK</FormLabel>
                     </div>
                     <Select
-                      id="jenis_back"
-                      value={this.state.jenis_back}
-                      onChange={(value) => this.handleSelectChange("jenis_back", value)}
+                      id="jenisBack"
+                      value={this.state.jenisBack}
+                      onChange={(value) => this.handleSelectChange("jenisBack", value)}
                       style={{ width: "100%" }}
                     >
-                      {this.state.list_jenis_back.length > 0 &&
-                        this.state.list_jenis_back.map((item, index) => (
-                          <Select.Option key={`jenis-back-${index}`} value={item.jenis_back_id}>
-                            {item.jenis_back_name}
+                      {this.state.listJenisBack.length > 0 &&
+                        this.state.listJenisBack.map((item, index) => (
+                          <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                            {item.namaJenisBack}
                           </Select.Option>
                         ))}
                     </Select>
@@ -505,8 +505,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Nomor BACK</FormLabel>
                     </div>
                     <Input
-                      id="nomor_back"
-                      value={this.state.nomor_back}
+                      id="nomorBack"
+                      value={this.state.nomorBack}
                       onChange={this.handleInputChange}
                     />
                   </Col>
@@ -516,10 +516,10 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Tanggal BACK</FormLabel>
                     </div>
                     <DatePicker
-                      id="tanggal_back"
+                      id="tanggalBack"
                       format="DD-MM-YYYY"
-                      value={this.state.tanggal_back}
-                      onChange={(date) => this.handleDatepickerChange("tanggal_back", date)}
+                      value={this.state.tanggalBack}
+                      onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -535,8 +535,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <Input
-                        id="merk_name"
-                        value={this.state.merk_name}
+                        id="namaMerk"
+                        value={this.state.namaMerk}
                         onChange={this.handleInputChange}
                         disabled
                       />
@@ -593,9 +593,9 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Jumlah Kemasan</FormLabel>
                     </div>
                     <InputNumber
-                      id="jumlah_kemasan"
-                      value={this.state.jumlah_kemasan}
-                      onChange={(value) => this.handleInputNumberChange("jumlah_kemasan", value)}
+                      id="jumlahKemasan"
+                      value={this.state.jumlahKemasan}
+                      onChange={(value) => this.handleInputNumberChange("jumlahKemasan", value)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -605,9 +605,9 @@ export default class BACKMMEAPerbaikan89 extends Component {
                       <FormLabel>Jumlah (lt)</FormLabel>
                     </div>
                     <InputNumber
-                      id="jumlah_lt"
-                      value={this.state.jumlah_lt}
-                      onChange={(value) => this.handleInputNumberChange("jumlah_lt", value)}
+                      id="jumlahLt"
+                      value={this.state.jumlahLt}
+                      onChange={(value) => this.handleInputNumberChange("jumlahLt", value)}
                       style={{ width: "100%" }}
                     />
                   </Col>
@@ -689,11 +689,8 @@ export default class BACKMMEAPerbaikan89 extends Component {
                           {
                             key: "1",
                             title: "Total",
-                            total_kemasan: sumArrayOfObject(
-                              this.state.dataSource,
-                              "jumlah_kemasan"
-                            ),
-                            total_lt: sumArrayOfObject(this.state.dataSource, "jumlah_lt"),
+                            total_kemasan: sumArrayOfObject(this.state.dataSource, "jumlahKemasan"),
+                            total_lt: sumArrayOfObject(this.state.dataSource, "jumlahLt"),
                           },
                         ]}
                       />

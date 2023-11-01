@@ -13,7 +13,7 @@ export default class ModalDaftarMerkMMEA extends Component {
       totalData: 0,
 
       table: {
-        merk_name: null,
+        namaMerk: null,
         golongan: null,
         kadar: null,
         tarif: null,
@@ -24,10 +24,10 @@ export default class ModalDaftarMerkMMEA extends Component {
       columns: [
         {
           title: "Merk MMEA",
-          dataIndex: "merk_name",
-          key: "merk_name",
+          dataIndex: "namaMerk",
+          key: "namaMerk",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("merk_name"),
+          ...this.getColumnSearchProps("namaMerk"),
         },
         {
           title: "Golongan",
@@ -72,11 +72,11 @@ export default class ModalDaftarMerkMMEA extends Component {
   }
 
   getDaftarMerkMmea = async () => {
-    const { merk_name, golongan, kadar, tarif, isi } = this.state.table;
+    const { namaMerk, golongan, kadar, tarif, isi } = this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (merk_name) payload.namaMerk = merk_name;
+    if (namaMerk) payload.namaMerk = namaMerk;
     if (golongan) payload.namaGolongan = golongan;
     if (kadar) payload.kadarEa = kadar;
     if (tarif) payload.tarifSpesifik = tarif;
@@ -93,8 +93,8 @@ export default class ModalDaftarMerkMMEA extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `daftar-merk-mmea-${index}`,
-        merk_id: item.idMerk,
-        merk_name: item.namaMerk,
+        idMerk: item.idMerk,
+        namaMerk: item.namaMerk,
         golongan: item.namaGolongan,
         kadar: item.kadarEa,
         tarif: item.tarifSpesifik,

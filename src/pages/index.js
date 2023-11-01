@@ -8,7 +8,6 @@ import BACKEAPerbaikan89 from "./BukuRekeningCukai/BACKEA/BACKEAPerbaikan89";
 import BACKEARekam67 from "./BukuRekeningCukai/BACKEA/BACKEARekam67";
 import BACKEARekam89 from "./BukuRekeningCukai/BACKEA/BACKEARekam89";
 import BACKMMEA from "./BukuRekeningCukai/BACKMMEA/BACKMMEA";
-import BACKMMEADetail89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEADetail89";
 import BACKMMEAPerbaikan89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEAPerbaikan89";
 import BACKMMEARekam89 from "./BukuRekeningCukai/BACKMMEA/BACKMMEARekam89";
 import BRCK1 from "./BukuRekeningCukai/BRCK1/BRCK1";
@@ -318,11 +317,6 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/back-mmea/perbaikan-8-9/:id"}
         render={(props) => <BACKMMEAPerbaikan89 {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/back-mmea/detail-8-9/:id"}
-        render={(props) => <BACKMMEADetail89 {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
