@@ -33,54 +33,54 @@ export default class BRCK2Detail extends Component {
       isUpdateLoading: false,
       isBrowseShow: false,
 
-      jenis_bkc_id: 2,
+      idJenisBkc: 2,
 
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      merk_mmea_id: null,
-      merk_mmea_name: null,
+      namaNppbkc: null,
+      idMerkMmea: null,
+      namaMerkMmea: null,
       tarif: null,
       isi: null,
-      periode_awal: null,
-      periode_akhir: null,
+      periodeAwal: null,
+      periodeAkhir: null,
 
-      saldo_awal_kemasan: null,
-      saldo_awal_lt: null,
+      saldoAwalKemasan: null,
+      saldoAwalLt: null,
 
-      total_debet_kemasan: null,
-      total_debet_lt: null,
-      total_kredit_kemasan: null,
-      total_kredit_lt: null,
+      totalDebetKemasan: null,
+      totalDebetLt: null,
+      totalKreditKemasan: null,
+      totalKreditLt: null,
 
-      saldo_buku_kemasan: null,
-      saldo_buku_lt: null,
+      saldoBukuKemasan: null,
+      saldoBukuLt: null,
 
-      hasil_pencacahan_back5_kemasan: null,
-      hasil_pencacahan_back5_lt: null,
-      hasil_pencarian_back5_description: null,
-      no_back5: null,
-      tgl_back5: null,
-      selisih_kemasan: null,
-      selisih_lt: null,
-      selisih_description: null,
-      batas_kelonggaran_kemasan: null,
-      batas_kelonggaran_description: null,
+      hasilPencacahanBack5Kemasan: null,
+      hasilPencacahanBack5Lt: null,
+      hasilPencarianBack5Description: null,
+      noBack5: null,
+      tglBack5: null,
+      selisihKemasan: null,
+      selisihLt: null,
+      selisihDescription: null,
+      batasKelonggaranKemasan: null,
+      batasKelonggaranDescription: null,
       notif: null,
-      jenis_penutupan: null,
+      jenisPenutupan: null,
 
-      list_jenis_penutupan: [
+      listJenisPenutupan: [
         {
-          jenis_penutupan_code: "PENUTUPAN TRIWULAN",
-          jenis_penutupan_name: "PENUTUPAN TRIWULAN",
+          kodeJenisPenutupan: "PENUTUPAN TRIWULAN",
+          namaJenisPenutupan: "PENUTUPAN TRIWULAN",
         },
         {
-          jenis_penutupan_code: "PERMOHONAN PENGUSAHA",
-          jenis_penutupan_name: "PERMOHONAN PENGUSAHA",
+          kodeJenisPenutupan: "PERMOHONAN PENGUSAHA",
+          namaJenisPenutupan: "PERMOHONAN PENGUSAHA",
         },
         {
-          jenis_penutupan_code: "DUGAAN PELANGGARAN",
-          jenis_penutupan_name: "DUGAAN PELANGGARAN",
+          kodeJenisPenutupan: "DUGAAN PELANGGARAN",
+          namaJenisPenutupan: "DUGAAN PELANGGARAN",
         },
       ],
 
@@ -94,58 +94,58 @@ export default class BRCK2Detail extends Component {
           title: "DOKUMEN",
           children: [
             {
-              key: "jenis_dokumen",
+              key: "jenisDokumen",
               title: "JENIS",
-              dataIndex: "jenis_dokumen",
+              dataIndex: "jenisDokumen",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("jenis_dokumen"),
+              ...this.getColumnSearchProps("jenisDokumen"),
             },
             {
-              key: "nomor_dokumen",
+              key: "nomorDokumen",
               title: "NOMOR",
-              dataIndex: "nomor_dokumen",
+              dataIndex: "nomorDokumen",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("nomor_dokumen"),
+              ...this.getColumnSearchProps("nomorDokumen"),
             },
             {
-              key: "tanggal_dokumen",
+              key: "tanggalDokumen",
               title: "TANGGAL",
-              dataIndex: "tanggal_dokumen",
+              dataIndex: "tanggalDokumen",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-              ...this.getColumnSearchProps("tanggal_dokumen"),
+              ...this.getColumnSearchProps("tanggalDokumen"),
             },
           ],
         },
         {
-          key: "tanggal_transaksi",
+          key: "tanggalTransaksi",
           title: "TGL PEMASUKAN/ PEMBUATAN ATAU PENGELUARAN",
-          dataIndex: "tanggal_transaksi",
+          dataIndex: "tanggalTransaksi",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("tanggal_transaksi"),
+          ...this.getColumnSearchProps("tanggalTransaksi"),
         },
         {
-          key: "uraian_kegiatan",
+          key: "uraianKegiatan",
           title: "URAIAN KEGIATAN",
-          dataIndex: "uraian_kegiatan",
+          dataIndex: "uraianKegiatan",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("uraian_kegiatan"),
+          ...this.getColumnSearchProps("uraianKegiatan"),
         },
         {
           title: "DEBET",
           fixed: "right",
           children: [
             {
-              key: "debet_kemasan",
+              key: "debetKemasan",
               title: <div style={{ fontSize: 10 }}>KEMASAN</div>,
-              dataIndex: "debet_kemasan",
+              dataIndex: "debetKemasan",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
-              key: "debet_lt",
+              key: "debetLt",
               title: <div style={{ fontSize: 10 }}>(Lt)</div>,
-              dataIndex: "debet_lt",
+              dataIndex: "debetLt",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -157,17 +157,17 @@ export default class BRCK2Detail extends Component {
           fixed: "right",
           children: [
             {
-              key: "kredit_kemasan",
+              key: "kreditKemasan",
               title: <div style={{ fontSize: 10 }}>KEMASAN</div>,
-              dataIndex: "kredit_kemasan",
+              dataIndex: "kreditKemasan",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
-              key: "kredit_lt",
+              key: "kreditLt",
               title: <div style={{ fontSize: 10 }}>(Lt)</div>,
-              dataIndex: "kredit_lt",
+              dataIndex: "kreditLt",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -179,17 +179,17 @@ export default class BRCK2Detail extends Component {
           fixed: "right",
           children: [
             {
-              key: "saldo_kemasan",
+              key: "saldoKemasan",
               title: <div style={{ fontSize: 10 }}>KEMASAN</div>,
-              dataIndex: "saldo_kemasan",
+              dataIndex: "saldoKemasan",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
             },
             {
-              key: "saldo_lt",
+              key: "saldoLt",
               title: <div style={{ fontSize: 10 }}>(Lt)</div>,
-              dataIndex: "saldo_lt",
+              dataIndex: "saldoLt",
               width: 80,
               fixed: "right",
               render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
@@ -214,8 +214,8 @@ export default class BRCK2Detail extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.saldo_awal_lt !== this.state.saldo_awal_lt ||
-      prevState.saldo_awal_kemasan !== this.state.saldo_awal_kemasan ||
+      prevState.saldoAwalLt !== this.state.saldoAwalLt ||
+      prevState.saldoAwalKemasan !== this.state.saldoAwalKemasan ||
       prevState.dataSource?.length !== this.state.dataSource?.length
     ) {
       if (this.state.dataSource?.length > 0) {
@@ -225,69 +225,69 @@ export default class BRCK2Detail extends Component {
 
     if (
       prevState.dataSource.length !== this.state.dataSource.length ||
-      prevState.hasil_pencacahan_back5_kemasan !== this.state.hasil_pencacahan_back5_kemasan ||
-      prevState.hasil_pencacahan_back5_lt !== this.state.hasil_pencacahan_back5_lt
+      prevState.hasilPencacahanBack5Kemasan !== this.state.hasilPencacahanBack5Kemasan ||
+      prevState.hasilPencacahanBack5Lt !== this.state.hasilPencacahanBack5Lt
     ) {
       this.setState({
-        total_debet_kemasan: sumArrayOfObject(this.state.dataSource, "debet_kemasan"),
-        total_debet_lt: sumArrayOfObject(this.state.dataSource, "debet_lt"),
-        total_kredit_kemasan: sumArrayOfObject(this.state.dataSource, "kredit_kemasan"),
-        total_kredit_lt: sumArrayOfObject(this.state.dataSource, "kredit_lt"),
-        selisih_kemasan: this.state.hasil_pencacahan_back5_kemasan - this.state.saldo_buku_kemasan,
-        selisih_lt: this.state.hasil_pencacahan_back5_lt - this.state.saldo_buku_lt,
+        totalDebetKemasan: sumArrayOfObject(this.state.dataSource, "debetKemasan"),
+        totalDebetLt: sumArrayOfObject(this.state.dataSource, "debetLt"),
+        totalKreditKemasan: sumArrayOfObject(this.state.dataSource, "kreditKemasan"),
+        totalKreditLt: sumArrayOfObject(this.state.dataSource, "kreditLt"),
+        selisihKemasan: this.state.hasilPencacahanBack5Kemasan - this.state.saldoBukuKemasan,
+        selisihLt: this.state.hasilPencacahanBack5Lt - this.state.saldoBukuLt,
       });
     }
 
     if (
-      (prevState.selisih_kemasan !== this.state.selisih_kemasan ||
-        prevState.selisih_lt !== this.state.selisih_lt) &&
-      Math.sign(this.state.selisih_kemasan) !== 0
+      (prevState.selisihKemasan !== this.state.selisihKemasan ||
+        prevState.selisihLt !== this.state.selisihLt) &&
+      Math.sign(this.state.selisihKemasan) !== 0
     ) {
-      if (Math.sign(this.state.selisih_kemasan) === -1) {
-        this.setState({ selisih_description: "Saldo - Hasil Pencacahan" });
+      if (Math.sign(this.state.selisihKemasan) === -1) {
+        this.setState({ selisihDescription: "Saldo - Hasil Pencacahan" });
       } else {
-        this.setState({ selisih_description: "Hasil Pencacahan - Saldo" });
+        this.setState({ selisihDescription: "Hasil Pencacahan - Saldo" });
       }
     }
 
     if (
-      (prevState.selisih_kemasan !== this.state.selisih_kemasan &&
-        Math.sign(this.state.selisih_kemasan) === 1) ||
-      (prevState.selisih_lt !== this.state.selisih_lt && Math.sign(this.state.selisih_lt) === 1)
+      (prevState.selisihKemasan !== this.state.selisihKemasan &&
+        Math.sign(this.state.selisihKemasan) === 1) ||
+      (prevState.selisihLt !== this.state.selisihLt && Math.sign(this.state.selisihLt) === 1)
     ) {
       this.setState({
-        batas_kelonggaran_kemasan: (1 / 100) * this.state.saldo_buku_lt,
-        batas_kelonggaran_description: `1% x ${this.state.saldo_buku_lt}`,
+        batasKelonggaranKemasan: (1 / 100) * this.state.saldoBukuLt,
+        batasKelonggaranDescription: `1% x ${this.state.saldoBukuLt}`,
       });
     }
 
     if (
-      (prevState.batas_kelonggaran_kemasan !== this.state.batas_kelonggaran_kemasan ||
-        prevState.selisih_kemasan !== this.state.selisih_kemasan ||
-        prevState.selisih_lt !== this.state.selisih_lt) &&
-      Math.sign(this.state.selisih_kemasan) !== 0 &&
-      Math.sign(this.state.selisih_lt) !== 0
+      (prevState.batasKelonggaranKemasan !== this.state.batasKelonggaranKemasan ||
+        prevState.selisihKemasan !== this.state.selisihKemasan ||
+        prevState.selisihLt !== this.state.selisihLt) &&
+      Math.sign(this.state.selisihKemasan) !== 0 &&
+      Math.sign(this.state.selisihLt) !== 0
     ) {
       switch (true) {
-        case Math.sign(this.state.selisih_kemasan) === -1:
-        case Math.sign(this.state.selisih_lt) === -1:
+        case Math.sign(this.state.selisihKemasan) === -1:
+        case Math.sign(this.state.selisihLt) === -1:
           this.setState({
             notif: "Terdapat selisih dengan BACK-5 dan dikenai Sanksi Administrasi",
           });
           break;
-        case (Math.sign(this.state.selisih_kemasan) === 1 ||
-          Math.sign(this.state.selisih_lt) === 1) &&
-          Math.abs(this.state.selisih_lt) > this.state.batas_kelonggaran_kemasan &&
-          Math.abs(this.state.selisih_kemasan) > this.state.batas_kelonggaran_kemasan:
+        case (Math.sign(this.state.selisihKemasan) === 1 ||
+          Math.sign(this.state.selisihLt) === 1) &&
+          Math.abs(this.state.selisihLt) > this.state.batasKelonggaranKemasan &&
+          Math.abs(this.state.selisihKemasan) > this.state.batasKelonggaranKemasan:
           this.setState({
             notif:
               "Jumlah kelebihan BKC lebih besar daripada Batas Kelonggaran, dikenal Sanksi Administrasi Denda",
           });
           break;
-        case (Math.sign(this.state.selisih_kemasan) === 1 ||
-          Math.sign(this.state.selisih_lt) === 1) &&
-          Math.abs(this.state.selisih_lt) <= this.state.batas_kelonggaran_kemasan &&
-          Math.abs(this.state.selisih_kemasan) <= this.state.batas_kelonggaran_kemasan:
+        case (Math.sign(this.state.selisihKemasan) === 1 ||
+          Math.sign(this.state.selisihLt) === 1) &&
+          Math.abs(this.state.selisihLt) <= this.state.batasKelonggaranKemasan &&
+          Math.abs(this.state.selisihKemasan) <= this.state.batasKelonggaranKemasan:
           this.setState({
             notif:
               "Jumlah kelebihan BKC tidak lebih besar daripada Batas Kelonggaran tidak dikenai Sanksi Administrasi Denda",
@@ -316,23 +316,23 @@ export default class BRCK2Detail extends Component {
 
       this.setState(
         {
-          nppbkc_id: data.idNppbkc,
+          idNppbkc: data.idNppbkc,
           nppbkc: data.nppbkc,
-          nama_nppbkc: data.namaPerusahaan,
-          merk_mmea_id: data.idMerk,
-          merk_mmea_name: data.namaMerk,
+          namaNppbkc: data.namaPerusahaan,
+          idMerkMmea: data.idMerk,
+          namaMerkMmea: data.namaMerk,
           tarif: data.tarif,
           isi: data.isi,
-          periode_awal: moment(data.periodeAwal),
-          periode_akhir: moment(data.periodeAkhir),
-          saldo_awal_lt: data.saldoAwalLt,
-          saldo_awal_kemasan: data.saldoAwalKemasan,
-          hasil_pencacahan_back5_lt: data.hasilCacahLt,
-          hasil_pencacahan_back5_kemasan: data.hasilCacahKemasan,
-          hasil_pencarian_back5_description: data.keteranganHasilCacah,
-          no_back5: data.nomorBack5,
-          tgl_back5: moment(data.tanggalBack5),
-          jenis_penutupan: data.jenisPenutupan,
+          periodeAwal: moment(data.periodeAwal),
+          periodeAkhir: moment(data.periodeAkhir),
+          saldoAwalLt: data.saldoAwalLt,
+          saldoAwalKemasan: data.saldoAwalKemasan,
+          hasilPencacahanBack5Lt: data.hasilCacahLt,
+          hasilPencacahanBack5Kemasan: data.hasilCacahKemasan,
+          hasilPencarianBack5Description: data.keteranganHasilCacah,
+          noBack5: data.nomorBack5,
+          tglBack5: moment(data.tanggalBack5),
+          jenisPenutupan: data.jenisPenutupan,
         },
         () => this.getBrck2()
       );
@@ -342,9 +342,9 @@ export default class BRCK2Detail extends Component {
   getBrck2 = async () => {
     const payload = {
       nppbkc: this.state.nppbkc,
-      namaMerk: this.state.merk_mmea_name,
-      awalTanggalPeriode: moment(this.state.periode_awal).format("YYYY-MM-DD"),
-      akhirTanggalPeriode: moment(this.state.periode_akhir).format("YYYY-MM-DD"),
+      namaMerk: this.state.namaMerkMmea,
+      awalTanggalPeriode: moment(this.state.periodeAwal).format("YYYY-MM-DD"),
+      akhirTanggalPeriode: moment(this.state.periodeAkhir).format("YYYY-MM-DD"),
     };
 
     this.setState({ isSearchLoading: true });
@@ -371,8 +371,8 @@ export default class BRCK2Detail extends Component {
     });
 
     if (responseSaldoAwal && responseProduksi && responsePerdagangan) {
-      let saldoKemasan = this.state.saldo_awal_kemasan || 0;
-      let saldoLt = this.state.saldo_awal_lt || 0;
+      let saldoKemasan = this.state.saldoAwalKemasan || 0;
+      let saldoLt = this.state.saldoAwalLt || 0;
 
       const data = [...responseProduksi.data.data, ...responsePerdagangan.data.data];
 
@@ -400,27 +400,27 @@ export default class BRCK2Detail extends Component {
 
           return {
             key: `brck-2-ck5-${index}`,
-            jenis_dokumen: item.jenisDok,
-            nomor_dokumen: item.nomorDok,
-            tanggal_dokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
-            tanggal_transaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
-            uraian_kegiatan: item.uraianKegiatan,
-            debet_kemasan: item.jenisTransaksi === "D" ? +item.jumlahKemasan : 0,
-            debet_lt: item.jenisTransaksi === "D" ? +item.jumlah : 0,
-            kredit_kemasan: item.jenisTransaksi === "K" ? +item.jumlahKemasan : 0,
-            kredit_lt: item.jenisTransaksi === "K" ? +item.jumlah : 0,
-            saldo_kemasan: saldoKemasan,
-            saldo_lt: saldoLt,
+            jenisDokumen: item.jenisDok,
+            nomorDokumen: item.nomorDok,
+            tanggalDokumen: moment(item.tanggalDok).format("DD-MM-YYYY"),
+            tanggalTransaksi: moment(item.tanggalCio).format("DD-MM-YYYY"),
+            uraianKegiatan: item.uraianKegiatan,
+            debetKemasan: item.jenisTransaksi === "D" ? +item.jumlahKemasan : 0,
+            debetLt: item.jenisTransaksi === "D" ? +item.jumlah : 0,
+            kreditKemasan: item.jenisTransaksi === "K" ? +item.jumlahKemasan : 0,
+            kreditLt: item.jenisTransaksi === "K" ? +item.jumlah : 0,
+            saldoKemasan: saldoKemasan,
+            saldoLt: saldoLt,
           };
         });
 
       this.setState({
         isBrowseShow: true,
         dataSource: newData,
-        saldo_awal_lt: responseSaldoAwal.data.data.saldoAwalLiter,
-        saldo_awal_kemasan: responseSaldoAwal.data.data.saldoAwalKemasan,
-        saldo_buku_kemasan: saldoKemasan,
-        saldo_buku_lt: saldoLt,
+        saldoAwalLt: responseSaldoAwal.data.data.saldoAwalLiter,
+        saldoAwalKemasan: responseSaldoAwal.data.data.saldoAwalKemasan,
+        saldoBukuKemasan: saldoKemasan,
+        saldoBukuLt: saldoLt,
       });
     }
 
@@ -428,19 +428,19 @@ export default class BRCK2Detail extends Component {
   };
 
   calculateSaldo = () => {
-    let saldoKemasan = this.state.saldo_awal_kemasan || 0;
-    let saldoLt = this.state.saldo_awal_lt || 0;
+    let saldoKemasan = this.state.saldoAwalKemasan || 0;
+    let saldoLt = this.state.saldoAwalLt || 0;
 
     const newData = this.state.dataSource?.map((item) => {
-      saldoKemasan = saldoKemasan + item.debet_kemasan - item.kredit_kemasan;
-      saldoLt = saldoLt + item.debet_lt - item.kredit_lt;
-      return { ...item, saldo_kemasan: saldoKemasan, saldo_lt: saldoLt };
+      saldoKemasan = saldoKemasan + item.debetKemasan - item.kreditKemasan;
+      saldoLt = saldoLt + item.debetLt - item.kreditLt;
+      return { ...item, saldoKemasan: saldoKemasan, saldoLt: saldoLt };
     });
 
     this.setState({
       dataSource: newData,
-      saldo_buku_lt: saldoLt,
-      saldo_buku_kemasan: saldoKemasan,
+      saldoBukuLt: saldoLt,
+      saldoBukuKemasan: saldoKemasan,
     });
   };
 
@@ -521,16 +521,16 @@ export default class BRCK2Detail extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      nppbkc_id: record.nppbkc_id,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      nama_nppbkc: record.nama_nppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
   handleDaftarMerkBrck2 = (record) => {
     this.setState({
-      merk_mmea_id: record.merk_mmea_id,
-      merk_mmea_name: record.merk_mmea_name,
+      idMerkMmea: record.idMerkMmea,
+      namaMerkMmea: record.namaMerkMmea,
       tarif: record.tarif,
       isi: record.isi,
     });
@@ -540,10 +540,10 @@ export default class BRCK2Detail extends Component {
 
   handleSearch = () => {
     if (
-      !this.state.nppbkc_id ||
-      !this.state.merk_mmea_id ||
-      !this.state.periode_akhir ||
-      !this.state.periode_akhir
+      !this.state.idNppbkc ||
+      !this.state.idMerkMmea ||
+      !this.state.periodeAkhir ||
+      !this.state.periodeAkhir
     ) {
       return notification.info({ message: "Info", description: "Data tidak boleh kosong" });
     }
@@ -552,14 +552,14 @@ export default class BRCK2Detail extends Component {
   };
   handleReset = () => {
     this.setState({
-      nppbkc_id: null,
+      idNppbkc: null,
       nppbkc: null,
-      nama_nppbkc: null,
-      merk_mmea_name: null,
+      namaNppbkc: null,
+      namaMerkMmea: null,
       tarif: null,
       isi: null,
-      periode_awal: null,
-      periode_akhir: null,
+      periodeAwal: null,
+      periodeAkhir: null,
     });
   };
 
@@ -587,7 +587,7 @@ export default class BRCK2Detail extends Component {
                       >
                         Cari
                       </Button>
-                      <Input id="nama_nppbkc" value={this.state.nama_nppbkc} disabled />
+                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                     </div>
                   </Col>
 
@@ -596,7 +596,7 @@ export default class BRCK2Detail extends Component {
                       <FormLabel>Merk</FormLabel>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="merk_mmea_name" value={this.state.merk_mmea_name} disabled />
+                      <Input id="namaMerkMmea" value={this.state.namaMerkMmea} disabled />
                       <Button
                         type="primary"
                         onClick={() => this.handleModalShow("isModalDaftarMerkVisible")}
@@ -627,19 +627,19 @@ export default class BRCK2Detail extends Component {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <DatePicker
-                        id="periode_awal"
+                        id="periodeAwal"
                         format="DD-MM-YYYY"
-                        onChange={(date) => this.handleDatepickerChange("periode_awal", date)}
-                        value={this.state.periode_awal}
+                        onChange={(date) => this.handleDatepickerChange("periodeAwal", date)}
+                        value={this.state.periodeAwal}
                         style={{ width: "100%" }}
                         disabled
                       />
                       <div>s.d</div>
                       <DatePicker
-                        id="periode_akhir"
+                        id="periodeAkhir"
                         format="DD-MM-YYYY"
-                        onChange={(date) => this.handleDatepickerChange("periode_akhir", date)}
-                        value={this.state.periode_akhir}
+                        onChange={(date) => this.handleDatepickerChange("periodeAkhir", date)}
+                        value={this.state.periodeAkhir}
                         style={{ width: "100%" }}
                         disabled
                       />
@@ -684,7 +684,7 @@ export default class BRCK2Detail extends Component {
                                 </FormLabel>
                               </div>
                               <InputNumber
-                                value={this.state.saldo_awal_kemasan}
+                                value={this.state.saldoAwalKemasan}
                                 min={0}
                                 style={{ width: "100%" }}
                                 disabled
@@ -698,7 +698,7 @@ export default class BRCK2Detail extends Component {
                                 </FormLabel>
                               </div>
                               <InputNumber
-                                value={this.state.saldo_awal_lt}
+                                value={this.state.saldoAwalLt}
                                 min={0}
                                 style={{ width: "100%" }}
                                 disabled
@@ -730,9 +730,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_debet_kemasan",
+                                  key: "totalDebetKemasan",
                                   title: "Debet Kemasan",
-                                  dataIndex: "total_debet_kemasan",
+                                  dataIndex: "totalDebetKemasan",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -740,9 +740,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_debet_lt",
+                                  key: "totalDebetLt",
                                   title: "Debet (Lt)",
-                                  dataIndex: "total_debet_lt",
+                                  dataIndex: "totalDebetLt",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -750,9 +750,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_kredit_kemasan",
+                                  key: "totalKreditKemasan",
                                   title: "Kredit Kemasan",
-                                  dataIndex: "total_kredit_kemasan",
+                                  dataIndex: "totalKreditKemasan",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -760,9 +760,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_kredit_lt",
+                                  key: "totalKreditLt",
                                   title: "Kredit (Lt)",
-                                  dataIndex: "total_kredit_lt",
+                                  dataIndex: "totalKreditLt",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -770,9 +770,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_saldo_kemasan",
+                                  key: "totalSaldoKemasan",
                                   title: "Saldo Kemasan",
-                                  dataIndex: "total_saldo_kemasan",
+                                  dataIndex: "totalSaldoKemasan",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -780,9 +780,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_saldo_lt",
+                                  key: "totalSaldoLt",
                                   title: "Saldo (Lt)",
-                                  dataIndex: "total_saldo_lt",
+                                  dataIndex: "totalSaldoLt",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -790,9 +790,9 @@ export default class BRCK2Detail extends Component {
                                   ),
                                 },
                                 {
-                                  key: "total_keterangan",
+                                  key: "totalKeterangan",
                                   title: "Keterangan",
-                                  dataIndex: "total_keterangan",
+                                  dataIndex: "totalKeterangan",
                                   width: 80,
                                   fixed: "right",
                                   render: (text) => (
@@ -804,46 +804,46 @@ export default class BRCK2Detail extends Component {
                                 {
                                   key: "1",
                                   title: "Jumlah",
-                                  total_debet_kemasan: this.state.total_debet_kemasan,
-                                  total_debet_lt: this.state.total_debet_lt,
-                                  total_kredit_kemasan: this.state.total_kredit_kemasan,
-                                  total_kredit_lt: this.state.total_kredit_lt,
-                                  total_saldo_kemasan: this.state.saldo_buku_kemasan,
-                                  total_saldo_lt: this.state.saldo_buku_lt,
-                                  total_keterangan: `Size Data: ${this.state.dataSource.length}`,
+                                  totalDebetKemasan: this.state.totalDebetKemasan,
+                                  totalDebetLt: this.state.totalDebetLt,
+                                  totalKreditKemasan: this.state.totalKreditKemasan,
+                                  totalKreditLt: this.state.totalKreditLt,
+                                  totalSaldoKemasan: this.state.saldoBukuKemasan,
+                                  totalSaldoLt: this.state.saldoBukuLt,
+                                  totalKeterangan: `Size Data: ${this.state.dataSource.length}`,
                                 },
                                 {
                                   key: "2",
                                   title: "Saldo Buku",
-                                  total_debet_kemasan: null,
-                                  total_debet_lt: null,
-                                  total_kredit_kemasan: null,
-                                  total_kredit_lt: null,
-                                  total_saldo_kemasan: this.state.saldo_buku_kemasan,
-                                  total_saldo_lt: this.state.saldo_buku_lt,
-                                  total_keterangan: null,
+                                  totalDebetKemasan: null,
+                                  totalDebetLt: null,
+                                  totalKreditKemasan: null,
+                                  totalKreditLt: null,
+                                  totalSaldoKemasan: this.state.saldoBukuKemasan,
+                                  totalSaldoLt: this.state.saldoBukuLt,
+                                  totalKeterangan: null,
                                 },
                                 {
                                   key: "3",
                                   title: "Selisih",
-                                  total_debet_kemasan: null,
-                                  total_debet_lt: null,
-                                  total_kredit_kemasan: null,
-                                  total_kredit_lt: null,
-                                  total_saldo_kemasan: Math.abs(this.state.selisih_kemasan),
-                                  total_saldo_lt: Math.abs(this.state.selisih_lt),
-                                  total_keterangan: null,
+                                  totalDebetKemasan: null,
+                                  totalDebetLt: null,
+                                  totalKreditKemasan: null,
+                                  totalKreditLt: null,
+                                  totalSaldoKemasan: Math.abs(this.state.selisihKemasan),
+                                  totalSaldoLt: Math.abs(this.state.selisihLt),
+                                  totalKeterangan: null,
                                 },
                                 {
                                   key: "4",
                                   title: "Saldo Akhir",
-                                  total_debet_kemasan: null,
-                                  total_debet_lt: null,
-                                  total_kredit_kemasan: null,
-                                  total_kredit_lt: null,
-                                  total_saldo_kemasan: this.state.hasil_pencacahan_back5_kemasan,
-                                  total_saldo_lt: this.state.hasil_pencacahan_back5_lt,
-                                  total_keterangan: null,
+                                  totalDebetKemasan: null,
+                                  totalDebetLt: null,
+                                  totalKreditKemasan: null,
+                                  totalKreditLt: null,
+                                  totalSaldoKemasan: this.state.hasilPencacahanBack5Kemasan,
+                                  totalSaldoLt: this.state.hasilPencacahanBack5Lt,
+                                  totalKeterangan: null,
                                 },
                               ]}
                             />
@@ -877,15 +877,12 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={5}>
                             <InputNumber
-                              id="hasil_pencacahan_back5_kemasan"
-                              value={this.state.hasil_pencacahan_back5_kemasan}
+                              id="hasilPencacahanBack5Kemasan"
+                              value={this.state.hasilPencacahanBack5Kemasan}
                               onChange={(value) => {
-                                this.handleInputNumberChange(
-                                  "hasil_pencacahan_back5_kemasan",
-                                  value
-                                );
+                                this.handleInputNumberChange("hasilPencacahanBack5Kemasan", value);
                                 this.setState({
-                                  hasil_pencacahan_back5_lt:
+                                  hasilPencacahanBack5Lt:
                                     (typeof value === "number" ? value : 0) * (this.state.isi || 1),
                                 });
                               }}
@@ -895,13 +892,13 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={5}>
                             <InputNumber
-                              id="hasil_pencacahan_back5_lt"
-                              value={this.state.hasil_pencacahan_back5_lt}
+                              id="hasilPencacahanBack5Lt"
+                              value={this.state.hasilPencacahanBack5Lt}
                               onChange={(value) => {
-                                this.handleInputNumberChange("hasil_pencacahan_back5_lt", value);
+                                this.handleInputNumberChange("hasilPencacahanBack5Lt", value);
 
                                 this.setState({
-                                  hasil_pencacahan_back5_kemasan:
+                                  hasilPencacahanBack5Kemasan:
                                     (typeof value === "number" ? value : 0) / (this.state.isi || 1),
                                 });
                               }}
@@ -911,8 +908,8 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={6}>
                             <Input.TextArea
-                              id="hasil_pencarian_back5_description"
-                              value={this.state.hasil_pencarian_back5_description}
+                              id="hasilPencarianBack5Description"
+                              value={this.state.hasilPencarianBack5Description}
                               onChange={this.handleInputChange}
                               autoSize
                               disabled
@@ -935,9 +932,9 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={5}>
                             <Input
-                              id="no_back5"
+                              id="noBack5"
                               onChange={this.handleInputChange}
-                              value={this.state.no_back5}
+                              value={this.state.noBack5}
                               disabled
                             />
                           </Col>
@@ -958,17 +955,17 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={5}>
                             <DatePicker
-                              id="tgl_back5"
+                              id="tglBack5"
                               format="DD-MM-YYYY"
-                              onChange={(date) => this.handleDatepickerChange("tgl_back5", date)}
-                              value={this.state.tgl_back5}
+                              onChange={(date) => this.handleDatepickerChange("tglBack5", date)}
+                              value={this.state.tglBack5}
                               style={{ width: "100%" }}
                               disabled
                             />
                           </Col>
                         </Row>
 
-                        {Math.sign(this.state.selisih_kemasan) !== 0 && (
+                        {Math.sign(this.state.selisihKemasan) !== 0 && (
                           <Row gutter={[10, 10]}>
                             <Col span={8}>
                               <div
@@ -979,31 +976,31 @@ export default class BRCK2Detail extends Component {
                                   justifyContent: "end",
                                 }}
                               >
-                                {Math.sign(this.state.selisih_kemasan) === -1
+                                {Math.sign(this.state.selisihKemasan) === -1
                                   ? "Selisih Kurang"
                                   : "Selisih Lebih"}
                               </div>
                             </Col>
                             <Col span={5}>
                               <InputNumber
-                                id="selisih_kemasan"
-                                value={Math.abs(this.state.selisih_kemasan)}
+                                id="selisihKemasan"
+                                value={Math.abs(this.state.selisihKemasan)}
                                 style={{ width: "100%" }}
                                 disabled
                               />
                             </Col>
                             <Col span={5}>
                               <InputNumber
-                                id="selisih_lt"
-                                value={Math.abs(this.state.selisih_lt)}
+                                id="selisihLt"
+                                value={Math.abs(this.state.selisihLt)}
                                 style={{ width: "100%" }}
                                 disabled
                               />
                             </Col>
                             <Col span={6}>
                               <Input.TextArea
-                                id="selisih_description"
-                                value={this.state.selisih_description}
+                                id="selisihDescription"
+                                value={this.state.selisihDescription}
                                 autoSize
                                 disabled
                               />
@@ -1011,7 +1008,7 @@ export default class BRCK2Detail extends Component {
                           </Row>
                         )}
 
-                        {Math.sign(this.state.selisih_kemasan) === 1 && (
+                        {Math.sign(this.state.selisihKemasan) === 1 && (
                           <Row gutter={[10, 10]}>
                             <Col span={8}>
                               <div
@@ -1028,8 +1025,8 @@ export default class BRCK2Detail extends Component {
 
                             <Col span={5}>
                               <InputNumber
-                                id="batas_kelonggaran_kemasan"
-                                value={this.state.batas_kelonggaran_kemasan}
+                                id="batasKelonggaranKemasan"
+                                value={this.state.batasKelonggaranKemasan}
                                 style={{ width: "100%" }}
                                 disabled
                               />
@@ -1037,8 +1034,8 @@ export default class BRCK2Detail extends Component {
 
                             <Col span={6} offset={5}>
                               <Input.TextArea
-                                id="batas_kelonggaran_description"
-                                value={this.state.batas_kelonggaran_description}
+                                id="batasKelonggaranDescription"
+                                value={this.state.batasKelonggaranDescription}
                                 autoSize
                                 disabled
                               />
@@ -1046,20 +1043,19 @@ export default class BRCK2Detail extends Component {
                           </Row>
                         )}
 
-                        {Math.sign(this.state.selisih_kemasan) !== 0 && (
+                        {Math.sign(this.state.selisihKemasan) !== 0 && (
                           <Row gutter={[10, 10]}>
                             <Col
                               span={11}
                               offset={13}
                               style={{
                                 color:
-                                  Math.sign(this.state.selisih_kemasan) === -1 ||
-                                  Math.sign(this.state.selisih_lt) === -1 ||
-                                  ((Math.sign(this.state.selisih_kemasan) === 1 ||
-                                    Math.sign(this.state.selisih_lt) === 1) &&
-                                    this.state.selisih_lt > this.state.batas_kelonggaran_kemasan &&
-                                    this.state.selisih_kemasan >
-                                      this.state.batas_kelonggaran_kemasan)
+                                  Math.sign(this.state.selisihKemasan) === -1 ||
+                                  Math.sign(this.state.selisihLt) === -1 ||
+                                  ((Math.sign(this.state.selisihKemasan) === 1 ||
+                                    Math.sign(this.state.selisihLt) === 1) &&
+                                    this.state.selisihLt > this.state.batasKelonggaranKemasan &&
+                                    this.state.selisihKemasan > this.state.batasKelonggaranKemasan)
                                     ? "red"
                                     : "blue",
                               }}
@@ -1084,21 +1080,19 @@ export default class BRCK2Detail extends Component {
                           </Col>
                           <Col span={7}>
                             <Select
-                              id="jenis_penutupan"
-                              value={this.state.jenis_penutupan}
-                              onChange={(value) =>
-                                this.handleSelectChange("jenis_penutupan", value)
-                              }
+                              id="jenisPenutupan"
+                              value={this.state.jenisPenutupan}
+                              onChange={(value) => this.handleSelectChange("jenisPenutupan", value)}
                               style={{ width: "100%" }}
                               disabled
                             >
-                              {this.state.list_jenis_penutupan.length > 0 &&
-                                this.state.list_jenis_penutupan.map((item, index) => (
+                              {this.state.listJenisPenutupan.length > 0 &&
+                                this.state.listJenisPenutupan.map((item, index) => (
                                   <Select.Option
                                     key={`jenis-penutupan-${index}`}
-                                    value={item.jenis_penutupan_code}
+                                    value={item.kodeJenisPenutupan}
                                   >
-                                    {item.jenis_penutupan_name}
+                                    {item.namaJenisPenutupan}
                                   </Select.Option>
                                 ))}
                             </Select>

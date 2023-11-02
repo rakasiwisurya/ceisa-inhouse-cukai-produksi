@@ -14,23 +14,23 @@ export default class ModalDaftarMerkBrck2 extends Component {
       totalData: 0,
 
       table: {
-        merk_mmea_name: null,
+        namaMerkMmea: null,
         golongan: null,
         tarif: null,
         isi: null,
         kemasan: null,
-        no_skep: null,
-        tanggal_penutupan_brck2: null,
+        noSkep: null,
+        tanggalPenutupanBrck2: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Merk MMEA",
-          dataIndex: "merk_mmea_name",
-          key: "merk_mmea_name",
+          dataIndex: "namaMerkMmea",
+          key: "namaMerkMmea",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("merk_mmea_name"),
+          ...this.getColumnSearchProps("namaMerkMmea"),
         },
         {
           title: "Golongan",
@@ -62,21 +62,21 @@ export default class ModalDaftarMerkBrck2 extends Component {
         },
         {
           title: "No. SKEP",
-          dataIndex: "no_skep",
-          key: "no_skep",
+          dataIndex: "noSkep",
+          key: "noSkep",
           render: (text) => <div style={{ textAlign: "center" }}>{text ? text : "-"}</div>,
-          ...this.getColumnSearchProps("no_skep"),
+          ...this.getColumnSearchProps("noSkep"),
         },
         {
           title: "Tanggal Penutupan BRCK-2",
-          dataIndex: "tanggal_penutupan_brck2",
-          key: "tanggal_penutupan_brck2",
+          dataIndex: "tanggalPenutupanBrck2",
+          key: "tanggalPenutupanBrck2",
           render: (text) => (
             <div style={{ textAlign: "center" }}>
               {text ? moment(text).format("DD-MM-YYYY") : "-"}
             </div>
           ),
-          ...this.getColumnSearchProps("tanggal_penutupan_brck2"),
+          ...this.getColumnSearchProps("tanggalPenutupanBrck2"),
         },
       ],
     };
@@ -87,21 +87,19 @@ export default class ModalDaftarMerkBrck2 extends Component {
   }
 
   getDaftarMerkBrck2 = async () => {
-    const { merk_mmea_name, golongan, tarif, isi, kemasan, no_skep, tanggal_penutupan_brck2 } =
+    const { namaMerkMmea, golongan, tarif, isi, kemasan, noSkep, tanggalPenutupanBrck2 } =
       this.state.table;
 
     const payload = { page: this.state.page };
 
-    if (merk_mmea_name) payload.namaMerk = merk_mmea_name;
+    if (namaMerkMmea) payload.namaMerk = namaMerkMmea;
     if (golongan) payload.namaGolongan = golongan;
     if (tarif) payload.tarifSpesifik = tarif;
     if (isi) payload.isiPerKemasan = isi;
     if (kemasan) payload.namaJenisKemasan = kemasan;
-    if (no_skep) payload.nomorSkep = no_skep;
-    if (tanggal_penutupan_brck2)
-      payload.terakhirPenutupan = moment(tanggal_penutupan_brck2, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+    if (noSkep) payload.nomorSkep = noSkep;
+    if (tanggalPenutupanBrck2)
+      payload.terakhirPenutupan = moment(tanggalPenutupanBrck2, "DD-MM-YYYY").format("YYYY-MM-DD");
 
     const response = await requestApi({
       service: "produksi",
@@ -114,14 +112,14 @@ export default class ModalDaftarMerkBrck2 extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `merk-brck2-${index}`,
-        merk_mmea_id: item.idMerk,
-        merk_mmea_name: item.namaMerk,
+        idMerkMmea: item.idMerk,
+        namaMerkMmea: item.namaMerk,
         golongan: item.namaGolongan,
         tarif: item.tarifSpesifik,
         isi: item.isiPerKemasan,
         kemasan: item.namaJenisKemasan,
-        no_skep: item.nomorSkep,
-        tanggal_penutupan_brck2: item.terakhirPenutupan,
+        noSkep: item.nomorSkep,
+        tanggalPenutupanBrck2: item.terakhirPenutupan,
       }));
 
       this.setState({

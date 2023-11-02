@@ -17,18 +17,18 @@ export default class BRCK2 extends Component {
 
       filter: {
         kppbc: null,
-        nama_perusahaan: null,
+        namaPerusahaan: null,
         merk: null,
         tarif: null,
         isi: null,
-        tanggal_awal: null,
-        tanggal_akhir: null,
-        saldo_awal_liter: null,
-        saldo_awal_kemasan: null,
-        saldo_penutupan_liter: null,
-        saldo_penutupan_kemasan: null,
-        selisih_liter: null,
-        selisih_kemasan: null,
+        tanggalAwal: null,
+        tanggalAkhir: null,
+        saldoAwalLiter: null,
+        saldoAwalKemasan: null,
+        saldoPenutupanLiter: null,
+        saldoPenutupanKemasan: null,
+        selisihLiter: null,
+        selisihKemasan: null,
       },
 
       page: 1,
@@ -47,12 +47,12 @@ export default class BRCK2 extends Component {
                 <ButtonCustom
                   icon="form"
                   variant="warning"
-                  onClick={() => this.handleEdit(record.brck2_id)}
+                  onClick={() => this.handleEdit(record.idBrck2)}
                 />
                 <ButtonCustom
                   icon="eye"
                   variant="info"
-                  onClick={() => this.handleDetail(record.brck2_id)}
+                  onClick={() => this.handleDetail(record.idBrck2)}
                 />
               </>
             </div>
@@ -67,10 +67,10 @@ export default class BRCK2 extends Component {
         },
         {
           title: "Perusahaan",
-          dataIndex: "nama_perusahaan",
-          key: "nama_perusahaan",
+          dataIndex: "namaPerusahaan",
+          key: "namaPerusahaan",
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nama_perusahaan"),
+          ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           title: "Merk",
@@ -98,25 +98,25 @@ export default class BRCK2 extends Component {
           children: [
             {
               title: "Tgl Awal",
-              dataIndex: "tanggal_awal",
-              key: "tanggal_awal",
+              dataIndex: "tanggalAwal",
+              key: "tanggalAwal",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>
                   {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
                 </div>
               ),
-              ...this.getColumnSearchProps("tanggal_awal"),
+              ...this.getColumnSearchProps("tanggalAwal"),
             },
             {
               title: "Tgl Akhir",
-              dataIndex: "tanggal_akhir",
-              key: "tanggal_akhir",
+              dataIndex: "tanggalAkhir",
+              key: "tanggalAkhir",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>
                   {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
                 </div>
               ),
-              ...this.getColumnSearchProps("tanggal_akhir"),
+              ...this.getColumnSearchProps("tanggalAkhir"),
             },
           ],
         },
@@ -125,21 +125,21 @@ export default class BRCK2 extends Component {
           children: [
             {
               title: "Liter",
-              dataIndex: "saldo_awal_liter",
-              key: "saldo_awal_liter",
+              dataIndex: "saldoAwalLiter",
+              key: "saldoAwalLiter",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("saldo_awal_liter"),
+              ...this.getColumnSearchProps("saldoAwalLiter"),
             },
             {
               title: "Kemasan",
-              dataIndex: "saldo_awal_kemasan",
-              key: "saldo_awal_kemasan",
+              dataIndex: "saldoAwalKemasan",
+              key: "saldoAwalKemasan",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("saldo_awal_kemasan"),
+              ...this.getColumnSearchProps("saldoAwalKemasan"),
             },
           ],
         },
@@ -148,21 +148,21 @@ export default class BRCK2 extends Component {
           children: [
             {
               title: "Liter",
-              dataIndex: "saldo_penutupan_liter",
-              key: "saldo_penutupan_liter",
+              dataIndex: "saldoPenutupanLiter",
+              key: "saldoPenutupanLiter",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("saldo_penutupan_liter"),
+              ...this.getColumnSearchProps("saldoPenutupanLiter"),
             },
             {
               title: "Kemasan",
-              dataIndex: "saldo_penutupan_kemasan",
-              key: "saldo_penutupan_kemasan",
+              dataIndex: "saldoPenutupanKemasan",
+              key: "saldoPenutupanKemasan",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("saldo_penutupan_kemasan"),
+              ...this.getColumnSearchProps("saldoPenutupanKemasan"),
             },
           ],
         },
@@ -171,21 +171,21 @@ export default class BRCK2 extends Component {
           children: [
             {
               title: "Liter",
-              dataIndex: "selisih_liter",
-              key: "selisih_liter",
+              dataIndex: "selisihLiter",
+              key: "selisihLiter",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("selisih_liter"),
+              ...this.getColumnSearchProps("selisihLiter"),
             },
             {
               title: "Kemasan",
-              dataIndex: "selisih_kemasan",
-              key: "selisih_kemasan",
+              dataIndex: "selisihKemasan",
+              key: "selisihKemasan",
               render: (text) => (
                 <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>
               ),
-              ...this.getColumnSearchProps("selisih_kemasan"),
+              ...this.getColumnSearchProps("selisihKemasan"),
             },
           ],
         },
@@ -206,40 +206,40 @@ export default class BRCK2 extends Component {
   getBrck2 = async () => {
     const {
       kppbc,
-      nama_perusahaan,
+      namaPerusahaan,
       merk,
       jenis,
       tarif,
       isi,
       kadar,
-      tanggal_awal,
-      tanggal_akhir,
-      saldo_awal_liter,
-      saldo_awal_kemasan,
-      saldo_penutupan_liter,
-      saldo_penutupan_kemasan,
-      selisih_liter,
-      selisih_kemasan,
+      tanggalAwal,
+      tanggalAkhir,
+      saldoAwalLiter,
+      saldoAwalKemasan,
+      saldoPenutupanLiter,
+      saldoPenutupanKemasan,
+      selisihLiter,
+      selisihKemasan,
     } = this.state.filter;
 
     const payload = { page: this.state.page };
 
     if (kppbc) payload.kppbc = kppbc;
-    if (nama_perusahaan) payload.namaPerusahaan = nama_perusahaan;
+    if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
     if (merk) payload.merk = merk;
     if (jenis) payload.jenis = jenis;
     if (tarif) payload.tarif = tarif;
     if (isi) payload.isi = isi;
     if (kadar) payload.kadar = kadar;
-    if (tanggal_awal) payload.tanggalAwal = moment(tanggal_awal, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (tanggal_akhir)
-      payload.tanggalAkhir = moment(tanggal_akhir, "DD-MM-YYYY").format("YYYY-MM-DD");
-    if (saldo_awal_liter) payload.saldoAwalLiter = saldo_awal_liter;
-    if (saldo_awal_kemasan) payload.saldoAwalKemasan = saldo_awal_kemasan;
-    if (saldo_penutupan_liter) payload.saldoPenutupanLiter = saldo_penutupan_liter;
-    if (saldo_penutupan_kemasan) payload.saldoPenutupanKemasan = saldo_penutupan_kemasan;
-    if (selisih_liter) payload.selisihLiter = selisih_liter;
-    if (selisih_kemasan) payload.selisihKemasan = selisih_kemasan;
+    if (tanggalAwal) payload.tanggalAwal = moment(tanggalAwal, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalAkhir)
+      payload.tanggalAkhir = moment(tanggalAkhir, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (saldoAwalLiter) payload.saldoAwalLiter = saldoAwalLiter;
+    if (saldoAwalKemasan) payload.saldoAwalKemasan = saldoAwalKemasan;
+    if (saldoPenutupanLiter) payload.saldoPenutupanLiter = saldoPenutupanLiter;
+    if (saldoPenutupanKemasan) payload.saldoPenutupanKemasan = saldoPenutupanKemasan;
+    if (selisihLiter) payload.selisihLiter = selisihLiter;
+    if (selisihKemasan) payload.selisihKemasan = selisihKemasan;
 
     const response = await requestApi({
       service: "produksi",
@@ -254,22 +254,22 @@ export default class BRCK2 extends Component {
 
       const newData = listData.map((item, index) => ({
         key: `brkc2-${index}`,
-        brck2_id: item.idBrck2,
+        idBrck2: item.idBrck2,
         kppbc: item.kppbc,
-        nama_perusahaan: item.namaPerusahaan,
+        namaPerusahaan: item.namaPerusahaan,
         merk: item.merk,
         jenis: item.jenis,
         tarif: item.tarif,
         isi: item.isi,
         kadar: item.kadar,
-        tanggal_awal: item.tanggalAwal,
-        tanggal_akhir: item.tanggalAkhir,
-        saldo_awal_liter: item.saldoAwalLiter,
-        saldo_awal_kemasan: item.saldoAwalKemasan,
-        saldo_penutupan_liter: item.saldoPenutupanLiter,
-        saldo_penutupan_kemasan: item.saldoPenutupanKemasan,
-        selisih_liter: item.selisihLiter,
-        selisih_kemasan: item.selisihKemasan,
+        tanggalAwal: item.tanggalAwal,
+        tanggalAkhir: item.tanggalAkhir,
+        saldoAwalLiter: item.saldoAwalLiter,
+        saldoAwalKemasan: item.saldoAwalKemasan,
+        saldoPenutupanLiter: item.saldoPenutupanLiter,
+        saldoPenutupanKemasan: item.saldoPenutupanKemasan,
+        selisihLiter: item.selisihLiter,
+        selisihKemasan: item.selisihKemasan,
       }));
 
       this.setState({ dataSource: newData, page: currentPage, totalData: totalData });
