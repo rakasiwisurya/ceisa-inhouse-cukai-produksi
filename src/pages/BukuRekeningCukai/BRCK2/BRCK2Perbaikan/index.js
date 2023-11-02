@@ -524,9 +524,9 @@ export default class BRCK2Perbaikan extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      idNppbkc: record.idNppbkc,
+      idNppbkc: record.nppbkc_id,
       nppbkc: record.nppbkc,
-      namaNppbkc: record.namaNppbkc,
+      namaNppbkc: record.nama_nppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
