@@ -62,13 +62,13 @@ export default class ModalStck extends Component {
     });
 
     if (response) {
-      const newData = response.data.data.data.map((item, index) => ({
+      const newData = response.data?.data?.data?.map((item, index) => ({
         key: `stck-${index}`,
         nomorStck: item.nomorDokumen,
         tanggalStck: moment(item.tanggalDokumen).format("DD-MM-YYYY"),
       }));
 
-      this.setState({ dataSource: newData, totalData: response.data.data.totalData });
+      this.setState({ dataSource: newData, totalData: response.data?.data?.totalData });
     }
   };
 

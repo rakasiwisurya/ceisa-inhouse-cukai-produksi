@@ -23,7 +23,7 @@ export const requestApi = async ({
     );
     if (setLoading) setLoading(false);
 
-    if (response?.data?.status) {
+    if (response?.data?.status !== undefined) {
       if (response.data.status === true || response.data.status === "true") return response;
 
       notification.error({

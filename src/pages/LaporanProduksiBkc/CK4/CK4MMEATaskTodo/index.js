@@ -24,6 +24,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
+import { download } from "utils/files";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 import { months, years } from "utils/times";
@@ -46,6 +47,7 @@ export default class CK4MMEATaskTodo extends Component {
       isDetailLoading: true,
       isModalDaftarStckVisible: false,
       isModalDaftarPenjabatBcVisible: false,
+      isDownloadLoading: false,
 
       namaPemrakarsa: null,
       jabatanPemrakarsa: null,
@@ -90,9 +92,9 @@ export default class CK4MMEATaskTodo extends Component {
       nomorSuratPermohonanPerbaikan: null,
       tanggalSuratPermohonanPerbaikan: null,
       alasan: null,
-      previewFile:
-        "https://raw.githubusercontent.com/rakasiwisurya/pdf-test/aa52b04cae0e0f857a2d0e21c3a837f3cfb7f5ff/NS_CG_K2R.pdf",
+      kodeUploadPerbaikan: null,
 
+      isStck: false,
       nomorStck: null,
       tanggalStck: null,
 
@@ -300,6 +302,7 @@ export default class CK4MMEATaskTodo extends Component {
         idKota: data.idKota,
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
+        isStck: data.isStck,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
           idCk4Detail: detail.idCk4Detail,
@@ -430,6 +433,18 @@ export default class CK4MMEATaskTodo extends Component {
       tanggalStck: moment(record.tanggalStck),
     });
     this.handleModalClose("isModalDaftarStckVisible");
+  };
+
+  handleDownload = async () => {
+    const response = await requestApi({
+      service: "s3",
+      method: "get",
+      endpoint: `/downloadFile/${this.state.kodeUploadPerbaikan}`,
+      setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
+      config: { responseType: "blob" },
+    });
+
+    if (response) download(response.data);
   };
 
   handleSimpanTasktodo = async () => {
@@ -950,35 +965,20 @@ export default class CK4MMEATaskTodo extends Component {
                       />
                     </Col>
 
-                    {this.state.previewFile && (
-                      <Col span={12}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Preview PDF</FormLabel>
-                        </div>
-                        <iframe
-                          src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                            this.state.previewFile
-                          )}&embedded=true`}
-                          title="Preview PDF"
-                          width={"100%"}
-                          height={400}
-                        />
-                        <div style={{ marginTop: 10 }}>
-                          <Button
-                            type="primary"
-                            onClick={() =>
-                              window.open(
-                                `https://docs.google.com/viewerng/viewer?url=${this.state.previewFile}`,
-                                "_blank"
-                              )
-                            }
-                            block
-                          >
-                            Open
-                          </Button>
-                        </div>
-                      </Col>
-                    )}
+                    <Col span={12}>
+                      <div style={{ marginBottom: 10 }}>
+                        <FormLabel>Download PDF</FormLabel>
+                      </div>
+
+                      <Button
+                        type="primary"
+                        loading={this.state.isDownloadLoading}
+                        onClick={this.handleDownload}
+                        disabled={!this.state.kodeUploadPerbaikan}
+                      >
+                        Download
+                      </Button>
+                    </Col>
                   </>
                 </Row>
               </div>
@@ -1113,7 +1113,7 @@ export default class CK4MMEATaskTodo extends Component {
                 </Row>
               </div>
 
-              {this.state.status === "SETUJU" && (
+              {this.state.status === "SETUJU" && this.state.isStck && (
                 <>
                   <Header>{this.state.subtitle6}</Header>
                   <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
@@ -1181,12 +1181,14 @@ export default class CK4MMEATaskTodo extends Component {
           )}
         </Container>
 
-        <ModalStck
-          isVisible={this.state.isModalDaftarStckVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarStckVisible")}
-          onDataDoubleClick={this.handleDataStck}
-          npwp={this.state.npwpNppbkc}
-        />
+        {this.state.isStck && (
+          <ModalStck
+            isVisible={this.state.isModalDaftarStckVisible}
+            onCancel={() => this.handleModalClose("isModalDaftarStckVisible")}
+            onDataDoubleClick={this.handleDataStck}
+            npwp={this.state.npwpNppbkc}
+          />
+        )}
 
         <ModalDaftarPenjabatBc
           isVisible={this.state.isModalDaftarPenjabatBcVisible}
