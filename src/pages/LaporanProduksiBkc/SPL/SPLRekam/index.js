@@ -69,8 +69,8 @@ export default class SPLRekam extends Component {
   };
   handleDataKota = (record) => {
     this.setState({
-      idKotaPernyataan: record.kota_id,
-      namaKotaPernyataan: record.kota_name,
+      idKotaPernyataan: record.idKota,
+      namaKotaPernyataan: record.namaKota,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };

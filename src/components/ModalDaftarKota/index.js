@@ -14,25 +14,25 @@ export default class ModalDaftarKota extends Component {
       page: 1,
 
       table: {
-        kota_id: null,
-        kota_name: null,
+        idKota: null,
+        namaKota: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Id",
-          dataIndex: "kota_id",
-          key: "kota_id",
+          dataIndex: "idKota",
+          key: "idKota",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("kota_id"),
+          ...this.getColumnSearchProps("idKota"),
         },
         {
           title: "Nama Kota / Kabupaten",
-          dataIndex: "kota_name",
-          key: "kota_name",
+          dataIndex: "namaKota",
+          key: "namaKota",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("kota_name"),
+          ...this.getColumnSearchProps("namaKota"),
         },
       ],
     };
@@ -53,8 +53,8 @@ export default class ModalDaftarKota extends Component {
     if (response) {
       const newData = response.data.data.map((item, index) => ({
         key: `kota-${index}`,
-        kota_id: item.kodeKabupaten,
-        kota_name: item.namaKabupaten,
+        idKota: item.kodeKabupaten,
+        namaKota: item.namaKabupaten,
       }));
 
       this.setState({ dataSource: newData });

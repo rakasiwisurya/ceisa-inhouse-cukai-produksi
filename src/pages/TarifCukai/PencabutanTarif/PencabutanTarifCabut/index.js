@@ -135,8 +135,8 @@ export default class PencabutanTarifCabut extends Component {
 
   handleDataKota = (record) => {
     this.setState({
-      idKota: record.kota_id,
-      namaKota: record.kota_name,
+      idKota: record.idKota,
+      namaKota: record.namaKota,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };

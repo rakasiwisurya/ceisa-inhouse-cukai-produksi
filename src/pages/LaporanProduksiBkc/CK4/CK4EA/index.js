@@ -229,8 +229,8 @@ export default class CK4EA extends Component {
   };
   handleDataKota = (record) => {
     this.setState({
-      idKota: record.kota_id,
-      namaKota: record.kota_name,
+      idKota: record.idKota,
+      namaKota: record.idKota,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
