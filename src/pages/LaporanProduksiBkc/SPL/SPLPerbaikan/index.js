@@ -98,10 +98,10 @@ export default class SPLPerbaikan extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      idNppbkc: record.nppbkc_id,
+      idNppbkc: record.idNppbkc,
       nppbkc: record.nppbkc,
-      namaNppbkc: record.nama_nppbkc,
-      alamatNppbkc: record.alamat_nppbkc,
+      namaNppbkc: record.namaNppbkc,
+      alamatNppbkc: record.alamatNppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };

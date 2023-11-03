@@ -173,11 +173,11 @@ export default class RekamJenisPitaRekam extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      idNppbkc: record.nppbkc_id,
+      idNppbkc: record.idNppbkc,
       nppbkc: record.nppbkc,
-      namaNppbkc: record.nama_nppbkc,
-      idJenisBkc: record.jenis_bkc_id,
-      personalNppbkc: record.personal_nppbkc,
+      namaNppbkc: record.namaNppbkc,
+      idJenisBkc: record.idJenisBkc,
+      personalNppbkc: record.personalNppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };

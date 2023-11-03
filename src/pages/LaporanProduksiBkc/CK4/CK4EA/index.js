@@ -219,11 +219,11 @@ export default class CK4EA extends Component {
 
   handleDataNppbkc = (record) => {
     this.setState({
-      idNppbkc: record.nppbkc_id,
+      idNppbkc: record.idNppbkc,
       nppbkc: record.nppbkc,
-      namaNppbkc: record.nama_nppbkc,
-      alamatNppbkc: record.alamat_nppbkc,
-      npwpNppbkc: record.npwp_nppbkc,
+      namaNppbkc: record.namaNppbkc,
+      alamatNppbkc: record.alamatNppbkc,
+      npwpNppbkc: record.npwpNppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };

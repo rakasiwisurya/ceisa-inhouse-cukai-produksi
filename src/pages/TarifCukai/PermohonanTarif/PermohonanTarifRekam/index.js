@@ -217,11 +217,11 @@ export default class PermohonanTarifRekam extends Component {
   };
   handleDataNppbkc = (record) => {
     this.setState({
-      idNppbkc: record.nppbkc_id,
+      idNppbkc: record.idNppbkc,
       nppbkc: record.nppbkc,
-      namaNppbkc: record.nama_nppbkc,
-      npwpNppbkc: record.npwp_nppbkc,
-      alamatNppbkc: record.alamat_nppbkc,
+      namaNppbkc: record.namaNppbkc,
+      npwpNppbkc: record.npwpNppbkc,
+      alamatNppbkc: record.alamatNppbkc,
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };

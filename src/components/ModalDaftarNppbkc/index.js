@@ -13,21 +13,21 @@ export default class ModalDaftarNPPBKC extends Component {
       totalData: 0,
 
       table: {
-        nppbkc_id: null,
-        nama_nppbkc: null,
+        idNppbkc: null,
+        namaNppbkc: null,
         nppbkc: null,
-        npwp_nppbkc: null,
-        alamat_nppbkc: null,
+        npwpNppbkc: null,
+        alamatNppbkc: null,
       },
 
       dataSource: [],
       columns: [
         {
           title: "Nama",
-          dataIndex: "nama_nppbkc",
-          key: "nama_nppbkc",
+          dataIndex: "namaNppbkc",
+          key: "namaNppbkc",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("nama_nppbkc"),
+          ...this.getColumnSearchProps("namaNppbkc"),
         },
         {
           title: "NPPBKC",
@@ -38,17 +38,17 @@ export default class ModalDaftarNPPBKC extends Component {
         },
         {
           title: "NPWP",
-          dataIndex: "npwp_nppbkc",
-          key: "npwp_nppbkc",
+          dataIndex: "npwpNppbkc",
+          key: "npwpNppbkc",
           render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-          ...this.getColumnSearchProps("npwp_nppbkc"),
+          ...this.getColumnSearchProps("npwpNppbkc"),
         },
         {
           title: "Alamat",
-          dataIndex: "alamat_nppbkc",
-          key: "alamat_nppbkc",
+          dataIndex: "alamatNppbkc",
+          key: "alamatNppbkc",
           render: (text) => <div>{text}</div>,
-          ...this.getColumnSearchProps("alamat_nppbkc"),
+          ...this.getColumnSearchProps("alamatNppbkc"),
         },
       ],
     };
@@ -66,18 +66,18 @@ export default class ModalDaftarNPPBKC extends Component {
 
   getDaftarNppbkc = async () => {
     const { idJenisBkc, idJenisUsaha } = this.props;
-    const { nppbkc_id, nama_nppbkc, nppbkc, npwp_nppbkc, alamat_nppbkc } = this.state.table;
+    const { idNppbkc, namaNppbkc, nppbkc, npwpNppbkc, alamatNppbkc } = this.state.table;
 
     const payload = { page: this.state.page };
 
     if (idJenisBkc) payload.kodeJenisBkc = idJenisBkc;
     if (idJenisUsaha) payload.kodeJenisUsaha = idJenisUsaha;
 
-    if (nppbkc_id) payload.idNppbkc = nppbkc_id;
-    if (nama_nppbkc) payload.namaNppbkc = nama_nppbkc;
+    if (idNppbkc) payload.idNppbkc = idNppbkc;
+    if (namaNppbkc) payload.namaNppbkc = namaNppbkc;
     if (nppbkc) payload.nppbkc = nppbkc;
-    if (npwp_nppbkc) payload.npwp = npwp_nppbkc;
-    if (alamat_nppbkc) payload.alamatNppbkc = alamat_nppbkc;
+    if (npwpNppbkc) payload.npwp = npwpNppbkc;
+    if (alamatNppbkc) payload.alamatNppbkc = alamatNppbkc;
 
     const response = await requestApi({
       service: "referensi",
@@ -90,13 +90,13 @@ export default class ModalDaftarNPPBKC extends Component {
     if (response) {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `nppbkc-${index}`,
-        nppbkc_id: item.idNppbkc,
-        nama_nppbkc: item.namaNppbkc,
+        idNppbkc: item.idNppbkc,
+        namaNppbkc: item.namaNppbkc,
         nppbkc: item.nppbkc,
-        npwp_nppbkc: item.npwp,
-        alamat_nppbkc: item.alamatNppbkc,
-        jenis_bkc_id: item.idJenisBkc,
-        personal_nppbkc: item.kodePerson,
+        npwpNppbkc: item.npwp,
+        alamatNppbkc: item.alamatNppbkc,
+        idJenisBkc: item.idJenisBkc,
+        personalNppbkc: item.kodePerson,
       }));
       const page = response.data.data.currentPage;
       const totalData = response.data.data.totalData;
