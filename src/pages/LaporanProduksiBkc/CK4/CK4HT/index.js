@@ -407,7 +407,7 @@ export default class CK4HT extends Component {
   handleDataKota = (record) => {
     this.setState({
       idKota: record.idKota,
-      namaKota: record.idKota,
+      namaKota: record.namaKota,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
