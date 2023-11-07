@@ -295,8 +295,8 @@ export default class PermohonanTarifPerbaikan extends Component {
 
   handleDataKota = (record) => {
     this.setState({
-      idKota: record.idKota,
-      namaKota: record.namaKota,
+      idLokasiPerekaman: record.idKota,
+      namaLokasiPerekaman: record.namaKota,
     });
     this.handleModalClose("isModalDaftarKotaVisible");
   };
