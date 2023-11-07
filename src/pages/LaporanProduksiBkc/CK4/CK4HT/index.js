@@ -670,7 +670,7 @@ export default class CK4HT extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam">
+        <Container menuName="Laporan Produksi BKC CK4" contentName="CK4 HT Rekam">
           <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>

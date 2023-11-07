@@ -814,7 +814,7 @@ export default class CK4HTPerbaikan extends Component {
 
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Perbaikan">
+        <Container menuName="Laporan Produksi BKC CK4" contentName="CK4 HT Perbaikan">
           <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>

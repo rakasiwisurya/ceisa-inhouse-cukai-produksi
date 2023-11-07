@@ -509,7 +509,7 @@ export default class CK4HTTaskToDo extends Component {
 
     return (
       <>
-        <Container menuName="Task To Do" contentName="CK4 HT" hideContentHeader>
+        <Container menuName="Task To Do" contentName="CK4 HT Task To Do">
           <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
