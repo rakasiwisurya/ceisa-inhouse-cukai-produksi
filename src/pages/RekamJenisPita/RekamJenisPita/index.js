@@ -246,7 +246,7 @@ export default class RekamJenisPita extends Component {
   render() {
     return (
       <>
-        <Container menuName="Rekam Jenis Pita" contentName="Rekam Jenis Pita">
+        <Container menuName="Jenis Pita" contentName="Jenis Pita">
           <Row gutter={[16, 16]}>
             <Col span={5}>
               <ButtonCustom
@@ -259,16 +259,15 @@ export default class RekamJenisPita extends Component {
             </Col>
           </Row>
 
-          <div style={{ marginTop: 30, marginBottom: 20 }}>
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isRekamJenisPitaLoading}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              onChange={(page) => this.setState({ page: page.current })}
-              scroll={{ x: "max-content" }}
-            />
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isRekamJenisPitaLoading}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            onChange={(page) => this.setState({ page: page.current })}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30 }}
+          />
         </Container>
       </>
     );

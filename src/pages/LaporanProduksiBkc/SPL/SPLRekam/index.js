@@ -2,7 +2,6 @@ import { Button, Card, Col, DatePicker, Input, Row, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
@@ -127,9 +126,8 @@ export default class SPLRekam extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC" contentName="SPL Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+        <Container menuName="Laporan Produksi BKC" contentName="SPL Rekam">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[20, 20]}>
               <Col span={12}>
                 <Card title={this.state.cardTitle1} style={{ height: 563 }}>
@@ -280,26 +278,26 @@ export default class SPLRekam extends Component {
                 </Card>
               </Col>
             </Row>
+          </Card>
 
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

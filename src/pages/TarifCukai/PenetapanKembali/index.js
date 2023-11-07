@@ -1,8 +1,7 @@
-import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
+import { Button, Card, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import moment from "moment";
@@ -637,13 +636,8 @@ export default class PenetapanKembali extends Component {
   render() {
     return (
       <>
-        <Container menuName="Tarif Cukai" contentName="Penetapan Kembali" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Tarif Cukai" contentName="Penetapan Kembali">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -660,18 +654,16 @@ export default class PenetapanKembali extends Component {
               </Col>
 
               <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Tanggal SKEP</FormLabel>
-                  </div>
-                  <DatePicker
-                    id="tanggalSkep"
-                    format="DD-MM-YYYY"
-                    value={this.state.tanggalSkep}
-                    onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
-                    style={{ width: "100%" }}
-                  />
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal SKEP</FormLabel>
                 </div>
+                <DatePicker
+                  id="tanggalSkep"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalSkep}
+                  onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
+                  style={{ width: "100%" }}
+                />
               </Col>
 
               <Col span={12}>
@@ -690,129 +682,124 @@ export default class PenetapanKembali extends Component {
                 </div>
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Card title={this.state.subtitle2}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <div style={{ marginBottom: 20 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Jenis Produksi</FormLabel>
-                  </div>
-                  <Select
-                    id="jenisProduksi"
-                    value={this.state.idJenisProduksi}
-                    loading={this.state.isJenisProduksiLoading}
-                    onChange={(value, option) => {
-                      this.handleSelectCustomChange("jenisProduksi", value, option);
-                    }}
-                    style={{ width: "100%" }}
-                    disabled={!this.state.idNppbkc}
-                  >
-                    {this.state.listJenisProduksi.length > 0 &&
-                      this.state.listJenisProduksi.map((item, index) => (
-                        <Select.Option
-                          key={`jenisProduksi-${index}`}
-                          value={
-                            item.idJenisProduksiBkc && item.idGolonganBkc
-                              ? `${item.idJenisProduksiBkc}-${item.idGolonganBkc}`
-                              : null
-                          }
-                        >
-                          {item.kodeJenisProduksi && item.namaGolonganBkc
-                            ? `${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`
-                            : "ALL"}
-                        </Select.Option>
-                      ))}
-                  </Select>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis Produksi</FormLabel>
                 </div>
-              </Col>
-            </Row>
-
-            {this.state.idNppbkc && (
-              <>
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    dataSource={this.state.dataSourceTop}
-                    columns={this.state.columnTop}
-                    scroll={{ x: "max-content" }}
-                    loading={this.state.isDetailMerkLoading}
-                    onChange={(page) => this.setState({ pageTop: page.current })}
-                    pagination={{ current: this.state.pageTop }}
-                    rowSelection={{
-                      selectedRowKeys: this.state.selectedRowKeysTop,
-                      onChange: this.handleSelectRowTopChange,
-                    }}
-                  />
-                </div>
-
-                <Row gutter={[16, 16]}>
-                  <Col span={4} offset={10}>
-                    <Row gutter={[16, 16]}>
-                      <Col span={12}>
-                        <ButtonCustom
-                          variant="danger"
-                          onClick={this.handleToTableTop}
-                          icon="arrow-up"
-                          block
-                          disabled={
-                            !this.state.dataSourceBottom.length > 0 ||
-                            !this.state.selectedRowKeysBottom.length > 0
-                          }
-                        />
-                      </Col>
-                      <Col span={12}>
-                        <ButtonCustom
-                          variant="success"
-                          onClick={this.handleToTableBottom}
-                          icon="arrow-down"
-                          block
-                          disabled={
-                            !this.state.dataSourceTop.length > 0 ||
-                            !this.state.selectedRowKeysTop.length > 0
-                          }
-                        />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    dataSource={this.state.dataSourceBottom}
-                    columns={this.state.columnBottom}
-                    scroll={{ x: "max-content" }}
-                    onChange={(page) => this.setState({ pageBottom: page.current })}
-                    pagination={{ current: this.state.pageBottom }}
-                    rowSelection={{
-                      selectedRowKeys: this.state.selectedRowKeysBottom,
-                      onChange: this.handleSelectRowBottomChange,
-                    }}
-                  />
-                </div>
-              </>
-            )}
-
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
-
-              <Col span={5}>
-                <Button
-                  type="primary"
-                  loading={this.state.isPenetapanLoading}
-                  onClick={this.handlePenetapan}
-                  block
+                <Select
+                  id="jenisProduksi"
+                  value={this.state.idJenisProduksi}
+                  loading={this.state.isJenisProduksiLoading}
+                  onChange={(value, option) => {
+                    this.handleSelectCustomChange("jenisProduksi", value, option);
+                  }}
+                  style={{ width: "100%" }}
+                  disabled={!this.state.idNppbkc}
                 >
-                  Simpan Penetapan
-                </Button>
+                  {this.state.listJenisProduksi.length > 0 &&
+                    this.state.listJenisProduksi.map((item, index) => (
+                      <Select.Option
+                        key={`jenisProduksi-${index}`}
+                        value={
+                          item.idJenisProduksiBkc && item.idGolonganBkc
+                            ? `${item.idJenisProduksiBkc}-${item.idGolonganBkc}`
+                            : null
+                        }
+                      >
+                        {item.kodeJenisProduksi && item.namaGolonganBkc
+                          ? `${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`
+                          : "ALL"}
+                      </Select.Option>
+                    ))}
+                </Select>
               </Col>
             </Row>
-          </div>
+          </Card>
+
+          {this.state.idNppbkc && (
+            <>
+              <Table
+                dataSource={this.state.dataSourceTop}
+                columns={this.state.columnTop}
+                scroll={{ x: "max-content" }}
+                loading={this.state.isDetailMerkLoading}
+                onChange={(page) => this.setState({ pageTop: page.current })}
+                pagination={{ current: this.state.pageTop }}
+                style={{ marginTop: 30, marginBottom: 30 }}
+                rowSelection={{
+                  selectedRowKeys: this.state.selectedRowKeysTop,
+                  onChange: this.handleSelectRowTopChange,
+                }}
+              />
+
+              <Row gutter={[16, 16]}>
+                <Col span={4} offset={10}>
+                  <Row gutter={[16, 16]}>
+                    <Col span={12}>
+                      <ButtonCustom
+                        variant="danger"
+                        onClick={this.handleToTableTop}
+                        icon="arrow-up"
+                        block
+                        disabled={
+                          !this.state.dataSourceBottom.length > 0 ||
+                          !this.state.selectedRowKeysBottom.length > 0
+                        }
+                      />
+                    </Col>
+                    <Col span={12}>
+                      <ButtonCustom
+                        variant="success"
+                        onClick={this.handleToTableBottom}
+                        icon="arrow-down"
+                        block
+                        disabled={
+                          !this.state.dataSourceTop.length > 0 ||
+                          !this.state.selectedRowKeysTop.length > 0
+                        }
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+
+              <Table
+                dataSource={this.state.dataSourceBottom}
+                columns={this.state.columnBottom}
+                scroll={{ x: "max-content" }}
+                onChange={(page) => this.setState({ pageBottom: page.current })}
+                pagination={{ current: this.state.pageBottom }}
+                style={{ marginTop: 30, marginBottom: 30 }}
+                rowSelection={{
+                  selectedRowKeys: this.state.selectedRowKeysBottom,
+                  onChange: this.handleSelectRowBottomChange,
+                }}
+              />
+            </>
+          )}
+
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+
+            <Col span={5}>
+              <Button
+                type="primary"
+                loading={this.state.isPenetapanLoading}
+                onClick={this.handlePenetapan}
+                block
+              >
+                Simpan Penetapan
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarKota

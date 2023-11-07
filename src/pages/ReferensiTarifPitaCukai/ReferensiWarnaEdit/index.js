@@ -1,14 +1,13 @@
-import { Button, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
-import React, { Component } from "react";
+import { Button, Card, Col, DatePicker, Icon, Input, Row, Select, Table, notification } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
-import moment from "moment";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { requestApi } from "utils/requestApi";
 import { pathName } from "configs/constants";
-import ButtonCustom from "components/Button/ButtonCustom";
+import moment from "moment";
+import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
+import { requestApi } from "utils/requestApi";
 
 export default class ReferensiWarnaEdit extends Component {
   constructor(props) {
@@ -379,35 +378,6 @@ export default class ReferensiWarnaEdit extends Component {
     });
   };
 
-  validationForm = () => {
-    const { nomorSkep, tanggalSkep, tanggalAwalBerlaku, dataSource } = this.state;
-
-    if (!nomorSkep || !tanggalSkep || !tanggalAwalBerlaku || dataSource.length < 1) {
-      return false;
-    }
-
-    return true;
-  };
-  validationInsert = () => {
-    const { idJenisBkc, kodeWarna, warna, idGolonganBkc, idJenisProduksiBkc, idJenisUsaha } =
-      this.state;
-
-    if (!idJenisBkc) return false;
-
-    if (idJenisBkc === 3 && (!kodeWarna || !warna || !idGolonganBkc || !idJenisProduksiBkc)) {
-      return false;
-    }
-
-    if (
-      idJenisBkc === 2 &&
-      (!kodeWarna || !warna || !idGolonganBkc || !idJenisProduksiBkc || !idJenisUsaha)
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
   handleSimpan = () => {
     const {
       idJenisBkc,
@@ -451,6 +421,27 @@ export default class ReferensiWarnaEdit extends Component {
       idJenisUsaha: null,
       namaJenisUsaha: null,
     });
+  };
+  handleReset = () => {
+    const resetData = {
+      isEdit: false,
+
+      kodeWarna: null,
+      warna: null,
+      idGolonganBkc: null,
+      namaGolonganBkc: null,
+      idJenisProduksiBkc: null,
+      namaJenisProduksiBkc: null,
+      idJenisUsaha: null,
+      namaJenisUsaha: null,
+    };
+
+    if (this.state.dataSource.length === 0) {
+      resetData.idJenisBkc = null;
+      resetData.namaJenisBkc = null;
+    }
+
+    this.setState(resetData);
   };
   handleUbah = () => {
     const {
@@ -587,264 +578,243 @@ export default class ReferensiWarnaEdit extends Component {
   };
 
   render() {
+    if (this.state.isDetailWarnaLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container
-          menuName="Refrensi Tarif dan Pita Cukai"
-          contentName="Referensi Warna Edit"
-          hideContentHeader
-        >
-          {this.state.isDetailWarnaLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor Surat</FormLabel>
-                    </div>
-                    <Input
-                      id="nomorSkep"
-                      onChange={this.handleInputChange}
-                      value={this.state.nomorSkep}
-                    />
-                  </Col>
+        <Container menuName="Refrensi Tarif dan Pita Cukai" contentName="Referensi Warna Edit">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Surat</FormLabel>
+                </div>
+                <Input
+                  id="nomorSkep"
+                  onChange={this.handleInputChange}
+                  value={this.state.nomorSkep}
+                />
+              </Col>
 
-                  <Col span={6}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Surat</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalSkep"
-                      format="DD-MM-YYYY"
-                      onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
-                      value={this.state.tanggalSkep}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
+              <Col span={6}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Surat</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalSkep"
+                  format="DD-MM-YYYY"
+                  onChange={(date) => this.handleDatepickerChange("tanggalSkep", date)}
+                  value={this.state.tanggalSkep}
+                  style={{ width: "100%" }}
+                />
+              </Col>
 
-                  <Col span={6}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Awal Berlaku</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalAwalBerlaku"
-                      format="DD-MM-YYYY"
-                      onChange={(value) => this.handleDatepickerChange("tanggalAwalBerlaku", value)}
-                      value={this.state.tanggalAwalBerlaku}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-                </Row>
-              </div>
+              <Col span={6}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Awal Berlaku</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalAwalBerlaku"
+                  format="DD-MM-YYYY"
+                  onChange={(value) => this.handleDatepickerChange("tanggalAwalBerlaku", value)}
+                  value={this.state.tanggalAwalBerlaku}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+            </Row>
+          </Card>
 
-              <Header>{this.state.subtitle2}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis BKC</FormLabel>
+                </div>
+                <Select
+                  id="jenisBkc"
+                  onChange={(value, option) => {
+                    this.setState({
+                      idGolonganBkc: null,
+                      namaGolonganBkc: null,
+                      idJenisProduksiBkc: null,
+                      namaJenisProduksiBkc: null,
+                      idJenisUsaha: null,
+                      namaJenisUsaha: null,
+                      listGolongan: [],
+                      listJenisProduksi: [],
+                    });
+                    this.handleSelectCustomChange("jenisBkc", value, option);
+                  }}
+                  style={{ width: "100%" }}
+                  value={this.state.idJenisBkc}
+                  loading={this.state.isJenisBkcLoading}
+                  disabled={this.state.dataSource.length > 0}
+                >
+                  {this.state.listJenisBkc.length > 0 &&
+                    this.state.listJenisBkc.map((item, index) => (
+                      <Select.Option key={`jenisBkc-${index}`} value={item.idJenisBkc}>
+                        {item.namaJenisBkc}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Kode Warna</FormLabel>
+                </div>
+                <Input
+                  id="kodeWarna"
+                  onChange={this.handleInputChange}
+                  value={this.state.kodeWarna}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Warna</FormLabel>
+                </div>
+                <Input id="warna" onChange={this.handleInputChange} value={this.state.warna} />
+              </Col>
+
+              {this.state.idJenisBkc && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Golongan</FormLabel>
+                  </div>
+                  <Select
+                    id="golonganBkc"
+                    onChange={(value, option) =>
+                      this.handleSelectCustomChange("golonganBkc", value, option)
+                    }
+                    value={this.state.idGolonganBkc}
+                    loading={this.state.isGolonganLoading}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.listGolongan.length > 0 &&
+                      this.state.listGolongan.map((item, index) => (
+                        <Select.Option key={`golonganBkc-${index}`} value={item.idGolonganBkc}>
+                          {item.namaGolonganBkc}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
+              )}
+
+              {this.state.idJenisBkc && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Jenis Produksi</FormLabel>
+                  </div>
+                  <Select
+                    id="jenisProduksiBkc"
+                    onChange={(value, option) =>
+                      this.handleSelectCustomChange("jenisProduksiBkc", value, option)
+                    }
+                    value={this.state.idJenisProduksiBkc}
+                    loading={this.state.isJenisProduksiLoading}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.listJenisProduksi.length > 0 &&
+                      this.state.listJenisProduksi.map((item, index) => (
+                        <Select.Option
+                          key={`jenisProduksiBkc-${index}`}
+                          value={item.idJenisProduksi}
+                        >
+                          {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
+              )}
+
+              <Col span={12}>
+                {this.state.idJenisBkc === 2 && (
+                  <>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis BKC</FormLabel>
+                      <FormLabel>Jenis Usaha</FormLabel>
                     </div>
                     <Select
-                      id="jenisBkc"
-                      onChange={(value, option) => {
-                        this.setState({
-                          idGolonganBkc: null,
-                          namaGolonganBkc: null,
-                          idJenisProduksiBkc: null,
-                          namaJenisProduksiBkc: null,
-                          idJenisUsaha: null,
-                          namaJenisUsaha: null,
-                          listGolongan: [],
-                          listJenisProduksi: [],
-                        });
-                        this.handleSelectCustomChange("jenisBkc", value, option);
-                      }}
+                      id="jenisUsaha"
+                      onChange={(value, option) =>
+                        this.handleSelectCustomChange("jenisUsaha", value, option)
+                      }
+                      value={this.state.idJenisUsaha}
+                      loading={this.state.isJenisUsahaLoading}
                       style={{ width: "100%" }}
-                      value={this.state.idJenisBkc}
-                      loading={this.state.isJenisBkcLoading}
-                      disabled={this.state.dataSource.length > 0}
                     >
-                      {this.state.listJenisBkc.length > 0 &&
-                        this.state.listJenisBkc.map((item, index) => (
-                          <Select.Option key={`jenisBkc-${index}`} value={item.idJenisBkc}>
-                            {item.namaJenisBkc}
+                      {this.state.listJenisUsaha.length > 0 &&
+                        this.state.listJenisUsaha.map((item, index) => (
+                          <Select.Option key={`jenisUsaha-${index}`} value={item.idJenisUsaha}>
+                            {item.namaJenisUsaha}
                           </Select.Option>
                         ))}
                     </Select>
-                  </Col>
-                </Row>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </Card>
 
-                <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kode Warna</FormLabel>
-                    </div>
-                    <Input
-                      id="kodeWarna"
-                      onChange={this.handleInputChange}
-                      value={this.state.kodeWarna}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Warna</FormLabel>
-                    </div>
-                    <Input id="warna" onChange={this.handleInputChange} value={this.state.warna} />
-                  </Col>
-
-                  {this.state.idJenisBkc && (
-                    <Col span={12}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Golongan</FormLabel>
-                      </div>
-                      <Select
-                        id="golonganBkc"
-                        onChange={(value, option) =>
-                          this.handleSelectCustomChange("golonganBkc", value, option)
-                        }
-                        value={this.state.idGolonganBkc}
-                        loading={this.state.isGolonganLoading}
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.listGolongan.length > 0 &&
-                          this.state.listGolongan.map((item, index) => (
-                            <Select.Option key={`golonganBkc-${index}`} value={item.idGolonganBkc}>
-                              {item.namaGolonganBkc}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </Col>
-                  )}
-
-                  {this.state.idJenisBkc && (
-                    <Col span={12}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Jenis Produksi</FormLabel>
-                      </div>
-                      <Select
-                        id="jenisProduksiBkc"
-                        onChange={(value, option) =>
-                          this.handleSelectCustomChange("jenisProduksiBkc", value, option)
-                        }
-                        value={this.state.idJenisProduksiBkc}
-                        loading={this.state.isJenisProduksiLoading}
-                        style={{ width: "100%" }}
-                      >
-                        {this.state.listJenisProduksi.length > 0 &&
-                          this.state.listJenisProduksi.map((item, index) => (
-                            <Select.Option
-                              key={`jenisProduksiBkc-${index}`}
-                              value={item.idJenisProduksi}
-                            >
-                              {`(${item.kodeJenisProduksi}) - ${item.namaJenisProduksi}`}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </Col>
-                  )}
-
-                  <Col span={12}>
-                    {this.state.idJenisBkc === 2 && (
-                      <>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jenis Usaha</FormLabel>
-                        </div>
-                        <Select
-                          id="jenisUsaha"
-                          onChange={(value, option) =>
-                            this.handleSelectCustomChange("jenisUsaha", value, option)
-                          }
-                          value={this.state.idJenisUsaha}
-                          loading={this.state.isJenisUsahaLoading}
-                          style={{ width: "100%" }}
-                        >
-                          {this.state.listJenisUsaha.length > 0 &&
-                            this.state.listJenisUsaha.map((item, index) => (
-                              <Select.Option key={`jenisUsaha-${index}`} value={item.idJenisUsaha}>
-                                {item.namaJenisUsaha}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      </>
-                    )}
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col span={8} offset={8}>
-                    <Row gutter={[16, 16]}>
-                      <Col span={12}>
-                        {this.state.isEdit ? (
-                          <ButtonCustom variant="warning" block onClick={this.handleUbah}>
-                            UBAH
-                          </ButtonCustom>
-                        ) : (
-                          <Button
-                            type="primary"
-                            block
-                            onClick={this.handleSimpan}
-                            // disabled={!this.validationInsert()}
-                          >
-                            SIMPAN
-                          </Button>
-                        )}
-                      </Col>
-
-                      <Col span={12}>
-                        {this.state.isEdit && (
-                          <Button type="danger" block onClick={this.handleBatal}>
-                            BATAL
-                          </Button>
-                        )}
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    dataSource={this.state.dataSource}
-                    columns={this.state.columns}
-                    loading={this.state.isTableLoading}
-                    scroll={{ x: "max-content" }}
-                    onChange={this.handleTableChange}
-                    pagination={{ current: this.state.page }}
-                  />
-                </div>
-
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
+          <Row>
+            <Col span={8} offset={8}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEdit ? (
+                    <ButtonCustom variant="warning" block onClick={this.handleUbah}>
+                      UBAH
                     </ButtonCustom>
-                  </Col>
-                  <Col span={4}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isSimpanPerubahanLoading}
-                      onClick={this.handleSimpanPerubahan}
-                      // disabled={!this.validationForm()}
-                      block
-                    >
-                      Update
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpan}>
+                      SIMPAN
                     </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+                  )}
+                </Col>
+
+                <Col span={12}>
+                  {this.state.isEdit ? (
+                    <Button type="danger" block onClick={this.handleBatal}>
+                      BATAL
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      RESET
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isTableLoading}
+            scroll={{ x: "max-content" }}
+            onChange={this.handleTableChange}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+          />
+
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isSimpanPerubahanLoading}
+                onClick={this.handleSimpanPerubahan}
+                block
+              >
+                Update
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </>
     );

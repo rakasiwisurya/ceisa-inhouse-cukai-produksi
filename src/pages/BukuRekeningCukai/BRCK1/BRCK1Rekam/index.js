@@ -13,7 +13,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
@@ -25,8 +24,6 @@ export default class BRCK1Rekam extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-1)",
-
       isSearchLoading: false,
       isRekamLoading: false,
       isBrowseShow: false,
@@ -541,371 +538,267 @@ export default class BRCK1Rekam extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1 Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>NPPBKC</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-1 Rekam">
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>NPPBKC</FormLabel>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                <Button
+                  type="primary"
+                  onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                >
+                  Cari
+                </Button>
+                <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
+              </div>
+            </Col>
+
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>Periode</FormLabel>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <DatePicker
+                  id="periodeAwal"
+                  format="DD-MM-YYYY"
+                  onChange={(date) => this.handleDatepickerChange("periodeAwal", date)}
+                  value={this.state.periodeAwal}
+                  style={{ width: "100%" }}
+                />
+                <div>s.d</div>
+                <DatePicker
+                  id="periodeAkhir"
+                  format="DD-MM-YYYY"
+                  onChange={(date) => this.handleDatepickerChange("periodeAkhir", date)}
+                  value={this.state.periodeAkhir}
+                  style={{ width: "100%" }}
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <Row style={{ marginTop: 30 }}>
+            <Col span={8} offset={16}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
                   <Button
                     type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                    onClick={this.handleSearch}
+                    loading={this.state.isSearchLoading}
+                    block
                   >
-                    Cari
+                    Tampilkan
                   </Button>
-                  <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
-                </div>
-              </Col>
+                </Col>
 
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Periode</FormLabel>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <DatePicker
-                    id="periodeAwal"
-                    format="DD-MM-YYYY"
-                    onChange={(date) => this.handleDatepickerChange("periodeAwal", date)}
-                    value={this.state.periodeAwal}
-                    style={{ width: "100%" }}
-                  />
-                  <div>s.d</div>
-                  <DatePicker
-                    id="periodeAkhir"
-                    format="DD-MM-YYYY"
-                    onChange={(date) => this.handleDatepickerChange("periodeAkhir", date)}
-                    value={this.state.periodeAkhir}
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  <Button type="danger" block onClick={this.handleReset}>
+                    Reset
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <Row style={{ marginTop: 30 }}>
-              <Col span={8} offset={16}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Button
-                      type="primary"
-                      onClick={this.handleSearch}
-                      loading={this.state.isSearchLoading}
-                      block
-                    >
-                      Tampilkan
-                    </Button>
-                  </Col>
-
-                  <Col span={12}>
-                    <Button type="danger" block onClick={this.handleReset}>
-                      Reset
-                    </Button>
+          {this.state.isBrowseShow && (
+            <>
+              <div style={{ marginTop: 30, marginBottom: 30 }}>
+                <Row style={{ marginBottom: 20 }}>
+                  <Col span={8} offset={16}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>
+                        SALDO AWAL <br /> (Hasil penutupan periode sebelumnya)
+                      </FormLabel>
+                    </div>
+                    <InputNumber
+                      id="saldoAwal"
+                      value={this.state.saldoAwal}
+                      onChange={(value) => this.handleInputNumberChange("saldoAwal", value)}
+                      min={0}
+                      style={{ width: "100%" }}
+                      disabled={this.state.saldoAwal !== null}
+                    />
                   </Col>
                 </Row>
-              </Col>
-            </Row>
 
-            {this.state.isBrowseShow && (
-              <>
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Row style={{ marginBottom: 20 }}>
-                    <Col span={8} offset={16}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>
-                          SALDO AWAL <br /> (Hasil penutupan periode sebelumnya)
-                        </FormLabel>
+                <Table
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                  loading={this.state.isSearchLoading}
+                  scroll={{ x: "max-content" }}
+                  pagination={{ current: this.state.page }}
+                  footer={(currentPageData) => {
+                    return (
+                      <Table
+                        style={{ margin: -16 }}
+                        showHeader={false}
+                        pagination={false}
+                        columns={[
+                          {
+                            key: "title",
+                            title: "Title",
+                            dataIndex: "title",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "transaksiDebet",
+                            title: "Transaksi Debit",
+                            dataIndex: "transaksiDebet",
+                            width: 101,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "transaksiKredit",
+                            title: "Transaksi Kredit",
+                            dataIndex: "transaksiKredit",
+                            width: 101,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "saldo",
+                            title: "Saldo",
+                            dataIndex: "saldo",
+                            width: 101,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "keterangan",
+                            title: "Keterangan",
+                            dataIndex: "keterangan",
+                            width: 101,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                        ]}
+                        dataSource={[
+                          {
+                            key: "1",
+                            title: "Jumlah",
+                            transaksiDebet: this.state.totalDebet,
+                            transaksiKredit: this.state.totalKredit,
+                            saldo: this.state.saldoBuku,
+                            keterangan: `Size Data: ${this.state.dataSource.length}`,
+                          },
+                          {
+                            key: "2",
+                            title: "Saldo Buku",
+                            transaksiDebet: null,
+                            transaksiKredit: null,
+                            saldo: this.state.saldoBuku,
+                            keterangan: null,
+                          },
+                          {
+                            key: "3",
+                            title: "Selisih",
+                            transaksiDebet: null,
+                            transaksiKredit: null,
+                            saldo: Math.abs(this.state.selisih),
+                            keterangan: null,
+                          },
+                          {
+                            key: "4",
+                            title: "Saldo Akhir",
+                            transaksiDebet: null,
+                            transaksiKredit: null,
+                            saldo: this.state.hasilPencacahanBack5,
+                            keterangan: null,
+                          },
+                        ]}
+                      />
+                    );
+                  }}
+                />
+              </div>
+
+              <Row gutter={[10, 10]}>
+                <Col span={21} offset={3}>
+                  <Row gutter={[10, 10]}>
+                    <Col span={13}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Hasil Pencacahan (BACK-5)
                       </div>
+                    </Col>
+                    <Col span={5}>
                       <InputNumber
-                        id="saldoAwal"
-                        value={this.state.saldoAwal}
-                        onChange={(value) => this.handleInputNumberChange("saldoAwal", value)}
-                        min={0}
+                        id="hasilPencacahanBack5"
+                        value={this.state.hasilPencacahanBack5}
+                        onChange={(value) => {
+                          this.handleInputNumberChange("hasilPencacahanBack5", value);
+                        }}
                         style={{ width: "100%" }}
-                        disabled={this.state.saldoAwal !== null}
+                      />
+                    </Col>
+                    <Col span={6}>
+                      <Input.TextArea
+                        id="hasilPencarianBack5Description"
+                        value={this.state.hasilPencarianBack5Description}
+                        onChange={this.handleInputChange}
+                        autoSize
                       />
                     </Col>
                   </Row>
 
-                  <Table
-                    columns={this.state.columns}
-                    dataSource={this.state.dataSource}
-                    loading={this.state.isSearchLoading}
-                    scroll={{ x: "max-content" }}
-                    pagination={{ current: this.state.page }}
-                    footer={(currentPageData) => {
-                      return (
-                        <Table
-                          style={{ margin: -16 }}
-                          showHeader={false}
-                          pagination={false}
-                          columns={[
-                            {
-                              key: "title",
-                              title: "Title",
-                              dataIndex: "title",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                            },
-                            {
-                              key: "transaksiDebet",
-                              title: "Transaksi Debit",
-                              dataIndex: "transaksiDebet",
-                              width: 101,
-                              fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                            },
-                            {
-                              key: "transaksiKredit",
-                              title: "Transaksi Kredit",
-                              dataIndex: "transaksiKredit",
-                              width: 101,
-                              fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                            },
-                            {
-                              key: "saldo",
-                              title: "Saldo",
-                              dataIndex: "saldo",
-                              width: 101,
-                              fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                            },
-                            {
-                              key: "keterangan",
-                              title: "Keterangan",
-                              dataIndex: "keterangan",
-                              width: 101,
-                              fixed: "right",
-                              render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                            },
-                          ]}
-                          dataSource={[
-                            {
-                              key: "1",
-                              title: "Jumlah",
-                              transaksiDebet: this.state.totalDebet,
-                              transaksiKredit: this.state.totalKredit,
-                              saldo: this.state.saldoBuku,
-                              keterangan: `Size Data: ${this.state.dataSource.length}`,
-                            },
-                            {
-                              key: "2",
-                              title: "Saldo Buku",
-                              transaksiDebet: null,
-                              transaksiKredit: null,
-                              saldo: this.state.saldoBuku,
-                              keterangan: null,
-                            },
-                            {
-                              key: "3",
-                              title: "Selisih",
-                              transaksiDebet: null,
-                              transaksiKredit: null,
-                              saldo: Math.abs(this.state.selisih),
-                              keterangan: null,
-                            },
-                            {
-                              key: "4",
-                              title: "Saldo Akhir",
-                              transaksiDebet: null,
-                              transaksiKredit: null,
-                              saldo: this.state.hasilPencacahanBack5,
-                              keterangan: null,
-                            },
-                          ]}
-                        />
-                      );
-                    }}
-                  />
-                </div>
+                  <Row gutter={[10, 10]}>
+                    <Col span={13}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        No. BACK-5
+                      </div>
+                    </Col>
+                    <Col span={5}>
+                      <Input
+                        id="noBack5"
+                        onChange={this.handleInputChange}
+                        value={this.state.noBack5}
+                      />
+                    </Col>
+                  </Row>
 
-                <Row gutter={[10, 10]}>
-                  <Col span={21} offset={3}>
-                    <Row gutter={[10, 10]}>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            height: 32,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "end",
-                          }}
-                        >
-                          Hasil Pencacahan (BACK-5)
-                        </div>
-                      </Col>
-                      <Col span={5}>
-                        <InputNumber
-                          id="hasilPencacahanBack5"
-                          value={this.state.hasilPencacahanBack5}
-                          onChange={(value) => {
-                            this.handleInputNumberChange("hasilPencacahanBack5", value);
-                          }}
-                          style={{ width: "100%" }}
-                        />
-                      </Col>
-                      <Col span={6}>
-                        <Input.TextArea
-                          id="hasilPencarianBack5Description"
-                          value={this.state.hasilPencarianBack5Description}
-                          onChange={this.handleInputChange}
-                          autoSize
-                        />
-                      </Col>
-                    </Row>
+                  <Row gutter={[10, 10]}>
+                    <Col span={13}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Tgl. BACK-5
+                      </div>
+                    </Col>
+                    <Col span={5}>
+                      <DatePicker
+                        id="tglBack5"
+                        format="DD-MM-YYYY"
+                        onChange={(date) => this.handleDatepickerChange("tglBack5", date)}
+                        value={this.state.tglBack5}
+                        style={{ width: "100%" }}
+                      />
+                    </Col>
+                  </Row>
 
-                    <Row gutter={[10, 10]}>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            height: 32,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "end",
-                          }}
-                        >
-                          No. BACK-5
-                        </div>
-                      </Col>
-                      <Col span={5}>
-                        <Input
-                          id="noBack5"
-                          onChange={this.handleInputChange}
-                          value={this.state.noBack5}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row gutter={[10, 10]}>
-                      <Col span={13}>
-                        <div
-                          style={{
-                            height: 32,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "end",
-                          }}
-                        >
-                          Tgl. BACK-5
-                        </div>
-                      </Col>
-                      <Col span={5}>
-                        <DatePicker
-                          id="tglBack5"
-                          format="DD-MM-YYYY"
-                          onChange={(date) => this.handleDatepickerChange("tglBack5", date)}
-                          value={this.state.tglBack5}
-                          style={{ width: "100%" }}
-                        />
-                      </Col>
-                    </Row>
-
-                    {Math.sign(this.state.selisih) !== 0 && (
-                      <>
-                        <Row gutter={[10, 10]}>
-                          <Col span={13}>
-                            <div
-                              style={{
-                                height: 32,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "end",
-                              }}
-                            >
-                              {Math.sign(this.state.selisih) === -1
-                                ? "Selisih Kurang"
-                                : "Selisih Lebih"}
-                            </div>
-                          </Col>
-                          <Col span={5}>
-                            <InputNumber
-                              id="selisih"
-                              value={Math.abs(this.state.selisih)}
-                              style={{ width: "100%" }}
-                              disabled
-                            />
-                          </Col>
-                          <Col span={6}>
-                            <Input.TextArea
-                              id="selisihDescription"
-                              value={this.state.selisihDescription}
-                              autoSize
-                              disabled
-                            />
-                          </Col>
-                        </Row>
-
-                        {Math.sign(this.state.selisih) === -1 && (
-                          <>
-                            <Row gutter={[10, 10]}>
-                              <Col span={13}>
-                                <div
-                                  style={{
-                                    height: 32,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "end",
-                                  }}
-                                >
-                                  Potongan
-                                </div>
-                              </Col>
-                              <Col span={5}>
-                                <InputNumber
-                                  id="potongan"
-                                  value={this.state.potongan}
-                                  style={{ width: "100%" }}
-                                  disabled
-                                />
-                              </Col>
-                              <Col span={6}>
-                                <Input.TextArea
-                                  id="potonganDescription"
-                                  value={this.state.potonganDescription}
-                                  autoSize
-                                  disabled
-                                />
-                              </Col>
-                            </Row>
-
-                            <Row gutter={[10, 10]}>
-                              <Col span={13}>
-                                <div
-                                  style={{
-                                    height: 32,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "end",
-                                  }}
-                                >
-                                  Kekurangan
-                                </div>
-                              </Col>
-                              <Col span={5}>
-                                <InputNumber
-                                  id="kekurangan"
-                                  value={this.state.kekurangan}
-                                  style={{ width: "100%" }}
-                                  disabled
-                                />
-                              </Col>
-                              <Col span={6}>
-                                <Input.TextArea
-                                  id="kekuranganDescription"
-                                  value={this.state.kekuranganDescription}
-                                  autoSize
-                                  disabled
-                                />
-                              </Col>
-                            </Row>
-                          </>
-                        )}
-                      </>
-                    )}
-
-                    {Math.sign(this.state.selisih) !== 0 && (
+                  {Math.sign(this.state.selisih) !== 0 && (
+                    <>
                       <Row gutter={[10, 10]}>
                         <Col span={13}>
                           <div
@@ -916,52 +809,100 @@ export default class BRCK1Rekam extends Component {
                               justifyContent: "end",
                             }}
                           >
-                            Batas Kelonggaran
+                            {Math.sign(this.state.selisih) === -1
+                              ? "Selisih Kurang"
+                              : "Selisih Lebih"}
                           </div>
                         </Col>
-
                         <Col span={5}>
                           <InputNumber
-                            id="batasKelonggaran"
-                            value={this.state.batasKelonggaran}
+                            id="selisih"
+                            value={Math.abs(this.state.selisih)}
                             style={{ width: "100%" }}
                             disabled
                           />
                         </Col>
-
                         <Col span={6}>
                           <Input.TextArea
-                            id="batasKelonggaranDescription"
-                            value={this.state.batasKelonggaranDescription}
+                            id="selisihDescription"
+                            value={this.state.selisihDescription}
                             autoSize
                             disabled
                           />
                         </Col>
                       </Row>
-                    )}
 
-                    {Math.sign(this.state.selisih) !== 0 && (
-                      <Row gutter={[10, 10]}>
-                        <Col
-                          span={11}
-                          offset={13}
-                          style={{
-                            color:
-                              (Math.sign(this.state.selisih) === -1 &&
-                                this.state.kekurangan > this.state.batasKelonggaran) ||
-                              (Math.sign(this.state.selisih) === 1 &&
-                                this.state.selisih > this.state.batasKelonggaran)
-                                ? "red"
-                                : "blue",
-                          }}
-                        >
-                          {this.state.notif}
-                        </Col>
-                      </Row>
-                    )}
+                      {Math.sign(this.state.selisih) === -1 && (
+                        <>
+                          <Row gutter={[10, 10]}>
+                            <Col span={13}>
+                              <div
+                                style={{
+                                  height: 32,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                Potongan
+                              </div>
+                            </Col>
+                            <Col span={5}>
+                              <InputNumber
+                                id="potongan"
+                                value={this.state.potongan}
+                                style={{ width: "100%" }}
+                                disabled
+                              />
+                            </Col>
+                            <Col span={6}>
+                              <Input.TextArea
+                                id="potonganDescription"
+                                value={this.state.potonganDescription}
+                                autoSize
+                                disabled
+                              />
+                            </Col>
+                          </Row>
 
-                    <Row gutter={[10, 50]}>
-                      <Col span={8} offset={9}>
+                          <Row gutter={[10, 10]}>
+                            <Col span={13}>
+                              <div
+                                style={{
+                                  height: 32,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                Kekurangan
+                              </div>
+                            </Col>
+                            <Col span={5}>
+                              <InputNumber
+                                id="kekurangan"
+                                value={this.state.kekurangan}
+                                style={{ width: "100%" }}
+                                disabled
+                              />
+                            </Col>
+                            <Col span={6}>
+                              <Input.TextArea
+                                id="kekuranganDescription"
+                                value={this.state.kekuranganDescription}
+                                autoSize
+                                disabled
+                              />
+                            </Col>
+                          </Row>
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  {Math.sign(this.state.selisih) !== 0 && (
+                    <Row gutter={[10, 10]}>
+                      <Col span={13}>
                         <div
                           style={{
                             height: 32,
@@ -970,52 +911,105 @@ export default class BRCK1Rekam extends Component {
                             justifyContent: "end",
                           }}
                         >
-                          Jenis Penutupan
+                          Batas Kelonggaran
                         </div>
                       </Col>
-                      <Col span={7}>
-                        <Select
-                          id="jenisPenutupan"
-                          value={this.state.jenisPenutupan}
-                          onChange={(value) => this.handleSelectChange("jenisPenutupan", value)}
+
+                      <Col span={5}>
+                        <InputNumber
+                          id="batasKelonggaran"
+                          value={this.state.batasKelonggaran}
                           style={{ width: "100%" }}
-                        >
-                          {this.state.listJenisPenutupan.length > 0 &&
-                            this.state.listJenisPenutupan.map((item, index) => (
-                              <Select.Option
-                                key={`jenis-penutupan-${index}`}
-                                value={item.kodeJenisPenutupan}
-                              >
-                                {item.namaJenisPenutupan}
-                              </Select.Option>
-                            ))}
-                        </Select>
+                          disabled
+                        />
+                      </Col>
+
+                      <Col span={6}>
+                        <Input.TextArea
+                          id="batasKelonggaranDescription"
+                          value={this.state.batasKelonggaranDescription}
+                          autoSize
+                          disabled
+                        />
                       </Col>
                     </Row>
-                  </Col>
-                </Row>
-              </>
-            )}
+                  )}
 
-            <Row gutter={[16, 16]}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+                  {Math.sign(this.state.selisih) !== 0 && (
+                    <Row gutter={[10, 10]}>
+                      <Col
+                        span={11}
+                        offset={13}
+                        style={{
+                          color:
+                            (Math.sign(this.state.selisih) === -1 &&
+                              this.state.kekurangan > this.state.batasKelonggaran) ||
+                            (Math.sign(this.state.selisih) === 1 &&
+                              this.state.selisih > this.state.batasKelonggaran)
+                              ? "red"
+                              : "blue",
+                        }}
+                      >
+                        {this.state.notif}
+                      </Col>
+                    </Row>
+                  )}
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+                  <Row gutter={[10, 50]}>
+                    <Col span={8} offset={9}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Jenis Penutupan
+                      </div>
+                    </Col>
+                    <Col span={7}>
+                      <Select
+                        id="jenisPenutupan"
+                        value={this.state.jenisPenutupan}
+                        onChange={(value) => this.handleSelectChange("jenisPenutupan", value)}
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.listJenisPenutupan.length > 0 &&
+                          this.state.listJenisPenutupan.map((item, index) => (
+                            <Select.Option
+                              key={`jenis-penutupan-${index}`}
+                              value={item.kodeJenisPenutupan}
+                            >
+                              {item.namaJenisPenutupan}
+                            </Select.Option>
+                          ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </>
+          )}
+
+          <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

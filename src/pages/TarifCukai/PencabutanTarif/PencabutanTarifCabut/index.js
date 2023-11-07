@@ -1,8 +1,7 @@
-import { Button, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import { pathName } from "configs/constants";
@@ -176,302 +175,273 @@ export default class PencabutanTarifCabut extends Component {
   };
 
   render() {
+    if (this.state.isDetailLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container menuName="Tarif Cukai" contentName="Pencabutan Tarif" hideContentHeader>
-          {this.state.isDetailLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
+        <Container menuName="Tarif Cukai" contentName="Pencabutan Tarif">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NPPBKC</FormLabel>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                  <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
+                </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NPWP</FormLabel>
+                </div>
+                <Input id="npwpNppbkc" value={this.state.npwpNppbkc} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Alamat</FormLabel>
+                </div>
+                <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
+              </Col>
+            </Row>
+          </Card>
+
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nama Merk</FormLabel>
+                </div>
+                <Input id="namaMerk" value={this.state.namaMerk} disabled />
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor KEP</FormLabel>
+                </div>
+                <Input id="nomorKep" value={this.state.nomorKep} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal KEP</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalKep"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalKep}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis Produksi</FormLabel>
+                </div>
+                <Input id="jenisProduksi" value={this.state.jenisProduksi} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Seri Pita</FormLabel>
+                </div>
+                <InputNumber
+                  id="seriPita"
+                  value={this.state.seriPita}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tarif Spesifik</FormLabel>
+                </div>
+                <InputNumber
+                  id="tarif"
+                  value={this.state.tarif}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>HJE</FormLabel>
+                </div>
+                <InputNumber id="hje" value={this.state.hje} style={{ width: "100%" }} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Isi Kemasan</FormLabel>
+                </div>
+                <InputNumber id="isi" value={this.state.isi} style={{ width: "100%" }} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Berat / Volume</FormLabel>
+                </div>
+                <InputNumber
+                  id="berat"
+                  value={this.state.berat}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Awal Berlaku</FormLabel>
+                </div>
+                <DatePicker
+                  id="awalBerlaku"
+                  format="DD-MM-YYYY"
+                  value={this.state.awalBerlaku}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Pesan Akhir</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalPesanAkhir"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalPesanAkhir}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+            </Row>
+          </Card>
+
+          <Card title={this.state.subtitle3} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Permohonan</FormLabel>
+                </div>
+                <Input
+                  id="nomorPermohonan"
+                  onChange={this.handleInputChange}
+                  value={this.state.nomorPermohonan}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Permohonan</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalPermohonan"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalPermohonan}
+                  onChange={(date) => this.handleDatepickerChange("tanggalPermohonan", date)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Lokasi Pencabutan</FormLabel>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="namaKota" value={this.state.namaKota} disabled />
+                  <Button
+                    type="default"
+                    icon="menu"
+                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                  />
+                </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal KEP Pencabutan</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalKepPencabutan"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalKepPencabutan}
+                  onChange={(date) => this.handleDatepickerChange("tanggalKepPencabutan", date)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Akhir Berlaku</FormLabel>
+                </div>
+                <DatePicker
+                  id="akhirBerlaku"
+                  format="DD-MM-YYYY"
+                  value={this.state.akhirBerlaku}
+                  onChange={(date) => this.handleDatepickerChange("akhirBerlaku", date)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Asal Merk</FormLabel>
+                </div>
+                <Select
+                  id="asalMerk"
+                  value={this.state.idAsalMerk}
+                  onChange={(value, option) => {
+                    this.handleSelectCustomChange("asalMerk", value, option);
+                  }}
+                  style={{ width: "100%" }}
+                >
+                  {this.state.listAsalMerk.length > 0 &&
+                    this.state.listAsalMerk.map((item, index) => (
+                      <Select.Option key={`asalMerk-${index}`} value={item.idAsalMerk}>
+                        {item.namaAsalMerk}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Keterangan Pencabutan</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="keteranganPencabutan"
+                  onChange={this.handleInputChange}
+                  value={this.state.keteranganPencabutan}
+                />
+              </Col>
+            </Row>
+          </Card>
+
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+
+            <Col span={5}>
+              <Button
+                type="danger"
+                loading={this.state.isCabutLoading}
+                onClick={this.handleCabut}
+                block
               >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPWP</FormLabel>
-                    </div>
-                    <Input id="npwpNppbkc" value={this.state.npwpNppbkc} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Alamat</FormLabel>
-                    </div>
-                    <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
-                  </Col>
-                </Row>
-              </div>
-
-              <Header>{this.state.subtitle2}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nama Merk</FormLabel>
-                    </div>
-                    <Input id="namaMerk" value={this.state.namaMerk} disabled />
-                  </Col>
-                </Row>
-
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor KEP</FormLabel>
-                    </div>
-                    <Input id="nomorKep" value={this.state.nomorKep} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal KEP</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalKep"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalKep}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis Produksi</FormLabel>
-                    </div>
-                    <Input id="jenisProduksi" value={this.state.jenisProduksi} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Seri Pita</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="seriPita"
-                      value={this.state.seriPita}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif Spesifik</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="tarif"
-                      value={this.state.tarif}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>HJE</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="hje"
-                      value={this.state.hje}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Isi Kemasan</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="isi"
-                      value={this.state.isi}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Berat / Volume</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="berat"
-                      value={this.state.berat}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Awal Berlaku</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="awalBerlaku"
-                      format="DD-MM-YYYY"
-                      value={this.state.awalBerlaku}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Pesan Akhir</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalPesanAkhir"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalPesanAkhir}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-                </Row>
-              </div>
-
-              <Header>{this.state.subtitle3}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor Permohonan</FormLabel>
-                    </div>
-                    <Input
-                      id="nomorPermohonan"
-                      onChange={this.handleInputChange}
-                      value={this.state.nomorPermohonan}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Permohonan</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalPermohonan"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalPermohonan}
-                      onChange={(date) => this.handleDatepickerChange("tanggalPermohonan", date)}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Lokasi Pencabutan</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="namaKota" value={this.state.namaKota} disabled />
-                      <Button
-                        type="default"
-                        icon="menu"
-                        onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal KEP Pencabutan</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalKepPencabutan"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalKepPencabutan}
-                      onChange={(date) => this.handleDatepickerChange("tanggalKepPencabutan", date)}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Akhir Berlaku</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="akhirBerlaku"
-                      format="DD-MM-YYYY"
-                      value={this.state.akhirBerlaku}
-                      onChange={(date) => this.handleDatepickerChange("akhirBerlaku", date)}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Asal Merk</FormLabel>
-                    </div>
-                    <Select
-                      id="asalMerk"
-                      value={this.state.idAsalMerk}
-                      onChange={(value, option) => {
-                        this.handleSelectCustomChange("asalMerk", value, option);
-                      }}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.listAsalMerk.length > 0 &&
-                        this.state.listAsalMerk.map((item, index) => (
-                          <Select.Option key={`asalMerk-${index}`} value={item.idAsalMerk}>
-                            {item.namaAsalMerk}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Keterangan Pencabutan</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="keteranganPencabutan"
-                      onChange={this.handleInputChange}
-                      value={this.state.keteranganPencabutan}
-                    />
-                  </Col>
-                </Row>
-
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
-
-                  <Col span={5}>
-                    <Button
-                      type="danger"
-                      loading={this.state.isCabutLoading}
-                      onClick={this.handleCabut}
-                      block
-                    >
-                      Simpan Pencabutan
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+                Simpan Pencabutan
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarKota

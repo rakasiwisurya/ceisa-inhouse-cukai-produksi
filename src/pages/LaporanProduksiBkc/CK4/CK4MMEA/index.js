@@ -15,7 +15,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarMerkMMEACK4 from "components/ModalDaftarMerkMMEACK4";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
@@ -620,13 +619,8 @@ export default class CK4MMEA extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Laporan Produksi BKC CK4" contentName="MMEA Rekam">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Data NPPBKC" style={{ height: 437 }}>
@@ -844,14 +838,9 @@ export default class CK4MMEA extends Component {
                 </Card>
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Kep Tarif" style={{ height: 705 }}>
@@ -1023,51 +1012,49 @@ export default class CK4MMEA extends Component {
                 </Card>
               </Col>
             </Row>
+          </Card>
 
-            <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={16}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbahRincian}>
-                        Ubah Rincian
-                      </Button>
-                    ) : (
-                      <Button type="primary" block onClick={this.handleSimpanRincian}>
-                        Simpan Rincian
-                      </Button>
-                    )}
-                  </Col>
+          <Row>
+            <Col span={8} offset={16}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="primary" block onClick={this.handleUbahRincian}>
+                      Ubah Rincian
+                    </Button>
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
+                      Simpan Rincian
+                    </Button>
+                  )}
+                </Col>
 
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                        Batal
-                      </Button>
-                    ) : (
-                      <Button type="danger" block onClick={this.handleReset}>
-                        Reset
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                      Batal
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      Reset
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                scroll={{ x: "max-content" }}
-                onChange={this.handleTableChange}
-                pagination={{ current: this.state.page }}
-              />
-            </div>
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            scroll={{ x: "max-content" }}
+            onChange={this.handleTableChange}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+          />
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+          <Card title={this.state.subtitle3} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ marginBottom: 10 }}>
@@ -1095,26 +1082,26 @@ export default class CK4MMEA extends Component {
                 </div>
               </Col>
             </Row>
+          </Card>
 
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

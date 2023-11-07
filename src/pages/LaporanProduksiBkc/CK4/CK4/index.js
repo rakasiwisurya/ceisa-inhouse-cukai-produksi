@@ -1,10 +1,9 @@
 import { Button, Col, Icon, Input, Modal, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import Header from "components/Header";
 import { pathName } from "configs/constants";
 import moment from "moment";
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import ModalCK4Pdf from "../ModalCK4Pdf";
@@ -12,6 +11,8 @@ import ModalCK4Pdf from "../ModalCK4Pdf";
 export default class CK4 extends Component {
   constructor(props) {
     super(props);
+    this.modal = createRef();
+
     this.state = {
       subtitle1: "CK4",
 
@@ -49,7 +50,7 @@ export default class CK4 extends Component {
                 variant="warning"
                 icon="form"
                 onClick={() => {
-                  if (record.isAlert) return this.handleConfirm();
+                  if (record.isAlert) return this.handleConfirm(record.idCk4, record.jenisBkc);
                   this.handleEdit(record.idCk4, record.jenisBkc);
                 }}
                 disabled={record.idBrck2 || record.idBrck1}
@@ -286,6 +287,8 @@ export default class CK4 extends Component {
     }
   };
   handleEdit = (id, jenisBkc) => {
+    Modal.destroyAll();
+
     switch (true) {
       case jenisBkc === "EA":
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-perbaikan/${id}`);
@@ -328,14 +331,14 @@ export default class CK4 extends Component {
       isModalPdfVisible: true,
     });
   };
-  handleConfirm = () => {
+  handleConfirm = (id, jenisBkc) => {
     Modal.confirm({
       icon: <Icon type="warning" />,
       title: "Alert",
       content:
         "CK-4 ini sudah lewat batas waktu perbaikan 3 bulan sejak tanggal pemberitahuan. Perbaikan atas jumlah produksi dapat dikenai sanksi terkait tidak memberitahukan barang kena cukai yang selesai dibuat, atau dilakukan penurunan nilai tingkat kepatuhan Pengusaha Pabrik. Apakah yakin akan melanjutkan perbaikan?",
       okText: "Continue",
-      onOk: this.handleEdit,
+      onOk: () => this.handleEdit(id, jenisBkc),
       cancelText: "Cancel",
       centered: true,
       width: 600,
@@ -345,61 +348,54 @@ export default class CK4 extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC" contentName="CK4" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Row gutter={[16, 16]}>
-                  <Col span={8}>
-                    <ButtonCustom
-                      variant="info"
-                      onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-rekam`)
-                      }
-                      block
-                    >
-                      CK4A Rekam
-                    </ButtonCustom>
-                  </Col>
+        <Container menuName="Laporan Produksi BKC" contentName="CK4">
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <Row gutter={[16, 16]}>
+                <Col span={8}>
+                  <ButtonCustom
+                    variant="info"
+                    onClick={() => this.props.history.push(`${pathName}/laporan-ck4/ck4-ea-rekam`)}
+                    block
+                  >
+                    CK4A Rekam
+                  </ButtonCustom>
+                </Col>
 
-                  <Col span={8}>
-                    <ButtonCustom
-                      variant="warning"
-                      onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-rekam`)
-                      }
-                      block
-                    >
-                      CK4B Rekam
-                    </ButtonCustom>
-                  </Col>
+                <Col span={8}>
+                  <ButtonCustom
+                    variant="warning"
+                    onClick={() =>
+                      this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea-rekam`)
+                    }
+                    block
+                  >
+                    CK4B Rekam
+                  </ButtonCustom>
+                </Col>
 
-                  <Col span={8}>
-                    <ButtonCustom
-                      variant="danger"
-                      onClick={() =>
-                        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-rekam`)
-                      }
-                      block
-                    >
-                      CK4C Rekam
-                    </ButtonCustom>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                <Col span={8}>
+                  <ButtonCustom
+                    variant="danger"
+                    onClick={() => this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-rekam`)}
+                    block
+                  >
+                    CK4C Rekam
+                  </ButtonCustom>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isCk4Loading}
-              onChange={(page) => this.setState({ page: page.current })}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              scroll={{ x: "max-content" }}
-              style={{ marginTop: 30, marginBottom: 20 }}
-            />
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isCk4Loading}
+            onChange={(page) => this.setState({ page: page.current })}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30 }}
+          />
 
           <ModalCK4Pdf
             isVisible={this.state.isModalPdfVisible}

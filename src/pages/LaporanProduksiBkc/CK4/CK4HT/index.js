@@ -15,7 +15,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarHTCK4 from "components/ModalDaftarMerkHTCK4";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
@@ -671,13 +670,8 @@ export default class CK4HT extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Laporan Produksi BKC CK4" contentName="HT Rekam">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Data NPPBKC" style={{ height: 437 }}>
@@ -893,14 +887,9 @@ export default class CK4HT extends Component {
                 </Card>
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Card title="Kep Tarif" style={{ height: 705 }}>
@@ -1088,104 +1077,102 @@ export default class CK4HT extends Component {
                 </Card>
               </Col>
             </Row>
+          </Card>
 
-            <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={16}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="primary" block onClick={this.handleUbahRincian}>
-                        Ubah Rincian
-                      </Button>
-                    ) : (
-                      <Button type="primary" block onClick={this.handleSimpanRincian}>
-                        Simpan Rincian
-                      </Button>
-                    )}
-                  </Col>
+          <Row>
+            <Col span={8} offset={16}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="primary" block onClick={this.handleUbahRincian}>
+                      Ubah Rincian
+                    </Button>
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
+                      Simpan Rincian
+                    </Button>
+                  )}
+                </Col>
 
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                        Batal
-                      </Button>
-                    ) : (
-                      <Button type="danger" block onClick={this.handleReset}>
-                        Reset
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                      Batal
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      Reset
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 20, marginBottom: 10 }}>
-              <Table
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-                scroll={{ x: "max-content" }}
-                onChange={this.handleTableChange}
-                pagination={{ current: this.state.page }}
-                footer={(currentPageData) => {
-                  return (
-                    <Table
-                      style={{ margin: -16 }}
-                      showHeader={false}
-                      pagination={false}
-                      columns={[
-                        {
-                          key: "title",
-                          title: "Title",
-                          dataIndex: "title",
-                          render: (text, record, index) => (
-                            <div style={{ textAlign: "right" }}>{text}</div>
-                          ),
-                        },
-                        {
-                          key: "data",
-                          title: "Data",
-                          dataIndex: "data",
-                          width: 80,
-                          render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                        },
-                      ]}
-                      dataSource={[
-                        {
-                          key: "1",
-                          title: "Jumlah Kemasan",
-                          data: this.state.totalJumlahKemasan,
-                        },
-                        {
-                          key: "2",
-                          title: "Jumlah Kemasan Dilekati Pita",
-                          data: this.state.totalJumlahKemasanDilekatiPita,
-                        },
-                        {
-                          key: "3",
-                          title: "Jumlah Batang",
-                          data: this.state.totalJumlahProduksiHtBtg,
-                        },
-                        {
-                          key: "4",
-                          title: "Jumlah Gram",
-                          data: this.state.totalJumlahProduksiHtGr,
-                        },
-                        {
-                          key: "5",
-                          title: "Jumlah Militer",
-                          data: this.state.totalJumlahProduksiHtMl,
-                        },
-                      ]}
-                    />
-                  );
-                }}
-              />
-            </div>
-          </div>
+          <Table
+            columns={this.state.columns}
+            dataSource={this.state.dataSource}
+            scroll={{ x: "max-content" }}
+            onChange={this.handleTableChange}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+            footer={(currentPageData) => {
+              return (
+                <Table
+                  style={{ margin: -16 }}
+                  showHeader={false}
+                  pagination={false}
+                  columns={[
+                    {
+                      key: "title",
+                      title: "Title",
+                      dataIndex: "title",
+                      render: (text, record, index) => (
+                        <div style={{ textAlign: "right" }}>{text}</div>
+                      ),
+                    },
+                    {
+                      key: "data",
+                      title: "Data",
+                      dataIndex: "data",
+                      width: 80,
+                      render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                    },
+                  ]}
+                  dataSource={[
+                    {
+                      key: "1",
+                      title: "Jumlah Kemasan",
+                      data: this.state.totalJumlahKemasan,
+                    },
+                    {
+                      key: "2",
+                      title: "Jumlah Kemasan Dilekati Pita",
+                      data: this.state.totalJumlahKemasanDilekatiPita,
+                    },
+                    {
+                      key: "3",
+                      title: "Jumlah Batang",
+                      data: this.state.totalJumlahProduksiHtBtg,
+                    },
+                    {
+                      key: "4",
+                      title: "Jumlah Gram",
+                      data: this.state.totalJumlahProduksiHtGr,
+                    },
+                    {
+                      key: "5",
+                      title: "Jumlah Militer",
+                      data: this.state.totalJumlahProduksiHtMl,
+                    },
+                  ]}
+                />
+              );
+            }}
+          />
 
-          <Header>{this.state.subtitle3}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+          <Card title={this.state.subtitle3} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ marginBottom: 10 }}>
@@ -1213,26 +1200,26 @@ export default class CK4HT extends Component {
                 </div>
               </Col>
             </Row>
+          </Card>
 
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

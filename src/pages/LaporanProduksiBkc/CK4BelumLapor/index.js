@@ -1,6 +1,5 @@
 import { Button, Col, Icon, Input, Row, Select, Table } from "antd";
 import Container from "components/Container";
-import Header from "components/Header";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -292,38 +291,34 @@ export default class CK4BelumLapor extends Component {
 
   render() {
     return (
-      <Container menuName="Laporan Produksi BKC" contentName="CK4 Belum Lapor" hideContentHeader>
-        <Header>{this.state.subtitle1}</Header>
-        <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-          <Row gutter={[16, 16]}>
-            <Col span={6}>
-              <Select
-                id="jenisLaporan"
-                value={this.state.jenisLaporan}
-                onChange={(value) => this.setState({ jenisLaporan: value })}
-                style={{ width: "100%" }}
-              >
-                {this.state.listJenisLaporan.length > 0 &&
-                  this.state.listJenisLaporan.map((item, index) => (
-                    <Select.Option key={`jenisLaporan-${index}`} value={item.idJenisLaporan}>
-                      {item.namaJenisLaporan}
-                    </Select.Option>
-                  ))}
-              </Select>
-            </Col>
-          </Row>
+      <Container menuName="Laporan Produksi BKC" contentName="CK4 Belum Lapor">
+        <Row gutter={[16, 16]}>
+          <Col span={6}>
+            <Select
+              id="jenisLaporan"
+              value={this.state.jenisLaporan}
+              onChange={(value) => this.setState({ jenisLaporan: value })}
+              style={{ width: "100%" }}
+            >
+              {this.state.listJenisLaporan.length > 0 &&
+                this.state.listJenisLaporan.map((item, index) => (
+                  <Select.Option key={`jenisLaporan-${index}`} value={item.idJenisLaporan}>
+                    {item.namaJenisLaporan}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Col>
+        </Row>
 
-          <div style={{ marginTop: 30, marginBottom: 20 }}>
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isCk4BelumLaporLoading}
-              onChange={(page) => this.setState({ page: page.current })}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              scroll={{ x: "max-content" }}
-            />
-          </div>
-        </div>
+        <Table
+          dataSource={this.state.dataSource}
+          columns={this.state.columns}
+          loading={this.state.isCk4BelumLaporLoading}
+          onChange={(page) => this.setState({ page: page.current })}
+          pagination={{ current: this.state.page, total: this.state.totalData }}
+          scroll={{ x: "max-content" }}
+          style={{ marginTop: 30 }}
+        />
       </Container>
     );
   }

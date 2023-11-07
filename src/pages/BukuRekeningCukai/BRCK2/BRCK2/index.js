@@ -1,7 +1,6 @@
 import { Button, Col, Icon, Input, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import Header from "components/Header";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
@@ -11,8 +10,6 @@ export default class BRCK2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Browse dan Perbaikan BRCK-2",
-
       isBrck2Loading: true,
 
       filter: {
@@ -339,32 +336,28 @@ export default class BRCK2 extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row>
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  onClick={() => this.props.history.push(`${pathName}/brck-2/rekam`)}
-                  block
-                >
-                  Rekam BRCK-2
-                </Button>
-              </Col>
-            </Row>
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2">
+          <Row>
+            <Col span={4}>
+              <Button
+                type="primary"
+                onClick={() => this.props.history.push(`${pathName}/brck-2/rekam`)}
+                block
+              >
+                Rekam BRCK-2
+              </Button>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                loading={this.state.isBrck2Loading}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
-                onChange={(page) => this.setState({ page: page.current })}
-                scroll={{ x: "max-content" }}
-              />
-            </div>
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isBrck2Loading}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            onChange={(page) => this.setState({ page: page.current })}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30 }}
+          />
         </Container>
       </>
     );

@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Col,
   DatePicker,
   Icon,
@@ -13,7 +14,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import { pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
@@ -414,94 +414,6 @@ export default class ReferensiTarifRekam extends Component {
     });
   };
 
-  validationForm = () => {
-    const {
-      nomorSkep,
-      tanggalSkep,
-      tanggalAwalBerlaku,
-      nomorPeraturan,
-      tanggalPeraturan,
-      dataSource,
-    } = this.state;
-
-    if (
-      !nomorSkep ||
-      !tanggalSkep ||
-      !tanggalAwalBerlaku ||
-      !nomorPeraturan ||
-      !tanggalPeraturan ||
-      dataSource.length < 1
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-  validationInsert = () => {
-    const {
-      idJenisBkc,
-      idGolonganBkc,
-      idPersonal,
-      idJenisProduksiBkc,
-      idJenisHtlRel,
-      tarif,
-      batasProduksi1,
-      batasProduksi2,
-      hje1,
-      hje2,
-      layer,
-      kadarAtas,
-      kadarBawah,
-      tarifCukaiDalamNegeri,
-      tarifCukaiImpor,
-    } = this.state;
-
-    if (!idJenisBkc) return false;
-
-    if (
-      idJenisBkc === 3 &&
-      (!idGolonganBkc ||
-        !idPersonal ||
-        !idJenisProduksiBkc ||
-        !tarif ||
-        !batasProduksi1 ||
-        !batasProduksi2 ||
-        !hje1 ||
-        !hje2 ||
-        !layer)
-    ) {
-      return false;
-    }
-
-    if (
-      idJenisBkc === 3 &&
-      (idJenisProduksiBkc === 2 || idJenisProduksiBkc === 5) &&
-      (!idJenisHtlRel || !tarif || !batasProduksi1 || !batasProduksi2 || !hje1 || !hje2 || !layer)
-    ) {
-      return false;
-    }
-
-    if (idJenisBkc === 2 && !idGolonganBkc) return false;
-
-    if (
-      idJenisBkc === 2 &&
-      idGolonganBkc === 4 &&
-      (!idPersonal || !idJenisProduksiBkc || !kadarAtas || !kadarBawah || !tarifCukaiImpor)
-    ) {
-      return false;
-    }
-
-    if (
-      idJenisBkc === 2 &&
-      idGolonganBkc === 5 &&
-      (!idPersonal || !idJenisProduksiBkc || !kadarAtas || !kadarBawah || !tarifCukaiDalamNegeri)
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
   handleSimpan = () => {
     const {
       idJenisBkc,
@@ -855,17 +767,8 @@ export default class ReferensiTarifRekam extends Component {
   render() {
     return (
       <>
-        <Container
-          menuName="Referensi Tarif dan Pita Cukai"
-          contentName="Referensi Tarif Rekam"
-          hideContentHeader
-        >
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Referensi Tarif dan Pita Cukai" contentName="Referensi Tarif Rekam">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -926,10 +829,9 @@ export default class ReferensiTarifRekam extends Component {
                 />
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -965,7 +867,7 @@ export default class ReferensiTarifRekam extends Component {
               </Col>
             </Row>
 
-            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+            <Row gutter={[16, 16]}>
               {this.state.idJenisBkc && (
                 <>
                   <Col span={12}>
@@ -1245,72 +1147,65 @@ export default class ReferensiTarifRekam extends Component {
                 </>
               )}
             </Row>
+          </Card>
 
-            <Row>
-              <Col span={8} offset={8}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    {this.state.isEdit ? (
-                      <ButtonCustom variant="warning" block onClick={this.handleUbah}>
-                        UBAH
-                      </ButtonCustom>
-                    ) : (
-                      <Button
-                        type="primary"
-                        block
-                        onClick={this.handleSimpan}
-                        // disabled={!this.validationInsert()}
-                      >
-                        SIMPAN
-                      </Button>
-                    )}
-                  </Col>
+          <Row>
+            <Col span={8} offset={8}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEdit ? (
+                    <ButtonCustom variant="warning" block onClick={this.handleUbah}>
+                      UBAH
+                    </ButtonCustom>
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpan}>
+                      SIMPAN
+                    </Button>
+                  )}
+                </Col>
 
-                  <Col span={12}>
-                    {this.state.isEdit ? (
-                      <Button type="danger" block onClick={this.handleBatal}>
-                        BATAL
-                      </Button>
-                    ) : (
-                      <Button type="danger" block onClick={this.handleReset}>
-                        RESET
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  {this.state.isEdit ? (
+                    <Button type="danger" block onClick={this.handleBatal}>
+                      BATAL
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      RESET
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                scroll={{ x: "max-content" }}
-                onChange={this.handleTableChange}
-                pagination={{ current: this.state.page }}
-              />
-            </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            scroll={{ x: "max-content" }}
+            onChange={this.handleTableChange}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+          />
 
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  // disabled={!this.validationForm()}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </>
     );

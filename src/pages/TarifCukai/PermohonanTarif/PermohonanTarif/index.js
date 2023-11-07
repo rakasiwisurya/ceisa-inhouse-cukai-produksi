@@ -479,16 +479,15 @@ class PermohonanTarif extends Component {
             </Col>
           </Row>
 
-          <div style={{ marginTop: 30, marginBottom: 20 }}>
-            <Table
-              dataSource={this.state.dataSource}
-              columns={this.state.columns}
-              loading={this.state.isPermohonanTarifLoading}
-              pagination={{ current: this.state.page, total: this.state.totalData }}
-              onChange={(page) => this.setState({ page: page.current })}
-              scroll={{ x: "max-content" }}
-            />
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isPermohonanTarifLoading}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            onChange={(page) => this.setState({ page: page.current })}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30 }}
+          />
         </Container>
 
         <ModalPermohonanTarifDetail

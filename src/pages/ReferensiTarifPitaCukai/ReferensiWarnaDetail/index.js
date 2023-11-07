@@ -1,12 +1,11 @@
-import { Button, Col, DatePicker, Icon, Input, Row, Select, Table } from "antd";
-import React, { Component } from "react";
+import { Button, Card, Col, DatePicker, Icon, Input, Row, Select, Table } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
-import moment from "moment";
-import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import ButtonCustom from "components/Button/ButtonCustom";
+import moment from "moment";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 
 export default class ReferensiWarnaDetail extends Component {
   constructor(props) {
@@ -243,180 +242,161 @@ export default class ReferensiWarnaDetail extends Component {
   };
 
   render() {
+    if (this.state.isDetailWarnaLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container
-          menuName="Refrensi Tarif dan Pita Cukai"
-          contentName="Referensi Warna Detail"
-          hideContentHeader
-        >
-          {this.state.isDetailWarnaLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor Surat</FormLabel>
-                    </div>
-                    <Input id="nomorSkep" value={this.state.nomorSkep} disabled />
-                  </Col>
+        <Container menuName="Refrensi Tarif dan Pita Cukai" contentName="Referensi Warna Detail">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Surat</FormLabel>
+                </div>
+                <Input id="nomorSkep" value={this.state.nomorSkep} disabled />
+              </Col>
 
-                  <Col span={6}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Surat</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalSkep"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalSkep}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
+              <Col span={6}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Surat</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalSkep"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalSkep}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
 
-                  <Col span={6}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal Awal Berlaku</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalAwalBerlaku"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalAwalBerlaku}
-                      style={{ width: "100%" }}
-                      disabled
-                    />
-                  </Col>
-                </Row>
-              </div>
+              <Col span={6}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Awal Berlaku</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalAwalBerlaku"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalAwalBerlaku}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </Col>
+            </Row>
+          </Card>
 
-              <Header>{this.state.subtitle2}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis BKC</FormLabel>
+                </div>
+                <Select
+                  id="jenisBkc"
+                  style={{ width: "100%" }}
+                  value={this.state.idJenisBkc}
+                  disabled
+                >
+                  <Select.Option value={this.state.idJenisBkc}>
+                    {this.state.namaJenisBkc}
+                  </Select.Option>
+                </Select>
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Kode Warna</FormLabel>
+                </div>
+                <Input id="kodeWarna" value={this.state.kodeWarna} disabled />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Warna</FormLabel>
+                </div>
+                <Input id="warna" value={this.state.warna} disabled />
+              </Col>
+
+              {this.state.idJenisBkc && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Golongan</FormLabel>
+                  </div>
+                  <Select
+                    id="golongan"
+                    value={this.state.idGolonganBkc}
+                    style={{ width: "100%" }}
+                    disabled
+                  >
+                    <Select.Option value={this.state.idGolonganBkc}>
+                      {this.state.namaGolonganBkc}
+                    </Select.Option>
+                  </Select>
+                </Col>
+              )}
+
+              {this.state.idJenisBkc && (
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Jenis Produksi</FormLabel>
+                  </div>
+                  <Select
+                    id="jenisProduksiBkc"
+                    value={this.state.idJenisProduksiBkc}
+                    style={{ width: "100%" }}
+                    disabled
+                  >
+                    <Select.Option value={this.state.idJenisProduksiBkc}>
+                      {this.state.kodeJenisProduksiBkc || this.state.namaJenisProduksiBkc
+                        ? `${
+                            this.state.kodeJenisProduksiBkc &&
+                            `(${this.state.kodeJenisProduksiBkc}) - `
+                          }${this.state.namaJenisProduksiBkc}`
+                        : null}
+                    </Select.Option>
+                  </Select>
+                </Col>
+              )}
+
+              <Col span={12}>
+                {this.state.idJenisBkc === 2 && (
+                  <>
                     <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis BKC</FormLabel>
+                      <FormLabel>Jenis Usaha</FormLabel>
                     </div>
                     <Select
-                      id="jenisBkc"
+                      id="jenisUsaha"
+                      value={this.state.idJenisUsaha}
                       style={{ width: "100%" }}
-                      value={this.state.idJenisBkc}
                       disabled
                     >
-                      <Select.Option value={this.state.idJenisBkc}>
-                        {this.state.namaJenisBkc}
+                      <Select.Option value={this.state.idJenisUsaha}>
+                        {this.state.namaJenisUsaha}
                       </Select.Option>
                     </Select>
-                  </Col>
-                </Row>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </Card>
 
-                <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Kode Warna</FormLabel>
-                    </div>
-                    <Input id="kodeWarna" value={this.state.kodeWarna} disabled />
-                  </Col>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            scroll={{ x: "max-content" }}
+            onChange={this.handleTableChange}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+          />
 
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Warna</FormLabel>
-                    </div>
-                    <Input id="warna" value={this.state.warna} disabled />
-                  </Col>
-
-                  {this.state.idJenisBkc && (
-                    <Col span={12}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Golongan</FormLabel>
-                      </div>
-                      <Select
-                        id="golongan"
-                        value={this.state.idGolonganBkc}
-                        style={{ width: "100%" }}
-                        disabled
-                      >
-                        <Select.Option value={this.state.idGolonganBkc}>
-                          {this.state.namaGolonganBkc}
-                        </Select.Option>
-                      </Select>
-                    </Col>
-                  )}
-
-                  {this.state.idJenisBkc && (
-                    <Col span={12}>
-                      <div style={{ marginBottom: 10 }}>
-                        <FormLabel>Jenis Produksi</FormLabel>
-                      </div>
-                      <Select
-                        id="jenisProduksiBkc"
-                        value={this.state.idJenisProduksiBkc}
-                        style={{ width: "100%" }}
-                        disabled
-                      >
-                        <Select.Option value={this.state.idJenisProduksiBkc}>
-                          {this.state.kodeJenisProduksiBkc || this.state.namaJenisProduksiBkc
-                            ? `${
-                                this.state.kodeJenisProduksiBkc &&
-                                `(${this.state.kodeJenisProduksiBkc}) - `
-                              }${this.state.namaJenisProduksiBkc}`
-                            : null}
-                        </Select.Option>
-                      </Select>
-                    </Col>
-                  )}
-
-                  <Col span={12}>
-                    {this.state.idJenisBkc === 2 && (
-                      <>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jenis Usaha</FormLabel>
-                        </div>
-                        <Select
-                          id="jenisUsaha"
-                          value={this.state.idJenisUsaha}
-                          style={{ width: "100%" }}
-                          disabled
-                        >
-                          <Select.Option value={this.state.idJenisUsaha}>
-                            {this.state.namaJenisUsaha}
-                          </Select.Option>
-                        </Select>
-                      </>
-                    )}
-                  </Col>
-                </Row>
-
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    dataSource={this.state.dataSource}
-                    columns={this.state.columns}
-                    scroll={{ x: "max-content" }}
-                    onChange={this.handleTableChange}
-                    pagination={{ current: this.state.page }}
-                  />
-                </div>
-
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+          </Row>
         </Container>
       </>
     );

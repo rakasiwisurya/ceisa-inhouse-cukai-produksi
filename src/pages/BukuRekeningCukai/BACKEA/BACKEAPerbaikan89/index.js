@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Col,
   DatePicker,
   Icon,
@@ -13,7 +14,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
@@ -332,6 +332,14 @@ export default class BACKEAPerbaikan89 extends Component {
       alasan: null,
     });
   };
+  handleReset = () => {
+    this.setState({
+      jenisBarangKenaCukaiRusak: null,
+      jumlahBarangKenaCukaiRusak: null,
+      catatan: null,
+      alasan: null,
+    });
+  };
   handleUpdate = async () => {
     const { idNppbkc, nppbkc, namaNppbkc, jenisBack, nomorBack, tanggalBack, dataSource } =
       this.state;
@@ -368,230 +376,211 @@ export default class BACKEAPerbaikan89 extends Component {
   };
 
   render() {
+    if (this.state.isDetailLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BACK EA 8 & 9 Perbaikan"
-          hideContentHeader
-        >
-          {this.state.isDetailLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div
-                className="kt-content  kt-grid__item kt-grid__item--fluid"
-                id="kt_content"
-                style={{ paddingBottom: 10 }}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                      >
-                        Cari
-                      </Button>
-                      <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis BACK</FormLabel>
-                    </div>
-                    <Select
-                      id="jenisBack"
-                      value={this.state.jenisBack}
-                      onChange={(value) => this.handleSelectChange("jenisBack", value)}
-                      style={{ width: "100%" }}
-                    >
-                      {this.state.listJenisBack.length > 0 &&
-                        this.state.listJenisBack.map((item, index) => (
-                          <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
-                            {item.namaJenisBack}
-                          </Select.Option>
-                        ))}
-                    </Select>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Nomor BACK</FormLabel>
-                    </div>
-                    <Input
-                      id="nomorBack"
-                      value={this.state.nomorBack}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tanggal BACK</FormLabel>
-                    </div>
-                    <DatePicker
-                      id="tanggalBack"
-                      format="DD-MM-YYYY"
-                      value={this.state.tanggalBack}
-                      onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-                </Row>
-              </div>
-
-              <Header>{this.state.subtitle2}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jenis BKC</FormLabel>
-                    </div>
-                    <Input
-                      id="jenisBarangKenaCukaiRusak"
-                      value={this.state.jenisBarangKenaCukaiRusak}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Jumlah (LT)</FormLabel>
-                    </div>
-                    <InputNumber
-                      id="jumlahBarangKenaCukaiRusak"
-                      value={this.state.jumlahBarangKenaCukaiRusak}
-                      onChange={(value) =>
-                        this.handleInputNumberChange("jumlahBarangKenaCukaiRusak", value)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Catatan</FormLabel>
-                    </div>
-                    <Input.TextArea
-                      id="catatan"
-                      value={this.state.catatan}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Alasan</FormLabel>
-                    </div>
-                    <Input
-                      id="alasan"
-                      value={this.state.alasan}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                </Row>
-
-                <Row style={{ marginTop: 20 }}>
-                  <Col span={8} offset={8}>
-                    <Row gutter={[16, 16]}>
-                      <Col span={12}>
-                        {this.state.isEditRincian ? (
-                          <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
-                            Ubah
-                          </ButtonCustom>
-                        ) : (
-                          <Button type="primary" block onClick={this.handleSimpanRincian}>
-                            Simpan
-                          </Button>
-                        )}
-                      </Col>
-
-                      <Col span={12}>
-                        {this.state.isEditRincian && (
-                          <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                            Batal
-                          </Button>
-                        )}
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-
-                <div style={{ marginTop: 30, marginBottom: 20 }}>
-                  <Table
-                    loading={this.state.isTableLoading}
-                    dataSource={this.state.dataSource}
-                    columns={this.state.columns}
-                    scroll={{ x: "max-content" }}
-                    onChange={(page) => this.setState({ page: page.current })}
-                    pagination={{ current: this.state.page }}
-                    footer={() => (
-                      <Table
-                        style={{ margin: -16 }}
-                        showHeader={false}
-                        pagination={false}
-                        columns={[
-                          {
-                            key: "title",
-                            title: "Title",
-                            dataIndex: "title",
-                          },
-                          {
-                            key: "totalBarangKenaCukaiRusak",
-                            title: "Total Barang Kena Cukai Rusak",
-                            dataIndex: "totalBarangKenaCukaiRusak",
-                            width: 120,
-                            fixed: "right",
-                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
-                          },
-                        ]}
-                        dataSource={[
-                          {
-                            key: "1",
-                            title: "Total",
-                            totalBarangKenaCukaiRusak: sumArrayOfObject(
-                              this.state.dataSource,
-                              "jumlahBarangKenaCukaiRusak"
-                            ),
-                          },
-                        ]}
-                      />
-                    )}
-                  />
+        <Container menuName="Buku Rekening Cukai" contentName="BACK EA 8 & 9 Perbaikan">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NPPBKC</FormLabel>
                 </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                  <Button
+                    type="primary"
+                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                  >
+                    Cari
+                  </Button>
+                  <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
+                </div>
+              </Col>
 
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis BACK</FormLabel>
+                </div>
+                <Select
+                  id="jenisBack"
+                  value={this.state.jenisBack}
+                  onChange={(value) => this.handleSelectChange("jenisBack", value)}
+                  style={{ width: "100%" }}
+                >
+                  {this.state.listJenisBack.length > 0 &&
+                    this.state.listJenisBack.map((item, index) => (
+                      <Select.Option key={`jenis-back-${index}`} value={item.idJenisBack}>
+                        {item.namaJenisBack}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor BACK</FormLabel>
+                </div>
+                <Input
+                  id="nomorBack"
+                  value={this.state.nomorBack}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal BACK</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalBack"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalBack}
+                  onChange={(date) => this.handleDatepickerChange("tanggalBack", date)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+            </Row>
+          </Card>
+
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jenis BKC</FormLabel>
+                </div>
+                <Input
+                  id="jenisBarangKenaCukaiRusak"
+                  value={this.state.jenisBarangKenaCukaiRusak}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Jumlah (LT)</FormLabel>
+                </div>
+                <InputNumber
+                  id="jumlahBarangKenaCukaiRusak"
+                  value={this.state.jumlahBarangKenaCukaiRusak}
+                  onChange={(value) =>
+                    this.handleInputNumberChange("jumlahBarangKenaCukaiRusak", value)
+                  }
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Catatan</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="catatan"
+                  value={this.state.catatan}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Alasan</FormLabel>
+                </div>
+                <Input id="alasan" value={this.state.alasan} onChange={this.handleInputChange} />
+              </Col>
+            </Row>
+          </Card>
+
+          <Row>
+            <Col span={8} offset={8}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
+                      Ubah
                     </ButtonCustom>
-                  </Col>
-
-                  <Col span={4}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isUpdateLoading}
-                      onClick={this.handleUpdate}
-                      block
-                    >
-                      Update
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
+                      Simpan
                     </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+                  )}
+                </Col>
+
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                      Batal
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      Reset
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          <Table
+            loading={this.state.isTableLoading}
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            scroll={{ x: "max-content" }}
+            onChange={(page) => this.setState({ page: page.current })}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+            footer={() => (
+              <Table
+                style={{ margin: -16 }}
+                showHeader={false}
+                pagination={false}
+                columns={[
+                  {
+                    key: "title",
+                    title: "Title",
+                    dataIndex: "title",
+                  },
+                  {
+                    key: "totalBarangKenaCukaiRusak",
+                    title: "Total Barang Kena Cukai Rusak",
+                    dataIndex: "totalBarangKenaCukaiRusak",
+                    width: 120,
+                    fixed: "right",
+                    render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                  },
+                ]}
+                dataSource={[
+                  {
+                    key: "1",
+                    title: "Total",
+                    totalBarangKenaCukaiRusak: sumArrayOfObject(
+                      this.state.dataSource,
+                      "jumlahBarangKenaCukaiRusak"
+                    ),
+                  },
+                ]}
+              />
+            )}
+          />
+
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isUpdateLoading}
+                onClick={this.handleUpdate}
+                block
+              >
+                Update
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

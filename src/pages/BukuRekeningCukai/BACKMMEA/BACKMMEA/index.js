@@ -1,11 +1,10 @@
-import React, { Component } from "react";
-import { Button, Row, Input, Icon, Table, Col } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
+import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
-import { requestApi } from "utils/requestApi";
 import moment from "moment";
-import ButtonCustom from "components/Button/ButtonCustom";
-import Header from "components/Header";
+import React, { Component } from "react";
+import { requestApi } from "utils/requestApi";
 import ModalBACKMMEADetail89 from "../ModalBACKMMEADetail89";
 
 export default class BACKMMEA extends Component {
@@ -308,32 +307,28 @@ export default class BACKMMEA extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BACK MMEA" hideContentHeader>
-          <Header>{this.state.subtitle}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <Row>
-              <Col span={6}>
-                <ButtonCustom
-                  variant="info"
-                  onClick={() => this.props.history.push(`${pathName}/back-mmea/rekam-8-9`)}
-                  block
-                >
-                  + Perekaman BACK 8 & 9
-                </ButtonCustom>
-              </Col>
-            </Row>
+        <Container menuName="Buku Rekening Cukai" contentName="BACK MMEA">
+          <Row>
+            <Col span={6}>
+              <ButtonCustom
+                variant="info"
+                onClick={() => this.props.history.push(`${pathName}/back-mmea/rekam-8-9`)}
+                block
+              >
+                + Perekaman BACK 8 & 9
+              </ButtonCustom>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                loading={this.state.isBackMmeaLoading}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
-                onChange={(page) => this.setState({ page: page.current })}
-                scroll={{ x: "max-content" }}
-              />
-            </div>
-          </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isBackMmeaLoading}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            onChange={(page) => this.setState({ page: page.current })}
+            scroll={{ x: "max-content" }}
+            style={{ marginTop: 30 }}
+          />
         </Container>
 
         <ModalBACKMMEADetail89

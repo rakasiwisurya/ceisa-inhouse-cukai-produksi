@@ -13,7 +13,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import moment from "moment";
 import React, { Component } from "react";
@@ -24,8 +23,6 @@ export default class BRCK2Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle1: "Buku Rekening Barang Kena Cukai Etil Alkohol (BRCK-2)",
-
       isDetailLoading: true,
       isModalDaftarNppbkcVisible: false,
       isModalDaftarMerkVisible: false,
@@ -564,559 +561,534 @@ export default class BRCK2Detail extends Component {
   };
 
   render() {
+    if (this.state.isDetailLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2 Detail" hideContentHeader>
-          {this.state.isDetailLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
+        <Container menuName="Buku Rekening Cukai" contentName="BRCK-2 Detail">
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>NPPBKC</FormLabel>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                <Button
+                  type="primary"
+                  onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                  disabled
+                >
+                  Cari
+                </Button>
+                <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
+              </div>
+            </Col>
+
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>Merk</FormLabel>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Input id="namaMerkMmea" value={this.state.namaMerkMmea} disabled />
+                <Button
+                  type="primary"
+                  onClick={() => this.handleModalShow("isModalDaftarMerkVisible")}
+                  disabled
+                >
+                  Cari
+                </Button>
+              </div>
+            </Col>
+
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>Tarif</FormLabel>
+              </div>
+              <Input id="tarif" value={this.state.tarif} disabled />
+            </Col>
+
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>Isi</FormLabel>
+              </div>
+              <Input id="isi" value={this.state.isi} disabled />
+            </Col>
+
+            <Col span={12}>
+              <div style={{ marginBottom: 10 }}>
+                <FormLabel>Periode</FormLabel>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <DatePicker
+                  id="periodeAwal"
+                  format="DD-MM-YYYY"
+                  onChange={(date) => this.handleDatepickerChange("periodeAwal", date)}
+                  value={this.state.periodeAwal}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+                <div>s.d</div>
+                <DatePicker
+                  id="periodeAkhir"
+                  format="DD-MM-YYYY"
+                  onChange={(date) => this.handleDatepickerChange("periodeAkhir", date)}
+                  value={this.state.periodeAkhir}
+                  style={{ width: "100%" }}
+                  disabled
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <Row style={{ marginTop: 30 }}>
+            <Col span={8} offset={16}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <Button
+                    type="primary"
+                    onClick={this.handleSearch}
+                    loading={this.state.isSearchLoading}
+                    block
+                    disabled
+                  >
+                    Tampilkan
+                  </Button>
+                </Col>
+
+                <Col span={12}>
+                  <Button type="danger" block onClick={this.handleReset} disabled>
+                    Reset
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          {this.state.isBrowseShow && (
             <>
-              <Header>{this.state.subtitle1}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                        disabled
-                      >
-                        Cari
-                      </Button>
-                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Merk</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <Input id="namaMerkMmea" value={this.state.namaMerkMmea} disabled />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarMerkVisible")}
-                        disabled
-                      >
-                        Cari
-                      </Button>
-                    </div>
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Tarif</FormLabel>
-                    </div>
-                    <Input id="tarif" value={this.state.tarif} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Isi</FormLabel>
-                    </div>
-                    <Input id="isi" value={this.state.isi} disabled />
-                  </Col>
-
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>Periode</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <DatePicker
-                        id="periodeAwal"
-                        format="DD-MM-YYYY"
-                        onChange={(date) => this.handleDatepickerChange("periodeAwal", date)}
-                        value={this.state.periodeAwal}
-                        style={{ width: "100%" }}
-                        disabled
-                      />
-                      <div>s.d</div>
-                      <DatePicker
-                        id="periodeAkhir"
-                        format="DD-MM-YYYY"
-                        onChange={(date) => this.handleDatepickerChange("periodeAkhir", date)}
-                        value={this.state.periodeAkhir}
-                        style={{ width: "100%" }}
-                        disabled
-                      />
-                    </div>
-                  </Col>
-                </Row>
-
-                <Row style={{ marginTop: 30 }}>
-                  <Col span={8} offset={16}>
+              <div style={{ marginTop: 30, marginBottom: 20 }}>
+                <Row style={{ marginBottom: 20 }}>
+                  <Col span={15} offset={9}>
                     <Row gutter={[16, 16]}>
                       <Col span={12}>
-                        <Button
-                          type="primary"
-                          onClick={this.handleSearch}
-                          loading={this.state.isSearchLoading}
-                          block
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>
+                            SALDO AWAL KEMASAN <br /> (Hasil penutupan periode sebelumnya)
+                          </FormLabel>
+                        </div>
+                        <InputNumber
+                          value={this.state.saldoAwalKemasan}
+                          min={0}
+                          style={{ width: "100%" }}
                           disabled
-                        >
-                          Tampilkan
-                        </Button>
+                        />
                       </Col>
 
                       <Col span={12}>
-                        <Button type="danger" block onClick={this.handleReset} disabled>
-                          Reset
-                        </Button>
+                        <div style={{ marginBottom: 10 }}>
+                          <FormLabel>
+                            SALDO AWAL (lt) <br /> (Hasil penutupan periode sebelumnya)
+                          </FormLabel>
+                        </div>
+                        <InputNumber
+                          value={this.state.saldoAwalLt}
+                          min={0}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
                       </Col>
                     </Row>
                   </Col>
                 </Row>
 
-                {this.state.isBrowseShow && (
-                  <>
-                    <div style={{ marginTop: 30, marginBottom: 20 }}>
-                      <Row style={{ marginBottom: 20 }}>
-                        <Col span={15} offset={9}>
-                          <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                              <div style={{ marginBottom: 10 }}>
-                                <FormLabel>
-                                  SALDO AWAL KEMASAN <br /> (Hasil penutupan periode sebelumnya)
-                                </FormLabel>
-                              </div>
-                              <InputNumber
-                                value={this.state.saldoAwalKemasan}
-                                min={0}
-                                style={{ width: "100%" }}
-                                disabled
-                              />
-                            </Col>
-
-                            <Col span={12}>
-                              <div style={{ marginBottom: 10 }}>
-                                <FormLabel>
-                                  SALDO AWAL (lt) <br /> (Hasil penutupan periode sebelumnya)
-                                </FormLabel>
-                              </div>
-                              <InputNumber
-                                value={this.state.saldoAwalLt}
-                                min={0}
-                                style={{ width: "100%" }}
-                                disabled
-                              />
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Row>
-
+                <Table
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                  pagination={{ current: this.state.page }}
+                  onChange={(page) => this.setState({ page: page.current })}
+                  scroll={{ x: "max-content" }}
+                  footer={() => {
+                    return (
                       <Table
-                        columns={this.state.columns}
-                        dataSource={this.state.dataSource}
-                        pagination={{ current: this.state.page }}
-                        onChange={(page) => this.setState({ page: page.current })}
-                        scroll={{ x: "max-content" }}
-                        footer={() => {
-                          return (
-                            <Table
-                              style={{ margin: -16 }}
-                              showHeader={false}
-                              pagination={false}
-                              columns={[
-                                {
-                                  key: "title",
-                                  title: "Title",
-                                  dataIndex: "title",
-                                  render: (text, record, index) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalDebetKemasan",
-                                  title: "Debet Kemasan",
-                                  dataIndex: "totalDebetKemasan",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalDebetLt",
-                                  title: "Debet (Lt)",
-                                  dataIndex: "totalDebetLt",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalKreditKemasan",
-                                  title: "Kredit Kemasan",
-                                  dataIndex: "totalKreditKemasan",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalKreditLt",
-                                  title: "Kredit (Lt)",
-                                  dataIndex: "totalKreditLt",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalSaldoKemasan",
-                                  title: "Saldo Kemasan",
-                                  dataIndex: "totalSaldoKemasan",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalSaldoLt",
-                                  title: "Saldo (Lt)",
-                                  dataIndex: "totalSaldoLt",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                                {
-                                  key: "totalKeterangan",
-                                  title: "Keterangan",
-                                  dataIndex: "totalKeterangan",
-                                  width: 80,
-                                  fixed: "right",
-                                  render: (text) => (
-                                    <div style={{ textAlign: "center" }}>{text}</div>
-                                  ),
-                                },
-                              ]}
-                              dataSource={[
-                                {
-                                  key: "1",
-                                  title: "Jumlah",
-                                  totalDebetKemasan: this.state.totalDebetKemasan,
-                                  totalDebetLt: this.state.totalDebetLt,
-                                  totalKreditKemasan: this.state.totalKreditKemasan,
-                                  totalKreditLt: this.state.totalKreditLt,
-                                  totalSaldoKemasan: this.state.saldoBukuKemasan,
-                                  totalSaldoLt: this.state.saldoBukuLt,
-                                  totalKeterangan: `Size Data: ${this.state.dataSource.length}`,
-                                },
-                                {
-                                  key: "2",
-                                  title: "Saldo Buku",
-                                  totalDebetKemasan: null,
-                                  totalDebetLt: null,
-                                  totalKreditKemasan: null,
-                                  totalKreditLt: null,
-                                  totalSaldoKemasan: this.state.saldoBukuKemasan,
-                                  totalSaldoLt: this.state.saldoBukuLt,
-                                  totalKeterangan: null,
-                                },
-                                {
-                                  key: "3",
-                                  title: "Selisih",
-                                  totalDebetKemasan: null,
-                                  totalDebetLt: null,
-                                  totalKreditKemasan: null,
-                                  totalKreditLt: null,
-                                  totalSaldoKemasan: Math.abs(this.state.selisihKemasan),
-                                  totalSaldoLt: Math.abs(this.state.selisihLt),
-                                  totalKeterangan: null,
-                                },
-                                {
-                                  key: "4",
-                                  title: "Saldo Akhir",
-                                  totalDebetKemasan: null,
-                                  totalDebetLt: null,
-                                  totalKreditKemasan: null,
-                                  totalKreditLt: null,
-                                  totalSaldoKemasan: this.state.hasilPencacahanBack5Kemasan,
-                                  totalSaldoLt: this.state.hasilPencacahanBack5Lt,
-                                  totalKeterangan: null,
-                                },
-                              ]}
-                            />
-                          );
-                        }}
+                        style={{ margin: -16 }}
+                        showHeader={false}
+                        pagination={false}
+                        columns={[
+                          {
+                            key: "title",
+                            title: "Title",
+                            dataIndex: "title",
+                            render: (text, record, index) => (
+                              <div style={{ textAlign: "center" }}>{text}</div>
+                            ),
+                          },
+                          {
+                            key: "totalDebetKemasan",
+                            title: "Debet Kemasan",
+                            dataIndex: "totalDebetKemasan",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalDebetLt",
+                            title: "Debet (Lt)",
+                            dataIndex: "totalDebetLt",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalKreditKemasan",
+                            title: "Kredit Kemasan",
+                            dataIndex: "totalKreditKemasan",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalKreditLt",
+                            title: "Kredit (Lt)",
+                            dataIndex: "totalKreditLt",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalSaldoKemasan",
+                            title: "Saldo Kemasan",
+                            dataIndex: "totalSaldoKemasan",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalSaldoLt",
+                            title: "Saldo (Lt)",
+                            dataIndex: "totalSaldoLt",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                          {
+                            key: "totalKeterangan",
+                            title: "Keterangan",
+                            dataIndex: "totalKeterangan",
+                            width: 80,
+                            fixed: "right",
+                            render: (text) => <div style={{ textAlign: "center" }}>{text}</div>,
+                          },
+                        ]}
+                        dataSource={[
+                          {
+                            key: "1",
+                            title: "Jumlah",
+                            totalDebetKemasan: this.state.totalDebetKemasan,
+                            totalDebetLt: this.state.totalDebetLt,
+                            totalKreditKemasan: this.state.totalKreditKemasan,
+                            totalKreditLt: this.state.totalKreditLt,
+                            totalSaldoKemasan: this.state.saldoBukuKemasan,
+                            totalSaldoLt: this.state.saldoBukuLt,
+                            totalKeterangan: `Size Data: ${this.state.dataSource.length}`,
+                          },
+                          {
+                            key: "2",
+                            title: "Saldo Buku",
+                            totalDebetKemasan: null,
+                            totalDebetLt: null,
+                            totalKreditKemasan: null,
+                            totalKreditLt: null,
+                            totalSaldoKemasan: this.state.saldoBukuKemasan,
+                            totalSaldoLt: this.state.saldoBukuLt,
+                            totalKeterangan: null,
+                          },
+                          {
+                            key: "3",
+                            title: "Selisih",
+                            totalDebetKemasan: null,
+                            totalDebetLt: null,
+                            totalKreditKemasan: null,
+                            totalKreditLt: null,
+                            totalSaldoKemasan: Math.abs(this.state.selisihKemasan),
+                            totalSaldoLt: Math.abs(this.state.selisihLt),
+                            totalKeterangan: null,
+                          },
+                          {
+                            key: "4",
+                            title: "Saldo Akhir",
+                            totalDebetKemasan: null,
+                            totalDebetLt: null,
+                            totalKreditKemasan: null,
+                            totalKreditLt: null,
+                            totalSaldoKemasan: this.state.hasilPencacahanBack5Kemasan,
+                            totalSaldoLt: this.state.hasilPencacahanBack5Lt,
+                            totalKeterangan: null,
+                          },
+                        ]}
                       />
-                    </div>
+                    );
+                  }}
+                />
+              </div>
 
+              <Row gutter={[10, 10]}>
+                <Col span={21} offset={3}>
+                  <Row gutter={[10, 10]}>
+                    <Col span={5} offset={8}>
+                      Kemasan
+                    </Col>
+                    <Col span={5}>Liter</Col>
+                    <Col span={6}>Keterangan</Col>
+                  </Row>
+
+                  <Row gutter={[10, 10]}>
+                    <Col span={8}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Hasil Pencacahan (BACK-5)
+                      </div>
+                    </Col>
+                    <Col span={5}>
+                      <InputNumber
+                        id="hasilPencacahanBack5Kemasan"
+                        value={this.state.hasilPencacahanBack5Kemasan}
+                        onChange={(value) => {
+                          this.handleInputNumberChange("hasilPencacahanBack5Kemasan", value);
+                          this.setState({
+                            hasilPencacahanBack5Lt:
+                              (typeof value === "number" ? value : 0) * (this.state.isi || 1),
+                          });
+                        }}
+                        style={{ width: "100%" }}
+                        disabled
+                      />
+                    </Col>
+                    <Col span={5}>
+                      <InputNumber
+                        id="hasilPencacahanBack5Lt"
+                        value={this.state.hasilPencacahanBack5Lt}
+                        onChange={(value) => {
+                          this.handleInputNumberChange("hasilPencacahanBack5Lt", value);
+
+                          this.setState({
+                            hasilPencacahanBack5Kemasan:
+                              (typeof value === "number" ? value : 0) / (this.state.isi || 1),
+                          });
+                        }}
+                        style={{ width: "100%" }}
+                        disabled
+                      />
+                    </Col>
+                    <Col span={6}>
+                      <Input.TextArea
+                        id="hasilPencarianBack5Description"
+                        value={this.state.hasilPencarianBack5Description}
+                        onChange={this.handleInputChange}
+                        autoSize
+                        disabled
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row gutter={[10, 10]}>
+                    <Col span={8}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        No. BACK-5
+                      </div>
+                    </Col>
+                    <Col span={5}>
+                      <Input
+                        id="noBack5"
+                        onChange={this.handleInputChange}
+                        value={this.state.noBack5}
+                        disabled
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row gutter={[10, 10]}>
+                    <Col span={8}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Tgl. BACK-5
+                      </div>
+                    </Col>
+                    <Col span={5}>
+                      <DatePicker
+                        id="tglBack5"
+                        format="DD-MM-YYYY"
+                        onChange={(date) => this.handleDatepickerChange("tglBack5", date)}
+                        value={this.state.tglBack5}
+                        style={{ width: "100%" }}
+                        disabled
+                      />
+                    </Col>
+                  </Row>
+
+                  {Math.sign(this.state.selisihKemasan) !== 0 && (
                     <Row gutter={[10, 10]}>
-                      <Col span={21} offset={3}>
-                        <Row gutter={[10, 10]}>
-                          <Col span={5} offset={8}>
-                            Kemasan
-                          </Col>
-                          <Col span={5}>Liter</Col>
-                          <Col span={6}>Keterangan</Col>
-                        </Row>
-
-                        <Row gutter={[10, 10]}>
-                          <Col span={8}>
-                            <div
-                              style={{
-                                height: 32,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "end",
-                              }}
-                            >
-                              Hasil Pencacahan (BACK-5)
-                            </div>
-                          </Col>
-                          <Col span={5}>
-                            <InputNumber
-                              id="hasilPencacahanBack5Kemasan"
-                              value={this.state.hasilPencacahanBack5Kemasan}
-                              onChange={(value) => {
-                                this.handleInputNumberChange("hasilPencacahanBack5Kemasan", value);
-                                this.setState({
-                                  hasilPencacahanBack5Lt:
-                                    (typeof value === "number" ? value : 0) * (this.state.isi || 1),
-                                });
-                              }}
-                              style={{ width: "100%" }}
-                              disabled
-                            />
-                          </Col>
-                          <Col span={5}>
-                            <InputNumber
-                              id="hasilPencacahanBack5Lt"
-                              value={this.state.hasilPencacahanBack5Lt}
-                              onChange={(value) => {
-                                this.handleInputNumberChange("hasilPencacahanBack5Lt", value);
-
-                                this.setState({
-                                  hasilPencacahanBack5Kemasan:
-                                    (typeof value === "number" ? value : 0) / (this.state.isi || 1),
-                                });
-                              }}
-                              style={{ width: "100%" }}
-                              disabled
-                            />
-                          </Col>
-                          <Col span={6}>
-                            <Input.TextArea
-                              id="hasilPencarianBack5Description"
-                              value={this.state.hasilPencarianBack5Description}
-                              onChange={this.handleInputChange}
-                              autoSize
-                              disabled
-                            />
-                          </Col>
-                        </Row>
-
-                        <Row gutter={[10, 10]}>
-                          <Col span={8}>
-                            <div
-                              style={{
-                                height: 32,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "end",
-                              }}
-                            >
-                              No. BACK-5
-                            </div>
-                          </Col>
-                          <Col span={5}>
-                            <Input
-                              id="noBack5"
-                              onChange={this.handleInputChange}
-                              value={this.state.noBack5}
-                              disabled
-                            />
-                          </Col>
-                        </Row>
-
-                        <Row gutter={[10, 10]}>
-                          <Col span={8}>
-                            <div
-                              style={{
-                                height: 32,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "end",
-                              }}
-                            >
-                              Tgl. BACK-5
-                            </div>
-                          </Col>
-                          <Col span={5}>
-                            <DatePicker
-                              id="tglBack5"
-                              format="DD-MM-YYYY"
-                              onChange={(date) => this.handleDatepickerChange("tglBack5", date)}
-                              value={this.state.tglBack5}
-                              style={{ width: "100%" }}
-                              disabled
-                            />
-                          </Col>
-                        </Row>
-
-                        {Math.sign(this.state.selisihKemasan) !== 0 && (
-                          <Row gutter={[10, 10]}>
-                            <Col span={8}>
-                              <div
-                                style={{
-                                  height: 32,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                {Math.sign(this.state.selisihKemasan) === -1
-                                  ? "Selisih Kurang"
-                                  : "Selisih Lebih"}
-                              </div>
-                            </Col>
-                            <Col span={5}>
-                              <InputNumber
-                                id="selisihKemasan"
-                                value={Math.abs(this.state.selisihKemasan)}
-                                style={{ width: "100%" }}
-                                disabled
-                              />
-                            </Col>
-                            <Col span={5}>
-                              <InputNumber
-                                id="selisihLt"
-                                value={Math.abs(this.state.selisihLt)}
-                                style={{ width: "100%" }}
-                                disabled
-                              />
-                            </Col>
-                            <Col span={6}>
-                              <Input.TextArea
-                                id="selisihDescription"
-                                value={this.state.selisihDescription}
-                                autoSize
-                                disabled
-                              />
-                            </Col>
-                          </Row>
-                        )}
-
-                        {Math.sign(this.state.selisihKemasan) === 1 && (
-                          <Row gutter={[10, 10]}>
-                            <Col span={8}>
-                              <div
-                                style={{
-                                  height: 32,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                Batas Kelonggaran
-                              </div>
-                            </Col>
-
-                            <Col span={5}>
-                              <InputNumber
-                                id="batasKelonggaranKemasan"
-                                value={this.state.batasKelonggaranKemasan}
-                                style={{ width: "100%" }}
-                                disabled
-                              />
-                            </Col>
-
-                            <Col span={6} offset={5}>
-                              <Input.TextArea
-                                id="batasKelonggaranDescription"
-                                value={this.state.batasKelonggaranDescription}
-                                autoSize
-                                disabled
-                              />
-                            </Col>
-                          </Row>
-                        )}
-
-                        {Math.sign(this.state.selisihKemasan) !== 0 && (
-                          <Row gutter={[10, 10]}>
-                            <Col
-                              span={11}
-                              offset={13}
-                              style={{
-                                color:
-                                  Math.sign(this.state.selisihKemasan) === -1 ||
-                                  Math.sign(this.state.selisihLt) === -1 ||
-                                  ((Math.sign(this.state.selisihKemasan) === 1 ||
-                                    Math.sign(this.state.selisihLt) === 1) &&
-                                    this.state.selisihLt > this.state.batasKelonggaranKemasan &&
-                                    this.state.selisihKemasan > this.state.batasKelonggaranKemasan)
-                                    ? "red"
-                                    : "blue",
-                              }}
-                            >
-                              {this.state.notif}
-                            </Col>
-                          </Row>
-                        )}
-
-                        <Row gutter={[10, 50]}>
-                          <Col span={8} offset={9}>
-                            <div
-                              style={{
-                                height: 32,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "end",
-                              }}
-                            >
-                              Jenis Penutupan
-                            </div>
-                          </Col>
-                          <Col span={7}>
-                            <Select
-                              id="jenisPenutupan"
-                              value={this.state.jenisPenutupan}
-                              onChange={(value) => this.handleSelectChange("jenisPenutupan", value)}
-                              style={{ width: "100%" }}
-                              disabled
-                            >
-                              {this.state.listJenisPenutupan.length > 0 &&
-                                this.state.listJenisPenutupan.map((item, index) => (
-                                  <Select.Option
-                                    key={`jenis-penutupan-${index}`}
-                                    value={item.kodeJenisPenutupan}
-                                  >
-                                    {item.namaJenisPenutupan}
-                                  </Select.Option>
-                                ))}
-                            </Select>
-                          </Col>
-                        </Row>
+                      <Col span={8}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          {Math.sign(this.state.selisihKemasan) === -1
+                            ? "Selisih Kurang"
+                            : "Selisih Lebih"}
+                        </div>
+                      </Col>
+                      <Col span={5}>
+                        <InputNumber
+                          id="selisihKemasan"
+                          value={Math.abs(this.state.selisihKemasan)}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
+                      </Col>
+                      <Col span={5}>
+                        <InputNumber
+                          id="selisihLt"
+                          value={Math.abs(this.state.selisihLt)}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
+                      </Col>
+                      <Col span={6}>
+                        <Input.TextArea
+                          id="selisihDescription"
+                          value={this.state.selisihDescription}
+                          autoSize
+                          disabled
+                        />
                       </Col>
                     </Row>
-                  </>
-                )}
+                  )}
 
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
-                </Row>
-              </div>
+                  {Math.sign(this.state.selisihKemasan) === 1 && (
+                    <Row gutter={[10, 10]}>
+                      <Col span={8}>
+                        <div
+                          style={{
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                        >
+                          Batas Kelonggaran
+                        </div>
+                      </Col>
+
+                      <Col span={5}>
+                        <InputNumber
+                          id="batasKelonggaranKemasan"
+                          value={this.state.batasKelonggaranKemasan}
+                          style={{ width: "100%" }}
+                          disabled
+                        />
+                      </Col>
+
+                      <Col span={6} offset={5}>
+                        <Input.TextArea
+                          id="batasKelonggaranDescription"
+                          value={this.state.batasKelonggaranDescription}
+                          autoSize
+                          disabled
+                        />
+                      </Col>
+                    </Row>
+                  )}
+
+                  {Math.sign(this.state.selisihKemasan) !== 0 && (
+                    <Row gutter={[10, 10]}>
+                      <Col
+                        span={11}
+                        offset={13}
+                        style={{
+                          color:
+                            Math.sign(this.state.selisihKemasan) === -1 ||
+                            Math.sign(this.state.selisihLt) === -1 ||
+                            ((Math.sign(this.state.selisihKemasan) === 1 ||
+                              Math.sign(this.state.selisihLt) === 1) &&
+                              this.state.selisihLt > this.state.batasKelonggaranKemasan &&
+                              this.state.selisihKemasan > this.state.batasKelonggaranKemasan)
+                              ? "red"
+                              : "blue",
+                        }}
+                      >
+                        {this.state.notif}
+                      </Col>
+                    </Row>
+                  )}
+
+                  <Row gutter={[10, 50]}>
+                    <Col span={8} offset={9}>
+                      <div
+                        style={{
+                          height: 32,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                      >
+                        Jenis Penutupan
+                      </div>
+                    </Col>
+                    <Col span={7}>
+                      <Select
+                        id="jenisPenutupan"
+                        value={this.state.jenisPenutupan}
+                        onChange={(value) => this.handleSelectChange("jenisPenutupan", value)}
+                        style={{ width: "100%" }}
+                        disabled
+                      >
+                        {this.state.listJenisPenutupan.length > 0 &&
+                          this.state.listJenisPenutupan.map((item, index) => (
+                            <Select.Option
+                              key={`jenis-penutupan-${index}`}
+                              value={item.kodeJenisPenutupan}
+                            >
+                              {item.namaJenisPenutupan}
+                            </Select.Option>
+                          ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
             </>
           )}
+
+          <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+          </Row>
         </Container>
       </>
     );

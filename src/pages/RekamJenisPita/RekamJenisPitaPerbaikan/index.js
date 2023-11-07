@@ -1,8 +1,7 @@
-import { Button, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
@@ -281,216 +280,186 @@ export default class RekamJenisPitaPerbaikan extends Component {
   };
 
   render() {
+    if (this.state.isDetailLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
-        <Container menuName="Rekam Jenis Pita" contentName="Perbaikan" hideContentHeader>
-          {this.state.isDetailLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ marginBottom: 10 }}>
-                      <FormLabel>NPPBKC</FormLabel>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      <Button
-                        type="primary"
-                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                        disabled
-                      >
-                        Cari
-                      </Button>
-                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
-                    </div>
-                  </Col>
-                </Row>
+        <Container menuName="Jenis Pita" contentName="Jenis Pita Perbaikan">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>NPPBKC</FormLabel>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                  <Button
+                    type="primary"
+                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                    disabled
+                  >
+                    Cari
+                  </Button>
+                  <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
+                </div>
+              </Col>
+            </Row>
 
-                {this.state.idNppbkc && (
-                  <Row gutter={[16, 16]}>
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jenis Produksi</FormLabel>
-                        </div>
-                        <Select
-                          id="jenisProduksiBkc"
-                          value={this.state.idJenisProduksiBkc}
-                          loading={this.state.isJenisProduksiLoading}
-                          onChange={(value, option) => {
-                            this.handleSelectCustomChange("jenisProduksiBkc", value, option);
-                          }}
-                          style={{ width: "100%" }}
+            {this.state.idNppbkc && (
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Jenis Produksi</FormLabel>
+                  </div>
+                  <Select
+                    id="jenisProduksiBkc"
+                    value={this.state.idJenisProduksiBkc}
+                    loading={this.state.isJenisProduksiLoading}
+                    onChange={(value, option) => {
+                      this.handleSelectCustomChange("jenisProduksiBkc", value, option);
+                    }}
+                    style={{ width: "100%" }}
+                  >
+                    {this.state.listJenisProduksiBkc.length > 0 &&
+                      this.state.listJenisProduksiBkc.map((item, index) => (
+                        <Select.Option
+                          key={`jenisProduksiBkc-${index}`}
+                          value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}-${item.kodeSatuan}`}
                         >
-                          {this.state.listJenisProduksiBkc.length > 0 &&
-                            this.state.listJenisProduksiBkc.map((item, index) => (
-                              <Select.Option
-                                key={`jenisProduksiBkc-${index}`}
-                                value={`${item.idJenisProduksiBkc}-${item.idGolonganBkc}-${item.kodeSatuan}`}
-                              >
-                                {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      </div>
-                    </Col>
+                          {`${item.kodeJenisProduksi} - ${item.namaGolonganBkc}`}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
 
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>HJE</FormLabel>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <InputNumber
-                            id="hje"
-                            onChange={(value) => this.handleInputNumberChange("hje", value)}
-                            value={this.state.hje}
-                            style={{ width: "100%" }}
-                            disabled={this.state.idJenisBkc === 2}
-                          />
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>HJE</FormLabel>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <InputNumber
+                      id="hje"
+                      onChange={(value) => this.handleInputNumberChange("hje", value)}
+                      value={this.state.hje}
+                      style={{ width: "100%" }}
+                      disabled={this.state.idJenisBkc === 2}
+                    />
 
-                          <Button
-                            type="primary"
-                            icon="search"
-                            loading={this.state.isTarifLoading || this.state.isWarnaLoading}
-                            onClick={this.getTarifWarna}
-                            disabled={
-                              !this.state.idJenisProduksiBkc ||
-                              (this.state.idJenisBkc === 3 && !this.state.hje)
-                            }
-                          />
-                        </div>
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Isi Per Kemasan</FormLabel>
-                        </div>
-
-                        <InputNumber
-                          id="isiKemasan"
-                          onChange={(value) => this.handleInputNumberChange("isiKemasan", value)}
-                          value={this.state.isiKemasan}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tarif Cukai</FormLabel>
-                        </div>
-                        <InputNumber
-                          id="tarif"
-                          value={this.state.tarif}
-                          onChange={(value) => this.handleInputNumberChange("tarif", value)}
-                          style={{ width: "100%" }}
-                          disabled
-                        />
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Awal Berlaku</FormLabel>
-                        </div>
-                        <DatePicker
-                          id="warna"
-                          format="DD-MM-YYYY"
-                          value={this.state.awalBerlaku}
-                          onChange={(date) => this.handleDatepickerChange("awalBerlaku", date)}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Warna</FormLabel>
-                        </div>
-                        <Input
-                          id="warna"
-                          value={this.state.warna}
-                          style={{ width: "100%" }}
-                          disabled
-                        />
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Seri Pita</FormLabel>
-                        </div>
-                        <Select
-                          id="seriPita"
-                          value={this.state.idSeriPita}
-                          loading={this.state.isSeripitaLoading}
-                          onChange={(value, option) => {
-                            this.handleSelectCustomChange("seriPita", value, option);
-                          }}
-                          style={{ width: "100%" }}
-                          disabled={this.state.idJenisBkc === 2}
-                        >
-                          {this.state.listSeriPita.length > 0 &&
-                            this.state.listSeriPita.map((item, index) => (
-                              <Select.Option key={`seriPita-${index}`} value={item.idSeripita}>
-                                {item.namaSeripita}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      </div>
-                    </Col>
-
-                    <Col span={12}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tahun Pita</FormLabel>
-                        </div>
-                        <Input
-                          id="tahunPita"
-                          value={this.state.tahunPita}
-                          style={{ width: "100%" }}
-                          disabled
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                )}
-
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
-
-                  <Col span={4}>
                     <Button
                       type="primary"
-                      loading={this.state.isUpdateLoading}
-                      onClick={this.handleUpdate}
-                      block
-                    >
-                      Update
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+                      icon="search"
+                      loading={this.state.isTarifLoading || this.state.isWarnaLoading}
+                      onClick={this.getTarifWarna}
+                      disabled={
+                        !this.state.idJenisProduksiBkc ||
+                        (this.state.idJenisBkc === 3 && !this.state.hje)
+                      }
+                    />
+                  </div>
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Isi Per Kemasan</FormLabel>
+                  </div>
+
+                  <InputNumber
+                    id="isiKemasan"
+                    onChange={(value) => this.handleInputNumberChange("isiKemasan", value)}
+                    value={this.state.isiKemasan}
+                    style={{ width: "100%" }}
+                  />
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Tarif Cukai</FormLabel>
+                  </div>
+                  <InputNumber
+                    id="tarif"
+                    value={this.state.tarif}
+                    onChange={(value) => this.handleInputNumberChange("tarif", value)}
+                    style={{ width: "100%" }}
+                    disabled
+                  />
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Awal Berlaku</FormLabel>
+                  </div>
+                  <DatePicker
+                    id="warna"
+                    format="DD-MM-YYYY"
+                    value={this.state.awalBerlaku}
+                    onChange={(date) => this.handleDatepickerChange("awalBerlaku", date)}
+                    style={{ width: "100%" }}
+                  />
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Warna</FormLabel>
+                  </div>
+                  <Input id="warna" value={this.state.warna} style={{ width: "100%" }} disabled />
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Seri Pita</FormLabel>
+                  </div>
+                  <Select
+                    id="seriPita"
+                    value={this.state.idSeriPita}
+                    loading={this.state.isSeripitaLoading}
+                    onChange={(value, option) => {
+                      this.handleSelectCustomChange("seriPita", value, option);
+                    }}
+                    style={{ width: "100%" }}
+                    disabled={this.state.idJenisBkc === 2}
+                  >
+                    {this.state.listSeriPita.length > 0 &&
+                      this.state.listSeriPita.map((item, index) => (
+                        <Select.Option key={`seriPita-${index}`} value={item.idSeripita}>
+                          {item.namaSeripita}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </Col>
+
+                <Col span={12}>
+                  <div style={{ marginBottom: 10 }}>
+                    <FormLabel>Tahun Pita</FormLabel>
+                  </div>
+                  <Input
+                    id="tahunPita"
+                    value={this.state.tahunPita}
+                    style={{ width: "100%" }}
+                    disabled
+                  />
+                </Col>
+              </Row>
+            )}
+          </Card>
+
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
+
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isUpdateLoading}
+                onClick={this.handleUpdate}
+                block
+              >
+                Update
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

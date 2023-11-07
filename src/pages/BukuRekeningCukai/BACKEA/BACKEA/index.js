@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Button, Row, Input, Icon, Table, Col } from "antd";
+import { Button, Row, Input, Icon, Table, Col, Card } from "antd";
 import Container from "components/Container";
 import { pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
-import Header from "components/Header";
 import ModalBACKEADetail67 from "../ModalBACKEADetail67";
 import ModalBACKEADetail89 from "../ModalBACKEADetail89";
 
@@ -536,13 +535,8 @@ export default class BACKEA extends Component {
   render() {
     return (
       <>
-        <Container menuName="Buku Rekening Cukai" contentName="BACK EA" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Buku Rekening Cukai" contentName="BACK EA">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row>
               <Col span={6}>
                 <ButtonCustom
@@ -555,20 +549,18 @@ export default class BACKEA extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource67}
-                columns={this.state.columns67}
-                loading={this.state.isBackEa67Loading}
-                pagination={{ current: this.state.page67, total: this.state.totalData67 }}
-                onChange={(page) => this.setState({ page67: page.current })}
-                scroll={{ x: "max-content" }}
-              />
-            </div>
-          </div>
+            <Table
+              dataSource={this.state.dataSource67}
+              columns={this.state.columns67}
+              loading={this.state.isBackEa67Loading}
+              pagination={{ current: this.state.page67, total: this.state.totalData67 }}
+              onChange={(page) => this.setState({ page67: page.current })}
+              scroll={{ x: "max-content" }}
+              style={{ marginTop: 30 }}
+            />
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          <Card title={this.state.subtitle2}>
             <Row>
               <Col span={6}>
                 <ButtonCustom
@@ -581,17 +573,16 @@ export default class BACKEA extends Component {
               </Col>
             </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource89}
-                columns={this.state.columns89}
-                loading={this.state.isBackEa89Loading}
-                pagination={{ current: this.state.page89, total: this.state.totalData89 }}
-                onChange={(page) => this.setState({ page89: page.current })}
-                scroll={{ x: "max-content" }}
-              />
-            </div>
-          </div>
+            <Table
+              dataSource={this.state.dataSource89}
+              columns={this.state.columns89}
+              loading={this.state.isBackEa89Loading}
+              pagination={{ current: this.state.page89, total: this.state.totalData89 }}
+              onChange={(page) => this.setState({ page89: page.current })}
+              scroll={{ x: "max-content" }}
+              style={{ marginTop: 30 }}
+            />
+          </Card>
         </Container>
 
         <ModalBACKEADetail67

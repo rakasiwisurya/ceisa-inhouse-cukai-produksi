@@ -2,7 +2,6 @@ import { Button, Card, Col, DatePicker, Input, Row, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
@@ -164,197 +163,182 @@ export default class SPLPerbaikan extends Component {
   };
 
   render() {
+    if (this.state.isDetailLoading) return <LoadingWrapperSkeleton />;
+
     return (
       <>
         <Container menuName="Laporan Produksi BKC" contentName="SPL Perbaikan" hideContentHeader>
-          {this.state.isDetailLoading ? (
-            <LoadingWrapperSkeleton />
-          ) : (
-            <>
-              <Header>{this.state.subtitle1}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                <Row gutter={[20, 20]}>
-                  <Col span={12}>
-                    <Card title={this.state.cardTitle1} style={{ height: 563 }}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nomor SPL</FormLabel>
-                        </div>
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
+            <Row gutter={[20, 20]}>
+              <Col span={12}>
+                <Card title={this.state.cardTitle1} style={{ height: 563 }}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nomor SPL</FormLabel>
+                    </div>
+                    <Input
+                      id="nomorSpl"
+                      onChange={this.handleInputChange}
+                      value={this.state.nomorSpl}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal SPL</FormLabel>
+                    </div>
+                    <DatePicker
+                      id="tanggalSpl"
+                      format="DD-MM-YYYY"
+                      value={this.state.tanggalSpl}
+                      onChange={(date) => this.handleDatepickerChange("tanggalSpl", date)}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Pengusaha</FormLabel>
+                    </div>
+                    <Input
+                      id="namaPengusaha"
+                      onChange={this.handleInputChange}
+                      value={this.state.namaPengusaha}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Jabatan</FormLabel>
+                    </div>
+                    <Input
+                      id="jabatan"
+                      onChange={this.handleInputChange}
+                      value={this.state.jabatan}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alamat</FormLabel>
+                    </div>
+                    <Input.TextArea
+                      id="alamatPengusaha"
+                      onChange={this.handleInputChange}
+                      value={this.state.alamatPengusaha}
+                    />
+                  </div>
+                </Card>
+              </Col>
+
+              <Col span={12}>
+                <Card title={this.state.cardTitle2} style={{ height: 563 }}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Nama Perusahaan</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
+                      <Button
+                        type="default"
+                        icon="menu"
+                        onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>NPPBKC</FormLabel>
+                    </div>
+                    <Input id="nppbkc" value={this.state.nppbkc} disabled />
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alamat</FormLabel>
+                    </div>
+                    <Input.TextArea id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+
+            <Row gutter={[20, 20]}>
+              <Col span={12}>
+                <Card title={this.state.cardTitle3}>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal Libur</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <DatePicker
+                        id="awalLibur"
+                        format="DD-MM-YYYY"
+                        value={this.state.awalLibur}
+                        onChange={(date) => this.handleDatepickerChange("awalLibur", date)}
+                        style={{ width: "100%" }}
+                      />
+                      <div>s.d</div>
+                      <DatePicker
+                        id="akhirLibur"
+                        format="DD-MM-YYYY"
+                        value={this.state.akhirLibur}
+                        onChange={(date) => this.handleDatepickerChange("akhirLibur", date)}
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Tanggal, Tempat</FormLabel>
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <DatePicker
+                        id="tanggalPernyataan"
+                        format="DD-MM-YYYY"
+                        value={this.state.tanggalPernyataan}
+                        onChange={(date) => this.handleDatepickerChange("tanggalPernyataan", date)}
+                      />
+                      <div>,</div>
+                      <div style={{ display: "flex", gap: 10 }}>
                         <Input
-                          id="nomorSpl"
-                          onChange={this.handleInputChange}
-                          value={this.state.nomorSpl}
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal SPL</FormLabel>
-                        </div>
-                        <DatePicker
-                          id="tanggalSpl"
-                          format="DD-MM-YYYY"
-                          value={this.state.tanggalSpl}
-                          onChange={(date) => this.handleDatepickerChange("tanggalSpl", date)}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nama Pengusaha</FormLabel>
-                        </div>
-                        <Input
-                          id="namaPengusaha"
-                          onChange={this.handleInputChange}
-                          value={this.state.namaPengusaha}
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Jabatan</FormLabel>
-                        </div>
-                        <Input
-                          id="jabatan"
-                          onChange={this.handleInputChange}
-                          value={this.state.jabatan}
-                        />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Alamat</FormLabel>
-                        </div>
-                        <Input.TextArea
-                          id="alamatPengusaha"
-                          onChange={this.handleInputChange}
-                          value={this.state.alamatPengusaha}
-                        />
-                      </div>
-                    </Card>
-                  </Col>
-
-                  <Col span={12}>
-                    <Card title={this.state.cardTitle2} style={{ height: 563 }}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Nama Perusahaan</FormLabel>
-                        </div>
-                        <div style={{ display: "flex", gap: 10 }}>
-                          <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
-                          <Button
-                            type="default"
-                            icon="menu"
-                            onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                          />
-                        </div>
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>NPPBKC</FormLabel>
-                        </div>
-                        <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                      </div>
-
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Alamat</FormLabel>
-                        </div>
-                        <Input.TextArea
-                          id="alamatNppbkc"
-                          value={this.state.alamatNppbkc}
+                          id="namaKotaPernyataan"
+                          value={this.state.namaKotaPernyataan}
                           disabled
                         />
+                        <Button
+                          type="default"
+                          icon="menu"
+                          onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
+                        />
                       </div>
-                    </Card>
-                  </Col>
-                </Row>
+                    </div>
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </Card>
 
-                <Row gutter={[20, 20]}>
-                  <Col span={12}>
-                    <Card title={this.state.cardTitle3}>
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal Libur</FormLabel>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <DatePicker
-                            id="awalLibur"
-                            format="DD-MM-YYYY"
-                            value={this.state.awalLibur}
-                            onChange={(date) => this.handleDatepickerChange("awalLibur", date)}
-                            style={{ width: "100%" }}
-                          />
-                          <div>s.d</div>
-                          <DatePicker
-                            id="akhirLibur"
-                            format="DD-MM-YYYY"
-                            value={this.state.akhirLibur}
-                            onChange={(date) => this.handleDatepickerChange("akhirLibur", date)}
-                            style={{ width: "100%" }}
-                          />
-                        </div>
-                      </div>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-                      <div style={{ marginBottom: 20 }}>
-                        <div style={{ marginBottom: 10 }}>
-                          <FormLabel>Tanggal, Tempat</FormLabel>
-                        </div>
-                        <div style={{ display: "flex", gap: 10 }}>
-                          <DatePicker
-                            id="tanggalPernyataan"
-                            format="DD-MM-YYYY"
-                            value={this.state.tanggalPernyataan}
-                            onChange={(date) =>
-                              this.handleDatepickerChange("tanggalPernyataan", date)
-                            }
-                          />
-                          <div>,</div>
-                          <div style={{ display: "flex", gap: 10 }}>
-                            <Input
-                              id="namaKotaPernyataan"
-                              value={this.state.namaKotaPernyataan}
-                              disabled
-                            />
-                            <Button
-                              type="default"
-                              icon="menu"
-                              onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </Col>
-                </Row>
-
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
-
-                  <Col span={4}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isUpdateLoading}
-                      onClick={this.handleUpdate}
-                      block
-                    >
-                      Update
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isUpdateLoading}
+                onClick={this.handleUpdate}
+                block
+              >
+                Update
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

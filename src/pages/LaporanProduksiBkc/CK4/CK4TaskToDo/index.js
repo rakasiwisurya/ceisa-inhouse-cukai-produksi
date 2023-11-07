@@ -41,7 +41,7 @@ export default class CK4TaskToDo extends Component {
         default:
           notification.info({
             message: "Info",
-            description: "Jenis Bkc is not found in this data or invalid",
+            description: "Jenis Bkc is not found or invalid in this data",
           });
           break;
       }

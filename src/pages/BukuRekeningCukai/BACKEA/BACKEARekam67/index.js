@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Col,
   DatePicker,
   Icon,
@@ -13,7 +14,6 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import { pathName } from "configs/constants";
 import moment from "moment";
@@ -221,7 +221,7 @@ export default class BACKEARekam67 extends Component {
   };
   handleColumnReset = (clearFilters) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: null });
   };
 
   handleInputChange = (e) => {
@@ -414,17 +414,8 @@ export default class BACKEARekam67 extends Component {
   render() {
     return (
       <>
-        <Container
-          menuName="Buku Rekening Cukai"
-          contentName="BACK EA 6 & 7 Rekam"
-          hideContentHeader
-        >
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+        <Container menuName="Buku Rekening Cukai" contentName="BACK EA 6 & 7 Rekam">
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -485,9 +476,9 @@ export default class BACKEARekam67 extends Component {
                 />
               </Col>
             </Row>
-          </div>
-          <Header>{this.state.subtitle2}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+          </Card>
+
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -583,66 +574,65 @@ export default class BACKEARekam67 extends Component {
                 />
               </Col>
             </Row>
+          </Card>
 
-            <Row style={{ marginTop: 20 }}>
-              <Col span={8} offset={8}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
-                        Ubah
-                      </ButtonCustom>
-                    ) : (
-                      <Button type="primary" block onClick={this.handleSimpanRincian}>
-                        Simpan
-                      </Button>
-                    )}
-                  </Col>
+          <Row>
+            <Col span={8} offset={8}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <ButtonCustom variant="warning" block onClick={this.handleUbahRincian}>
+                      Ubah
+                    </ButtonCustom>
+                  ) : (
+                    <Button type="primary" block onClick={this.handleSimpanRincian}>
+                      Simpan
+                    </Button>
+                  )}
+                </Col>
 
-                  <Col span={12}>
-                    {this.state.isEditRincian ? (
-                      <Button type="danger" block onClick={this.handleBatalEditRincian}>
-                        Batal
-                      </Button>
-                    ) : (
-                      <Button type="danger" block onClick={this.handleReset}>
-                        Reset
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  {this.state.isEditRincian ? (
+                    <Button type="danger" block onClick={this.handleBatalEditRincian}>
+                      Batal
+                    </Button>
+                  ) : (
+                    <Button type="danger" block onClick={this.handleReset}>
+                      Reset
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <div style={{ marginTop: 30, marginBottom: 20 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                scroll={{ x: "max-content" }}
-                onChange={(page) => this.setState({ page: page.current })}
-                pagination={{ current: this.state.page }}
-              />
-            </div>
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            scroll={{ x: "max-content" }}
+            onChange={(page) => this.setState({ page: page.current })}
+            pagination={{ current: this.state.page }}
+            style={{ marginTop: 30, marginBottom: 30 }}
+          />
 
-            <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-              <Col span={4}>
-                <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
-                  Kembali
-                </ButtonCustom>
-              </Col>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  loading={this.state.isRekamLoading}
-                  onClick={this.handleRekam}
-                  block
-                >
-                  Rekam
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarNPPBKC

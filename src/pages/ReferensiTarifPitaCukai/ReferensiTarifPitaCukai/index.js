@@ -322,7 +322,7 @@ export default class ReferensiTarifPitaCukai extends Component {
           pagination={{ current: this.state.page, total: this.state.totalData }}
           onChange={(page) => this.setState({ page: page.current })}
           scroll={{ x: "max-content" }}
-          style={{ marginTop: 30, marginBottom: 20 }}
+          style={{ marginTop: 30 }}
         />
       </Container>
     );

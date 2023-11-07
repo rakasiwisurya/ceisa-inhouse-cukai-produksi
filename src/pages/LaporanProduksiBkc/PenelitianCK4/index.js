@@ -1,6 +1,5 @@
 import { Button, Col, Icon, Input, Row, Table, notification } from "antd";
 import Container from "components/Container";
-import Header from "components/Header";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -236,42 +235,34 @@ export default class PenelitianCK4 extends Component {
   render() {
     return (
       <>
-        <Container menuName="Laporan Produksi BKC" contentName="Penelitian CK4" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <div style={{ marginTop: 10 }}>
-              <Table
-                dataSource={this.state.dataSource}
-                columns={this.state.columns}
-                loading={this.state.isPenelitianCk4Loading}
-                onChange={(page) => this.setState({ page: page.current })}
-                pagination={{ current: this.state.page, total: this.state.totalData }}
-                scroll={{ x: "max-content" }}
-                rowSelection={{
-                  selectedRowKeys: this.state.selectedRowKeys,
-                  onChange: this.handleRowSelectChange,
-                }}
-              />
-            </div>
+        <Container menuName="Laporan Produksi BKC" contentName="Penelitian CK4">
+          <Table
+            dataSource={this.state.dataSource}
+            columns={this.state.columns}
+            loading={this.state.isPenelitianCk4Loading}
+            onChange={(page) => this.setState({ page: page.current })}
+            pagination={{ current: this.state.page, total: this.state.totalData }}
+            scroll={{ x: "max-content" }}
+            rowSelection={{
+              selectedRowKeys: this.state.selectedRowKeys,
+              onChange: this.handleRowSelectChange,
+            }}
+            style={{ marginBottom: 30 }}
+          />
 
-            <Row gutter={[16, 16]}>
-              <Col span={12} offset={18}>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isSimpanLoading}
-                      onClick={this.handleSimpan}
-                      disabled={!this.state.dataRows.length > 0}
-                      block
-                    >
-                      Simpan Penelitian
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </div>
+          <Row gutter={[16, 16]}>
+            <Col span={6} offset={18}>
+              <Button
+                type="primary"
+                loading={this.state.isSimpanLoading}
+                onClick={this.handleSimpan}
+                disabled={!this.state.dataRows.length > 0}
+                block
+              >
+                Simpan Penelitian
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </>
     );

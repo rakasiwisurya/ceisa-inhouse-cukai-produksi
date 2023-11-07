@@ -1,8 +1,7 @@
-import { Button, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import Header from "components/Header";
 import ModalDaftarHtlRel from "components/ModalDaftarHtlRel";
 import ModalDaftarJenisPita from "components/ModalDaftarJenisPita";
 import ModalDaftarKota from "components/ModalDaftarKota";
@@ -421,12 +420,7 @@ export default class PermohonanTarifRekam extends Component {
     return (
       <>
         <Container menuName="Tarif Cukai" contentName="Permohonan Tarif Rekam" hideContentHeader>
-          <Header>{this.state.subtitle1}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+          <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -561,14 +555,9 @@ export default class PermohonanTarifRekam extends Component {
                 />
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle2}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -601,14 +590,9 @@ export default class PermohonanTarifRekam extends Component {
                 <Input id="alamatNppbkc" value={this.state.alamatNppbkc} disabled />
               </Col>
             </Row>
-          </div>
+          </Card>
 
-          <Header>{this.state.subtitle3}</Header>
-          <div
-            className="kt-content  kt-grid__item kt-grid__item--fluid"
-            id="kt_content"
-            style={{ paddingBottom: 10 }}
-          >
+          <Card title={this.state.subtitle3} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
@@ -995,13 +979,11 @@ export default class PermohonanTarifRekam extends Component {
                 </>
               )}
             </Row>
-          </div>
+          </Card>
 
           {this.state.idJenisBkc === 3 &&
-          !(this.state.idJenisProduksiHt === 2 || this.state.idJenisProduksiHt === 5) ? (
-            <>
-              <Header>{this.state.subtitle4}</Header>
-              <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+            !(this.state.idJenisProduksiHt === 2 || this.state.idJenisProduksiHt === 5) && (
+              <Card title={this.state.subtitle4} style={{ marginBottom: 30 }}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
                     <Row gutter={[16, 16]}>
@@ -1091,57 +1073,27 @@ export default class PermohonanTarifRekam extends Component {
                     )}
                   </Col>
                 </Row>
+              </Card>
+            )}
 
-                <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                  <Col span={4}>
-                    <ButtonCustom
-                      variant="secondary"
-                      onClick={() => this.props.history.goBack()}
-                      block
-                    >
-                      Kembali
-                    </ButtonCustom>
-                  </Col>
+          <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
+            <Col span={4}>
+              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+                Kembali
+              </ButtonCustom>
+            </Col>
 
-                  <Col span={4}>
-                    <Button
-                      type="primary"
-                      loading={this.state.isRekamLoading}
-                      onClick={this.handleRekam}
-                      block
-                    >
-                      Rekam
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            </>
-          ) : (
-            <div className="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-              <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-                <Col span={4}>
-                  <ButtonCustom
-                    variant="secondary"
-                    onClick={() => this.props.history.goBack()}
-                    block
-                  >
-                    Kembali
-                  </ButtonCustom>
-                </Col>
-
-                <Col span={4}>
-                  <Button
-                    type="primary"
-                    loading={this.state.isRekamLoading}
-                    onClick={this.handleRekam}
-                    block
-                  >
-                    Rekam
-                  </Button>
-                </Col>
-              </Row>
-            </div>
-          )}
+            <Col span={4}>
+              <Button
+                type="primary"
+                loading={this.state.isRekamLoading}
+                onClick={this.handleRekam}
+                block
+              >
+                Rekam
+              </Button>
+            </Col>
+          </Row>
         </Container>
 
         <ModalDaftarKota
