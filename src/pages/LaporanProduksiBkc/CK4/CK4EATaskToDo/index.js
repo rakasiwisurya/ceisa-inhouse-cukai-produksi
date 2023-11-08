@@ -21,6 +21,7 @@ import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { download } from "utils/files";
+import { getTokenPayload } from "utils/jwt";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
 
@@ -43,6 +44,10 @@ export default class CK4EATaskToDo extends Component {
       isModalDaftarStckVisible: false,
       isModalDaftarPenjabatBcVisible: false,
       isDownloadLoading: false,
+
+      tokenData: null,
+      kodeKantor: null,
+      namaKantor: null,
 
       namaPemrakarsa: null,
       jabatanPemrakarsa: null,
@@ -172,6 +177,7 @@ export default class CK4EATaskToDo extends Component {
   }
 
   componentDidMount() {
+    this.getToken();
     this.getDetailCk4Ea();
   }
 
@@ -181,6 +187,18 @@ export default class CK4EATaskToDo extends Component {
       this.setState({ totaJumlahProduksi: sumArrayOfObject(dataSource, "jumlahProduksi") });
     }
   }
+
+  getToken = async () => {
+    try {
+      const tokenData = await getTokenPayload();
+      this.setState({ tokenData });
+    } catch (error) {
+      notification.error({
+        message: "Failed",
+        description: "There's something error with token data",
+      });
+    }
+  };
 
   getDetailCk4Ea = async () => {
     const payload = { idCk4: this.props.match.params.id };
@@ -214,6 +232,8 @@ export default class CK4EATaskToDo extends Component {
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
+        kodeKantor: data.kodeKantor,
+        namaKantor: data.namaKantor,
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
           nomorProduksi: detail.nomorProduksi,
@@ -332,7 +352,7 @@ export default class CK4EATaskToDo extends Component {
   };
 
   handleSimpanTasktodo = async () => {
-    const { status, nomorStck, tanggalStck, alasan } = this.state;
+    const { status, isStck, nomorStck, tanggalStck, alasan } = this.state;
 
     const payload = {
       idCk4Header: this.props.match.params.id,
@@ -340,7 +360,7 @@ export default class CK4EATaskToDo extends Component {
       flagApprove: status === "SETUJU" ? "Y" : "N",
     };
 
-    if (status === "SETUJU") {
+    if (status === "SETUJU" && isStck) {
       payload.nomorStck = nomorStck;
       payload.tanggalStck = moment(tanggalStck, "DD-MM-YYYY").format("YYYY-MM-DD");
     } else {
@@ -812,16 +832,20 @@ export default class CK4EATaskToDo extends Component {
               </ButtonCustom>
             </Col>
 
-            <Col span={4}>
-              <Button
-                type="primary"
-                loading={this.state.isSimpanTasktodoLoading}
-                onClick={this.handleSimpanTasktodo}
-                block
-              >
-                Simpan
-              </Button>
-            </Col>
+            {this.state.tokenData?.kode_kantor === this.state.kodeKantor &&
+              this.state.tokenData?.role ===
+                "a565468f-bbfa-43ab-b6b1-7c3c33631b33,a565468f-bbfa-43ab-b6b1-7c3c33631b33" && (
+                <Col span={4}>
+                  <Button
+                    type="primary"
+                    loading={this.state.isSimpanTasktodoLoading}
+                    onClick={this.handleSimpanTasktodo}
+                    block
+                  >
+                    Simpan
+                  </Button>
+                </Col>
+              )}
           </Row>
         </Container>
 

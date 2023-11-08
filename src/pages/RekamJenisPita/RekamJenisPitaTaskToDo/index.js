@@ -7,6 +7,7 @@ import { baseUrlCeisaInhouse } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
+import { getTokenPayload } from "utils/jwt";
 
 export default class RekamJenisPitaTaskToDo extends Component {
   constructor(props) {
@@ -20,6 +21,10 @@ export default class RekamJenisPitaTaskToDo extends Component {
       isTarifLoading: false,
       isWarnaLoading: false,
       isModalDaftarNppbkcVisible: false,
+
+      tokenData: null,
+      kodeKantor: null,
+      namaKantor: null,
 
       idNppbkc: null,
       nppbkc: null,
@@ -56,6 +61,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
   }
 
   componentDidMount() {
+    this.getToken();
     this.getDetailRekamJenisPita();
   }
 
@@ -92,6 +98,18 @@ export default class RekamJenisPitaTaskToDo extends Component {
     }
   }
 
+  getToken = async () => {
+    try {
+      const tokenData = await getTokenPayload();
+      this.setState({ tokenData });
+    } catch (error) {
+      notification.error({
+        message: "Failed",
+        description: "There's something error with token data",
+      });
+    }
+  };
+
   getDetailRekamJenisPita = async () => {
     const payload = { idJenisPita: this.props.match.params.id };
 
@@ -124,6 +142,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
         tahunPita: data.tahunPita,
         idSeriPita: data.idSeripita,
         namaSeriPita: data.namaSeripita,
+        kodeKantor: data.kodeKantor,
+        namaKantor: data.namaKantor,
       });
 
       this.setState({ tarif: data.tarif, warna: data.warna, kodeWarna: data.kodeWarna });
@@ -398,17 +418,20 @@ export default class RekamJenisPitaTaskToDo extends Component {
                 Kembali
               </ButtonCustom>
             </Col>
-
-            <Col span={4}>
-              <Button
-                type="primary"
-                loading={this.state.isSimpanTaskToDoLoading}
-                onClick={this.handleSimpanTaskToDo}
-                block
-              >
-                Simpan
-              </Button>
-            </Col>
+            {this.state.tokenData?.kode_kantor === this.state.kodeKantor &&
+              this.state.tokenData?.role ===
+                "a565468f-bbfa-43ab-b6b1-7c3c33631b33,a565468f-bbfa-43ab-b6b1-7c3c33631b33" && (
+                <Col span={4}>
+                  <Button
+                    type="primary"
+                    loading={this.state.isSimpanTaskToDoLoading}
+                    onClick={this.handleSimpanTaskToDo}
+                    block
+                  >
+                    Simpan
+                  </Button>
+                </Col>
+              )}
           </Row>
         </Container>
       </>
