@@ -342,6 +342,8 @@ export default class CK4HTTaskToDo extends Component {
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
+        kodeUploadPerbaikan: data.kodeUploadPerbaikan,
+
         kodeKantor: data.kodeKantor,
         namaKantor: data.namaKantor,
 
@@ -488,7 +490,7 @@ export default class CK4HTTaskToDo extends Component {
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, `${new Date().getTime()}`);
   };
 
   handleSimpanTasktodo = async () => {

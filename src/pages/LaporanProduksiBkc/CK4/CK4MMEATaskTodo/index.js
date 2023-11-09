@@ -320,8 +320,11 @@ export default class CK4MMEATaskTodo extends Component {
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
+        kodeUploadPerbaikan: data.kodeUploadPerbaikan,
+
         kodeKantor: data.kodeKantor,
         namaKantor: data.namaKantor,
+
         dataSource: data.details.map((detail, index) => ({
           key: `ck4-${index}`,
           idCk4Detail: detail.idCk4Detail,
@@ -463,7 +466,7 @@ export default class CK4MMEATaskTodo extends Component {
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, `${new Date().getTime()}`);
   };
 
   handleSimpanTasktodo = async () => {
