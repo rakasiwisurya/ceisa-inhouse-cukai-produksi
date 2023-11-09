@@ -360,9 +360,11 @@ export default class CK4EATaskToDo extends Component {
       flagApprove: status === "SETUJU" ? "Y" : "N",
     };
 
-    if (status === "SETUJU" && isStck) {
-      payload.nomorStck = nomorStck;
-      payload.tanggalStck = moment(tanggalStck, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (status === "SETUJU") {
+      if (isStck) {
+        payload.nomorStck = nomorStck;
+        payload.tanggalStck = moment(tanggalStck, "DD-MM-YYYY").format("YYYY-MM-DD");
+      }
     } else {
       payload.alasan = alasan;
     }
