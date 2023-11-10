@@ -20,7 +20,7 @@ import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarHTCK4 from "components/ModalDaftarMerkHTCK4";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
@@ -474,9 +474,9 @@ export default class CK4HTPerbaikan extends Component {
     e.stopPropagation();
 
     const response = await requestApi({
-      service: "s3",
+      service: "produksi",
       method: "get",
-      endpoint: `/downloadFile/MpgBCAeAW6XX7VrEyFlfBw==/un8o8qvB9vnBl9rhg-Ofyw==/nAt-aE29fndOGQ4ca6mxZg59IY0F4ZwQLiDwRQEgsVsfInjqPNx2XshUgXILjEUL4KgaTnheY72GwTWMuz5ULw==`,
+      endpoint: `${endpoints.s3Download}/MpgBCAeAW6XX7VrEyFlfBw==/_kS9AjWBFQNLDy9NHZiEjg==/pF24hy4gJU1g7qLuu1KgJRS5NlWup0wDyIROzHyQNTcbeS0wO-lurtc0XC1-vSX-4KgaTnheY72GwTWMuz5ULw==`,
       config: { responseType: "blob" },
       setLoading: (bool) => this.setState({ isDownloadTemplateLoading: bool }),
     });

@@ -18,7 +18,7 @@ import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
 import ModalStck from "components/ModalStck";
-import { baseUrlCeisaInhouse } from "configs/constants";
+import { baseUrlCeisaInhouse, endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
@@ -288,7 +288,7 @@ export default class CK4MMEATaskTodo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/detail-mmea",
+      endpoint: endpoints.ck4MmeaDetailTasktodo,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -459,9 +459,9 @@ export default class CK4MMEATaskTodo extends Component {
 
   handleDownload = async () => {
     const response = await requestApi({
-      service: "s3",
+      service: "produksi",
       method: "get",
-      endpoint: `/downloadFile/${this.state.kodeUploadPerbaikan}`,
+      endpoint: `${endpoints.s3Download}/${this.state.kodeUploadPerbaikan}`,
       setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
       config: { responseType: "blob" },
     });
@@ -490,7 +490,7 @@ export default class CK4MMEATaskTodo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/task-todo-perbaikan",
+      endpoint: endpoints.ck4PerbaikanTasktodo,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanTasktodoLoading: bool }),
     });

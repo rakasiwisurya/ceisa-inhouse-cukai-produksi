@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -15,7 +15,7 @@ export default class CK4TaskToDo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/task-todo",
+      endpoint: endpoints.ck4Tasktodo,
       params: payload,
     });
 
