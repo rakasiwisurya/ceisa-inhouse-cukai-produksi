@@ -68,7 +68,7 @@ export class ModalProcessTTE extends Component {
             service: "fasilitas",
             contentType: "formData",
             method: "post",
-            endpoint: "nadine/uploadSignedFile",
+            endpoint: "/nadine/uploadSignedFile",
             body: formData,
           });
 

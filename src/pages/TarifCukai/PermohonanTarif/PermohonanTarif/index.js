@@ -2,7 +2,7 @@ import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import ModalProcessTTE from "components/ModalProcessTTE";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import { QRCodeCanvas } from "qrcode.react";
 import React, { Component } from "react";
@@ -71,7 +71,7 @@ class PermohonanTarif extends Component {
                 />
                 <QRCodeCanvas
                   id={record.idTarifMerkHeader}
-                  value={`https://apisdev-gw.beacukai.go.id/download-repo-cukai-service/s3/downloadFileDS/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.idTarifMerkHeader}.pdf`}
+                  value={`${process.env.REACT_APP_API_S3_DOWNLOAD}${endpoints.s3UnencryptDownload}/cuQHp8--6_YY0OhogE6pSA==/penetapan_tarif_${record.idTarifMerkHeader}.pdf`}
                   level="Q"
                   style={{ display: "none" }}
                   imageSettings={{
@@ -254,7 +254,7 @@ class PermohonanTarif extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-penetapan-tarif",
+      endpoint: endpoints.permohonanTarifBrowse,
       params: payload,
       setLoading: (bool) => this.setState({ isPermohonanTarifLoading: bool }),
     });

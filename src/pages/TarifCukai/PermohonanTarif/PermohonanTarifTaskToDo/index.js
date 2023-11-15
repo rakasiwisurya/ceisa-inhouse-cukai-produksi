@@ -3,7 +3,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { baseUrlCeisaInhouse } from "configs/constants";
+import { baseUrlCeisaInhouse, endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { download } from "utils/files";
@@ -193,7 +193,7 @@ export default class PermohonanTarifTaskToDo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-tarif-cukai-detail",
+      endpoint: endpoints.permohonanTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -286,9 +286,9 @@ export default class PermohonanTarifTaskToDo extends Component {
 
   handleDownload = async () => {
     const response = await requestApi({
-      service: "s3",
+      service: "produksi",
       method: "get",
-      endpoint: `/downloadFile/${this.state.kodeFoto}`,
+      endpoint: `${endpoints.s3Download}/${this.state.kodeFoto}`,
       setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
       config: { responseType: "blob" },
     });
@@ -311,7 +311,7 @@ export default class PermohonanTarifTaskToDo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/pita-cukai/penetapan-pengajuan-tarif",
+      endpoint: endpoints.permohonanTarifSubmitTaskTodo,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanTasktodoLoading: bool }),
     });

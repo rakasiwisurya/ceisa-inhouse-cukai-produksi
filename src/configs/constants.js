@@ -6,6 +6,11 @@ export const endpoints = {
   listKabupatenAll: "/Referensi/v1/kabupaten/all",
   listNegaraAll: "/Referensi/v1/negara/all",
 
+  uploadFileTte: "/nadine/uploadFile",
+  uploadFileTteSigned: "/nadine/uploadSignedFile",
+  detailPegawaiKemenkeu: "",
+
+  s3UnencryptDownload: "/downloadFileDS",
   s3Download: "/produksi/download",
 
   listJenisBkc: "/referensi/jenis-bkc",
@@ -70,4 +75,16 @@ export const endpoints = {
   jenisPitaDetail: "/pita/browse-by-id",
   jenisPitaPerbaikan: "/pita/perbaikan-jenis",
   jenisPitaSubmitTaskTodo: "/pita/task-todo",
+
+  permohonanTarifBrowse: "/pita-cukai/browse-penetapan-tarif",
+  permohonanTarifRekam: "/pita-cukai/form-perekaman-tarif",
+  permohonanTarifDetail: "/pita-cukai/browse-tarif-cukai-detail",
+  permohonanTarifPerbaikan: "/pita-cukai/form-update-tarif",
+  permohonanTarifSubmitTaskTodo: "/pita-cukai/penetapan-pengajuan-tarif",
+
+  pencabutanTarifDetail: "/pita-cukai/browse-detail-pencabutan",
+  pencabutanTarif: "/pita-cukai/pencabutan-tarif",
+
+  penetapanKembaliDetail: "/pita-cukai/detail-penetapan-kembali-tarif",
+  penetapanKembali: "/pita-cukai/penetapan-kembali-tarif",
 };

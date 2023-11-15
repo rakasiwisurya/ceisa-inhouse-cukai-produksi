@@ -1,6 +1,6 @@
 import { Button, Icon, Input, Table, Tag } from "antd";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -168,7 +168,7 @@ export default class PencabutanTarif extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-penetapan-tarif",
+      endpoint: endpoints.permohonanTarifBrowse,
       params: payload,
       setLoading: (bool) => this.setState({ isPencabutanTarifLoading: bool }),
     });

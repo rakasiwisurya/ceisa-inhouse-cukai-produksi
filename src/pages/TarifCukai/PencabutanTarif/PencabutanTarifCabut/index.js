@@ -4,7 +4,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarKota from "components/ModalDaftarKota";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -75,7 +75,7 @@ export default class PencabutanTarifCabut extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-detail-pencabutan",
+      endpoint: endpoints.pencabutanTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -163,7 +163,7 @@ export default class PencabutanTarifCabut extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/pita-cukai/pencabutan-tarif",
+      endpoint: endpoints.pencabutanTarif,
       body: payload,
       setLoading: (bool) => this.setState({ isCabutLoading: bool }),
     });

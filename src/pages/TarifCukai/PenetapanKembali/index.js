@@ -4,6 +4,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -294,7 +295,7 @@ export default class PenetapanKembali extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByNppbkc,
       params: { idNppbkc: this.state.idNppbkc },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -327,7 +328,7 @@ export default class PenetapanKembali extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/detail-penetapan-kembali-tarif",
+      endpoint: endpoints.penetapanKembaliDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailMerkLoading: bool }),
     });
@@ -625,7 +626,7 @@ export default class PenetapanKembali extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/pita-cukai/penetapan-kembali-tarif",
+      endpoint: endpoints.penetapanKembali,
       body: payload,
       setLoading: (bool) => this.setState({ isPenetapanLoading: bool }),
     });

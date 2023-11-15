@@ -7,7 +7,7 @@ import ModalDaftarJenisPita from "components/ModalDaftarJenisPita";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNegara from "components/ModalDaftarNegara";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -165,7 +165,7 @@ export default class PermohonanTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -405,7 +405,7 @@ export default class PermohonanTarifRekam extends Component {
       service: "produksi",
       contentType: "formData",
       method: "post",
-      endpoint: "/pita-cukai/form-perekaman-tarif",
+      endpoint: endpoints.permohonanTarifRekam,
       body: formData,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

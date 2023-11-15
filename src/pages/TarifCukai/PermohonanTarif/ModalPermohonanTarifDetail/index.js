@@ -11,6 +11,7 @@ import {
   Skeleton,
 } from "antd";
 import FormLabel from "components/FormLabel";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { download } from "utils/files";
@@ -165,7 +166,7 @@ export default class ModalPermohonanTarifDetail extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-tarif-cukai-detail",
+      endpoint: endpoints.permohonanTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -242,14 +243,14 @@ export default class ModalPermohonanTarifDetail extends Component {
 
   handleDownload = async () => {
     const response = await requestApi({
-      service: "s3",
+      service: "produksi",
       method: "get",
-      endpoint: `/downloadFile/${this.state.kodeFoto}`,
+      endpoint: `${endpoints.s3Download}/${this.state.kodeFoto}`,
       setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
       config: { responseType: "blob" },
     });
 
-    if (response) download(response.data);
+    if (response) download(response.data, "etiket");
   };
 
   render() {

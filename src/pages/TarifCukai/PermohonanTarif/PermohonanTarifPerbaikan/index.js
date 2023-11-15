@@ -8,7 +8,7 @@ import ModalDaftarJenisPita from "components/ModalDaftarJenisPita";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNegara from "components/ModalDaftarNegara";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { download } from "utils/files";
@@ -173,7 +173,7 @@ export default class PermohonanTarifPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/pita-cukai/browse-tarif-cukai-detail",
+      endpoint: endpoints.permohonanTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -251,7 +251,7 @@ export default class PermohonanTarifPerbaikan extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -356,9 +356,9 @@ export default class PermohonanTarifPerbaikan extends Component {
 
   handleDownload = async () => {
     const response = await requestApi({
-      service: "s3",
+      service: "produksi",
       method: "get",
-      endpoint: `/downloadFile/${this.state.kodeFoto}`,
+      endpoint: `${endpoints.s3Download}/${this.state.kodeFoto}`,
       setLoading: (bool) => this.setState({ isDownloadLoading: bool }),
       config: { responseType: "blob" },
     });
@@ -504,7 +504,7 @@ export default class PermohonanTarifPerbaikan extends Component {
       service: "produksi",
       contentType: "formData",
       method: "post",
-      endpoint: "/pita-cukai/form-perbaikan-tarif",
+      endpoint: endpoints.permohonanTarifPerbaikan,
       body: formData,
       setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
     });
