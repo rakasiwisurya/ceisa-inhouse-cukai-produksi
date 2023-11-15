@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -95,7 +96,7 @@ export default class ModalDaftarMerkMMEACK4 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/daftar-merk-mmea",
+      endpoint: endpoints.ck4DaftarMerkMmea,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarMerkMmeaLoading: bool }),
     });

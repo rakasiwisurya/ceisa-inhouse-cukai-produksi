@@ -344,7 +344,7 @@ export default class CK4HTPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
-      endpoint: endpoints.ck4HtDelete,
+      endpoint: endpoints.ck4HtDetailDelete,
       params: payload,
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });

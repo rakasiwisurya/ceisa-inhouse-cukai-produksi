@@ -3,6 +3,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -218,7 +219,7 @@ export default class ReferensiTarifDetail extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-detail-tarif",
+      endpoint: endpoints.referensiTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
     });

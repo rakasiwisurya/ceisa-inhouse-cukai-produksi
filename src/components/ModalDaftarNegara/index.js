@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -41,7 +42,7 @@ export default class ModalDaftarNegara extends Component {
     const response = await requestApi({
       service: "referensi_beacukai",
       method: "get",
-      endpoint: "Referensi/v1/negara/all",
+      endpoint: endpoints.listNegaraAll,
       setLoading: (bool) => this.setState({ isDaftarNegaraLoading: bool }),
     });
 

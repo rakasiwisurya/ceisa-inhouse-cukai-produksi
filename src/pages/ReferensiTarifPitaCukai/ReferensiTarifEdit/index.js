@@ -15,7 +15,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -311,7 +311,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-detail-tarif",
+      endpoint: endpoints.referensiTarifDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailTarifLoading: bool }),
     });
@@ -377,7 +377,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -393,7 +393,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/golongan",
+      endpoint: endpoints.listGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     });
@@ -406,7 +406,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByJenisBkc,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -419,7 +419,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-htl-rel",
+      endpoint: endpoints.listJenisHtlRel,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisHtlRelLoading: bool }),
     });
@@ -797,7 +797,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-delete-tarif",
+      endpoint: endpoints.referensiTarifDetailDelete,
       body: { idTarifBkcDetail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
@@ -858,7 +858,7 @@ export default class ReferensiTarifEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-update-tarif",
+      endpoint: endpoints.referensiTarifUpdate,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanPerubahanLoading: bool }),
     });

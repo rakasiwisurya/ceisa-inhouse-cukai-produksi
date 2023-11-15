@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -80,7 +81,7 @@ export default class ModalDaftarHTCK4 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/daftar-merk-ht",
+      endpoint: endpoints.ck4DaftarMerkHt,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarMerkHtLoading: bool }),
     });

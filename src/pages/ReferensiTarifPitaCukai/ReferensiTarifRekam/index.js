@@ -14,7 +14,7 @@ import {
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -286,7 +286,7 @@ export default class ReferensiTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -302,7 +302,7 @@ export default class ReferensiTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/golongan",
+      endpoint: endpoints.listGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     });
@@ -315,7 +315,7 @@ export default class ReferensiTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByJenisBkc,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -328,7 +328,7 @@ export default class ReferensiTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-htl-rel",
+      endpoint: endpoints.listJenisHtlRel,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisHtlRelLoading: bool }),
     });
@@ -753,7 +753,7 @@ export default class ReferensiTarifRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-rekam-tarif",
+      endpoint: endpoints.referensiTarifRekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

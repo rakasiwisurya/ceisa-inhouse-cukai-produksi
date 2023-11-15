@@ -464,7 +464,7 @@ export default class CK4MMEAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
-      endpoint: endpoints.ck4MmeaDelete,
+      endpoint: endpoints.ck4MmeaDetailDelete,
       params: { idCk4Detail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });

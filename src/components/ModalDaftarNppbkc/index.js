@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -82,7 +83,7 @@ export default class ModalDaftarNPPBKC extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/nppbkc/inhouse/browseNppbkc",
+      endpoint: endpoints.browseNppbkc,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarNppbkcLoading: bool }),
     });

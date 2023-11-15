@@ -2,7 +2,7 @@ import { Button, Card, Col, DatePicker, Icon, Input, Row, Select, Table, notific
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -194,7 +194,7 @@ export default class ReferensiWarnaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -210,7 +210,7 @@ export default class ReferensiWarnaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/golongan",
+      endpoint: endpoints.listGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     });
@@ -223,7 +223,7 @@ export default class ReferensiWarnaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByJenisBkc,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -234,7 +234,7 @@ export default class ReferensiWarnaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-usaha",
+      endpoint: endpoints.listJenisUsaha,
       setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
     });
 
@@ -483,7 +483,7 @@ export default class ReferensiWarnaRekam extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-rekam-warna",
+      endpoint: endpoints.referensiWarnaRekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

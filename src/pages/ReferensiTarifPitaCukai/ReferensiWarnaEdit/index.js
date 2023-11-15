@@ -3,7 +3,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -220,7 +220,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-detail-warna",
+      endpoint: endpoints.referensiWarnaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailWarnaLoading: bool }),
     });
@@ -256,7 +256,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-bkc",
+      endpoint: endpoints.listJenisBkc,
       setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
     });
 
@@ -272,7 +272,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/golongan",
+      endpoint: endpoints.listGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isGolonganLoading: bool }),
     });
@@ -285,7 +285,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByJenisBkc,
       params: payload,
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -296,7 +296,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/jenis-usaha",
+      endpoint: endpoints.listJenisUsaha,
       setLoading: (bool) => this.setState({ isJenisUsahaLoading: bool }),
     });
 
@@ -528,7 +528,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-delete-warna",
+      endpoint: endpoints.refensiWarnaDetailDelete,
       body: { idWarnaBkcDetail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
@@ -566,7 +566,7 @@ export default class ReferensiWarnaEdit extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "post",
-      endpoint: "/referensi/browse-update-warna",
+      endpoint: endpoints.referensiWarnaUpdate,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanPerubahanLoading: bool }),
     });

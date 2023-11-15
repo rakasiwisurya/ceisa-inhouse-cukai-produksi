@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -58,7 +59,7 @@ export default class ModalDaftarPenjabatBc extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/daftar-penjabat-bc-new",
+      endpoint: endpoints.browsePenjabatBc,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarPenjabatBcLoading: bool }),
     });
