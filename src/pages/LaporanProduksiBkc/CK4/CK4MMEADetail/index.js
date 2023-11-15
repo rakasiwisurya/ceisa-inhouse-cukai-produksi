@@ -20,6 +20,7 @@ import { requestApi } from "utils/requestApi";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ButtonCustom from "components/Button/ButtonCustom";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
+import { endpoints } from "configs/constants";
 
 export default class CK4MMEADetail extends Component {
   constructor(props) {
@@ -184,7 +185,7 @@ export default class CK4MMEADetail extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/detail-mmea",
+      endpoint: endpoints.ck4MmeaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });

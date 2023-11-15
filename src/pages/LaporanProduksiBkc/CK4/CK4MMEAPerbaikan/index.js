@@ -241,7 +241,7 @@ export default class CK4MMEAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/detail-mmea",
+      endpoint: endpoints.ck4MmeaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -464,7 +464,7 @@ export default class CK4MMEAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
-      endpoint: "/delete-detail-mmea",
+      endpoint: endpoints.ck4MmeaDelete,
       params: { idCk4Detail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
@@ -739,7 +739,7 @@ export default class CK4MMEAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/perbaikan-mmea",
+      endpoint: endpoints.ck4MmeaPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
     });

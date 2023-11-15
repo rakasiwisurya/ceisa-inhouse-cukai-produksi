@@ -656,7 +656,7 @@ export default class CK4HT extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/rekam-ht",
+      endpoint: endpoints.ck4HtRekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

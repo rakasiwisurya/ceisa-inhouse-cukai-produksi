@@ -284,7 +284,7 @@ export default class CK4HTPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/detail-ht",
+      endpoint: endpoints.ck4HtDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -344,7 +344,7 @@ export default class CK4HTPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
-      endpoint: "/delete-detail-ht",
+      endpoint: endpoints.ck4HtDelete,
       params: payload,
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
@@ -798,7 +798,7 @@ export default class CK4HTPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/perbaikan-ht",
+      endpoint: endpoints.ck4HtPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
     });

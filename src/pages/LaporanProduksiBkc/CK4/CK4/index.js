@@ -1,9 +1,9 @@
 import { Button, Col, Icon, Input, Modal, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import ModalCK4Pdf from "../ModalCK4Pdf";
@@ -11,8 +11,6 @@ import ModalCK4Pdf from "../ModalCK4Pdf";
 export default class CK4 extends Component {
   constructor(props) {
     super(props);
-    this.modal = createRef();
-
     this.state = {
       subtitle1: "CK4",
 
@@ -200,7 +198,7 @@ export default class CK4 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse",
+      endpoint: endpoints.ck4Browse,
       params: payload,
       setLoading: (bool) => this.setState({ isCk4Loading: bool }),
     });

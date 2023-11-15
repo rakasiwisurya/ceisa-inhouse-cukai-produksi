@@ -18,7 +18,7 @@ import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -175,7 +175,7 @@ export default class CK4EAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/detail-ea",
+      endpoint: endpoints.ck4EaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -320,7 +320,7 @@ export default class CK4EAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "delete",
-      endpoint: "/delete-detail-ea",
+      endpoint: endpoints.ck4EaDelete,
       params: { idCk4Detail: id },
       setLoading: (bool) => this.setState({ isTableLoading: bool }),
     });
@@ -482,7 +482,7 @@ export default class CK4EAPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/perbaikan-ea",
+      endpoint: endpoints.ck4EaPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanPerbaikanLoading: bool }),
     });

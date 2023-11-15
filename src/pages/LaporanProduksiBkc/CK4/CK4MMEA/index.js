@@ -605,7 +605,7 @@ export default class CK4MMEA extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/rekam-mmea",
+      endpoint: endpoints.ck4MmeaRekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });
