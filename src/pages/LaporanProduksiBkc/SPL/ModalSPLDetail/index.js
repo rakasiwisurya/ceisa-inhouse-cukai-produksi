@@ -1,5 +1,6 @@
 import { Card, Col, DatePicker, Input, Modal, Row, Skeleton } from "antd";
 import FormLabel from "components/FormLabel";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -49,7 +50,7 @@ export default class ModalSPLDetail extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/spl/browse-by-id",
+      endpoint: endpoints.splDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });

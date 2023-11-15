@@ -1,5 +1,6 @@
 import { Button, Col, Icon, Input, Row, Table, notification } from "antd";
 import Container from "components/Container";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -125,7 +126,7 @@ export default class PenelitianCK4 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse-penelitian-ck4",
+      endpoint: endpoints.ck4PenelitianBrowse,
       params: payload,
       setLoading: (bool) => this.setState({ isPenelitianCk4Loading: bool }),
     });
@@ -155,7 +156,7 @@ export default class PenelitianCK4 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/ck4/penelitian-ck4",
+      endpoint: endpoints.ck4PenelitianSubmit,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanLoading: bool }),
     });

@@ -21,4 +21,15 @@ export const endpoints = {
   ck4HtDetailTasktodo: "/ck4/detail-ht/task-todo",
   ck4Tasktodo: "/ck4/task-todo",
   ck4PerbaikanTasktodo: "/ck4/task-todo-perbaikan",
+
+  ck4BelumLaporBulanan: "/ck4/browse-belum-lapor",
+  ck4BelumLaporHarian: "/ck4/browse-belum-lapor-harian",
+
+  ck4PenelitianBrowse: "/ck4/browse-penelitian-ck4",
+  ck4PenelitianSubmit: "/ck4/penelitian-ck4",
+
+  splBrowse: "/spl/browse",
+  splRekam: "/spl/rekam",
+  splDetail: "/spl/browse-by-id",
+  splPerbaikan: "/spl/perbaikan",
 };

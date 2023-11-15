@@ -1,5 +1,6 @@
 import { Button, Col, Icon, Input, Row, Select, Table } from "antd";
 import Container from "components/Container";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
@@ -186,7 +187,7 @@ export default class CK4BelumLapor extends Component {
       const response = await requestApi({
         service: "produksi",
         method: "get",
-        endpoint: "/ck4/browse-belum-lapor",
+        endpoint: endpoints.ck4BelumLaporBulanan,
         params: payload,
         setLoading: (bool) => this.setState({ isCk4BelumLaporLoading: bool }),
       });
@@ -212,7 +213,7 @@ export default class CK4BelumLapor extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse-belum-lapor-harian",
+      endpoint: endpoints.ck4BelumLaporHarian,
       params: payload,
       setLoading: (bool) => this.setState({ isCk4BelumLaporLoading: bool }),
     });

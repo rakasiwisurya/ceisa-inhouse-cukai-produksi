@@ -5,7 +5,7 @@ import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarKota from "components/ModalDaftarKota";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -53,7 +53,7 @@ export default class SPLPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/spl/browse-by-id",
+      endpoint: endpoints.splDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -151,7 +151,7 @@ export default class SPLPerbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/spl/perbaikan",
+      endpoint: endpoints.splPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });
