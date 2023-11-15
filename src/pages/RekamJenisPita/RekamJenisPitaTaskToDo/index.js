@@ -3,7 +3,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { baseUrlCeisaInhouse } from "configs/constants";
+import { baseUrlCeisaInhouse, endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -116,7 +116,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "get",
-      endpoint: "/pita/browse-by-id",
+      endpoint: endpoints.jenisPitaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -153,7 +153,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByNppbkc,
       params: { idNppbkc: this.state.idNppbkc },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -175,7 +175,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-tarif",
+      endpoint: endpoints.listTarifByJenisProduksiGolonganHje,
       params: payload,
       setLoading: (bool) => this.setState({ isTarifLoading: bool }),
     });
@@ -193,7 +193,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-warna",
+      endpoint: endpoints.listWarnaByJenisProduksiGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isWarnaLoading: bool }),
     });
@@ -208,7 +208,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/seripita/get-seripita-jenis-bkc",
+      endpoint: endpoints.listSeriPita,
       params: payload,
       setLoading: (bool) => this.setState({ isSeripitaLoading: bool }),
     });
@@ -225,7 +225,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "post",
-      endpoint: "/pita/task-todo",
+      endpoint: endpoints.jenisPitaSubmitTaskTodo,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanTaskToDoLoading: bool }),
     });

@@ -64,4 +64,10 @@ export const endpoints = {
   splRekam: "/spl/rekam",
   splDetail: "/spl/browse-by-id",
   splPerbaikan: "/spl/perbaikan",
+
+  jenisPitaBrowse: "/pita/browse-jenis",
+  jenisPitaRekam: "/pita/rekam-jenis",
+  jenisPitaDetail: "/pita/browse-by-id",
+  jenisPitaPerbaikan: "/pita/perbaikan-jenis",
+  jenisPitaSubmitTaskTodo: "/pita/task-todo",
 };

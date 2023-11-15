@@ -1,7 +1,7 @@
 import { Button, Col, Icon, Input, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -164,7 +164,7 @@ export default class RekamJenisPita extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "get",
-      endpoint: "pita/browse-jenis",
+      endpoint: endpoints.jenisPitaBrowse,
       params: payload,
       setLoading: (bool) => this.setState({ isRekamJenisPitaLoading: bool }),
     });

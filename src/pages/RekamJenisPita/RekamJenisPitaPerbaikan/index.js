@@ -4,7 +4,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
@@ -89,7 +89,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "get",
-      endpoint: "/pita/browse-by-id",
+      endpoint: endpoints.jenisPitaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -124,7 +124,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/nppbkc-produksi-bkc/browse-jenis-produksi",
+      endpoint: endpoints.listJenisProduksiByNppbkc,
       params: { idNppbkc: this.state.idNppbkc },
       setLoading: (bool) => this.setState({ isJenisProduksiLoading: bool }),
     });
@@ -146,7 +146,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-tarif",
+      endpoint: endpoints.listTarifByJenisProduksiGolonganHje,
       params: payload,
       setLoading: (bool) => this.setState({ isTarifLoading: bool }),
     });
@@ -164,7 +164,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/referensi/browse-warna",
+      endpoint: endpoints.listWarnaByJenisProduksiGolongan,
       params: payload,
       setLoading: (bool) => this.setState({ isWarnaLoading: bool }),
     });
@@ -179,7 +179,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "referensi",
       method: "get",
-      endpoint: "/seripita/get-seripita-jenis-bkc",
+      endpoint: endpoints.listSeriPita,
       params: payload,
       setLoading: (bool) => this.setState({ isSeripitaLoading: bool }),
     });
@@ -268,7 +268,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "post",
-      endpoint: "/pita/perbaikan-jenis",
+      endpoint: endpoints.jenisPitaPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
     });
