@@ -12,6 +12,7 @@ import {
   Table,
 } from "antd";
 import FormLabel from "components/FormLabel";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -96,7 +97,7 @@ export default class ModalBACKEADetail89 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/back-ea-8-9/detail",
+      endpoint: endpoints.backEa89Detail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });

@@ -2,6 +2,7 @@ import { pdf } from "@react-pdf/renderer";
 import { Form, Input, Modal, notification } from "antd";
 import FormLabel from "components/FormLabel";
 import PdfPenetapanTarifTTE from "components/PdfPenetapanTarifTTE";
+import { endpoints } from "configs/constants";
 import React, { Component } from "react";
 import { base64toBlob } from "utils/converter";
 import { downloadFile } from "utils/files";
@@ -27,7 +28,7 @@ export class ModalProcessTTE extends Component {
       const responseNikHris = await requestApi({
         service: "fasilitas",
         method: "get",
-        endpoint: `/nadine/nik-hris/${values.nip}`,
+        endpoint: `${endpoints.detailPegawaiKemenkeu}${values.nip}`,
       });
 
       if (responseNikHris) {
@@ -50,7 +51,7 @@ export class ModalProcessTTE extends Component {
           service: "fasilitas",
           contentType: "formData",
           method: "post",
-          endpoint: "/nadine/uploadFile",
+          endpoint: endpoints.uploadFileTte,
           body: formData,
         });
 
@@ -68,7 +69,7 @@ export class ModalProcessTTE extends Component {
             service: "fasilitas",
             contentType: "formData",
             method: "post",
-            endpoint: "/nadine/uploadSignedFile",
+            endpoint: endpoints.uploadFileTteSigned,
             body: formData,
           });
 

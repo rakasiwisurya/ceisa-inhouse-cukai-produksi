@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -104,7 +105,7 @@ export default class qModalDaftarJenisPita extends Component {
     const response = await requestApi({
       service: "pita_cukai",
       method: "get",
-      endpoint: "/pita/browse-jenis",
+      endpoint: endpoints.jenisPitaBrowse,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarJenisPitaLoading: bool }),
     });

@@ -5,10 +5,11 @@ export const endpoints = {
   listKantorAll: "/Referensi/v1/kantor/all",
   listKabupatenAll: "/Referensi/v1/kabupaten/all",
   listNegaraAll: "/Referensi/v1/negara/all",
+  browsePerbenStck: "/perben/piutang/get-piutang-cukai",
 
   uploadFileTte: "/nadine/uploadFile",
   uploadFileTteSigned: "/nadine/uploadSignedFile",
-  detailPegawaiKemenkeu: "",
+  detailPegawaiKemenkeu: "/nadine/nik-hris",
 
   s3UnencryptDownload: "/downloadFileDS",
   s3Download: "/produksi/download",
@@ -29,6 +30,8 @@ export const endpoints = {
 
   ck4DaftarMerkMmea: "/ck4/daftar-merk-mmea",
   ck4DaftarMerkHt: "/ck4/daftar-merk-ht",
+  brck2DaftarMerkMmea: "/brck/daftar-merk-brck2",
+  backDaftarMerkMmea: "/back/daftar-merk-mmea",
 
   referensiTarifWarnaBrowse: "/referensi/browse",
   referensiWarnaRekam: "/referensi/browse-rekam-warna",
@@ -87,4 +90,35 @@ export const endpoints = {
 
   penetapanKembaliDetail: "/pita-cukai/detail-penetapan-kembali-tarif",
   penetapanKembali: "/pita-cukai/penetapan-kembali-tarif",
+
+  brck1Browse: "/brck/browse-brck1",
+  brck1Rekam: "/brck/rekam-brck1",
+  brck1Detail: "/brck/detail-brck1",
+  brck1Perbaikan: "/brck/perbaikan-brck1",
+  brck1ListCk4: "/ck4/browse-brck1",
+  brck1ListCk5: "/ck5/browse-brck1",
+  brck1SaldoAwal: "/brck/saldo-awal-brck1",
+
+  brck2Browse: "/brck2/browse",
+  brck2Rekam: "/brck/rekam-brck2",
+  brck2Detail: "/brck/detail-brck2",
+  brck2Perbaikan: "/brck/perbaikan-brck2",
+  brck2ListCk4: "/ck4/browse-brck2",
+  brck2ListCk5: "/ck5/browse-brck2",
+  brck2SaldoAwal: "/brck/saldo-awal-brck2",
+
+  backEa67Browse: "/back-ea-6-7/browse",
+  backEa67Rekam: "/back-ea-6-7/rekam",
+  backEa67Detail: "/back-ea-6-7/detail",
+  backEa67Perbaikan: "/back-ea-6-7/update",
+
+  backEa89Browse: "/back-ea-8-9/browse",
+  backEa89Rekam: "/back-ea-8-9/rekam",
+  backEa89Detail: "/back-ea-8-9/detail",
+  backEa89Perbaikan: "/back-ea-8-9/update",
+
+  backMmeaBrowse: "/back-mmea/browse",
+  backMmeaRekam: "/back-mmea/rekam",
+  backMmeaDetail: "/back-mmea/detail",
+  backMmeaPerbaikan: "/back-mmea/update",
 };

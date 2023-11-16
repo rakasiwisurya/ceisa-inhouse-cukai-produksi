@@ -17,7 +17,7 @@ import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarMerkMMEA from "components/ModalDaftarMerkMMEA";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -155,7 +155,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/back-mmea/detail",
+      endpoint: endpoints.backMmeaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -435,7 +435,7 @@ export default class BACKMMEAPerbaikan89 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/back-mmea/update",
+      endpoint: endpoints.backMmeaPerbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
     });

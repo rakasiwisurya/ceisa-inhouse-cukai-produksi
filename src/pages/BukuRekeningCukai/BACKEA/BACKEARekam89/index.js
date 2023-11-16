@@ -15,7 +15,7 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -294,7 +294,7 @@ export default class BACKEARekam89 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/back-ea-8-9/rekam",
+      endpoint: endpoints.backEa67Rekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

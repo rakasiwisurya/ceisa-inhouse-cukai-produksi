@@ -16,7 +16,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -190,7 +190,7 @@ export default class BACKEAPerbaikan67 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/back-ea-6-7/detail",
+      endpoint: endpoints.backEa67Detail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -470,7 +470,7 @@ export default class BACKEAPerbaikan67 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/back-ea-6-7/update",
+      endpoint: endpoints.backEa67Perbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
     });

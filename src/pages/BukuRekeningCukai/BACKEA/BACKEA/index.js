@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Row, Input, Icon, Table, Col, Card } from "antd";
 import Container from "components/Container";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import { requestApi } from "utils/requestApi";
 import moment from "moment";
 import ButtonCustom from "components/Button/ButtonCustom";
@@ -316,7 +316,7 @@ export default class BACKEA extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/back-ea-6-7/browse",
+      endpoint: endpoints.backEa67Browse,
       params: payload,
       setLoading: (bool) => this.setState({ isBackEa67Loading: bool }),
     });
@@ -372,7 +372,7 @@ export default class BACKEA extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/back-ea-8-9/browse",
+      endpoint: endpoints.backEa89Browse,
       params: payload,
       setLoading: (bool) => this.setState({ isBackEa89Loading: bool }),
     });

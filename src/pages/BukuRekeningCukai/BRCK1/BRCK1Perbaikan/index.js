@@ -15,7 +15,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -284,7 +284,7 @@ export default class BRCK1Perbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/brck/detail-brck1",
+      endpoint: endpoints.brck1Detail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -325,21 +325,21 @@ export default class BRCK1Perbaikan extends Component {
     const responseSaldoAwal = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/brck/saldo-awal-brck1",
+      endpoint: endpoints.brck1SaldoAwal,
       params: payload,
     });
 
     const responseProduksi = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse-brck1",
+      endpoint: endpoints.brck1ListCk4,
       params: payload,
     });
 
     const responsePerdagangan = await requestApi({
       service: "perdagangan",
       method: "get",
-      endpoint: "/ck5/browse-brck1",
+      endpoint: endpoints.brck1ListCk5,
       params: payload,
     });
 
@@ -562,7 +562,7 @@ export default class BRCK1Perbaikan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/brck/perbaikan-brck1",
+      endpoint: endpoints.brck1Perbaikan,
       body: payload,
       setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
     });

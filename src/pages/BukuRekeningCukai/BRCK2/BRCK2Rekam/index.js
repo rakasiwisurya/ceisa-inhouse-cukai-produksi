@@ -15,7 +15,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import ModalDaftarMerkBrck2 from "components/ModalDaftarMerkBrck2";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
-import { pathName } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -307,21 +307,21 @@ export default class BRCK2Rekam extends Component {
     const responseSaldoAwal = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/brck/saldo-awal-brck2",
+      endpoint: endpoints.brck2SaldoAwal,
       params: payload,
     });
 
     const responseProduksi = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/ck4/browse-brck2",
+      endpoint: endpoints.brck2ListCk4,
       params: payload,
     });
 
     const responsePerdagangan = await requestApi({
       service: "perdagangan",
       method: "get",
-      endpoint: "/ck5/browse-brck2",
+      endpoint: endpoints.brck2ListCk5,
       params: payload,
     });
 
@@ -580,7 +580,7 @@ export default class BRCK2Rekam extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: "/brck/rekam-brck2",
+      endpoint: endpoints.brck2Rekam,
       body: payload,
       setLoading: (bool) => this.setState({ isRekamLoading: bool }),
     });

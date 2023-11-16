@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -56,7 +57,7 @@ export default class ModalStck extends Component {
     const response = await requestApi({
       service: "perbendaharaan",
       method: "get",
-      endpoint: "/perben/piutang/get-piutang-cukai",
+      endpoint: endpoints.browsePerbenStck,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarStckLoading: bool }),
     });

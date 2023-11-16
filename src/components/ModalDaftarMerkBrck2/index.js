@@ -1,4 +1,5 @@
 import { Button, Icon, Input, Modal, Table } from "antd";
+import { endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
@@ -104,7 +105,7 @@ export default class ModalDaftarMerkBrck2 extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: "/brck/daftar-merk-brck2",
+      endpoint: endpoints.brck2DaftarMerkMmea,
       params: payload,
       setLoading: (bool) => this.setState({ isDaftarMerkBrck2Loading: bool }),
     });
