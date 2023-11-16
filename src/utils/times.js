@@ -23,7 +23,7 @@ export const months = (() => {
     8: "AGUSTUS",
     9: "SEPTEMBER",
     10: "OKTOBER",
-    11: "NOPEMBER",
+    11: "NOVEMBER",
     12: "DESEMBER",
   };
 
