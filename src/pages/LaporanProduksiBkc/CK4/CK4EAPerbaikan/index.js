@@ -80,7 +80,7 @@ export default class CK4EAPerbaikan extends Component {
 
       nomorSurat: null,
       tanggalSurat: null,
-      idPenjabatBc: null,
+      nipPenjabatBc: null,
       namaPenjabatBc: null,
       keteranganPerbaikan: null,
 
@@ -311,7 +311,7 @@ export default class CK4EAPerbaikan extends Component {
   };
   handleDataPenjabatBc = (record) => {
     this.setState({
-      idPenjabatBc: record.idPenjabatBc,
+      nipPenjabatBc: record.nipPenjabatBc,
       namaPenjabatBc: record.namaPenjabatBc,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
@@ -440,7 +440,7 @@ export default class CK4EAPerbaikan extends Component {
       namaPengusaha,
       nomorSurat,
       tanggalSurat,
-      idPenjabatBc,
+      nipPenjabatBc,
       namaPenjabatBc,
       keteranganPerbaikan,
       dataSource,
@@ -466,7 +466,7 @@ export default class CK4EAPerbaikan extends Component {
       namaPejabat: namaPenjabatBc,
       namaPengusaha: namaPengusaha,
       namaPerusahaan: namaNppbkc,
-      nipPenjabatBc: idPenjabatBc,
+      nipPenjabatBc: nipPenjabatBc,
       nomorPemberitahuan: nomorPemberitahuan,
       nomorSurat: nomorSurat,
       nppbkc: nppbkc,
@@ -848,9 +848,9 @@ export default class CK4EAPerbaikan extends Component {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Input
-                    id="idPenjabatBc"
+                    id="nipPenjabatBc"
                     onChange={this.handleInputChange}
-                    value={this.state.idPenjabatBc}
+                    value={this.state.nipPenjabatBc}
                     style={{ flex: 1 }}
                     disabled
                   />
