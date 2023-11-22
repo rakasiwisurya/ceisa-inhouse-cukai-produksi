@@ -1,4 +1,14 @@
-import { Button, Card, Col, DatePicker, Input, InputNumber, Row, Select, notification } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  notification,
+} from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
@@ -43,18 +53,18 @@ export default class RekamJenisPitaTaskToDo extends Component {
       idSeriPita: null,
       namaSeriPita: null,
       tahunPita: String(new Date().getFullYear()),
-      tasktodoStatus: "SETUJU",
-
+      tasktodoStatus: "setuju",
+      komentar: "",
       listJenisProduksiBkc: [],
       listSeriPita: [],
       listStatus: [
         {
-          idStatus: "SETUJU",
-          namaStatus: "SETUJU",
+          idStatus: "setuju",
+          namaStatus: "setuju",
         },
         {
-          idStatus: "TOLAK",
-          namaStatus: "TOLAK",
+          idStatus: "tolak",
+          namaStatus: "tolak",
         },
       ],
     };
@@ -146,7 +156,11 @@ export default class RekamJenisPitaTaskToDo extends Component {
         namaKantor: data.namaKantor,
       });
 
-      this.setState({ tarif: data.tarif, warna: data.warna, kodeWarna: data.kodeWarna });
+      this.setState({
+        tarif: data.tarif,
+        warna: data.warna,
+        kodeWarna: data.kodeWarna,
+      });
     }
   };
   getJenisProduksi = async () => {
@@ -166,7 +180,9 @@ export default class RekamJenisPitaTaskToDo extends Component {
   };
   getTarif = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc.split("-")[0].trim(),
+      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc
+        .split("-")[0]
+        .trim(),
       idGolonganBkc: this.state.idJenisProduksiBkc.split("-")[1],
     };
 
@@ -186,7 +202,9 @@ export default class RekamJenisPitaTaskToDo extends Component {
   };
   getWarna = async () => {
     const payload = {
-      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc.split("-")[0].trim(),
+      kodeJenisProduksiBkc: this.state.namaJenisProduksiBkc
+        .split("-")[0]
+        .trim(),
       idGolonganBkc: this.state.idJenisProduksiBkc.split("-")[1],
     };
 
@@ -199,7 +217,10 @@ export default class RekamJenisPitaTaskToDo extends Component {
     });
 
     if (response) {
-      this.setState({ warna: response.data.data.warna, kodeWarna: response.data.data?.kodeWarna });
+      this.setState({
+        warna: response.data.data.warna,
+        kodeWarna: response.data.data?.kodeWarna,
+      });
     }
   };
   getSeripita = async () => {
@@ -220,6 +241,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
     const payload = {
       idJenisPita: this.props.match.params.id,
       status: this.state.tasktodoStatus,
+      komentar: this.state.komentar,
     };
 
     const response = await requestApi({
@@ -231,12 +253,23 @@ export default class RekamJenisPitaTaskToDo extends Component {
     });
 
     if (response) {
-      notification.success({ message: "Success", description: response.data.message });
+      notification.success({
+        message: "Success",
+        description: response.data.message,
+      });
       const timeout = setTimeout(() => {
         window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
         clearTimeout(timeout);
       }, 1000);
     }
+  };
+
+  handleInputChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value.toUpperCase() });
+  };
+
+  handleSelectChange = (field, value) => {
+    this.setState({ [field]: value });
   };
 
   render() {
@@ -256,7 +289,11 @@ export default class RekamJenisPitaTaskToDo extends Component {
                   <Button type="primary" disabled>
                     Cari
                   </Button>
-                  <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
+                  <Input
+                    id="namaNppbkc"
+                    value={this.state.namaNppbkc}
+                    disabled
+                  />
                 </div>
               </Col>
             </Row>
@@ -290,7 +327,9 @@ export default class RekamJenisPitaTaskToDo extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>HJE</FormLabel>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
                     <InputNumber
                       id="hje"
                       value={this.state.hje}
@@ -301,7 +340,9 @@ export default class RekamJenisPitaTaskToDo extends Component {
                     <Button
                       type="primary"
                       icon="search"
-                      loading={this.state.isTarifLoading || this.state.isWarnaLoading}
+                      loading={
+                        this.state.isTarifLoading || this.state.isWarnaLoading
+                      }
                       onClick={this.getTarifWarna}
                       disabled={
                         !this.state.idJenisProduksiBkc ||
@@ -353,7 +394,12 @@ export default class RekamJenisPitaTaskToDo extends Component {
                   <div style={{ marginBottom: 10 }}>
                     <FormLabel>Warna</FormLabel>
                   </div>
-                  <Input id="warna" value={this.state.warna} style={{ width: "100%" }} disabled />
+                  <Input
+                    id="warna"
+                    value={this.state.warna}
+                    style={{ width: "100%" }}
+                    disabled
+                  />
                 </Col>
 
                 <Col span={12}>
@@ -369,7 +415,10 @@ export default class RekamJenisPitaTaskToDo extends Component {
                   >
                     {this.state.listSeriPita.length > 0 &&
                       this.state.listSeriPita.map((item, index) => (
-                        <Select.Option key={`seriPita-${index}`} value={item.idSeripita}>
+                        <Select.Option
+                          key={`seriPita-${index}`}
+                          value={item.idSeripita}
+                        >
                           {item.namaSeripita}
                         </Select.Option>
                       ))}
@@ -397,24 +446,44 @@ export default class RekamJenisPitaTaskToDo extends Component {
                 </div>
                 <Select
                   id="tasktodoStatus"
-                  onChange={(value) => this.handleSelectChange("tasktodoStatus", value)}
+                  onChange={(value) =>
+                    this.handleSelectChange("tasktodoStatus", value)
+                  }
                   value={this.state.tasktodoStatus}
                   style={{ width: "100%" }}
                 >
                   {this.state.listStatus.length > 0 &&
                     this.state.listStatus.map((item, index) => (
-                      <Select.Option key={`tasktodoStatus-${index}`} value={item.idStatus}>
+                      <Select.Option
+                        key={`tasktodoStatus-${index}`}
+                        value={item.idStatus}
+                      >
                         {item.namaStatus}
                       </Select.Option>
                     ))}
                 </Select>
+              </Col>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Komentar</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="komentar"
+                  rows={4}
+                  onChange={this.handleInputChange}
+                  style={{ width: "100%" }}
+                />
               </Col>
             </Row>
           </Card>
 
           <Row gutter={[16, 16]}>
             <Col span={4}>
-              <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
+              <ButtonCustom
+                variant="secondary"
+                onClick={() => this.props.history.goBack()}
+                block
+              >
                 Kembali
               </ButtonCustom>
             </Col>
