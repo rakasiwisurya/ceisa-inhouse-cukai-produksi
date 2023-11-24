@@ -19,19 +19,27 @@ import BRCK2Detail from "./BukuRekeningCukai/BRCK2/BRCK2Detail";
 import BRCK2Perbaikan from "./BukuRekeningCukai/BRCK2/BRCK2Perbaikan";
 import BRCK2Rekam from "./BukuRekeningCukai/BRCK2/BRCK2Rekam";
 import CK4 from "./LaporanProduksiBkc/CK4/CK4";
-import CK4BelumLapor from "./LaporanProduksiBkc/CK4BelumLapor";
 import CK4EA from "./LaporanProduksiBkc/CK4/CK4EA";
 import CK4EADetail from "./LaporanProduksiBkc/CK4/CK4EADetail";
+import CK4EAPembatalan from "./LaporanProduksiBkc/CK4/CK4EAPembatalan";
 import CK4EAPerbaikan from "./LaporanProduksiBkc/CK4/CK4EAPerbaikan";
 import CK4EATaskToDo from "./LaporanProduksiBkc/CK4/CK4EATaskToDo";
+import CK4EATaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4EATaskToDoPembatalan";
 import CK4HT from "./LaporanProduksiBkc/CK4/CK4HT";
 import CK4HTDetail from "./LaporanProduksiBkc/CK4/CK4HTDetail";
+import CK4HTPembatalan from "./LaporanProduksiBkc/CK4/CK4HTPembatalan";
 import CK4HTPerbaikan from "./LaporanProduksiBkc/CK4/CK4HTPerbaikan";
 import CK4HTTaskToDo from "./LaporanProduksiBkc/CK4/CK4HTTaskToDo";
+import CK4HTTaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4HTTaskToDoPembatalan";
 import CK4MMEA from "./LaporanProduksiBkc/CK4/CK4MMEA";
 import CK4MMEADetail from "./LaporanProduksiBkc/CK4/CK4MMEADetail";
+import CK4MMEAPembatalan from "./LaporanProduksiBkc/CK4/CK4MMEAPembatalan";
 import CK4MMEAPerbaikan from "./LaporanProduksiBkc/CK4/CK4MMEAPerbaikan";
+import CK4MMEATaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4MMEATaskToDoPembatalan";
 import CK4MMEATaskTodo from "./LaporanProduksiBkc/CK4/CK4MMEATaskTodo";
+import CK4TaskToDo from "./LaporanProduksiBkc/CK4/CK4TaskToDo";
+import CK4TaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4TaskToDoPembatalan";
+import CK4BelumLapor from "./LaporanProduksiBkc/CK4BelumLapor";
 import PenelitianCK4 from "./LaporanProduksiBkc/PenelitianCK4";
 import SPL from "./LaporanProduksiBkc/SPL/SPL";
 import SPLPerbaikan from "./LaporanProduksiBkc/SPL/SPLPerbaikan";
@@ -54,7 +62,6 @@ import PermohonanTarif from "./TarifCukai/PermohonanTarif/PermohonanTarif";
 import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
 import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
-import CK4TaskToDo from "./LaporanProduksiBkc/CK4/CK4TaskToDo";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -160,6 +167,11 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4/pembatalan/tasktodo/:id"}
+        render={(props) => <CK4TaskToDoPembatalan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/laporan-ck4/ck4-ea-rekam"}
         render={(props) => <CK4EA {...props} {...propsExtra} />}
         exact={true}
@@ -175,8 +187,18 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4-ea/pembatalan/:id"}
+        render={(props) => <CK4EAPembatalan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/laporan-ck4/ck4-ea/tasktodo/:id"}
         render={(props) => <CK4EATaskToDo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/laporan-ck4/ck4-ea/pembatalan/tasktodo/:id"}
+        render={(props) => <CK4EATaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -195,8 +217,18 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4-mmea/pembatalan/:id"}
+        render={(props) => <CK4MMEAPembatalan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/laporan-ck4/ck4-mmea/tasktodo/:id"}
         render={(props) => <CK4MMEATaskTodo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/laporan-ck4/ck4-mmea/pembatalan/tasktodo/:id"}
+        render={(props) => <CK4MMEATaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
@@ -215,8 +247,18 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
+        path={pathName + "/laporan-ck4/ck4-ht/pembatalan/:id"}
+        render={(props) => <CK4HTPembatalan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
         path={pathName + "/laporan-ck4/ck4-ht/tasktodo/:id"}
         render={(props) => <CK4HTTaskToDo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/laporan-ck4/ck4-ht/pembatalan/tasktodo/:id"}
+        render={(props) => <CK4HTTaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
