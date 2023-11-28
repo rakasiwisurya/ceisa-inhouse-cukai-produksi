@@ -121,7 +121,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
   };
 
   getDetailRekamJenisPita = async () => {
-    const payload = { idJenisPita: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "pita_cukai",
