@@ -45,6 +45,11 @@ export default class CK4 extends Component {
           render: (text, record, index) => (
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
               <ButtonCustom
+                variant="danger"
+                icon="to-top"
+                onClick={() => this.handleBatal(record.idCk4, record.jenisBkc)}
+              />
+              <ButtonCustom
                 variant="warning"
                 icon="form"
                 onClick={() => {
@@ -296,6 +301,19 @@ export default class CK4 extends Component {
         break;
       default:
         this.props.history.push(`${pathName}/laporan-ck4/ck4-ht-perbaikan/${id}`);
+        break;
+    }
+  };
+  handleBatal = (id, jenisBkc) => {
+    switch (true) {
+      case jenisBkc === "EA":
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ea/pembatalan/${id}`);
+        break;
+      case jenisBkc === "MMEA":
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-mmea/pembatalan/${id}`);
+        break;
+      default:
+        this.props.history.push(`${pathName}/laporan-ck4/ck4-ht/pembatalan/${id}`);
         break;
     }
   };
