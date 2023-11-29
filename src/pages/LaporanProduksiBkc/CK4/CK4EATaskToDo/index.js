@@ -201,7 +201,7 @@ export default class CK4EATaskToDo extends Component {
   };
 
   getDetailCk4Ea = async () => {
-    const payload = { idCk4: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",

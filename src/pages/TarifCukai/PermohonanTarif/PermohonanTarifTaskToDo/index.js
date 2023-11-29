@@ -188,12 +188,12 @@ export default class PermohonanTarifTaskToDo extends Component {
   };
 
   getPermohonanTarifDetail = async () => {
-    const payload = { idTarifMerkHeader: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: endpoints.permohonanTarifDetail,
+      endpoint: endpoints.permohonanTarifDetailTasktodo,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -299,7 +299,7 @@ export default class PermohonanTarifTaskToDo extends Component {
   handleSimpanTasktodo = async () => {
     const { tasktodoStatus, tasktodoAwalBerlaku, tasktodoTanggalSkep, tasktodoAlasan } = this.state;
 
-    const payload = { idTarifMerkHeader: this.props.match.params.id, status: tasktodoStatus };
+    const payload = { idProses: this.props.match.params.id, status: tasktodoStatus };
 
     if (tasktodoStatus === "SETUJU") {
       payload.awalBerlaku = moment(tasktodoAwalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -311,7 +311,7 @@ export default class PermohonanTarifTaskToDo extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: endpoints.permohonanTarifSubmitTaskTodo,
+      endpoint: endpoints.permohonanTarifSubmitTasktodo,
       body: payload,
       setLoading: (bool) => this.setState({ isSimpanTasktodoLoading: bool }),
     });

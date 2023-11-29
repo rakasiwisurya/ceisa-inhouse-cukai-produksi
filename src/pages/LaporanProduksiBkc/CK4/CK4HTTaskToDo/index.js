@@ -305,7 +305,7 @@ export default class CK4HTTaskToDo extends Component {
   };
 
   getDetailCk4Ht = async () => {
-    const payload = { idCk4: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
@@ -497,7 +497,7 @@ export default class CK4HTTaskToDo extends Component {
     const { status, isStck, nomorStck, tanggalStck, alasan } = this.state;
 
     const payload = {
-      idCk4Header: this.props.match.params.id,
+      idProses: this.props.match.params.id,
       status,
       flagApprove: status === "SETUJU" ? "Y" : "N",
     };

@@ -305,12 +305,12 @@ export default class CK4HTTaskToDoPembatalan extends Component {
   };
 
   getDetailCk4Ht = async () => {
-    const payload = { idCk4: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: endpoints.ck4HtDetail,
+      endpoint: endpoints.ck4HtDetailTasktodo,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -497,7 +497,7 @@ export default class CK4HTTaskToDoPembatalan extends Component {
     const { status, isStck, nomorStck, tanggalStck, alasan } = this.state;
 
     const payload = {
-      idCk4Header: this.props.match.params.id,
+      idProses: this.props.match.params.id,
       status,
     };
 

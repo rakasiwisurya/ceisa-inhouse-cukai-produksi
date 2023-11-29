@@ -38,7 +38,6 @@ import CK4MMEAPerbaikan from "./LaporanProduksiBkc/CK4/CK4MMEAPerbaikan";
 import CK4MMEATaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4MMEATaskToDoPembatalan";
 import CK4MMEATaskTodo from "./LaporanProduksiBkc/CK4/CK4MMEATaskTodo";
 import CK4TaskToDo from "./LaporanProduksiBkc/CK4/CK4TaskToDo";
-import CK4TaskToDoPembatalan from "./LaporanProduksiBkc/CK4/CK4TaskToDoPembatalan";
 import CK4BelumLapor from "./LaporanProduksiBkc/CK4BelumLapor";
 import PenelitianCK4 from "./LaporanProduksiBkc/PenelitianCK4";
 import SPL from "./LaporanProduksiBkc/SPL/SPL";
@@ -164,11 +163,6 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/laporan-ck4/ck4/tasktodo/:id"}
         render={(props) => <CK4TaskToDo {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
-        path={pathName + "/laporan-ck4/ck4/pembatalan/tasktodo/:id"}
-        render={(props) => <CK4TaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

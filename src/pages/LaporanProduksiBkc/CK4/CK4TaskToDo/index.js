@@ -10,7 +10,7 @@ export default class CK4TaskToDo extends Component {
   }
 
   getCK4JenisBkc = async () => {
-    const payload = { idCk4Header: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
@@ -22,30 +22,55 @@ export default class CK4TaskToDo extends Component {
     if (response) {
       const { data } = response.data;
 
-      switch (true) {
-        case data?.namaJenisBkc === "EA":
-          this.props.history.replace(
-            `${pathName}/laporan-ck4/ck4-ea/tasktodo/${this.props.match.params.id}`
-          );
-          break;
-        case data?.namaJenisBkc === "MMEA":
-          this.props.history.replace(
-            `${pathName}/laporan-ck4/ck4-mmea/tasktodo/${this.props.match.params.id}`
-          );
-          break;
-        case data?.namaJenisBkc === "HT":
-          this.props.history.replace(
-            `${pathName}/laporan-ck4/ck4-ht/tasktodo/${this.props.match.params.id}`
-          );
-          break;
-        default:
-          notification.info({
-            message: "Info",
-            description: "Jenis Bkc is not found or invalid in this data",
-          });
-          break;
+      if (data?.status === "Persetujuan Perbaikan") {
+        switch (true) {
+          case data?.namaJenisBkc === "EA":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4-ea/tasktodo/${this.props.match.params.id}`
+            );
+          case data?.namaJenisBkc === "MMEA":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4-mmea/tasktodo/${this.props.match.params.id}`
+            );
+          case data?.namaJenisBkc === "HT":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4-ht/tasktodo/${this.props.match.params.id}`
+            );
+          default:
+            return notification.info({
+              message: "Info",
+              description: "Jenis Bkc is not found or invalid in this data",
+            });
+        }
+      }
+
+      if (data?.status === "Persetujuan Pembatalan") {
+        switch (true) {
+          case data?.namaJenisBkc === "EA":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+            );
+          case data?.namaJenisBkc === "MMEA":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+            );
+          case data?.namaJenisBkc === "HT":
+            return this.props.history.replace(
+              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+            );
+          default:
+            return notification.info({
+              message: "Info",
+              description: "Jenis Bkc is not found or invalid in this data",
+            });
+        }
       }
     }
+
+    notification.info({
+      message: "Info",
+      description: "Status CK4 is not found or invalid in this data",
+    });
   };
 
   render() {

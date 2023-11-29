@@ -79,13 +79,15 @@ export const endpoints = {
   jenisPitaRekam: "/pita/rekam-jenis",
   jenisPitaDetail: "/pita/browse-by-id",
   jenisPitaPerbaikan: "/pita/perbaikan-jenis",
-  jenisPitaSubmitTaskTodo: "/pita/task-todo",
+  jenisPitaDetailTasktodo: "/pita/detail-task-todo",
+  jenisPitaSubmitTasktodo: "/pita/task-todo",
 
   permohonanTarifBrowse: "/pita-cukai/browse-penetapan-tarif",
   permohonanTarifRekam: "/pita-cukai/form-perekaman-tarif",
   permohonanTarifDetail: "/pita-cukai/browse-tarif-cukai-detail",
   permohonanTarifPerbaikan: "/pita-cukai/form-update-tarif",
-  permohonanTarifSubmitTaskTodo: "/pita-cukai/penetapan-pengajuan-tarif",
+  permohonanTarifDetailTasktodo: "/pita-cukai/detail-task-todo",
+  permohonanTarifSubmitTasktodo: "/pita-cukai/penetapan-pengajuan-tarif",
 
   pencabutanTarifDetail: "/pita-cukai/browse-detail-pencabutan",
   pencabutanTarif: "/pita-cukai/pencabutan-tarif",
