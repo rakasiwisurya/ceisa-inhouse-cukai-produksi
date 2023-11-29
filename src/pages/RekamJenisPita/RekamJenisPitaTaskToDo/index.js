@@ -448,8 +448,8 @@ export default class RekamJenisPitaTaskToDo extends Component {
                 Kembali
               </ButtonCustom>
             </Col>
-            {/* {
-              this.state.tokenData?.kode_kantor === this.state.kodeKantor &&
+
+            {this.state.tokenData?.kode_kantor === this.state.kodeKantor &&
               this.state.tokenData?.role ===
                 "a565468f-bbfa-43ab-b6b1-7c3c33631b33,a565468f-bbfa-43ab-b6b1-7c3c33631b33" && (
                 <Col span={4}>
@@ -462,18 +462,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
                     Simpan
                   </Button>
                 </Col>
-              )
-            } */}
-            <Col span={4}>
-              <Button
-                type="primary"
-                loading={this.state.isSimpanTaskToDoLoading}
-                onClick={this.handleSimpanTaskToDo}
-                block
-              >
-                Simpan
-              </Button>
-            </Col>
+              )}
           </Row>
         </Container>
       </>
