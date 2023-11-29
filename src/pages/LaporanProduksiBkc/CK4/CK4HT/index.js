@@ -23,7 +23,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { convertArrayExcelToTable } from "utils/convertArrayExcelToTable";
-import { download } from "utils/files";
+import { downloadFile } from "utils/files";
 import { formatDateFromExcelEpoch } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 import { sumArrayOfObject } from "utils/sumArrayOfObject";
@@ -363,16 +363,7 @@ export default class CK4HT extends Component {
   };
   handleDownloadTemplate = async (e) => {
     e.stopPropagation();
-
-    const response = await requestApi({
-      service: "produksi",
-      method: "get",
-      endpoint: `${endpoints.s3Download}/MpgBCAeAW6XX7VrEyFlfBw==/_kS9AjWBFQNLDy9NHZiEjg==/pF24hy4gJU1g7qLuu1KgJRS5NlWup0wDyIROzHyQNTcbeS0wO-lurtc0XC1-vSX-4KgaTnheY72GwTWMuz5ULw==`,
-      config: { responseType: "blob" },
-      setLoading: (bool) => this.setState({ isDownloadTemplateLoading: bool }),
-    });
-
-    if (response) download(response.data, "template_ck4_ht");
+    downloadFile("/assets/files/template_ck4_ht.xlsx", "template_ck4_ht.xlsx");
   };
   handleModalShow = (visibleState) => {
     this.setState({ [visibleState]: true });

@@ -43,11 +43,11 @@ export const download = (blob, filename) => {
 };
 
 export const downloadFile = (blob, filename) => {
-  const blobUrl = URL.createObjectURL(blob);
+  const blobUrl = typeof blob !== "string" ? URL.createObjectURL(blob) : blob;
   const downloadLink = document.createElement("a");
   downloadLink.href = blobUrl;
   downloadLink.download = filename;
   document.body.appendChild(downloadLink);
   downloadLink.click();
-  URL.revokeObjectURL(blobUrl);
+  if (typeof blob !== "string") URL.revokeObjectURL(blobUrl);
 };

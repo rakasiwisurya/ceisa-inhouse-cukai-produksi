@@ -69,7 +69,8 @@ export default class CK4TaskToDo extends Component {
 
     notification.info({
       message: "Info",
-      description: "Status CK4 is not found or invalid in this data",
+      description:
+        "Status CK4 is not found or invalid in this data or neither 'Persetujuan Perbaikan' nor 'Persetujuan Pembatalan'",
     });
   };
 
