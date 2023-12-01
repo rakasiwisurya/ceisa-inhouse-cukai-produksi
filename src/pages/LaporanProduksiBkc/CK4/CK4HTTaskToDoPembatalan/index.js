@@ -494,11 +494,21 @@ export default class CK4HTTaskToDoPembatalan extends Component {
   };
 
   handleSimpanTasktodo = async () => {
-    const { status, isStck, nomorStck, tanggalStck, alasan } = this.state;
+    const {
+      status,
+      isStck,
+      nomorStck,
+      tanggalStck,
+      nomorSuratPermohonanPerbaikan,
+      tanggalSuratPermohonanPerbaikan,
+      alasan,
+    } = this.state;
 
     const payload = {
       idProses: this.props.match.params.id,
       status,
+      nomorPersetujuanPerbaikan: nomorSuratPermohonanPerbaikan,
+      tanggalPersetujuanPerbaikan: tanggalSuratPermohonanPerbaikan,
     };
 
     if (status === "SETUJU") {

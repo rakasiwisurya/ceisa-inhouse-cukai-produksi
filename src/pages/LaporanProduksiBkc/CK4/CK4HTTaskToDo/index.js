@@ -494,12 +494,22 @@ export default class CK4HTTaskToDo extends Component {
   };
 
   handleSimpanTasktodo = async () => {
-    const { status, isStck, nomorStck, tanggalStck, alasan } = this.state;
+    const {
+      status,
+      isStck,
+      nomorStck,
+      tanggalStck,
+      nomorSuratPermohonanPerbaikan,
+      tanggalSuratPermohonanPerbaikan,
+      alasan,
+    } = this.state;
 
     const payload = {
       idProses: this.props.match.params.id,
       status,
       flagApprove: status === "SETUJU" ? "Y" : "N",
+      nomorPersetujuanPerbaikan: nomorSuratPermohonanPerbaikan,
+      tanggalPersetujuanPerbaikan: tanggalSuratPermohonanPerbaikan,
     };
 
     if (status === "SETUJU") {
