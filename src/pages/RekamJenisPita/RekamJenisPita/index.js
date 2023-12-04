@@ -118,6 +118,13 @@ export default class RekamJenisPita extends Component {
           render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tahunPita"),
         },
+        {
+          key: "status",
+          title: "Status",
+          dataIndex: "status",
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          ...this.getColumnSearchProps("status"),
+        },
       ],
     };
   }

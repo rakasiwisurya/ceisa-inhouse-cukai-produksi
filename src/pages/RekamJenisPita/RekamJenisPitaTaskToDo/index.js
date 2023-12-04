@@ -43,18 +43,18 @@ export default class RekamJenisPitaTaskToDo extends Component {
       idSeriPita: null,
       namaSeriPita: null,
       tahunPita: String(new Date().getFullYear()),
-      tasktodoStatus: "setuju",
-      komentar: "",
+      tasktodoStatus: "SETUJU",
+      komentar: null,
       listJenisProduksiBkc: [],
       listSeriPita: [],
       listStatus: [
         {
-          idStatus: "setuju",
-          namaStatus: "setuju",
+          idStatus: "SETUJU",
+          namaStatus: "SETUJU",
         },
         {
-          idStatus: "tolak",
-          namaStatus: "tolak",
+          idStatus: "TOLAK",
+          namaStatus: "TOLAK",
         },
       ],
     };

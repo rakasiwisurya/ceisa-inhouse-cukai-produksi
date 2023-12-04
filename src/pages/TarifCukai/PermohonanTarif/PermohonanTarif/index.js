@@ -86,17 +86,6 @@ class PermohonanTarif extends Component {
           ),
         },
         {
-          key: "status",
-          title: "Status",
-          dataIndex: "status",
-          render: (text) => (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
-            </div>
-          ),
-          ...this.getColumnSearchProps("status"),
-        },
-        {
           key: "namaKantor",
           title: "Nama Kantor",
           dataIndex: "namaKantor",
@@ -198,6 +187,17 @@ class PermohonanTarif extends Component {
             </div>
           ),
           ...this.getColumnSearchProps("akhirBerlaku"),
+        },
+        {
+          key: "status",
+          title: "Status",
+          dataIndex: "status",
+          render: (text) => (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
+            </div>
+          ),
+          ...this.getColumnSearchProps("status"),
         },
       ],
     };
