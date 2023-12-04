@@ -31,23 +31,23 @@ export default class RekamJenisPita extends Component {
 
       dataSource: [],
       columns: [
-        {
-          key: "aksi",
-          title: "Aksi",
-          dataIndex: "aksi",
-          fixed: "left",
-          render: (text, record, index) => (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <>
-                <ButtonCustom
-                  icon="form"
-                  variant="warning"
-                  onClick={() => this.handlePerbaikan(record.idJenisPita)}
-                />
-              </>
-            </div>
-          ),
-        },
+        // {
+        //   key: "aksi",
+        //   title: "Aksi",
+        //   dataIndex: "aksi",
+        //   fixed: "left",
+        //   render: (text, record, index) => (
+        //     <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+        //       <>
+        //         <ButtonCustom
+        //           icon="form"
+        //           variant="warning"
+        //           onClick={() => this.handlePerbaikan(record.idJenisPita)}
+        //         />
+        //       </>
+        //     </div>
+        //   ),
+        // },
         {
           key: "namaKantor",
           title: "Nama Kantor",
