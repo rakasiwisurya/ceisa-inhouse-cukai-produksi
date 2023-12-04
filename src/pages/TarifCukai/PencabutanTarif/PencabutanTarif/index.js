@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Table, Tag } from "antd";
+import { Button, Icon, Input, Table } from "antd";
 import Container from "components/Container";
 import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
@@ -41,16 +41,6 @@ export default class PencabutanTarif extends Component {
                   onClick={() => this.handlePencabutan(record.idTarifMerkHeader)}
                 />
               </>
-            </div>
-          ),
-        },
-        {
-          key: "status",
-          title: "Status",
-          dataIndex: "status",
-          render: (text) => (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
             </div>
           ),
         },
@@ -115,6 +105,16 @@ export default class PencabutanTarif extends Component {
           ),
           ...this.getColumnSearchProps("akhirBerlaku"),
         },
+        {
+          key: "status",
+          title: "Status",
+          dataIndex: "status",
+          render: (text) => (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
+        },
       ],
     };
   }
@@ -147,7 +147,7 @@ export default class PencabutanTarif extends Component {
       akhirBerlaku,
     } = this.state.filter;
 
-    const payload = { page: this.state.page, status: "AKTIF" };
+    const payload = { page: this.state.page, status: "Selesai" };
 
     if (kodeKantor) payload.kodeKantor = kodeKantor;
     if (namaKantor) payload.namaKantor = namaKantor;

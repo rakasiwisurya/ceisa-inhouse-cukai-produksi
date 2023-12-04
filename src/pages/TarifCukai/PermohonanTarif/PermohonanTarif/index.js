@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
+import { Button, Col, Icon, Input, Row, Table } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import ModalProcessTTE from "components/ModalProcessTTE";
@@ -194,7 +194,7 @@ class PermohonanTarif extends Component {
           dataIndex: "status",
           render: (text) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {text !== null ? <Tag color={text === "AKTIF" ? "green" : "red"}>{text}</Tag> : "-"}
+              {text !== null ? text : "-"}
             </div>
           ),
           ...this.getColumnSearchProps("status"),
