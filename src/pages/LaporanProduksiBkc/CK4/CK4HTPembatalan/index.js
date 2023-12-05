@@ -699,6 +699,7 @@ export default class CK4HTPembatalan extends Component {
     } = this.state;
 
     const payload = {
+      idCk4Header: this.props.match.params.id,
       namaKota,
       namaPengusaha,
       nomorSurat,
