@@ -55,6 +55,11 @@ class PermohonanTarif extends Component {
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
               <>
                 <ButtonCustom
+                  variant="danger"
+                  icon="to-top"
+                  onClick={() => this.handlePembatalan(record.idTarifMerkHeader)}
+                />
+                <ButtonCustom
                   icon="eye"
                   variant="info"
                   onClick={() => this.handleDetail(record.idTarifMerkHeader)}
@@ -373,6 +378,9 @@ class PermohonanTarif extends Component {
   };
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/permohonan-tarif/perbaikan/${id}`);
+  };
+  handlePembatalan = (id) => {
+    this.props.history.push(`${pathName}/permohonan-tarif/pembatalan/${id}`);
   };
   handleGeneratePdf = async (rowData) => {
     const {

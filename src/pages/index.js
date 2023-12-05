@@ -58,6 +58,7 @@ import PencabutanTarif from "./TarifCukai/PencabutanTarif/PencabutanTarif";
 import PencabutanTarifCabut from "./TarifCukai/PencabutanTarif/PencabutanTarifCabut";
 import PenetapanKembali from "./TarifCukai/PenetapanKembali";
 import PermohonanTarif from "./TarifCukai/PermohonanTarif/PermohonanTarif";
+import PermohonanTarifPembatalan from "./TarifCukai/PermohonanTarif/PermohonanTarifPembatalan";
 import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
 import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
@@ -118,6 +119,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/permohonan-tarif/perbaikan/:id"}
         render={(props) => <PermohonanTarifPerbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/pembatalan/:id"}
+        render={(props) => <PermohonanTarifPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
