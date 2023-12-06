@@ -272,9 +272,6 @@ export default class RekamJenisPitaTaskToDo extends Component {
                 </div>
                 <div style={{ display: "flex", gap: 10 }}>
                   <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                  <Button type="primary" disabled>
-                    Cari
-                  </Button>
                   <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
@@ -314,14 +311,6 @@ export default class RekamJenisPitaTaskToDo extends Component {
                       id="hje"
                       value={this.state.hje}
                       style={{ width: "100%" }}
-                      disabled
-                    />
-
-                    <Button
-                      type="primary"
-                      icon="search"
-                      loading={this.state.isTarifLoading || this.state.isWarnaLoading}
-                      onClick={this.getTarifWarna}
                       disabled
                     />
                   </div>
