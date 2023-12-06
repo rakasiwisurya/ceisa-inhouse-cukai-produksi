@@ -55,11 +55,6 @@ class PermohonanTarif extends Component {
             <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
               <>
                 <ButtonCustom
-                  variant="danger"
-                  icon="to-top"
-                  onClick={() => this.handlePembatalan(record.idTarifMerkHeader)}
-                />
-                <ButtonCustom
                   icon="eye"
                   variant="info"
                   onClick={() => this.handleDetail(record.idTarifMerkHeader)}
@@ -68,6 +63,13 @@ class PermohonanTarif extends Component {
                   icon="form"
                   variant="warning"
                   onClick={() => this.handlePerbaikan(record.idTarifMerkHeader)}
+                />
+                <ButtonCustom
+                  variant="danger"
+                  icon="to-top"
+                  onClick={() =>
+                    this.handlePembatalan(record.idTarifMerkHeader)
+                  }
                 />
                 <ButtonCustom
                   variant="danger"
@@ -94,28 +96,44 @@ class PermohonanTarif extends Component {
           key: "namaKantor",
           title: "Nama Kantor",
           dataIndex: "namaKantor",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("namaKantor"),
         },
         {
           key: "nppbkc",
           title: "NPPBKC",
           dataIndex: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           key: "namaPerusahaan",
           title: "Nama Perusahaan",
           dataIndex: "namaPerusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           key: "nomorKep",
           title: "Nomor KEP",
           dataIndex: "nomorKep",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("nomorKep"),
         },
         {
@@ -133,42 +151,66 @@ class PermohonanTarif extends Component {
           key: "namaMerk",
           title: "Nama Merk",
           dataIndex: "namaMerk",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("namaMerk"),
         },
         {
           key: "jenisProduksi",
           title: "Jenis Produksi",
           dataIndex: "jenisProduksi",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("jenisProduksi"),
         },
         {
           key: "hjePerKemasan",
           title: "HJE",
           dataIndex: "hjePerKemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("hjePerKemasan"),
         },
         {
           key: "isiPerKemasan",
           title: "Isi",
           dataIndex: "isiPerKemasan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("isiPerKemasan"),
         },
         {
           key: "tarifSpesifik",
           title: "Tarif",
           dataIndex: "tarifSpesifik",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tarifSpesifik"),
         },
         {
           key: "tujuanPemasaran",
           title: "Tujuan",
           dataIndex: "tujuanPemasaran",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? text : "-"}
+            </div>
+          ),
           ...this.getColumnSearchProps("tujuanPemasaran"),
         },
         {
@@ -245,16 +287,24 @@ class PermohonanTarif extends Component {
     if (nppbkc) payload.nppbkc = nppbkc;
     if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
     if (nomorKep) payload.nomorSkep = nomorKep;
-    if (tanggalKep) payload.tanggalSkep = moment(tanggalKep, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (tanggalKep)
+      payload.tanggalSkep = moment(tanggalKep, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (namaMerk) payload.namaMerk = namaMerk;
     if (jenisProduksi) payload.namaJenisProduksiBkc = jenisProduksi;
     if (hjePerKemasan) payload.hjePerKemasan = hjePerKemasan;
     if (isiPerKemasan) payload.isiPerKemasan = isiPerKemasan;
     if (tarifSpesifik) payload.tarifSpesifik = tarifSpesifik;
     if (tujuanPemasaran) payload.tujuanPemasaran = tujuanPemasaran;
-    if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (awalBerlaku)
+      payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
     if (akhirBerlaku)
-      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format(
+        "YYYY-MM-DD"
+      );
 
     const response = await requestApi({
       service: "produksi",
@@ -318,7 +368,12 @@ class PermohonanTarif extends Component {
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -326,7 +381,9 @@ class PermohonanTarif extends Component {
           }}
           value={this.state.filter[dataIndex]}
           onChange={(e) =>
-            this.setState({ filter: { ...this.state.filter, [dataIndex]: e.target.value } })
+            this.setState({
+              filter: { ...this.state.filter, [dataIndex]: e.target.value },
+            })
           }
           onPressEnter={() => this.handleColumnSearch(confirm)}
           style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -427,7 +484,9 @@ class PermohonanTarif extends Component {
         idTarifMerkHeader,
         nomorPermohonan,
         nomorKep,
-        tanggalKep: tanggalKep ? moment(tanggalKep).format("DD MMMM YYYY") : tanggalKep,
+        tanggalKep: tanggalKep
+          ? moment(tanggalKep).format("DD MMMM YYYY")
+          : tanggalKep,
         idJenisBkc,
         jenisBkc:
           idJenisBkc === 3
@@ -463,9 +522,13 @@ class PermohonanTarif extends Component {
         negaraAsal,
         tarifPerKemasan,
         namaKantor,
-        awalBerlaku: awalBerlaku ? moment(awalBerlaku).format("DD MMMM YYYY") : awalBerlaku,
+        awalBerlaku: awalBerlaku
+          ? moment(awalBerlaku).format("DD MMMM YYYY")
+          : awalBerlaku,
         namaKantorWilayah: namaKantorWilayah,
-        waktuRekam: waktuRekam ? moment(waktuRekam).format("DD MMMM YYYY") : waktuRekam,
+        waktuRekam: waktuRekam
+          ? moment(waktuRekam).format("DD MMMM YYYY")
+          : waktuRekam,
       },
       isModalPdfVisible: true,
     });
@@ -479,7 +542,9 @@ class PermohonanTarif extends Component {
             <Col span={4}>
               <ButtonCustom
                 variant="info"
-                onClick={() => this.props.history.push(`${pathName}/permohonan-tarif/rekam`)}
+                onClick={() =>
+                  this.props.history.push(`${pathName}/permohonan-tarif/rekam`)
+                }
                 block
               >
                 + Tarif Rekam
@@ -491,7 +556,10 @@ class PermohonanTarif extends Component {
             dataSource={this.state.dataSource}
             columns={this.state.columns}
             loading={this.state.isPermohonanTarifLoading}
-            pagination={{ current: this.state.page, total: this.state.totalData }}
+            pagination={{
+              current: this.state.page,
+              total: this.state.totalData,
+            }}
             onChange={(page) => this.setState({ page: page.current })}
             scroll={{ x: "max-content" }}
             style={{ marginTop: 30 }}
@@ -502,13 +570,18 @@ class PermohonanTarif extends Component {
           id={this.state.detailId}
           isVisible={this.state.isModalPermohonanTarifDetailVisible}
           onCancel={() =>
-            this.setState({ detailId: null, isModalPermohonanTarifDetailVisible: false })
+            this.setState({
+              detailId: null,
+              isModalPermohonanTarifDetailVisible: false,
+            })
           }
         />
 
         <ModalPermohonanTarifPdf
           isVisible={this.state.isModalPdfVisible}
-          onButtonTteClick={() => this.setState({ isModalProcessTTEVisible: true })}
+          onButtonTteClick={() =>
+            this.setState({ isModalProcessTTEVisible: true })
+          }
           onCancel={() => {
             this.setState({
               isModalPdfVisible: false,
