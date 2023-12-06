@@ -322,10 +322,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
                       icon="search"
                       loading={this.state.isTarifLoading || this.state.isWarnaLoading}
                       onClick={this.getTarifWarna}
-                      disabled={
-                        !this.state.idJenisProduksiBkc ||
-                        (this.state.idJenisBkc === 3 && !this.state.hje)
-                      }
+                      disabled
                     />
                   </div>
                 </Col>
