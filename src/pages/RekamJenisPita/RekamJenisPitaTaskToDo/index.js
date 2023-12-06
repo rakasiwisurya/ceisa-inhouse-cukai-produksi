@@ -91,8 +91,7 @@ export default class RekamJenisPitaTaskToDo extends Component {
 
     if (
       prevState.idJenisProduksiBkc !== this.state.idJenisProduksiBkc ||
-      prevState.hje !== this.state.hje ||
-      prevState.isiKemasan !== this.state.isiKemasan
+      prevState.hje !== this.state.hje
     ) {
       this.setState({ tarif: null, warna: null });
     }
