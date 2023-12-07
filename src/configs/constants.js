@@ -79,6 +79,7 @@ export const endpoints = {
   jenisPitaRekam: "/pita/rekam-jenis",
   jenisPitaDetail: "/pita/browse-by-id",
   jenisPitaPerbaikan: "/pita/perbaikan-jenis",
+  jenisPitaPembatalan: "/pita/pembatalan-jenis",
   jenisPitaDetailTasktodo: "/pita/detail-task-todo",
   jenisPitaSubmitTasktodo: "/pita/task-todo",
 

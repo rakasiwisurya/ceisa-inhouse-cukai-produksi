@@ -31,23 +31,28 @@ export default class RekamJenisPita extends Component {
 
       dataSource: [],
       columns: [
-        // {
-        //   key: "aksi",
-        //   title: "Aksi",
-        //   dataIndex: "aksi",
-        //   fixed: "left",
-        //   render: (text, record, index) => (
-        //     <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-        //       <>
-        //         <ButtonCustom
-        //           icon="form"
-        //           variant="warning"
-        //           onClick={() => this.handlePerbaikan(record.idJenisPita)}
-        //         />
-        //       </>
-        //     </div>
-        //   ),
-        // },
+        {
+          key: "aksi",
+          title: "Aksi",
+          dataIndex: "aksi",
+          fixed: "left",
+          render: (text, record, index) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <>
+                {/* <ButtonCustom
+                  icon="form"
+                  variant="warning"
+                  onClick={() => this.handlePerbaikan(record.idJenisPita)}
+                /> */}
+                <Button
+                  icon="to-top"
+                  type="danger"
+                  onClick={() => this.handlePembatalan(record.idJenisPita)}
+                />
+              </>
+            </div>
+          ),
+        },
         {
           key: "namaKantor",
           title: "Nama Kantor",
@@ -248,6 +253,9 @@ export default class RekamJenisPita extends Component {
 
   handlePerbaikan = (id) => {
     this.props.history.push(`${pathName}/rekam-jenis-pita/perbaikan/${id}`);
+  };
+  handlePembatalan = (id) => {
+    this.props.history.push(`${pathName}/rekam-jenis-pita/pembatalan/${id}`);
   };
 
   render() {

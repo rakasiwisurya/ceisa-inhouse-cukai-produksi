@@ -51,6 +51,7 @@ import ReferensiWarnaDetail from "./ReferensiTarifPitaCukai/ReferensiWarnaDetail
 import ReferensiWarnaEdit from "./ReferensiTarifPitaCukai/ReferensiWarnaEdit";
 import ReferensiWarnaRekam from "./ReferensiTarifPitaCukai/ReferensiWarnaRekam";
 import RekamJenisPita from "./RekamJenisPita/RekamJenisPita";
+import RekamJenisPitaPembatalan from "./RekamJenisPita/RekamJenisPitaPembatalan";
 import RekamJenisPitaPerbaikan from "./RekamJenisPita/RekamJenisPitaPerbaikan";
 import RekamJenisPitaRekam from "./RekamJenisPita/RekamJenisPitaRekam";
 import RekamJenisPitaTaskToDo from "./RekamJenisPita/RekamJenisPitaTaskToDo";
@@ -154,6 +155,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/rekam-jenis-pita/perbaikan/:id"}
         render={(props) => <RekamJenisPitaPerbaikan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/pembatalan/:id"}
+        render={(props) => <RekamJenisPitaPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

@@ -10,14 +10,16 @@ import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
 
-export default class RekamJenisPitaPerbaikan extends Component {
+export default class RekamJenisPitaPembatalan extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       subtitle1: "Permohonan",
+      subtitle2: "Dasar Pembatalan",
 
       isDetailLoading: true,
-      isUpdateLoading: false,
+      isPembatalanLoading: false,
       isJenisProduksiLoading: true,
       isTarifLoading: false,
       isWarnaLoading: false,
@@ -40,6 +42,11 @@ export default class RekamJenisPitaPerbaikan extends Component {
       idSeriPita: null,
       namaSeriPita: null,
       tahunPita: String(new Date().getFullYear()),
+
+      namaPemeriksa: null,
+      nomorPembatalan: null,
+      tanggalPembatalan: null,
+      filePembatalan: null,
 
       listJenisProduksiBkc: [],
       listSeriPita: [],
@@ -222,54 +229,25 @@ export default class RekamJenisPitaPerbaikan extends Component {
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
 
-  handleUpdate = async () => {
-    const {
-      idNppbkc,
-      nppbkc,
-      namaNppbkc,
-      idJenisBkc,
-      personalNppbkc,
-      idJenisProduksiBkc,
-      namaJenisProduksiBkc,
-      hje,
-      isiKemasan,
-      tarif,
-      awalBerlaku,
-      warna,
-      kodeWarna,
-      tahunPita,
-    } = this.state;
+  handleUploadFile = (e) => {
+    this.setState({ filePembatalan: e.target.files[0] });
+  };
 
-    const splitIdJenisProduksi = idJenisProduksiBkc.split("-");
-    const splitNamaJenisProduksi = namaJenisProduksiBkc.split("-").map((item) => item.trim());
+  handlePembatalan = async () => {
+    const { namaPemeriksa, nomorPembatalan, tanggalPembatalan, filePembatalan } = this.state;
 
-    const payload = {
-      idJenisPita: this.props.match.params.id,
-      idJenisBkc: idJenisBkc,
-      idJenisProduksiBkc: splitIdJenisProduksi[0],
-      kodeJenisProduksiBkc: splitNamaJenisProduksi[0],
-      isiKemasan: isiKemasan,
-      awalBerlaku: moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      tarif: tarif,
-      warna: warna,
-      kodeWarna: kodeWarna,
-      tahunPita: tahunPita,
-      idNppbkc: idNppbkc,
-      nppbkc: nppbkc,
-      namaPerusahaan: namaNppbkc,
-      hje: hje,
-      personalisasi: personalNppbkc,
-      idGolonganBkc: splitIdJenisProduksi[1],
-      namaGolonganBkc: splitNamaJenisProduksi[1],
-      kodeSatuan: splitIdJenisProduksi[2],
-    };
+    const formData = new FormData();
+    formData.set("namaPemeriksa", namaPemeriksa);
+    formData.set("nomorPembatalan", nomorPembatalan);
+    formData.set("tanggalPembatalan", tanggalPembatalan);
+    formData.set("filePembatalan", filePembatalan);
 
     const response = await requestApi({
       service: "pita_cukai",
       method: "post",
-      endpoint: endpoints.jenisPitaPerbaikan,
-      body: payload,
-      setLoading: (bool) => this.setState({ isUpdateLoading: bool }),
+      endpoint: endpoints.jenisPitaPembatalan,
+      body: formData,
+      setLoading: (bool) => this.setState({ isPembatalanLoading: bool }),
     });
 
     if (response) {
@@ -283,7 +261,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
     return (
       <>
-        <Container menuName="Jenis Pita" contentName="Jenis Pita Perbaikan">
+        <Container menuName="Jenis Pita" contentName="Jenis Pita Pembatalan">
           <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
@@ -292,13 +270,6 @@ export default class RekamJenisPitaPerbaikan extends Component {
                 </div>
                 <div style={{ display: "flex", gap: 10 }}>
                   <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                    disabled
-                  >
-                    Cari
-                  </Button>
                   <Input id="namaNppbkc" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
@@ -318,6 +289,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       this.handleSelectCustomChange("jenisProduksiBkc", value, option);
                     }}
                     style={{ width: "100%" }}
+                    disabled
                   >
                     {this.state.listJenisProduksiBkc.length > 0 &&
                       this.state.listJenisProduksiBkc.map((item, index) => (
@@ -341,18 +313,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       onChange={(value) => this.handleInputNumberChange("hje", value)}
                       value={this.state.hje}
                       style={{ width: "100%" }}
-                      disabled={this.state.idJenisBkc === 2}
-                    />
-
-                    <Button
-                      type="primary"
-                      icon="search"
-                      loading={this.state.isTarifLoading || this.state.isWarnaLoading}
-                      onClick={this.getTarifWarna}
-                      disabled={
-                        !this.state.idJenisProduksiBkc ||
-                        (this.state.idJenisBkc === 3 && !this.state.hje)
-                      }
+                      disabled
                     />
                   </div>
                 </Col>
@@ -367,6 +328,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                     onChange={(value) => this.handleInputNumberChange("isiKemasan", value)}
                     value={this.state.isiKemasan}
                     style={{ width: "100%" }}
+                    disabled
                   />
                 </Col>
 
@@ -393,6 +355,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                     value={this.state.awalBerlaku}
                     onChange={(date) => this.handleDatepickerChange("awalBerlaku", date)}
                     style={{ width: "100%" }}
+                    disabled
                   />
                 </Col>
 
@@ -415,7 +378,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
                       this.handleSelectCustomChange("seriPita", value, option);
                     }}
                     style={{ width: "100%" }}
-                    disabled={this.state.idJenisBkc === 2}
+                    disabled
                   >
                     {this.state.listSeriPita.length > 0 &&
                       this.state.listSeriPita.map((item, index) => (
@@ -441,6 +404,53 @@ export default class RekamJenisPitaPerbaikan extends Component {
             )}
           </Card>
 
+          <Card title={this.state.subtitle2} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nama Pemeriksa</FormLabel>
+                </div>
+                <Input
+                  id="namaPemeriksa"
+                  value={this.state.namaPemeriksa}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Pembatalan</FormLabel>
+                </div>
+                <Input
+                  id="nomorPembatalan"
+                  value={this.state.nomorPembatalan}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Tanggal Pembatalan</FormLabel>
+                </div>
+                <DatePicker
+                  id="tanggalPembatalan"
+                  format="DD-MM-YYYY"
+                  value={this.state.tanggalPembatalan}
+                  onChange={(date) => this.handleDatepickerChange("tanggalPembatalan", date)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Upload File</FormLabel>
+                </div>
+
+                <input type="file" onChange={this.handleUploadFile} />
+              </Col>
+            </Row>
+          </Card>
+
           <Row gutter={[16, 16]}>
             <Col span={4}>
               <ButtonCustom variant="secondary" onClick={() => this.props.history.goBack()} block>
@@ -450,12 +460,12 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
             <Col span={4}>
               <Button
-                type="primary"
-                loading={this.state.isUpdateLoading}
-                onClick={this.handleUpdate}
+                type="danger"
+                loading={this.state.isPembatalanLoading}
+                onClick={this.handlePembatalan}
                 block
               >
-                Update
+                Simpan Pembatalan
               </Button>
             </Col>
           </Row>
