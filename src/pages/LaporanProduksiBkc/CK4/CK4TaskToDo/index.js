@@ -48,15 +48,15 @@ export default class CK4TaskToDo extends Component {
         switch (true) {
           case data?.namaJenisBkc === "EA":
             return this.props.history.replace(
-              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+              `${pathName}/laporan-ck4/ck4-ea/pembatalan/tasktodo/${this.props.match.params.id}`
             );
           case data?.namaJenisBkc === "MMEA":
             return this.props.history.replace(
-              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+              `${pathName}/laporan-ck4/ck4-mmea/pembatalan/tasktodo/${this.props.match.params.id}`
             );
           case data?.namaJenisBkc === "HT":
             return this.props.history.replace(
-              `${pathName}/laporan-ck4/ck4/pembatalan/tasktodo/${this.props.match.params.id}`
+              `${pathName}/laporan-ck4/ck4-ht/pembatalan/tasktodo/${this.props.match.params.id}`
             );
           default:
             return notification.info({
