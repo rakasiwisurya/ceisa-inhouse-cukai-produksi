@@ -360,16 +360,17 @@ export default class CK4EATaskToDoPembatalan extends Component {
       isStck,
       nomorStck,
       tanggalStck,
-      nomorSuratPermohonanPerbaikan,
-      tanggalSuratPermohonanPerbaikan,
+      nomorSuratPermohonanPembatalan,
+      tanggalSuratPermohonanPembatalan,
       alasan,
     } = this.state;
 
     const payload = {
       idProses: this.props.match.params.id,
       status,
-      nomorPersetujuanPerbaikan: nomorSuratPermohonanPerbaikan,
-      tanggalPersetujuanPerbaikan: tanggalSuratPermohonanPerbaikan,
+      flagPembatalan: status === "SETUJU" ? "Y" : "N",
+      nomorPersetujuanPembatalan: nomorSuratPermohonanPembatalan,
+      tanggalPersetujuanPembatalan: tanggalSuratPermohonanPembatalan,
     };
 
     if (status === "SETUJU") {

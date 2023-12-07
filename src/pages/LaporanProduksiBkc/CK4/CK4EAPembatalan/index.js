@@ -415,9 +415,9 @@ export default class CK4EAPembatalan extends Component {
       namaPengusaha,
       nomorSurat,
       tanggalSurat,
-      nipPenjabatBc,
-      namaPenjabat: namaPenjabatBc,
-      keteranganPembatalan,
+      nip: nipPenjabatBc,
+      namaPegawai: namaPenjabatBc,
+      keterangan: keteranganPembatalan,
     };
 
     const response = await requestApi({
