@@ -151,7 +151,7 @@ export default class CK4EAPembatalan extends Component {
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: endpoints.ck4EaDetailTasktodo,
+      endpoint: endpoints.ck4EaDetail,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
