@@ -59,10 +59,10 @@ export const endpoints = {
   ck4EaDetailTasktodo: "/ck4/detail-ea/task-todo",
   ck4MmeaDetailTasktodo: "/ck4/detail-mmea/task-todo",
   ck4HtDetailTasktodo: "/ck4/detail-ht/task-todo",
-  ck4Pembatalan: "/ck4/pembatalan",
+  ck4Pembatalan: "/ck4/pembatalan-ck4",
   ck4Tasktodo: "/ck4/task-todo",
   ck4PerbaikanTasktodo: "/ck4/task-todo-perbaikan",
-  ck4PembatalanTasktodo: "/ck4/task-todo-pembatalan",
+  ck4PembatalanTasktodo: "/ck4/task-todo-pembatalan-ck4",
 
   ck4BelumLaporBulanan: "/ck4/browse-belum-lapor",
   ck4BelumLaporHarian: "/ck4/browse-belum-lapor-harian",
