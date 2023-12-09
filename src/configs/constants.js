@@ -90,7 +90,8 @@ export const endpoints = {
   permohonanTarifPerbaikan: "/pita-cukai/form-update-tarif",
   permohonanTarifPembatalan: "/pita-cukai/pembatalan-tarif",
   permohonanTarifDetailTasktodo: "/pita-cukai/detail-task-todo",
-  permohonanTarifSubmitTasktodo: "/pita-cukai/penetapan-pengajuan-tarif",
+  permohonanTarifRekamTasktodo: "/pita-cukai/penetapan-pengajuan-tarif",
+  permohonanTarifPembatalanTasktodo: "/pita-cukai/pembatalan-tarif-tasktodo",
 
   pencabutanTarifDetail: "/pita-cukai/browse-detail-pencabutan",
   pencabutanTarif: "/pita-cukai/pencabutan-tarif",

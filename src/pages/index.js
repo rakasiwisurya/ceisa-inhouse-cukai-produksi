@@ -65,6 +65,8 @@ import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRe
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
 import RekamJenisPitaTaskToDoPembatalan from "./RekamJenisPita/RekamJenisPitaTaskToDoPembatalan";
 import RekamJenisPitaTaskToDoRekam from "./RekamJenisPita/RekamJenisPitaTaskToDoRekam";
+import PermohonanTarifTaskToDoRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDoRekam";
+import PermohonanTarifTaskToDoPembatalan from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskTodoPembatalan";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -110,11 +112,6 @@ export default function PageContent({ propsExtra }) {
         exact={true}
       />
       <Route
-        path={pathName + "/permohonan-tarif/tasktodo/:id"}
-        render={(props) => <PermohonanTarifTaskToDo {...props} {...propsExtra} />}
-        exact={true}
-      />
-      <Route
         path={pathName + "/permohonan-tarif/rekam"}
         render={(props) => <PermohonanTarifRekam {...props} {...propsExtra} />}
         exact={true}
@@ -127,6 +124,21 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/permohonan-tarif/pembatalan/:id"}
         render={(props) => <PermohonanTarifPembatalan {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/tasktodo/:id"}
+        render={(props) => <PermohonanTarifTaskToDo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/rekam/tasktodo/:id"}
+        render={(props) => <PermohonanTarifTaskToDoRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/pembatalan/tasktodo/:id"}
+        render={(props) => <PermohonanTarifTaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

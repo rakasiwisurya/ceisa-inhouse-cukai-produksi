@@ -3,20 +3,15 @@ import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import ModalDaftarHtlRel from "components/ModalDaftarHtlRel";
-import ModalDaftarJenisPita from "components/ModalDaftarJenisPita";
-import ModalDaftarKota from "components/ModalDaftarKota";
-import ModalDaftarNegara from "components/ModalDaftarNegara";
-import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
 import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
-import { endpoints, pathName } from "configs/constants";
+import { baseUrlCeisaInhouse, endpoints } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
 import { download } from "utils/files";
-import { capitalize } from "utils/formatter";
+import { getTokenPayload } from "utils/jwt";
 import { requestApi } from "utils/requestApi";
 
-export default class PermohonanTarifPembatalan extends Component {
+export default class PermohonanTarifTaskToDoPembatalan extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,19 +19,17 @@ export default class PermohonanTarifPembatalan extends Component {
       subtitle2: "Pabrik/Importir",
       subtitle3: "Rincian",
       subtitle4: "Tampilan Kemasan",
-      subtitle5: "Dasar Pembatalan",
+      subtitle5: "Dokumen Pembatalan",
+      subtitle6: "Dasar Pembatalan",
 
       isDetailLoading: true,
-      isPembatalanLoading: false,
       isDownloadLoading: false,
-      isJenisBkcLoading: true,
-      isJenisKemasanMmeaLoading: true,
-      isModalDaftarNppbkcVisible: false,
-      isModalDaftarJenisPitaVisible: false,
-      isModalDaftarHtlRelVisible: false,
-      isModalDaftarKotaVisible: false,
-      isModalDaftarNegaraAsalVisible: false,
+      isSimpanTasktodoLoading: false,
       isModalDaftarPenjabatBcVisible: false,
+
+      tokenData: null,
+      kodeKantor: null,
+      namaKantor: null,
 
       idJenisBkc: null,
       namaJenisBkc: null,
@@ -100,11 +93,14 @@ export default class PermohonanTarifPembatalan extends Component {
       fileGambarEtiket: null,
       previewGambarEtiket: null,
 
-      nomorSurat: null,
-      tanggalSurat: null,
-      nipPenjabatBc: null,
-      namaPenjabatBc: null,
-      keteranganPembatalan: null,
+      kodeUploadDokumen: null,
+
+      tasktodoStatus: "SETUJU",
+      tasktodoNomorPembatalan: null,
+      tasktodoTanggalPembatalan: null,
+      tasktodoNipPenjabatBc: null,
+      tasktodoNamaPenjabatBc: null,
+      tasktodoKeterangan: null,
 
       listJenisBkc: [],
       listBahanKemasan: [
@@ -162,29 +158,49 @@ export default class PermohonanTarifPembatalan extends Component {
           namaTujuanPemasaran: "LABORATORIUM",
         },
       ],
+      listStatus: [
+        {
+          idStatus: "SETUJU",
+          namaStatus: "SETUJU",
+        },
+        {
+          idStatus: "TOLAK",
+          namaStatus: "TOLAK",
+        },
+      ],
     };
   }
 
   componentDidMount() {
-    this.getJenisBkc();
+    this.getToken();
     this.getPermohonanTarifDetail();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.idJenisProduksiHt !== this.state.idJenisProduksiHt) {
-      this.setState({
-        hjePersatuanHt: this.state.hjePerkemasanHt / this.state.isiHt,
-      });
+      this.setState({ hjePersatuanHt: this.state.isiHt / this.state.hjePerkemasanHt });
     }
   }
 
+  getToken = async () => {
+    try {
+      const tokenData = await getTokenPayload();
+      this.setState({ tokenData });
+    } catch (error) {
+      notification.error({
+        message: "Failed",
+        description: "There's something error with token data",
+      });
+    }
+  };
+
   getPermohonanTarifDetail = async () => {
-    const payload = { idTarifMerkHeader: this.props.match.params.id };
+    const payload = { idProses: this.props.match.params.id };
 
     const response = await requestApi({
       service: "produksi",
       method: "get",
-      endpoint: endpoints.permohonanTarifDetail,
+      endpoint: endpoints.permohonanTarifDetailTasktodo,
       params: payload,
       setLoading: (bool) => this.setState({ isDetailLoading: bool }),
     });
@@ -255,21 +271,10 @@ export default class PermohonanTarifPembatalan extends Component {
         sisiAtas: data.sisiAtas,
         sisiBawah: data.sisiBawah,
         kodeFoto: data.kodeFoto,
-      });
-    }
-  };
-  getJenisBkc = async () => {
-    const response = await requestApi({
-      service: "referensi",
-      method: "get",
-      endpoint: endpoints.listJenisBkc,
-      setLoading: (bool) => this.setState({ isJenisBkcLoading: bool }),
-    });
 
-    if (response) {
-      const newData = response.data.data.map((item) => item);
-      newData.splice(0, 1);
-      this.setState({ listJenisBkc: newData });
+        kodeKantor: data.kodeKantor,
+        namaKantor: data.namaKantor,
+      });
     }
   };
 
@@ -285,18 +290,7 @@ export default class PermohonanTarifPembatalan extends Component {
   handleSelectChange = (field, value) => {
     this.setState({ [field]: value });
   };
-  handleUploadFile = (e) => {
-    this.setState({
-      fileGambarEtiket: e.target.files[0],
-      previewGambarEtiket: URL.createObjectURL(e.target.files[0]),
-    });
-  };
-  handleSelectCustomChange = (field, value, option) => {
-    this.setState({
-      [`id${capitalize(field, false)}`]: value,
-      [`nama${capitalize(field, false)}`]: option.props.children,
-    });
-  };
+
   handleModalShow = (visibleState) => {
     this.setState({ [visibleState]: true });
   };
@@ -304,74 +298,13 @@ export default class PermohonanTarifPembatalan extends Component {
     this.setState({ [visibleState]: false });
   };
 
-  handleDataKota = (record) => {
-    this.setState({
-      idLokasiPerekaman: record.idKota,
-      namaLokasiPerekaman: record.namaKota,
-    });
-    this.handleModalClose("isModalDaftarKotaVisible");
-  };
-  handleDataNppbkc = (record) => {
-    this.setState({
-      idNppbkc: record.idNppbkc,
-      nppbkc: record.nppbkc,
-      namaNppbkc: record.namaNppbkc,
-      npwpNppbkc: record.npwpNppbkc,
-      alamatNppbkc: record.alamatNppbkc,
-    });
-    this.handleModalClose("isModalDaftarNppbkcVisible");
-  };
-  handleDataJenisPita = (record) => {
-    if (this.state.idJenisBkc === 3) {
-      this.setState({
-        idJenisPita: record.idJenisPita,
-        personal: record.personal,
-        idJenisProduksiHt: record.idJenisProduksi,
-        kodeJenisProduksiHt: record.kodeJenisProduksi,
-        idGolongan: record.idGolongan,
-        namaGolongan: record.namaGolongan,
-        isiHt: record.isi,
-        hjePerkemasanHt: record.hje,
-        tarifHt: record.tarif,
-      });
-    } else {
-      this.setState({
-        idJenisPita: record.idJenisPita,
-        personal: record.personal,
-        isiMmea: record.isi,
-        idGolongan: record.idGolongan,
-        namaGolongan: record.namaGolongan,
-        tarifCukaiPerLiter: record.tarif,
-        tarifCukaiPerKemasan: record.tarif * record.isi,
-        seriPita: "MMEA",
-      });
-    }
-
-    this.handleModalClose("isModalDaftarJenisPitaVisible");
-  };
-  handleDataHtlRel = (record) => {
-    this.setState({
-      idJenisHtlRelHt: record.idJenisHtlRel,
-      namaJenisHtlRelHt: record.namaJenisHtlRel,
-      satuanJenisHtlRelHt: record.satuanJenisHtlRel,
-    });
-    this.handleModalClose("isModalDaftarHtlRelVisible");
-  };
-  handleDataNegaraAsal = (record) => {
-    this.setState({
-      idNegaraAsalMmea: record.idNegara,
-      namaNegaraAsalMmea: record.namaNegara,
-    });
-    this.handleModalClose("isModalDaftarNegaraAsalVisible");
-  };
   handleDataPenjabatBc = (record) => {
     this.setState({
-      nipPenjabatBc: record.nipPenjabatBc,
-      namaPenjabatBc: record.namaPenjabatBc,
+      tasktodoNipPenjabatBc: record.nipPenjabatBc,
+      tasktodoNamaPenjabatBc: record.namaPenjabatBc,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
-
   handleDownload = async (kodeUpload) => {
     const response = await requestApi({
       service: "produksi",
@@ -384,33 +317,40 @@ export default class PermohonanTarifPembatalan extends Component {
     if (response) download(response.data, "etiket");
   };
 
-  handlePembatalan = async () => {
-    const { nomorSurat, tanggalSurat, nipPenjabatBc, namaPenjabatBc, keteranganPembatalan } =
-      this.state;
+  handleSimpanTasktodo = async () => {
+    const {
+      tasktodoStatus,
+      tasktodoNomorPembatalan,
+      tasktodoTanggalPembatalan,
+      tasktodoNipPenjabatBc,
+      tasktodoNamaPenjabatBc,
+      tasktodoKeterangan,
+    } = this.state;
 
     const payload = {
-      idTarifMerkheader: this.props.match.params.id,
-      keterangan: keteranganPembatalan,
-      namaPegawai: namaPenjabatBc,
-      nip: nipPenjabatBc,
-      nomorSurat,
-      tanggalSurat: moment(tanggalSurat, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      idProses: this.props.match.params.id,
+      status: tasktodoStatus,
+      nomorPembatalan: tasktodoNomorPembatalan,
+      tanggalPembatalan: moment(tasktodoTanggalPembatalan).format("YYYY-MM-DD"),
+      nipPenjabatBc: tasktodoNipPenjabatBc,
+      namaPenjabatBc: tasktodoNamaPenjabatBc,
+      keterangan: tasktodoKeterangan,
     };
 
     const response = await requestApi({
       service: "produksi",
       method: "post",
-      endpoint: endpoints.permohonanTarifPembatalan,
+      endpoint: endpoints.permohonanTarifPembatalanTasktodo,
       body: payload,
-      setLoading: (bool) => this.setState({ isSimpanPembatalanLoading: bool }),
+      setLoading: (bool) => this.setState({ isSimpanTasktodoLoading: bool }),
     });
 
     if (response) {
-      notification.success({
-        message: "Success",
-        description: response.data.message,
-      });
-      this.props.history.push(`${pathName}/laporan-ck4`);
+      notification.success({ message: "Success", description: response.data.message });
+      const timeout = setTimeout(() => {
+        window.location.href = `${baseUrlCeisaInhouse}/tasktodo`;
+        clearTimeout(timeout);
+      }, 1000);
     }
   };
 
@@ -419,7 +359,7 @@ export default class PermohonanTarifPembatalan extends Component {
 
     return (
       <>
-        <Container menuName="Tarif Cukai" contentName="Permohonan Tarif Pembatalan">
+        <Container menuName="Task To Do" contentName="Permohonan Tarif Task To Do Pembatalan">
           <Card title={this.state.subtitle1} style={{ marginBottom: 30 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
@@ -429,66 +369,12 @@ export default class PermohonanTarifPembatalan extends Component {
                 <Select
                   id="jenisBkc"
                   value={this.state.idJenisBkc}
-                  onChange={(value, option) => {
-                    this.handleSelectCustomChange("jenisBkc", value, option);
-                    this.setState({
-                      idJenisPita: null,
-
-                      idMerkHt: null,
-                      merkHt: null,
-                      idJenisProduksiHt: null,
-                      kodeJenisProduksiHt: null,
-                      idGolongan: null,
-                      namaGolongan: null,
-                      idJenisHtlRelHt: null,
-                      namaJenisHtlRelHt: null,
-                      satuanJenisHtlRelHt: null,
-                      isiHt: null,
-                      beratHt: null,
-                      hjePerkemasanHt: null,
-                      hjePersatuanHt: null,
-                      tarifHt: null,
-                      bahanKemasanHt: null,
-                      idAsalProdukHt: null,
-                      namaAsalProdukHt: null,
-                      tujuanPemasaranHt: null,
-
-                      idMerkMmea: null,
-                      merkMmea: null,
-                      idNegaraAsalMmea: null,
-                      namaNegaraAsalMmea: null,
-                      isiMmea: null,
-                      tarifCukaiPerLiter: null,
-                      tarifCukaiPerKemasan: null,
-                      idAsalProdukMmea: null,
-                      namaAsalProdukMmea: null,
-
-                      personal: null,
-                      seriPita: null,
-
-                      nomorSuratLisensi: null,
-                      tanggalSuratLisensi: null,
-
-                      sisiDepan: null,
-                      sisiBelakang: null,
-                      sisiKiri: null,
-                      sisiKanan: null,
-                      sisiAtas: null,
-                      sisiBawah: null,
-                      fileGambarEtiket: null,
-                      previewGambarEtiket: null,
-                    });
-                  }}
                   style={{ width: "100%" }}
-                  loading={this.state.isJenisBkcLoading}
                   disabled
                 >
-                  {this.state.listJenisBkc.length > 0 &&
-                    this.state.listJenisBkc.map((item, index) => (
-                      <Select.Option key={`jenisBkc-${index}`} value={item.idJenisBkc}>
-                        {item.namaJenisBkc}
-                      </Select.Option>
-                    ))}
+                  <Select.Option value={this.state.idJenisBkc}>
+                    {this.state.namaJenisBkc}
+                  </Select.Option>
                 </Select>
               </Col>
 
@@ -496,12 +382,7 @@ export default class PermohonanTarifPembatalan extends Component {
                 <div style={{ marginBottom: 10 }}>
                   <FormLabel>No. Permohonan</FormLabel>
                 </div>
-                <Input
-                  id="nomorPermohonan"
-                  onChange={this.handleInputChange}
-                  value={this.state.nomorPermohonan}
-                  disabled
-                />
+                <Input id="nomorPermohonan" value={this.state.nomorPermohonan} disabled />
               </Col>
 
               <Col span={12}>
@@ -511,7 +392,6 @@ export default class PermohonanTarifPembatalan extends Component {
                 <DatePicker
                   id="tanggalPermohonan"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("tanggalPermohonan", date)}
                   value={this.state.tanggalPermohonan}
                   style={{ width: "100%" }}
                   disabled
@@ -524,12 +404,6 @@ export default class PermohonanTarifPembatalan extends Component {
                 </div>
                 <div style={{ display: "flex", gap: 10 }}>
                   <Input id="lokasiPerekaman" value={this.state.namaLokasiPerekaman} disabled />
-                  <Button
-                    type="default"
-                    icon="menu"
-                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                    disabled
-                  />
                 </div>
               </Col>
 
@@ -540,7 +414,6 @@ export default class PermohonanTarifPembatalan extends Component {
                 <DatePicker
                   id="tanggalKep"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("tanggalKep", date)}
                   value={this.state.tanggalKep}
                   style={{ width: "100%" }}
                   disabled
@@ -554,7 +427,6 @@ export default class PermohonanTarifPembatalan extends Component {
                 <DatePicker
                   id="awalBerlaku"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("awalBerlaku", date)}
                   value={this.state.awalBerlaku}
                   style={{ width: "100%" }}
                   disabled
@@ -571,13 +443,6 @@ export default class PermohonanTarifPembatalan extends Component {
                 </div>
                 <div style={{ display: "flex", gap: 10 }}>
                   <Input id="nppbkc" value={this.state.nppbkc} disabled />
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarNppbkcVisible")}
-                    disabled
-                  >
-                    Cari
-                  </Button>
                   <Input id="namaPerusahaan" value={this.state.namaNppbkc} disabled />
                 </div>
               </Col>
@@ -617,14 +482,6 @@ export default class PermohonanTarifPembatalan extends Component {
                       .join("_")}`}
                     disabled
                   />
-
-                  <Button
-                    type="primary"
-                    onClick={() => this.handleModalShow("isModalDaftarJenisPitaVisible")}
-                    disabled
-                  >
-                    Cari
-                  </Button>
                 </div>
               </Col>
 
@@ -649,12 +506,7 @@ export default class PermohonanTarifPembatalan extends Component {
                       disabled
                     />
                   ) : (
-                    <Input
-                      id="merkHt"
-                      onChange={this.handleInputChange}
-                      value={this.state.merkHt}
-                      disabled
-                    />
+                    <Input id="merkHt" value={this.state.merkHt} disabled />
                   )}
                 </Col>
               )}
@@ -678,13 +530,6 @@ export default class PermohonanTarifPembatalan extends Component {
                       {(this.state.idJenisProduksiHt === 2 ||
                         this.state.idJenisProduksiHt === 5) && (
                         <>
-                          <Button
-                            type="primary"
-                            onClick={() => this.handleModalShow("isModalDaftarHtlRelVisible")}
-                            disabled
-                          >
-                            {this.state.kodeJenisProduksiHt}
-                          </Button>
                           <Input
                             id="namaJenisHtlRelHt"
                             value={this.state.namaJenisHtlRelHt}
@@ -773,11 +618,6 @@ export default class PermohonanTarifPembatalan extends Component {
                     </div>
                     <Select
                       id="bahanKemasanHt"
-                      onChange={(value) => {
-                        const spiltValue = value.split("-");
-                        this.handleSelectChange("bahanKemasanHt", spiltValue[0]);
-                        this.handleSelectChange("seriPita", spiltValue[1]);
-                      }}
                       value={this.state.bahanKemasanHt}
                       style={{ width: "100%" }}
                       disabled
@@ -785,7 +625,7 @@ export default class PermohonanTarifPembatalan extends Component {
                       {this.state.listBahanKemasan.length > 0 &&
                         this.state.listBahanKemasan.map((item, index) => (
                           <Select.Option
-                            key={`bahanKemasan-${index}`}
+                            key={`bahan-kemasan-${index}`}
                             value={`${item.idBahanKemasan}-${item.seriPita}`}
                           >
                             {item.namaBahanKemasan}
@@ -800,16 +640,16 @@ export default class PermohonanTarifPembatalan extends Component {
                     </div>
                     <Select
                       id="asalProdukHt"
-                      onChange={(value, option) => {
-                        this.handleSelectCustomChange("asalProdukHt", value, option);
-                      }}
                       value={this.state.idAsalProdukHt}
                       style={{ width: "100%" }}
                       disabled
                     >
                       {this.state.listAsalProdukHt.length > 0 &&
                         this.state.listAsalProdukHt.map((item, index) => (
-                          <Select.Option key={`asalProdukHt-${index}`} value={item.idAsalProdukHt}>
+                          <Select.Option
+                            key={`asal-produk-ht-${index}`}
+                            value={item.idAsalProdukHt}
+                          >
                             {item.namaAsalProdukHt}
                           </Select.Option>
                         ))}
@@ -822,7 +662,6 @@ export default class PermohonanTarifPembatalan extends Component {
                     </div>
                     <Select
                       id="tujuanPemasaranHt"
-                      onChange={(value) => this.handleSelectChange("tujuanPemasaranHt", value)}
                       value={this.state.tujuanPemasaranHt}
                       style={{ width: "100%" }}
                       disabled
@@ -847,7 +686,6 @@ export default class PermohonanTarifPembatalan extends Component {
                         </div>
                         <Input
                           id="nomorSuratLisensi"
-                          onChange={this.handleInputChange}
                           value={this.state.nomorSuratLisensi}
                           disabled
                         />
@@ -860,9 +698,6 @@ export default class PermohonanTarifPembatalan extends Component {
                         <DatePicker
                           id="tanggalSuratLisensi"
                           format="DD-MM-YYYY"
-                          onChange={(date) =>
-                            this.handleDatepickerChange("tanggalSuratLisensi", date)
-                          }
                           value={this.state.tanggalSuratLisensi}
                           style={{ width: "100%" }}
                           disabled
@@ -879,12 +714,7 @@ export default class PermohonanTarifPembatalan extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Merk MMEA</FormLabel>
                     </div>
-                    <Input
-                      id="merkMmea"
-                      onChange={this.handleInputChange}
-                      value={this.state.merkMmea}
-                      disabled
-                    />
+                    <Input id="merkMmea" value={this.state.merkMmea} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -893,9 +723,6 @@ export default class PermohonanTarifPembatalan extends Component {
                     </div>
                     <Select
                       id="asalProdukMmea"
-                      onChange={(value, option) => {
-                        this.handleSelectCustomChange("asalProdukMmea", value, option);
-                      }}
                       value={this.state.idAsalProdukMmea}
                       style={{ width: "100%" }}
                       disabled
@@ -903,7 +730,7 @@ export default class PermohonanTarifPembatalan extends Component {
                       {this.state.listAsalProdukMmea.length > 0 &&
                         this.state.listAsalProdukMmea.map((item, index) => (
                           <Select.Option
-                            key={`asalProdukMmea-${index}`}
+                            key={`asal-produk-mmea-${index}`}
                             value={item.idAsalProdukMmea}
                           >
                             {item.namaAsalProdukMmea}
@@ -921,12 +748,6 @@ export default class PermohonanTarifPembatalan extends Component {
                         <Input
                           id="namaNegaraAsalMmea"
                           value={this.state.namaNegaraAsalMmea}
-                          disabled
-                        />
-                        <Button
-                          type="default"
-                          icon="menu"
-                          onClick={() => this.handleModalShow("isModalDaftarNegaraAsalVisible")}
                           disabled
                         />
                       </div>
@@ -952,12 +773,7 @@ export default class PermohonanTarifPembatalan extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Golongan</FormLabel>
                     </div>
-                    <Input
-                      id="namaGolongan"
-                      onChange={this.handleInputChange}
-                      value={this.state.namaGolongan}
-                      disabled
-                    />
+                    <Input id="namaGolongan" value={this.state.namaGolongan} disabled />
                   </Col>
 
                   <Col span={12}>
@@ -1004,12 +820,7 @@ export default class PermohonanTarifPembatalan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Sisi Depan</FormLabel>
                         </div>
-                        <Input.TextArea
-                          id="sisiDepan"
-                          onChange={this.handleInputChange}
-                          value={this.state.sisiDepan}
-                          disabled
-                        />
+                        <Input.TextArea id="sisiDepan" value={this.state.sisiDepan} disabled />
                       </Col>
 
                       <Col span={24}>
@@ -1018,7 +829,6 @@ export default class PermohonanTarifPembatalan extends Component {
                         </div>
                         <Input.TextArea
                           id="sisiBelakang"
-                          onChange={this.handleInputChange}
                           value={this.state.sisiBelakang}
                           disabled
                         />
@@ -1028,48 +838,28 @@ export default class PermohonanTarifPembatalan extends Component {
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Sisi Kiri</FormLabel>
                         </div>
-                        <Input.TextArea
-                          id="sisiKiri"
-                          onChange={this.handleInputChange}
-                          value={this.state.sisiKiri}
-                          disabled
-                        />
+                        <Input.TextArea id="sisiKiri" value={this.state.sisiKiri} disabled />
                       </Col>
 
                       <Col span={24}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Sisi Kanan</FormLabel>
                         </div>
-                        <Input.TextArea
-                          id="sisiKanan"
-                          onChange={this.handleInputChange}
-                          value={this.state.sisiKanan}
-                          disabled
-                        />
+                        <Input.TextArea id="sisiKanan" value={this.state.sisiKanan} disabled />
                       </Col>
 
                       <Col span={24}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Sisi Atas</FormLabel>
                         </div>
-                        <Input.TextArea
-                          id="sisiAtas"
-                          onChange={this.handleInputChange}
-                          value={this.state.sisiAtas}
-                          disabled
-                        />
+                        <Input.TextArea id="sisiAtas" value={this.state.sisiAtas} disabled />
                       </Col>
 
                       <Col span={24}>
                         <div style={{ marginBottom: 10 }}>
                           <FormLabel>Sisi Bawah</FormLabel>
                         </div>
-                        <Input.TextArea
-                          id="sisiBawah"
-                          onChange={this.handleInputChange}
-                          value={this.state.sisiBawah}
-                          disabled
-                        />
+                        <Input.TextArea id="sisiBawah" value={this.state.sisiBawah} disabled />
                       </Col>
                     </Row>
                   </Col>
@@ -1078,17 +868,14 @@ export default class PermohonanTarifPembatalan extends Component {
                     <div style={{ marginBottom: 10 }}>
                       <FormLabel>Etiket</FormLabel>
                     </div>
-
-                    <div style={{ marginBottom: 20 }}>
-                      <Button
-                        type="primary"
-                        loading={this.state.isDownloadLoading}
-                        onClick={() => this.handleDownload("kodeFoto")}
-                        disabled={!this.state.kodeFoto}
-                      >
-                        Download
-                      </Button>
-                    </div>
+                    <Button
+                      type="primary"
+                      loading={this.state.isDownloadLoading}
+                      onClick={() => this.handleDownload("kodeFoto")}
+                      disabled={!this.state.kodeFoto}
+                    >
+                      Download
+                    </Button>
                   </Col>
                 </Row>
               </Card>
@@ -1098,25 +885,64 @@ export default class PermohonanTarifPembatalan extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Surat</FormLabel>
+                  <FormLabel>Dokumen Pembatalan</FormLabel>
+                </div>
+                <Button
+                  type="primary"
+                  loading={this.state.isDownloadLoading}
+                  onClick={() => this.handleDownload("kodeUploadDokumen")}
+                  disabled={!this.state.kodeUploadDokumen}
+                >
+                  Download
+                </Button>
+              </Col>
+            </Row>
+          </Card>
+
+          <Card title={this.state.subtitle6} style={{ marginBottom: 30 }}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Persetujuan</FormLabel>
+                </div>
+                <Select
+                  id="tasktodoStatus"
+                  onChange={(value) => this.handleSelectChange("tasktodoStatus", value)}
+                  value={this.state.tasktodoStatus}
+                  style={{ width: "100%" }}
+                >
+                  {this.state.listStatus.length > 0 &&
+                    this.state.listStatus.map((item, index) => (
+                      <Select.Option key={`tasktodoStatus-${index}`} value={item.idStatus}>
+                        {item.namaStatus}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Nomor Pembatalan</FormLabel>
                 </div>
                 <Input
-                  id="nomorSurat"
+                  id="tasktodoNomorPembatalan"
                   onChange={this.handleInputChange}
-                  value={this.state.nomorSurat}
+                  value={this.state.tasktodoNomorPembatalan}
                 />
               </Col>
 
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Surat</FormLabel>
+                  <FormLabel>Tanggal Pembatalan</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalSurat"
+                  id="tasktodoTanggalPembatalan"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("tanggalSurat", date)}
+                  value={this.state.tasktodoTanggalPembatalan}
                   style={{ width: "100%" }}
-                  value={this.state.tanggalSurat}
+                  onChange={(date) =>
+                    this.handleDatepickerChange("tasktodoTanggalPembatalan", date)
+                  }
                 />
               </Col>
 
@@ -1126,9 +952,9 @@ export default class PermohonanTarifPembatalan extends Component {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Input
-                    id="nipPenjabatBc"
+                    id="tasktodoNipPenjabatBc"
                     onChange={this.handleInputChange}
-                    value={this.state.nipPenjabatBc}
+                    value={this.state.tasktodoNipPenjabatBc}
                     style={{ flex: 1 }}
                     disabled
                   />
@@ -1139,9 +965,9 @@ export default class PermohonanTarifPembatalan extends Component {
                     Cari
                   </Button>
                   <Input
-                    id="namaPenjabatBc"
+                    id="tasktodoNamaPenjabatBc"
                     onChange={this.handleInputChange}
-                    value={this.state.namaPenjabatBc}
+                    value={this.state.tasktodoNamaPenjabatBc}
                     style={{ flex: 2 }}
                     disabled
                   />
@@ -1150,12 +976,16 @@ export default class PermohonanTarifPembatalan extends Component {
 
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Keterangan</FormLabel>
+                  <FormLabel>
+                    {this.state.tasktodoStatus === "SETUJU" ? "Keterangan" : "Alasan"}
+                  </FormLabel>
                 </div>
                 <Input.TextArea
-                  id="keteranganPembatalan"
+                  id="tasktodoKeterangan"
                   onChange={this.handleInputChange}
-                  value={this.state.keteranganPembatalan}
+                  value={this.state.tasktodoKeterangan}
+                  rows={4}
+                  style={{ width: "100%" }}
                 />
               </Col>
             </Row>
@@ -1168,51 +998,22 @@ export default class PermohonanTarifPembatalan extends Component {
               </ButtonCustom>
             </Col>
 
-            <Col span={4}>
-              <Button
-                type="danger"
-                loading={this.state.isPembatalanLoading}
-                onClick={this.handlePembatalan}
-                block
-              >
-                Simpan Pembatalan
-              </Button>
-            </Col>
+            {this.state.tokenData?.kode_kantor === this.state.kodeKantor &&
+              this.state.tokenData?.role ===
+                "a565468f-bbfa-43ab-b6b1-7c3c33631b33,a565468f-bbfa-43ab-b6b1-7c3c33631b33" && (
+                <Col span={4}>
+                  <Button
+                    type="primary"
+                    loading={this.state.isSimpanTasktodoLoading}
+                    onClick={this.handleSimpanTasktodo}
+                    block
+                  >
+                    Simpan
+                  </Button>
+                </Col>
+              )}
           </Row>
         </Container>
-
-        <ModalDaftarKota
-          isVisible={this.state.isModalDaftarKotaVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarKotaVisible")}
-          onDataDoubleClick={this.handleDataKota}
-        />
-
-        <ModalDaftarNPPBKC
-          isVisible={this.state.isModalDaftarNppbkcVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
-          onDataDoubleClick={this.handleDataNppbkc}
-          idJenisBkc={this.state.idJenisBkc}
-        />
-
-        <ModalDaftarJenisPita
-          isVisible={this.state.isModalDaftarJenisPitaVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarJenisPitaVisible")}
-          onDataDoubleClick={this.handleDataJenisPita}
-          idJenisBkc={this.state.idJenisBkc}
-        />
-
-        <ModalDaftarHtlRel
-          id={this.state.idJenisProduksiHt}
-          isVisible={this.state.isModalDaftarHtlRelVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarHtlRelVisible")}
-          onDataDoubleClick={this.handleDataHtlRel}
-        />
-
-        <ModalDaftarNegara
-          isVisible={this.state.isModalDaftarNegaraAsalVisible}
-          onCancel={() => this.handleModalClose("isModalDaftarNegaraAsalVisible")}
-          onDataDoubleClick={this.handleDataNegaraAsal}
-        />
 
         <ModalDaftarPenjabatBc
           isVisible={this.state.isModalDaftarPenjabatBcVisible}

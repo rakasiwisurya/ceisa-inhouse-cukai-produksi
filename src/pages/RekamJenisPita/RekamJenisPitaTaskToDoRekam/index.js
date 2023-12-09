@@ -44,7 +44,7 @@ export default class RekamJenisPitaTaskToDoRekam extends Component {
       namaSeriPita: null,
       tahunPita: String(new Date().getFullYear()),
       tasktodoStatus: "SETUJU",
-      komentar: null,
+      tasktodoKomentar: null,
       listJenisProduksiBkc: [],
       listSeriPita: [],
       listStatus: [
@@ -226,7 +226,7 @@ export default class RekamJenisPitaTaskToDoRekam extends Component {
     const payload = {
       idProses: this.props.match.params.id,
       status: this.state.tasktodoStatus,
-      komentar: this.state.komentar,
+      komentar: this.state.tasktodoKomentar,
     };
 
     const response = await requestApi({
@@ -418,8 +418,8 @@ export default class RekamJenisPitaTaskToDoRekam extends Component {
                   <FormLabel>Komentar</FormLabel>
                 </div>
                 <Input.TextArea
-                  id="komentar"
-                  value={this.state.komentar}
+                  id="tasktodoKomentar"
+                  value={this.state.tasktodoKomentar}
                   rows={4}
                   onChange={this.handleInputChange}
                   style={{ width: "100%" }}

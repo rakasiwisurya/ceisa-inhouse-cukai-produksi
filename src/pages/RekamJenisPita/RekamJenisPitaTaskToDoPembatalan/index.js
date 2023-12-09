@@ -53,11 +53,11 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
       kodeUploadDokumen: null,
 
       tasktodoStatus: "SETUJU",
-      nomorPembatalan: null,
-      tanggalPembatalan: null,
-      nipPenjabatBc: null,
-      namaPenjabatBc: null,
-      keterangan: null,
+      tasktodoNomorPembatalan: null,
+      tasktodoTanggalPembatalan: null,
+      tasktodoNipPenjabatBc: null,
+      tasktodoNamaPenjabatBc: null,
+      tasktodoKeterangan: null,
 
       listJenisProduksiBkc: [],
       listSeriPita: [],
@@ -256,8 +256,8 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
 
   handleDataPenjabatBc = (record) => {
     this.setState({
-      nipPenjabatBc: record.nipPenjabatBc,
-      namaPenjabatBc: record.namaPenjabatBc,
+      tasktodoNipPenjabatBc: record.nipPenjabatBc,
+      tasktodoNamaPenjabatBc: record.namaPenjabatBc,
     });
     this.handleModalClose("isModalDaftarPenjabatBcVisible");
   };
@@ -276,21 +276,21 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
   handleSimpanTaskToDo = async () => {
     const {
       tasktodoStatus,
-      nomorPembatalan,
-      tanggalPembatalan,
-      nipPenjabatBc,
-      namaPenjabatBc,
-      keterangan,
+      tasktodoNomorPembatalan,
+      tasktodoTanggalPembatalan,
+      tasktodoNipPenjabatBc,
+      tasktodoNamaPenjabatBc,
+      tasktodoKeterangan,
     } = this.state;
 
     const payload = {
       idProses: this.props.match.params.id,
       status: tasktodoStatus,
-      nomorPembatalan: nomorPembatalan,
-      tanggalPembatalan: tanggalPembatalan,
-      nipPenjabatBc: nipPenjabatBc,
-      namaPenjabatBc: namaPenjabatBc,
-      keterangan: keterangan,
+      nomorPembatalan: tasktodoNomorPembatalan,
+      tanggalPembatalan: moment(tasktodoTanggalPembatalan).format("YYYY-MM-DD"),
+      nipPenjabatBc: tasktodoNipPenjabatBc,
+      namaPenjabatBc: tasktodoNamaPenjabatBc,
+      keterangan: tasktodoKeterangan,
     };
 
     const response = await requestApi({
@@ -495,9 +495,9 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
                   <FormLabel>Nomor Pembatalan</FormLabel>
                 </div>
                 <Input
-                  id="nomorPembatalan"
+                  id="tasktodoNomorPembatalan"
                   onChange={this.handleInputChange}
-                  value={this.state.nomorPembatalan}
+                  value={this.state.tasktodoNomorPembatalan}
                 />
               </Col>
 
@@ -506,11 +506,13 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
                   <FormLabel>Tanggal Pembatalan</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalPembatalan"
+                  id="tasktodoTanggalPembatalan"
                   format="DD-MM-YYYY"
-                  value={this.state.tanggalPembatalan}
+                  value={this.state.tasktodoTanggalPembatalan}
                   style={{ width: "100%" }}
-                  onChange={(date) => this.handleDatepickerChange("tanggalPembatalan", date)}
+                  onChange={(date) =>
+                    this.handleDatepickerChange("tasktodoTanggalPembatalan", date)
+                  }
                 />
               </Col>
 
@@ -520,9 +522,9 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Input
-                    id="nipPenjabatBc"
+                    id="tasktodoNipPenjabatBc"
                     onChange={this.handleInputChange}
-                    value={this.state.nipPenjabatBc}
+                    value={this.state.tasktodoNipPenjabatBc}
                     style={{ flex: 1 }}
                     disabled
                   />
@@ -533,9 +535,9 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
                     Cari
                   </Button>
                   <Input
-                    id="namaPenjabatBc"
+                    id="tasktodoNamaPenjabatBc"
                     onChange={this.handleInputChange}
-                    value={this.state.namaPenjabatBc}
+                    value={this.state.tasktodoNamaPenjabatBc}
                     style={{ flex: 2 }}
                     disabled
                   />
@@ -549,9 +551,9 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
                   </FormLabel>
                 </div>
                 <Input.TextArea
-                  id="keterangan"
+                  id="tasktodoKeterangan"
                   onChange={this.handleInputChange}
-                  value={this.state.keterangan}
+                  value={this.state.tasktodoKeterangan}
                   rows={4}
                   style={{ width: "100%" }}
                 />
