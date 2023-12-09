@@ -38,8 +38,7 @@ export default class CK4MMEAPembatalan extends Component {
       subtitle1: "Pemrakarsa",
       subtitle2: "Pemberitahuan",
       subtitle3: "Rincian",
-      subtitle4: "Keterangan Lain",
-      subtitle5: "Dasar Pembatalan",
+      subtitle4: "Dasar Pembatalan",
 
       isEditRincian: false,
       editIndexRincian: null,
@@ -99,11 +98,12 @@ export default class CK4MMEAPembatalan extends Component {
       namaKota: null,
       namaPengusaha: null,
 
-      nomorSurat: null,
-      tanggalSurat: null,
+      nomorPembatalan: null,
+      tanggalPembatalan: null,
       nipPenjabatBc: null,
       namaPenjabatBc: null,
-      keteranganPembatalan: null,
+      keterangan: null,
+      filePembatalan: null,
 
       uraianRincianFile: [],
 
@@ -390,6 +390,9 @@ export default class CK4MMEAPembatalan extends Component {
   handleModalClose = (visibleState) => {
     this.setState({ [visibleState]: false });
   };
+  handleUploadPembatalan = (e) => {
+    this.setState({ filePembatalan: e.target.files[0] });
+  };
 
   handleDataNppbkc = (record) => {
     this.setState({
@@ -624,31 +627,28 @@ export default class CK4MMEAPembatalan extends Component {
   };
   handleSimpanPembatalan = async () => {
     const {
-      namaKota,
-      namaPengusaha,
-      nomorSurat,
-      tanggalSurat,
+      nomorPembatalan,
+      tanggalPembatalan,
       nipPenjabatBc,
       namaPenjabatBc,
-      keteranganPembatalan,
+      keterangan,
+      filePembatalan,
     } = this.state;
 
-    const payload = {
-      idCk4Header: this.props.match.params.id,
-      namaKota,
-      namaPengusaha,
-      nomorSurat,
-      tanggalSurat,
-      nip: nipPenjabatBc,
-      namaPegawai: namaPenjabatBc,
-      keterangan: keteranganPembatalan,
-    };
+    const formData = new FormData();
+    formData.set("idCk4Header", this.props.match.params.id);
+    formData.set("nomorSurat", nomorPembatalan);
+    formData.set("tanggalSurat", moment(tanggalPembatalan).format("YYYY-MM-DD"));
+    formData.set("nip", nipPenjabatBc);
+    formData.set("namaPegawai", namaPenjabatBc);
+    formData.set("keterangan", keterangan);
+    if (filePembatalan) formData.set("filePembatalan", filePembatalan);
 
     const response = await requestApi({
       service: "produksi",
       method: "post",
       endpoint: endpoints.ck4Pembatalan,
-      body: payload,
+      body: formData,
       setLoading: (bool) => this.setState({ isSimpanPembatalanLoading: bool }),
     });
 
@@ -1119,54 +1119,25 @@ export default class CK4MMEAPembatalan extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Dibuat di Kota/Kabupaten</FormLabel>
-                </div>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <Input id="namaKota" value={this.state.namaKota} disabled />
-                  <Button
-                    type="default"
-                    icon="menu"
-                    onClick={() => this.handleModalShow("isModalDaftarKotaVisible")}
-                  />
-                </div>
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nama Pengusaha</FormLabel>
+                  <FormLabel>Nomor Pembatalan</FormLabel>
                 </div>
                 <Input
-                  id="namaPengusaha"
+                  id="nomorPembatalan"
+                  value={this.state.nomorPembatalan}
                   onChange={this.handleInputChange}
-                  value={this.state.namaPengusaha}
-                />
-              </Col>
-            </Row>
-          </Card>
-
-          <Card title={this.state.subtitle5} style={{ marginBottom: 30 }}>
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Surat</FormLabel>
-                </div>
-                <Input
-                  id="nomorSurat"
-                  onChange={this.handleInputChange}
-                  value={this.state.nomorSurat}
                 />
               </Col>
 
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Surat</FormLabel>
+                  <FormLabel>Tanggal Pembatalan</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalSurat"
+                  id="tanggalPembatalan"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("tanggalSurat", date)}
+                  value={this.state.tanggalPembatalan}
+                  onChange={(date) => this.handleDatepickerChange("tanggalPembatalan", date)}
                   style={{ width: "100%" }}
-                  value={this.state.tanggalSurat}
                 />
               </Col>
 
@@ -1203,10 +1174,20 @@ export default class CK4MMEAPembatalan extends Component {
                   <FormLabel>Keterangan</FormLabel>
                 </div>
                 <Input.TextArea
-                  id="keteranganPembatalan"
+                  id="keterangan"
                   onChange={this.handleInputChange}
-                  value={this.state.keteranganPembatalan}
+                  value={this.state.keterangan}
+                  rows={4}
+                  style={{ width: "100%" }}
                 />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Upload File</FormLabel>
+                </div>
+
+                <input type="file" onChange={this.handleUploadPembatalan} />
               </Col>
             </Row>
           </Card>

@@ -100,11 +100,12 @@ export default class PermohonanTarifPembatalan extends Component {
       fileGambarEtiket: null,
       previewGambarEtiket: null,
 
-      nomorSurat: null,
-      tanggalSurat: null,
+      nomorPembatalan: null,
+      tanggalPembatalan: null,
       nipPenjabatBc: null,
       namaPenjabatBc: null,
-      keteranganPembatalan: null,
+      keterangan: null,
+      filePembatalan: null,
 
       listJenisBkc: [],
       listBahanKemasan: [
@@ -303,6 +304,9 @@ export default class PermohonanTarifPembatalan extends Component {
   handleModalClose = (visibleState) => {
     this.setState({ [visibleState]: false });
   };
+  handleUploadPembatalan = (e) => {
+    this.setState({ filePembatalan: e.target.files[0] });
+  };
 
   handleDataKota = (record) => {
     this.setState({
@@ -385,23 +389,29 @@ export default class PermohonanTarifPembatalan extends Component {
   };
 
   handlePembatalan = async () => {
-    const { nomorSurat, tanggalSurat, nipPenjabatBc, namaPenjabatBc, keteranganPembatalan } =
-      this.state;
+    const {
+      nomorPembatalan,
+      tanggalPembatalan,
+      nipPenjabatBc,
+      namaPenjabatBc,
+      keterangan,
+      filePembatalan,
+    } = this.state;
 
-    const payload = {
-      idTarifMerkheader: this.props.match.params.id,
-      keterangan: keteranganPembatalan,
-      namaPegawai: namaPenjabatBc,
-      nip: nipPenjabatBc,
-      nomorSurat,
-      tanggalSurat: moment(tanggalSurat, "DD-MM-YYYY").format("YYYY-MM-DD"),
-    };
+    const formData = new FormData();
+    formData.set("idTarifMerkheader", this.props.match.params.id);
+    formData.set("nomorPembatalan", nomorPembatalan);
+    formData.set("tanggalPembatalan", moment(tanggalPembatalan).format("YYYY-MM-DD"));
+    formData.set("nip", nipPenjabatBc);
+    formData.set("namaPemeriksa", namaPenjabatBc);
+    formData.set("keterangan", keterangan);
+    if (filePembatalan) formData.set("filePembatalan", filePembatalan);
 
     const response = await requestApi({
       service: "produksi",
       method: "post",
       endpoint: endpoints.permohonanTarifPembatalan,
-      body: payload,
+      body: formData,
       setLoading: (bool) => this.setState({ isSimpanPembatalanLoading: bool }),
     });
 
@@ -1098,25 +1108,25 @@ export default class PermohonanTarifPembatalan extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nomor Surat</FormLabel>
+                  <FormLabel>Nomor Pembatalan</FormLabel>
                 </div>
                 <Input
-                  id="nomorSurat"
+                  id="nomorPembatalan"
+                  value={this.state.nomorPembatalan}
                   onChange={this.handleInputChange}
-                  value={this.state.nomorSurat}
                 />
               </Col>
 
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Tanggal Surat</FormLabel>
+                  <FormLabel>Tanggal Pembatalan</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalSurat"
+                  id="tanggalPembatalan"
                   format="DD-MM-YYYY"
-                  onChange={(date) => this.handleDatepickerChange("tanggalSurat", date)}
+                  value={this.state.tanggalPembatalan}
+                  onChange={(date) => this.handleDatepickerChange("tanggalPembatalan", date)}
                   style={{ width: "100%" }}
-                  value={this.state.tanggalSurat}
                 />
               </Col>
 
@@ -1153,10 +1163,20 @@ export default class PermohonanTarifPembatalan extends Component {
                   <FormLabel>Keterangan</FormLabel>
                 </div>
                 <Input.TextArea
-                  id="keteranganPembatalan"
+                  id="keterangan"
                   onChange={this.handleInputChange}
-                  value={this.state.keteranganPembatalan}
+                  value={this.state.keterangan}
+                  rows={4}
+                  style={{ width: "100%" }}
                 />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Upload File</FormLabel>
+                </div>
+
+                <input type="file" onChange={this.handleUploadPembatalan} />
               </Col>
             </Row>
           </Card>

@@ -4,6 +4,7 @@ import Container from "components/Container";
 import FormLabel from "components/FormLabel";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
 import ModalDaftarNPPBKC from "components/ModalDaftarNppbkc";
+import ModalDaftarPenjabatBc from "components/ModalDaftarPenjabatBc";
 import { endpoints, pathName } from "configs/constants";
 import moment from "moment";
 import React, { Component } from "react";
@@ -24,6 +25,7 @@ export default class RekamJenisPitaPembatalan extends Component {
       isTarifLoading: false,
       isWarnaLoading: false,
       isModalDaftarNppbkcVisible: false,
+      isModalDaftarPenjabatBcVisible: false,
 
       idNppbkc: null,
       nppbkc: null,
@@ -43,9 +45,11 @@ export default class RekamJenisPitaPembatalan extends Component {
       namaSeriPita: null,
       tahunPita: String(new Date().getFullYear()),
 
-      namaPemeriksa: null,
       nomorPembatalan: null,
       tanggalPembatalan: null,
+      nipPenjabatBc: null,
+      namaPenjabatBc: null,
+      keterangan: null,
       filePembatalan: null,
 
       listJenisProduksiBkc: [],
@@ -228,19 +232,36 @@ export default class RekamJenisPitaPembatalan extends Component {
     });
     this.handleModalClose("isModalDaftarNppbkcVisible");
   };
+  handleDataPenjabatBc = (record) => {
+    this.setState({
+      nipPenjabatBc: record.nipPenjabatBc,
+      namaPenjabatBc: record.namaPenjabatBc,
+    });
+    this.handleModalClose("isModalDaftarPenjabatBcVisible");
+  };
 
-  handleUploadFile = (e) => {
+  handleUploadFilePembatalan = (e) => {
     this.setState({ filePembatalan: e.target.files[0] });
   };
 
   handlePembatalan = async () => {
-    const { namaPemeriksa, nomorPembatalan, tanggalPembatalan, filePembatalan } = this.state;
+    const {
+      nomorPembatalan,
+      tanggalPembatalan,
+      nipPenjabatBc,
+      namaPenjabatBc,
+      keterangan,
+      filePembatalan,
+    } = this.state;
 
     const formData = new FormData();
-    formData.set("namaPemeriksa", namaPemeriksa);
+    formData.set("idJenisPitaCukai", this.props.match.params.id);
     formData.set("nomorPembatalan", nomorPembatalan);
-    formData.set("tanggalPembatalan", tanggalPembatalan);
-    formData.set("filePembatalan", filePembatalan);
+    formData.set("tanggalPembatalan", moment(tanggalPembatalan).format("YYYY-MM-DD"));
+    formData.set("nip", nipPenjabatBc);
+    formData.set("namaPemeriksa", namaPenjabatBc);
+    formData.set("keterangan", keterangan);
+    if (filePembatalan) formData.set("filePembatalan", filePembatalan);
 
     const response = await requestApi({
       service: "pita_cukai",
@@ -408,17 +429,6 @@ export default class RekamJenisPitaPembatalan extends Component {
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Nama Pemeriksa</FormLabel>
-                </div>
-                <Input
-                  id="namaPemeriksa"
-                  value={this.state.namaPemeriksa}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
                   <FormLabel>Nomor Pembatalan</FormLabel>
                 </div>
                 <Input
@@ -443,10 +453,51 @@ export default class RekamJenisPitaPembatalan extends Component {
 
               <Col span={12}>
                 <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Penjabat BC</FormLabel>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Input
+                    id="nipPenjabatBc"
+                    onChange={this.handleInputChange}
+                    value={this.state.nipPenjabatBc}
+                    style={{ flex: 1 }}
+                    disabled
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => this.handleModalShow("isModalDaftarPenjabatBcVisible")}
+                  >
+                    Cari
+                  </Button>
+                  <Input
+                    id="namaPenjabatBc"
+                    onChange={this.handleInputChange}
+                    value={this.state.namaPenjabatBc}
+                    style={{ flex: 2 }}
+                    disabled
+                  />
+                </div>
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
+                  <FormLabel>Keterangan</FormLabel>
+                </div>
+                <Input.TextArea
+                  id="keterangan"
+                  onChange={this.handleInputChange}
+                  value={this.state.keterangan}
+                  rows={4}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+
+              <Col span={12}>
+                <div style={{ marginBottom: 10 }}>
                   <FormLabel>Upload File</FormLabel>
                 </div>
 
-                <input type="file" onChange={this.handleUploadFile} />
+                <input type="file" onChange={this.handleUploadFilePembatalan} />
               </Col>
             </Row>
           </Card>
@@ -475,6 +526,12 @@ export default class RekamJenisPitaPembatalan extends Component {
           isVisible={this.state.isModalDaftarNppbkcVisible}
           onCancel={() => this.handleModalClose("isModalDaftarNppbkcVisible")}
           onDataDoubleClick={this.handleDataNppbkc}
+        />
+
+        <ModalDaftarPenjabatBc
+          isVisible={this.state.isModalDaftarPenjabatBcVisible}
+          onCancel={() => this.handleModalClose("isModalDaftarPenjabatBcVisible")}
+          onDataDoubleClick={this.handleDataPenjabatBc}
         />
       </>
     );
