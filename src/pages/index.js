@@ -63,6 +63,8 @@ import PermohonanTarifPembatalan from "./TarifCukai/PermohonanTarif/PermohonanTa
 import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
 import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
+import RekamJenisPitaTaskToDoPembatalan from "./RekamJenisPita/RekamJenisPitaTaskToDoPembatalan";
+import RekamJenisPitaTaskToDoRekam from "./RekamJenisPita/RekamJenisPitaTaskToDoRekam";
 
 export default function PageContent({ propsExtra }) {
   return (
@@ -165,6 +167,16 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/rekam-jenis-pita/tasktodo/:id"}
         render={(props) => <RekamJenisPitaTaskToDo {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/rekam/tasktodo/:id"}
+        render={(props) => <RekamJenisPitaTaskToDoRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/rekam-jenis-pita/pembatalan/tasktodo/:id"}
+        render={(props) => <RekamJenisPitaTaskToDoPembatalan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route

@@ -81,7 +81,8 @@ export const endpoints = {
   jenisPitaPerbaikan: "/pita/perbaikan-jenis",
   jenisPitaPembatalan: "/pita/pembatalan-jenis",
   jenisPitaDetailTasktodo: "/pita/detail-task-todo",
-  jenisPitaSubmitTasktodo: "/pita/task-todo",
+  jenisPitaRekamTasktodo: "/pita/task-todo",
+  jenisPitaPembatalanTasktodo: "/pita/pembatalan-task-todo",
 
   permohonanTarifBrowse: "/pita-cukai/browse-penetapan-tarif",
   permohonanTarifRekam: "/pita-cukai/form-perekaman-tarif",
