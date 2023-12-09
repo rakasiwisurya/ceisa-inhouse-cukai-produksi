@@ -81,7 +81,7 @@ export default class CK4EAPembatalan extends Component {
       tanggalPembatalan: null,
       nipPenjabatBc: null,
       namaPenjabatBc: null,
-      keterangan: null,
+      keteranganBatal: null,
       filePembatalan: null,
 
       searchText: null,
@@ -407,7 +407,7 @@ export default class CK4EAPembatalan extends Component {
       tanggalPembatalan,
       nipPenjabatBc,
       namaPenjabatBc,
-      keterangan,
+      keteranganBatal,
       filePembatalan,
     } = this.state;
 
@@ -417,7 +417,7 @@ export default class CK4EAPembatalan extends Component {
     formData.set("tanggalSurat", moment(tanggalPembatalan).format("YYYY-MM-DD"));
     formData.set("nip", nipPenjabatBc);
     formData.set("namaPegawai", namaPenjabatBc);
-    formData.set("keterangan", keterangan);
+    formData.set("keteranganBatal", keteranganBatal);
     if (filePembatalan) formData.set("filePembatalan", filePembatalan);
 
     const response = await requestApi({
@@ -767,9 +767,9 @@ export default class CK4EAPembatalan extends Component {
                   <FormLabel>Keterangan</FormLabel>
                 </div>
                 <Input.TextArea
-                  id="keterangan"
+                  id="keteranganBatal"
                   onChange={this.handleInputChange}
-                  value={this.state.keterangan}
+                  value={this.state.keteranganBatal}
                   rows={4}
                   style={{ width: "100%" }}
                 />

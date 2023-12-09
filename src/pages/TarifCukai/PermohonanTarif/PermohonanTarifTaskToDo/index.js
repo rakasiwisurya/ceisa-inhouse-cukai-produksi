@@ -1,5 +1,6 @@
+import { notification } from "antd";
 import LoadingWrapperSkeleton from "components/LoadingWrapperSkeleton";
-import { endpoints } from "configs/constants";
+import { endpoints, pathName } from "configs/constants";
 import React, { Component } from "react";
 import { requestApi } from "utils/requestApi";
 
