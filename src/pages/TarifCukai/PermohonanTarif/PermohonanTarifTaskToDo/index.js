@@ -23,7 +23,7 @@ export default class PermohonanTarifTaskToDo extends Component {
     if (response) {
       const { data } = response.data;
 
-      if (data?.status === "Penetapan Pita") {
+      if (data?.status === "Penetapan Tarif") {
         return this.props.history.replace(
           `${pathName}/permohonan-tarif/rekam/tasktodo/${this.props.match.params.id}`
         );
@@ -38,7 +38,7 @@ export default class PermohonanTarifTaskToDo extends Component {
       notification.info({
         message: "Info",
         description:
-          "Status Jenis Pita is not found or invalid in this data or neither 'Penetapan Pita' nor 'Pembatalan Pita'",
+          "Status Jenis Pita is not found or invalid in this data or neither 'Penetapan Tarif' nor 'Penetapan Pencabuatan'",
       });
     }
   };
