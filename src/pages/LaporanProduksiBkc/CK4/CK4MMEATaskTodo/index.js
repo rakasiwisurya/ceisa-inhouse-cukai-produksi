@@ -323,9 +323,9 @@ export default class CK4MMEATaskTodo extends Component {
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
         nomorPermohonanPerbaikan: data.nomorPermohonanPerbaikan,
-        tanggalPermohonanPerbaikan: data.tanggalPermohonanPerbaikan,
+        tanggalPermohonanPerbaikan: moment(data.tanggalPermohonanPerbaikan),
         nomorPermohonanPembatalan: data.nomorPermohonanPembatalan,
-        tanggalPermohonanPembatalan: data.tanggalPermohonanPembatalan,
+        tanggalPermohonanPembatalan: moment(data.tanggalPermohonanPembatalan),
         kodeUploadPerbaikan: data.kodeUploadPerbaikan,
 
         kodeKantor: data.kodeKantor,
