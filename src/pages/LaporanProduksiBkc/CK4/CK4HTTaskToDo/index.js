@@ -92,8 +92,10 @@ export default class CK4HTTaskToDo extends Component {
       jumlahKemasanDilekatiPita: null,
 
       status: "SETUJU",
-      nomorSuratPermohonanPerbaikan: null,
-      tanggalSuratPermohonanPerbaikan: null,
+      nomorPermohonanPerbaikan: null,
+      tanggalPermohonanPerbaikan: null,
+      nomorPermohonanPembatalan: null,
+      tanggalPermohonanPembatalan: null,
       alasan: null,
       kodeUploadPerbaikan: null,
 
@@ -342,6 +344,10 @@ export default class CK4HTTaskToDo extends Component {
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
+        nomorPermohonanPerbaikan: data.nomorPermohonanPerbaikan,
+        tanggalPermohonanPerbaikan: data.tanggalPermohonanPerbaikan,
+        nomorPermohonanPembatalan: data.nomorPermohonanPembatalan,
+        tanggalPermohonanPembatalan: data.tanggalPermohonanPembatalan,
         kodeUploadPerbaikan: data.kodeUploadPerbaikan,
 
         kodeKantor: data.kodeKantor,
@@ -499,8 +505,8 @@ export default class CK4HTTaskToDo extends Component {
       isStck,
       nomorStck,
       tanggalStck,
-      nomorSuratPermohonanPerbaikan,
-      tanggalSuratPermohonanPerbaikan,
+      nomorPermohonanPerbaikan,
+      tanggalPermohonanPerbaikan,
       alasan,
     } = this.state;
 
@@ -508,8 +514,8 @@ export default class CK4HTTaskToDo extends Component {
       idProses: this.props.match.params.id,
       status,
       flagApprove: status === "SETUJU" ? "Y" : "N",
-      nomorPersetujuanPerbaikan: nomorSuratPermohonanPerbaikan,
-      tanggalPersetujuanPerbaikan: tanggalSuratPermohonanPerbaikan,
+      nomorPersetujuanPerbaikan: nomorPermohonanPerbaikan,
+      tanggalPersetujuanPerbaikan: tanggalPermohonanPerbaikan,
     };
 
     if (status === "SETUJU") {
@@ -1012,9 +1018,10 @@ export default class CK4HTTaskToDo extends Component {
                   <FormLabel>Nomor Surat</FormLabel>
                 </div>
                 <Input
-                  id="nomorSuratPermohonanPerbaikan"
+                  id="nomorPermohonanPerbaikan"
                   onChange={this.handleInputChange}
-                  value={this.state.nomorSuratPermohonanPerbaikan}
+                  value={this.state.nomorPermohonanPerbaikan}
+                  disabled
                 />
               </Col>
 
@@ -1023,13 +1030,14 @@ export default class CK4HTTaskToDo extends Component {
                   <FormLabel>Tanggal Surat</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalSuratPermohonanPerbaikan"
+                  id="tanggalPermohonanPerbaikan"
                   format="DD-MM-YYYY"
                   onChange={(date) =>
-                    this.handleDatepickerChange("tanggalSuratPermohonanPerbaikan", date)
+                    this.handleDatepickerChange("tanggalPermohonanPerbaikan", date)
                   }
                   style={{ width: "100%" }}
-                  value={this.state.tanggalSuratPermohonanPerbaikan}
+                  value={this.state.tanggalPermohonanPerbaikan}
+                  disabled
                 />
               </Col>
 

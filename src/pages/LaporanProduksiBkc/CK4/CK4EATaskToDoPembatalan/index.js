@@ -76,8 +76,10 @@ export default class CK4EATaskToDoPembatalan extends Component {
       keterangan: null,
 
       status: "SETUJU",
-      nomorSuratPermohonanPembatalan: null,
-      tanggalSuratPermohonanPembatalan: null,
+      nomorPermohonanPerbaikan: null,
+      tanggalPermohonanPerbaikan: null,
+      nomorPermohonanPembatalan: null,
+      tanggalPermohonanPembatalan: null,
       alasan: null,
       kodeUploadPerbaikan: null,
 
@@ -232,6 +234,10 @@ export default class CK4EATaskToDoPembatalan extends Component {
         namaKota: data.namaKota,
         namaPengusaha: data.namaPengusaha,
         isStck: data.isStck,
+        nomorPermohonanPerbaikan: data.nomorPermohonanPerbaikan,
+        tanggalPermohonanPerbaikan: data.tanggalPermohonanPerbaikan,
+        nomorPermohonanPembatalan: data.nomorPermohonanPembatalan,
+        tanggalPermohonanPembatalan: data.tanggalPermohonanPembatalan,
         kodeUploadPerbaikan: data.kodeUploadPerbaikan,
 
         kodeKantor: data.kodeKantor,
@@ -360,8 +366,8 @@ export default class CK4EATaskToDoPembatalan extends Component {
       isStck,
       nomorStck,
       tanggalStck,
-      nomorSuratPermohonanPembatalan,
-      tanggalSuratPermohonanPembatalan,
+      nomorPermohonanPembatalan,
+      tanggalPermohonanPembatalan,
       alasan,
     } = this.state;
 
@@ -369,8 +375,8 @@ export default class CK4EATaskToDoPembatalan extends Component {
       idProses: this.props.match.params.id,
       status,
       flagPembatalan: status === "SETUJU" ? "Y" : "N",
-      nomorPersetujuanPembatalan: nomorSuratPermohonanPembatalan,
-      tanggalPersetujuanPembatalan: tanggalSuratPermohonanPembatalan,
+      nomorPersetujuanPembatalan: nomorPermohonanPembatalan,
+      tanggalPersetujuanPembatalan: tanggalPermohonanPembatalan,
     };
 
     if (status === "SETUJU") {
@@ -638,9 +644,10 @@ export default class CK4EATaskToDoPembatalan extends Component {
                   <FormLabel>Nomor Surat</FormLabel>
                 </div>
                 <Input
-                  id="nomorSuratPermohonanPembatalan"
+                  id="nomorPermohonanPembatalan"
                   onChange={this.handleInputChange}
-                  value={this.state.nomorSuratPermohonanPembatalan}
+                  value={this.state.nomorPermohonanPembatalan}
+                  disabled
                 />
               </Col>
 
@@ -649,13 +656,14 @@ export default class CK4EATaskToDoPembatalan extends Component {
                   <FormLabel>Tanggal Surat</FormLabel>
                 </div>
                 <DatePicker
-                  id="tanggalSuratPermohonanPembatalan"
+                  id="tanggalPermohonanPembatalan"
                   format="DD-MM-YYYY"
                   onChange={(date) =>
-                    this.handleDatepickerChange("tanggalSuratPermohonanPembatalan", date)
+                    this.handleDatepickerChange("tanggalPermohonanPembatalan", date)
                   }
                   style={{ width: "100%" }}
-                  value={this.state.tanggalSuratPermohonanPembatalan}
+                  value={this.state.tanggalPermohonanPembatalan}
+                  disabled
                 />
               </Col>
 
