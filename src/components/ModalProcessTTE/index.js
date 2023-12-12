@@ -28,7 +28,7 @@ export class ModalProcessTTE extends Component {
       const responseNikHris = await requestApi({
         service: "fasilitas",
         method: "get",
-        endpoint: `${endpoints.detailPegawaiKemenkeu}${values.nip}`,
+        endpoint: `${endpoints.detailPegawaiKemenkeu}/${values.nip}`,
       });
 
       if (responseNikHris) {

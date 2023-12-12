@@ -29,6 +29,12 @@ export default class PermohonanTarifTaskToDo extends Component {
         );
       }
 
+      if (data?.status === "Penetapan Tarif Perbaikan") {
+        return this.props.history.replace(
+          `${pathName}/permohonan-tarif/perbaikan/tasktodo/${this.props.match.params.id}`
+        );
+      }
+
       if (data?.status === "Penetapan Pencabuatan") {
         return this.props.history.replace(
           `${pathName}/permohonan-tarif/pembatalan/tasktodo/${this.props.match.params.id}`
@@ -38,7 +44,7 @@ export default class PermohonanTarifTaskToDo extends Component {
       notification.info({
         message: "Info",
         description:
-          "Status Jenis Pita is not found or invalid in this data or neither 'Penetapan Tarif' nor 'Penetapan Pencabuatan'",
+          "Status Jenis Pita is not found or invalid in this data or neither 'Penetapan Tarif' nor 'Penetapan Tarif Perbaikan' nor 'Penetapan Pencabuatan'",
       });
     }
   };

@@ -55,6 +55,8 @@ import RekamJenisPitaPembatalan from "./RekamJenisPita/RekamJenisPitaPembatalan"
 import RekamJenisPitaPerbaikan from "./RekamJenisPita/RekamJenisPitaPerbaikan";
 import RekamJenisPitaRekam from "./RekamJenisPita/RekamJenisPitaRekam";
 import RekamJenisPitaTaskToDo from "./RekamJenisPita/RekamJenisPitaTaskToDo";
+import RekamJenisPitaTaskToDoPembatalan from "./RekamJenisPita/RekamJenisPitaTaskToDoPembatalan";
+import RekamJenisPitaTaskToDoRekam from "./RekamJenisPita/RekamJenisPitaTaskToDoRekam";
 import PencabutanTarif from "./TarifCukai/PencabutanTarif/PencabutanTarif";
 import PencabutanTarifCabut from "./TarifCukai/PencabutanTarif/PencabutanTarifCabut";
 import PenetapanKembali from "./TarifCukai/PenetapanKembali";
@@ -63,8 +65,7 @@ import PermohonanTarifPembatalan from "./TarifCukai/PermohonanTarif/PermohonanTa
 import PermohonanTarifPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifPerbaikan";
 import PermohonanTarifRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifRekam";
 import PermohonanTarifTaskToDo from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDo";
-import RekamJenisPitaTaskToDoPembatalan from "./RekamJenisPita/RekamJenisPitaTaskToDoPembatalan";
-import RekamJenisPitaTaskToDoRekam from "./RekamJenisPita/RekamJenisPitaTaskToDoRekam";
+import PermohonanTarifTaskToDoPerbaikan from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDoPerbaikan";
 import PermohonanTarifTaskToDoRekam from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskToDoRekam";
 import PermohonanTarifTaskToDoPembatalan from "./TarifCukai/PermohonanTarif/PermohonanTarifTaskTodoPembatalan";
 
@@ -134,6 +135,11 @@ export default function PageContent({ propsExtra }) {
       <Route
         path={pathName + "/permohonan-tarif/rekam/tasktodo/:id"}
         render={(props) => <PermohonanTarifTaskToDoRekam {...props} {...propsExtra} />}
+        exact={true}
+      />
+      <Route
+        path={pathName + "/permohonan-tarif/perbaikan/tasktodo/:id"}
+        render={(props) => <PermohonanTarifTaskToDoPerbaikan {...props} {...propsExtra} />}
         exact={true}
       />
       <Route
