@@ -88,7 +88,7 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
       this.getSeripita();
 
       if (this.state.idJenisBkc === 2) {
-        this.setState({ hje: 0 });
+        this.setState({ hje: "-" });
       }
     }
 
@@ -146,7 +146,7 @@ export default class RekamJenisPitaTaskToDoPembatalan extends Component {
 
         idJenisProduksiBkc: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}-${data.kodeSatuan}`,
         namaJenisProduksiBkc: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
-        hje: data.hje || 0,
+        hje: data.hje === 0 ? "-" : data.hje,
         isiKemasan: data.isiVolume,
         tarif: data.tarif,
         awalBerlaku: moment(data.awalBerlaku),

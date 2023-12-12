@@ -54,7 +54,7 @@ export default class RekamJenisPitaRekam extends Component {
       this.getSeripita();
 
       if (this.state.idJenisBkc === 2) {
-        this.setState({ hje: 0 });
+        this.setState({ hje: "-" });
       }
     }
 
@@ -214,7 +214,7 @@ export default class RekamJenisPitaRekam extends Component {
       idNppbkc: idNppbkc,
       nppbkc: nppbkc,
       namaPerusahaan: namaNppbkc,
-      hje: hje,
+      hje: hje === "-" ? 0 : hje,
       personalisasi: personalNppbkc,
       idGolonganBkc: splitIdJenisProduksi[1],
       namaGolonganBkc: splitNamaJenisProduksi[1],

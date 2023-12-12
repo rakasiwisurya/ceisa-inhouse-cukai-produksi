@@ -59,7 +59,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
       this.getSeripita();
 
       if (this.state.idJenisBkc === 2) {
-        this.setState({ hje: 0 });
+        this.setState({ hje: "-" });
       }
     }
 
@@ -105,7 +105,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
 
         idJenisProduksiBkc: `${data.idJenisProduksiBkc}-${data.idGolonganBkc}-${data.kodeSatuan}`,
         namaJenisProduksiBkc: `${data.kodeJenisProduksiBkc} - ${data.namaGolonganBkc}`,
-        hje: data.hje,
+        hje: data.hje === 0 ? "-" : data.hje,
         isiKemasan: data.isiVolume,
         tarif: data.tarif,
         awalBerlaku: moment(data.awalBerlaku),
@@ -257,7 +257,7 @@ export default class RekamJenisPitaPerbaikan extends Component {
       idNppbkc: idNppbkc,
       nppbkc: nppbkc,
       namaPerusahaan: namaNppbkc,
-      hje: hje,
+      hje: hje === "-" ? 0 : hje,
       personalisasi: personalNppbkc,
       idGolonganBkc: splitIdJenisProduksi[1],
       namaGolonganBkc: splitNamaJenisProduksi[1],
