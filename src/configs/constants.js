@@ -91,6 +91,7 @@ export const endpoints = {
   permohonanTarifPembatalan: "/pita-cukai/pembatalan-tarif",
   permohonanTarifDetailTasktodo: "/pita-cukai/detail-task-todo",
   permohonanTarifRekamTasktodo: "/pita-cukai/penetapan-pengajuan-tarif",
+  permohonanTarifPerbaikanTasktodo: "/tarif-merk/task-todo-perbaikan-tarif",
   permohonanTarifPembatalanTasktodo: "/pita-cukai/pembatalan-tarif-tasktodo",
 
   pencabutanTarifDetail: "/pita-cukai/browse-detail-pencabutan",
