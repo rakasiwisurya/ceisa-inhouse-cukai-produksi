@@ -306,9 +306,11 @@ export default class PermohonanTarifTaskToDoPerbaikan extends Component {
 
     formData.set("idProses", this.props.match.params.id);
     formData.set("status", tasktodoStatus);
-    formData.set("file", tasktodoFile);
 
-    if (tasktodoStatus !== "SETUJU") formData.set("alasan", tasktodoAlasan);
+    if (tasktodoStatus !== "SETUJU") {
+      formData.set("alasan", tasktodoAlasan);
+      formData.set("file", tasktodoFile);
+    }
 
     const response = await requestApi({
       service: "produksi",
@@ -877,24 +879,26 @@ export default class PermohonanTarifTaskToDoPerbaikan extends Component {
             </Row>
 
             <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ marginBottom: 10 }}>
-                  <FormLabel>Upload Dokumen</FormLabel>
-                </div>
-                <input type="file" onChange={this.handleUploadFile} />
-              </Col>
-
               {this.state.tasktodoStatus !== "SETUJU" && (
-                <Col span={12}>
-                  <div style={{ marginBottom: 10 }}>
-                    <FormLabel>Alasan</FormLabel>
-                  </div>
-                  <Input.TextArea
-                    id="tasktodoAlasan"
-                    value={this.state.tasktodoAlasan}
-                    onChange={this.handleInputChange}
-                  />
-                </Col>
+                <>
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Alasan</FormLabel>
+                    </div>
+                    <Input.TextArea
+                      id="tasktodoAlasan"
+                      value={this.state.tasktodoAlasan}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+
+                  <Col span={12}>
+                    <div style={{ marginBottom: 10 }}>
+                      <FormLabel>Upload Dokumen</FormLabel>
+                    </div>
+                    <input type="file" onChange={this.handleUploadFile} />
+                  </Col>
+                </>
               )}
             </Row>
           </Card>
