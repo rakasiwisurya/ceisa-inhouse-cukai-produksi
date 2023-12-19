@@ -27,6 +27,7 @@ class PermohonanTarif extends Component {
       totalData: 0,
 
       filter: {
+        statusMerk: null,
         status: null,
         kodeKantor: null,
         namaKantor: null,
@@ -194,6 +195,23 @@ class PermohonanTarif extends Component {
           ...this.getColumnSearchProps("akhirBerlaku"),
         },
         {
+          key: "statusMerk",
+          title: "Status Merk",
+          dataIndex: "statusMerk",
+          render: (text) => (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {text !== null ? (
+                <Tag color={text === "AKTIF" ? "green" : text === "TIDAK AKTIF" ? "red" : "blue"}>
+                  {text}
+                </Tag>
+              ) : (
+                "-"
+              )}
+            </div>
+          ),
+          ...this.getColumnSearchProps("statusMerk"),
+        },
+        {
           key: "status",
           title: "Status",
           dataIndex: "status",
@@ -244,6 +262,7 @@ class PermohonanTarif extends Component {
 
   getPermohonanTarif = async () => {
     const {
+      statusMerk,
       status,
       kodeKantor,
       namaKantor,
@@ -263,7 +282,6 @@ class PermohonanTarif extends Component {
 
     const payload = { page: this.state.page };
 
-    if (status) payload.status = status;
     if (kodeKantor) payload.kodeKantor = kodeKantor;
     if (namaKantor) payload.namaKantor = namaKantor;
     if (nppbkc) payload.nppbkc = nppbkc;
@@ -279,6 +297,8 @@ class PermohonanTarif extends Component {
     if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (akhirBerlaku)
       payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
+    if (statusMerk) payload.statusMerk = statusMerk;
+    if (status) payload.status = status;
 
     const response = await requestApi({
       service: "produksi",
@@ -292,6 +312,7 @@ class PermohonanTarif extends Component {
       const newData = response.data.data.listData.map((item, index) => ({
         key: `permohonan-tarif-${index}`,
         idTarifMerkHeader: item.idTarifMerkHeader,
+        statusMerk: item.statusMerk,
         status: item.status,
         kodeKantor: item.kodeKantor,
         namaKantor: item.namaKantor,
