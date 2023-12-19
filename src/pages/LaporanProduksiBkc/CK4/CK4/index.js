@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Modal, Row, Table } from "antd";
+import { Button, Col, Icon, Input, Modal, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { endpoints, pathName } from "configs/constants";
@@ -150,7 +150,29 @@ export default class CK4 extends Component {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? (
+                <Tag
+                  color={
+                    text === "Selesai" || text === "Selesai (Perbaikan)" || text === "Perekaman"
+                      ? "green"
+                      : text === "Persetujuan Perbaikan" || text === "Persetujuan Pembatalan"
+                      ? "gold"
+                      : text === "Selesai (Tolak Perbaikan)" ||
+                        text === "Selesai (Tolak Pembatalan)" ||
+                        text === "Batal"
+                      ? "red"
+                      : "blue"
+                  }
+                >
+                  {text}
+                </Tag>
+              ) : (
+                "-"
+              )}
+            </div>
+          ),
           ...this.getColumnSearchProps("status"),
         },
       ],

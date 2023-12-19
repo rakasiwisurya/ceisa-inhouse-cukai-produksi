@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table } from "antd";
+import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { endpoints, pathName } from "configs/constants";
@@ -127,7 +127,31 @@ export default class RekamJenisPita extends Component {
           key: "status",
           title: "Status",
           dataIndex: "status",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+          render: (text) => (
+            <div style={{ textAlign: "center" }}>
+              {text !== null ? (
+                <Tag
+                  color={
+                    text === "Selesai" ||
+                    text === "Perekaman Pita Portal" ||
+                    text === "Perekaman Pita Inhouse"
+                      ? "green"
+                      : text === "Penetapan Pita" || text === "Pembatalan Pita"
+                      ? "gold"
+                      : text === "Tolak" ||
+                        text === "Tolak (Pembatalan)" ||
+                        text === "Pita Non Aktif"
+                      ? "red"
+                      : "blue"
+                  }
+                >
+                  {text}
+                </Tag>
+              ) : (
+                "-"
+              )}
+            </div>
+          ),
           ...this.getColumnSearchProps("status"),
         },
       ],

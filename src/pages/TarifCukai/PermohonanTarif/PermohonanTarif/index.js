@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Row, Table } from "antd";
+import { Button, Col, Icon, Input, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import ModalProcessTTE from "components/ModalProcessTTE";
@@ -67,9 +67,7 @@ class PermohonanTarif extends Component {
                 <ButtonCustom
                   variant="danger"
                   icon="to-top"
-                  onClick={() =>
-                    this.handlePembatalan(record.idTarifMerkHeader)
-                  }
+                  onClick={() => this.handlePembatalan(record.idTarifMerkHeader)}
                 />
                 <ButtonCustom
                   variant="danger"
@@ -96,44 +94,28 @@ class PermohonanTarif extends Component {
           key: "namaKantor",
           title: "Nama Kantor",
           dataIndex: "namaKantor",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("namaKantor"),
         },
         {
           key: "nppbkc",
           title: "NPPBKC",
           dataIndex: "nppbkc",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nppbkc"),
         },
         {
           key: "namaPerusahaan",
           title: "Nama Perusahaan",
           dataIndex: "namaPerusahaan",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("namaPerusahaan"),
         },
         {
           key: "nomorKep",
           title: "Nomor KEP",
           dataIndex: "nomorKep",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("nomorKep"),
         },
         {
@@ -151,66 +133,42 @@ class PermohonanTarif extends Component {
           key: "namaMerk",
           title: "Nama Merk",
           dataIndex: "namaMerk",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("namaMerk"),
         },
         {
           key: "jenisProduksi",
           title: "Jenis Produksi",
           dataIndex: "jenisProduksi",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("jenisProduksi"),
         },
         {
           key: "hjePerKemasan",
           title: "HJE",
           dataIndex: "hjePerKemasan",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("hjePerKemasan"),
         },
         {
           key: "isiPerKemasan",
           title: "Isi",
           dataIndex: "isiPerKemasan",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("isiPerKemasan"),
         },
         {
           key: "tarifSpesifik",
           title: "Tarif",
           dataIndex: "tarifSpesifik",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tarifSpesifik"),
         },
         {
           key: "tujuanPemasaran",
           title: "Tujuan",
           dataIndex: "tujuanPemasaran",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? text : "-"}
-            </div>
-          ),
+          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
           ...this.getColumnSearchProps("tujuanPemasaran"),
         },
         {
@@ -241,7 +199,31 @@ class PermohonanTarif extends Component {
           dataIndex: "status",
           render: (text) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {text !== null ? text : "-"}
+              {text !== null ? (
+                <Tag
+                  color={
+                    text === "Selesai" ||
+                    text === "Selesai (Perbaikan)" ||
+                    text === "Perekaman Tarif Portal" ||
+                    text === "Perekaman Tarif Inhouse"
+                      ? "green"
+                      : text === "Penetapan Tarif" ||
+                        text === "Penetapan Tarif Perbaikan" ||
+                        text === "Penetapan Pencabutan"
+                      ? "gold"
+                      : text === "Tolak" ||
+                        text === "Tarif Non Aktif" ||
+                        text === "Selesai (Tolak Perbaikan)" ||
+                        text === "Selesai (Tolak Pencabutan)"
+                      ? "red"
+                      : "blue"
+                  }
+                >
+                  {text}
+                </Tag>
+              ) : (
+                "-"
+              )}
             </div>
           ),
           ...this.getColumnSearchProps("status"),
@@ -287,24 +269,16 @@ class PermohonanTarif extends Component {
     if (nppbkc) payload.nppbkc = nppbkc;
     if (namaPerusahaan) payload.namaPerusahaan = namaPerusahaan;
     if (nomorKep) payload.nomorSkep = nomorKep;
-    if (tanggalKep)
-      payload.tanggalSkep = moment(tanggalKep, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+    if (tanggalKep) payload.tanggalSkep = moment(tanggalKep, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (namaMerk) payload.namaMerk = namaMerk;
     if (jenisProduksi) payload.namaJenisProduksiBkc = jenisProduksi;
     if (hjePerKemasan) payload.hjePerKemasan = hjePerKemasan;
     if (isiPerKemasan) payload.isiPerKemasan = isiPerKemasan;
     if (tarifSpesifik) payload.tarifSpesifik = tarifSpesifik;
     if (tujuanPemasaran) payload.tujuanPemasaran = tujuanPemasaran;
-    if (awalBerlaku)
-      payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+    if (awalBerlaku) payload.awalBerlaku = moment(awalBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
     if (akhirBerlaku)
-      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
+      payload.akhirBerlaku = moment(akhirBerlaku, "DD-MM-YYYY").format("YYYY-MM-DD");
 
     const response = await requestApi({
       service: "produksi",
@@ -368,12 +342,7 @@ class PermohonanTarif extends Component {
   };
 
   getColumnSearchProps = (dataIndex, inputType) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={(node) => {
@@ -484,9 +453,7 @@ class PermohonanTarif extends Component {
         idTarifMerkHeader,
         nomorPermohonan,
         nomorKep,
-        tanggalKep: tanggalKep
-          ? moment(tanggalKep).format("DD MMMM YYYY")
-          : tanggalKep,
+        tanggalKep: tanggalKep ? moment(tanggalKep).format("DD MMMM YYYY") : tanggalKep,
         idJenisBkc,
         jenisBkc:
           idJenisBkc === 3
@@ -522,13 +489,9 @@ class PermohonanTarif extends Component {
         negaraAsal,
         tarifPerKemasan,
         namaKantor,
-        awalBerlaku: awalBerlaku
-          ? moment(awalBerlaku).format("DD MMMM YYYY")
-          : awalBerlaku,
+        awalBerlaku: awalBerlaku ? moment(awalBerlaku).format("DD MMMM YYYY") : awalBerlaku,
         namaKantorWilayah: namaKantorWilayah,
-        waktuRekam: waktuRekam
-          ? moment(waktuRekam).format("DD MMMM YYYY")
-          : waktuRekam,
+        waktuRekam: waktuRekam ? moment(waktuRekam).format("DD MMMM YYYY") : waktuRekam,
       },
       isModalPdfVisible: true,
     });
@@ -542,9 +505,7 @@ class PermohonanTarif extends Component {
             <Col span={4}>
               <ButtonCustom
                 variant="info"
-                onClick={() =>
-                  this.props.history.push(`${pathName}/permohonan-tarif/rekam`)
-                }
+                onClick={() => this.props.history.push(`${pathName}/permohonan-tarif/rekam`)}
                 block
               >
                 + Tarif Rekam
@@ -579,9 +540,7 @@ class PermohonanTarif extends Component {
 
         <ModalPermohonanTarifPdf
           isVisible={this.state.isModalPdfVisible}
-          onButtonTteClick={() =>
-            this.setState({ isModalProcessTTEVisible: true })
-          }
+          onButtonTteClick={() => this.setState({ isModalProcessTTEVisible: true })}
           onCancel={() => {
             this.setState({
               isModalPdfVisible: false,
