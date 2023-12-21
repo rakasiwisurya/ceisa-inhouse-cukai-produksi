@@ -375,7 +375,8 @@ export default class PdfCetakanCK4 extends Component {
                   </Text>
                   <Text style={styles.text}>
                     Jumlah pemberitahuan ini telah dibukukan ke dalam Buku Rekening Barang Kena
-                    Cukai Etil Alkohol yang bersangkutan pada tanggal {tanggalPemberitahuan}
+                    Cukai Etil Alkohol yang bersangkutan pada tanggal "X tanggal brck belum ada X di
+                    API"
                   </Text>
                 </View>
               ) : jenisBkc === "MMEA" ? (
@@ -386,8 +387,8 @@ export default class PdfCetakanCK4 extends Component {
                   </Text>
                   <Text style={styles.text}>
                     Jumlah pemberitahuan ini telah dibukukan ke dalam Buku Rekening Barang Kena
-                    Cukai Minuman yang Mengandung Etil Alkohol yang bersangkutan pada tanggal{" "}
-                    {tanggalPemberitahuan}
+                    Cukai Minuman yang Mengandung Etil Alkohol yang bersangkutan pada tanggal "X
+                    tanggal brck belum ada X di API"
                   </Text>
                 </View>
               ) : jenisBkc === "HT" ? (

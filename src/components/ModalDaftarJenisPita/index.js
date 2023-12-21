@@ -90,7 +90,7 @@ export default class qModalDaftarJenisPita extends Component {
     const { idJenisBkc } = this.props;
     const { kodeJenisProduksi, hje, isi, awalBerlaku, tarif, warna, tahunPita } = this.state.table;
 
-    const payload = { page: this.state.page };
+    const payload = { page: this.state.page, status: "Selesai" };
 
     if (idJenisBkc) payload.idJenisBkc = idJenisBkc;
 
