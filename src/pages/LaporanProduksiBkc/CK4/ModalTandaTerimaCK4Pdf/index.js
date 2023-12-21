@@ -3,7 +3,7 @@ import { Modal } from "antd";
 import PdfTandaTerimaCK4 from "components/PdfTandaTerimaCK4";
 import React, { Component } from "react";
 
-export default class ModalCK4Pdf extends Component {
+export default class ModalTandaTerimaCK4Pdf extends Component {
   render() {
     const { isVisible, onCancel, pdfContent } = this.props;
 

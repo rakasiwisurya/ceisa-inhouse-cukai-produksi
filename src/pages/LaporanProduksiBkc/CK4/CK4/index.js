@@ -1,4 +1,4 @@
-import { Button, Col, Icon, Input, Modal, Row, Table, Tag } from "antd";
+import { Button, Col, Dropdown, Icon, Input, Menu, Modal, Row, Table, Tag } from "antd";
 import ButtonCustom from "components/Button/ButtonCustom";
 import Container from "components/Container";
 import { endpoints, pathName } from "configs/constants";
@@ -6,7 +6,8 @@ import moment from "moment";
 import React, { Component } from "react";
 import { capitalize } from "utils/formatter";
 import { requestApi } from "utils/requestApi";
-import ModalCK4Pdf from "../ModalCK4Pdf";
+import ModalTandaTerimaCK4Pdf from "../ModalTandaTerimaCK4Pdf";
+import ModalCetakanCK4Pdf from "../ModalCetakanCK4Pdf";
 
 export default class CK4 extends Component {
   constructor(props) {
@@ -15,7 +16,9 @@ export default class CK4 extends Component {
       subtitle1: "CK4",
 
       isCk4Loading: true,
-      isModalPdfVisible: false,
+      isCk4DetailLoading: false,
+      isModalPdfTandaTerimaVisible: false,
+      isModalPdfCetakCk4Visible: false,
 
       pdfContent: {},
 
@@ -36,146 +39,6 @@ export default class CK4 extends Component {
       },
 
       dataSource: [],
-      columns: [
-        {
-          title: "Aksi",
-          dataIndex: "aksi",
-          key: "aksi",
-          fixed: "left",
-          render: (text, record, index) => (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-              <ButtonCustom
-                variant="danger"
-                icon="to-top"
-                onClick={() => this.handleBatal(record.idCk4, record.jenisBkc)}
-              />
-              <ButtonCustom
-                variant="warning"
-                icon="form"
-                onClick={() => {
-                  if (record.isAlert) return this.handleConfirm(record.idCk4, record.jenisBkc);
-                  this.handleEdit(record.idCk4, record.jenisBkc);
-                }}
-                disabled={record.idBrck2 || record.idBrck1}
-              />
-              <ButtonCustom
-                variant="info"
-                icon="eye"
-                onClick={() => this.handleDetail(record.idCk4, record.jenisBkc)}
-              />
-              <ButtonCustom
-                variant="danger"
-                icon="file-pdf"
-                onClick={() => this.handleGeneratePdf(record)}
-              />
-            </div>
-          ),
-        },
-        {
-          title: "KPPBC",
-          dataIndex: "kppbc",
-          key: "kppbc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("kppbc"),
-        },
-        {
-          title: "NPPBKC",
-          dataIndex: "nppbkc",
-          key: "nppbkc",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("nppbkc"),
-        },
-        {
-          title: "Nama Perusahaan",
-          dataIndex: "namaPerusahaan",
-          key: "namaPerusahaan",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("namaPerusahaan"),
-        },
-        {
-          title: "Tanggal Pemberitahuan",
-          dataIndex: "tanggalPemberitahuan",
-          key: "tanggalPemberitahuan",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
-            </div>
-          ),
-          ...this.getColumnSearchProps("tanggalPemberitahuan"),
-        },
-        {
-          title: "Tanggal Produksi Awal",
-          dataIndex: "tanggalProduksiAwal",
-          key: "tanggalProduksiAwal",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
-            </div>
-          ),
-          ...this.getColumnSearchProps("tanggalProduksiAwal"),
-        },
-        {
-          title: "Tanggal Produksi Akhir",
-          dataIndex: "tanggalProduksiAkhir",
-          key: "tanggalProduksiAkhir",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
-            </div>
-          ),
-          ...this.getColumnSearchProps("tanggalProduksiAkhir"),
-        },
-        {
-          title: "Jumlah Produksi (lt)",
-          dataIndex: "jumlahProduksiLiter",
-          key: "jumlahProduksiLiter",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlahProduksiLiter"),
-        },
-        {
-          title: "Jumlah Produksi (btg)",
-          dataIndex: "jumlahProduksiBtg",
-          key: "jumlahProduksiBtg",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlahProduksiBtg"),
-        },
-        {
-          title: "Jumlah Produksi (gram)",
-          dataIndex: "jumlahProduksiGram",
-          key: "jumlahProduksiGram",
-          render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
-          ...this.getColumnSearchProps("jumlahProduksiGram"),
-        },
-        {
-          title: "Status",
-          dataIndex: "status",
-          key: "status",
-          render: (text) => (
-            <div style={{ textAlign: "center" }}>
-              {text !== null ? (
-                <Tag
-                  color={
-                    text === "Selesai" || text === "Selesai (Perbaikan)" || text === "Perekaman"
-                      ? "green"
-                      : text === "Persetujuan Perbaikan" || text === "Persetujuan Pembatalan"
-                      ? "gold"
-                      : text === "Selesai (Tolak Perbaikan)" ||
-                        text === "Selesai (Tolak Pembatalan)" ||
-                        text === "Batal"
-                      ? "red"
-                      : "blue"
-                  }
-                >
-                  {text}
-                </Tag>
-              ) : (
-                "-"
-              )}
-            </div>
-          ),
-          ...this.getColumnSearchProps("status"),
-        },
-      ],
     };
   }
 
@@ -339,7 +202,7 @@ export default class CK4 extends Component {
         break;
     }
   };
-  handleGeneratePdf = (rowData) => {
+  handleResponTandaTerimaPdf = (rowData) => {
     const {
       nomorPemberitahuan,
       tanggalPemberitahuan,
@@ -366,8 +229,77 @@ export default class CK4 extends Component {
         periodeBulan: capitalize(periodeBulan),
         periodeTahun: periodeTahun,
       },
-      isModalPdfVisible: true,
+      isModalPdfTandaTerimaVisible: true,
     });
+  };
+  handleCetakCk4Pdf = async (rowData) => {
+    const {
+      idCk4,
+      jenisBkc,
+      nomorPemberitahuan,
+      tanggalPemberitahuan,
+      nppbkc,
+      namaPerusahaan,
+      alamatPerusahaan,
+      jenisLaporan,
+      tanggalProduksiAwal,
+      tanggalProduksiAkhir,
+      tanggalJamProduksiAwal,
+      tanggalJamProduksiAkhir,
+      jumlahKemasan,
+      jumlahProduksiLiter,
+      jumlahProduksiBtg,
+      jumlahProduksiGram,
+      jumlahKemasanDilekatiPita,
+      namaPengusaha,
+      kota,
+      waktuRekam,
+    } = rowData;
+
+    const payload = { idCk4Header: idCk4 };
+
+    const response = await requestApi({
+      service: "produksi",
+      method: "get",
+      endpoint: endpoints.ck4BrowseDetail,
+      params: payload,
+      setLoading: (bool) => this.setState({ isCk4DetailLoading: bool }),
+    });
+
+    if (response) {
+      const details = response.data.data;
+
+      this.setState({
+        pdfContent: {
+          jenisBkc,
+          nomorPemberitahuan,
+          tanggalPemberitahuan: moment(tanggalPemberitahuan).format("DD MMMM YYYY"),
+          nppbkc,
+          namaPerusahaan,
+          alamatPerusahaan,
+          jenisLaporan,
+          tanggalProduksiAwal: moment(tanggalProduksiAwal).format("[tanggal] DD-MM-YYYY"),
+          tanggalProduksiAkhir: moment(tanggalProduksiAkhir).format("[tanggal] DD-MM-YYYY"),
+          tanggalJamProduksiAwal: moment(tanggalJamProduksiAwal).format(
+            "[tanggal] DD-MM-YYYY [jam] HH:mm"
+          ),
+          tanggalJamProduksiAkhir: moment(tanggalJamProduksiAkhir).format(
+            "[tanggal] DD-MM-YYYY [jam] HH:mm"
+          ),
+          jumlahKemasan,
+          jumlahProduksiLiter,
+          jumlahProduksiBtg,
+          jumlahProduksiGram,
+          jumlahKemasanDilekatiPita,
+          namaPengusaha,
+          kota,
+          waktuRekam: moment(waktuRekam).format("dddd, DD/MM/YYYY, HH:mm"),
+          details,
+        },
+        isModalPdfCetakCk4Visible: true,
+        isCk4DetailLoading: false,
+      });
+    }
   };
   handleConfirm = (id, jenisBkc) => {
     Modal.confirm({
@@ -384,6 +316,172 @@ export default class CK4 extends Component {
   };
 
   render() {
+    const menu = ({ record, onTandaTerima, onCetakCk4 }) => (
+      <Menu>
+        <Menu.Item
+          onClick={() => onTandaTerima(record)}
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <Icon type="printer" /> Respon Tanda Terima
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => onCetakCk4(record)}
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          {this.state.isCk4DetailLoading ? <Icon type="loading" /> : <Icon type="printer" />}{" "}
+          Cetakan CK4
+        </Menu.Item>
+      </Menu>
+    );
+
+    const columns = [
+      {
+        title: "Aksi",
+        dataIndex: "aksi",
+        key: "aksi",
+        fixed: "left",
+        render: (text, record, index) => (
+          <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+            <ButtonCustom
+              variant="info"
+              icon="eye"
+              onClick={() => this.handleDetail(record.idCk4, record.jenisBkc)}
+            />
+            <ButtonCustom
+              variant="warning"
+              icon="form"
+              onClick={() => {
+                if (record.isAlert) return this.handleConfirm(record.idCk4, record.jenisBkc);
+                this.handleEdit(record.idCk4, record.jenisBkc);
+              }}
+              disabled={record.idBrck2 || record.idBrck1}
+            />
+            <ButtonCustom
+              variant="danger"
+              icon="to-top"
+              onClick={() => this.handleBatal(record.idCk4, record.jenisBkc)}
+            />
+            <Dropdown
+              overlay={() =>
+                menu({
+                  record,
+                  onTandaTerima: this.handleResponTandaTerimaPdf,
+                  onCetakCk4: this.handleCetakCk4Pdf,
+                })
+              }
+              trigger={["click"]}
+            >
+              <ButtonCustom variant="danger" icon="file-pdf" />
+            </Dropdown>
+          </div>
+        ),
+      },
+      {
+        title: "KPPBC",
+        dataIndex: "kppbc",
+        key: "kppbc",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("kppbc"),
+      },
+      {
+        title: "NPPBKC",
+        dataIndex: "nppbkc",
+        key: "nppbkc",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("nppbkc"),
+      },
+      {
+        title: "Nama Perusahaan",
+        dataIndex: "namaPerusahaan",
+        key: "namaPerusahaan",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("namaPerusahaan"),
+      },
+      {
+        title: "Tanggal Pemberitahuan",
+        dataIndex: "tanggalPemberitahuan",
+        key: "tanggalPemberitahuan",
+        render: (text) => (
+          <div style={{ textAlign: "center" }}>
+            {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
+          </div>
+        ),
+        ...this.getColumnSearchProps("tanggalPemberitahuan"),
+      },
+      {
+        title: "Tanggal Produksi Awal",
+        dataIndex: "tanggalProduksiAwal",
+        key: "tanggalProduksiAwal",
+        render: (text) => (
+          <div style={{ textAlign: "center" }}>
+            {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
+          </div>
+        ),
+        ...this.getColumnSearchProps("tanggalProduksiAwal"),
+      },
+      {
+        title: "Tanggal Produksi Akhir",
+        dataIndex: "tanggalProduksiAkhir",
+        key: "tanggalProduksiAkhir",
+        render: (text) => (
+          <div style={{ textAlign: "center" }}>
+            {text !== null ? moment(text).format("DD-MM-YYYY") : "-"}
+          </div>
+        ),
+        ...this.getColumnSearchProps("tanggalProduksiAkhir"),
+      },
+      {
+        title: "Jumlah Produksi (lt)",
+        dataIndex: "jumlahProduksiLiter",
+        key: "jumlahProduksiLiter",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("jumlahProduksiLiter"),
+      },
+      {
+        title: "Jumlah Produksi (btg)",
+        dataIndex: "jumlahProduksiBtg",
+        key: "jumlahProduksiBtg",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("jumlahProduksiBtg"),
+      },
+      {
+        title: "Jumlah Produksi (gram)",
+        dataIndex: "jumlahProduksiGram",
+        key: "jumlahProduksiGram",
+        render: (text) => <div style={{ textAlign: "center" }}>{text !== null ? text : "-"}</div>,
+        ...this.getColumnSearchProps("jumlahProduksiGram"),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (text) => (
+          <div style={{ textAlign: "center" }}>
+            {text !== null ? (
+              <Tag
+                color={
+                  text === "Selesai" || text === "Selesai (Perbaikan)" || text === "Perekaman"
+                    ? "green"
+                    : text === "Persetujuan Perbaikan" || text === "Persetujuan Pembatalan"
+                    ? "gold"
+                    : text === "Selesai (Tolak Perbaikan)" ||
+                      text === "Selesai (Tolak Pembatalan)" ||
+                      text === "Batal"
+                    ? "red"
+                    : "blue"
+                }
+              >
+                {text}
+              </Tag>
+            ) : (
+              "-"
+            )}
+          </div>
+        ),
+        ...this.getColumnSearchProps("status"),
+      },
+    ];
+
     return (
       <>
         <Container menuName="Laporan Produksi BKC" contentName="CK4">
@@ -427,7 +525,7 @@ export default class CK4 extends Component {
 
           <Table
             dataSource={this.state.dataSource}
-            columns={this.state.columns}
+            columns={columns}
             loading={this.state.isCk4Loading}
             onChange={(page) => this.setState({ page: page.current })}
             pagination={{ current: this.state.page, total: this.state.totalData }}
@@ -435,9 +533,22 @@ export default class CK4 extends Component {
             style={{ marginTop: 30 }}
           />
 
-          <ModalCK4Pdf
-            isVisible={this.state.isModalPdfVisible}
-            onCancel={() => this.setState({ isModalPdfVisible: false, pdfContent: {} })}
+          <ModalTandaTerimaCK4Pdf
+            isVisible={this.state.isModalPdfTandaTerimaVisible}
+            onCancel={() => this.setState({ isModalPdfTandaTerimaVisible: false, pdfContent: {} })}
+            pdfContent={this.state.pdfContent}
+          />
+
+          <ModalCetakanCK4Pdf
+            isVisible={this.state.isModalPdfCetakCk4Visible}
+            onCancel={() =>
+              this.setState({
+                isModalPdfCetakCk4Visible: false,
+                isCk4DetailLoading: false,
+                pdfContent: {},
+              })
+            }
+            isLoading={this.state.isCk4DetailLoading}
             pdfContent={this.state.pdfContent}
           />
         </Container>

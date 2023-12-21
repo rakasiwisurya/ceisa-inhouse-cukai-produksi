@@ -44,6 +44,7 @@ export const endpoints = {
   referensiTarifUpdate: "/referensi/browse-update-tarif",
 
   ck4Browse: "/ck4/browse",
+  ck4BrowseDetail: "/ck4/browse-detail",
   ck4EaRekam: "/ck4/rekam-ea",
   ck4EaDetail: "/ck4/detail-ea",
   ck4EaDetailDelete: "/delete-detail-ea",
